@@ -29,17 +29,19 @@ MacRunner is built around a simple idea: **choose an app or game, add it to your
 
 **Compatibility runtime: FEX + Wine.** The game engine is the technology the game itself was built with; the graphics column shows the path used to run it on this Mac.
 
-| Game | Game engine | Graphics | Status | FPS |
+| Game | Game engine | Graphics path | Status | FPS |
 | --- | --- | --- | --- | --- |
 | **Hollow Knight** | Unity | DXMT → Metal | **Working** | Not measured |
 | **Factorio** | Custom engine (Wube) | DXMT → Metal | **Working** | Not measured |
 | **Vampire Survivors** | Unity (IL2CPP) | DXMT → Metal | **Working** | Not measured |
-| **Hedon Bloodrite** | GZDoom | OpenGL | **Working** | Not measured |
-| **DOOM 64** | KEX (PC re-release) | OpenGL | **Working** | Not measured |
+| **Hedon Bloodrite** | GZDoom | OpenGL → Metal (Apple driver) | **Working** | Not measured |
+| **DOOM 64** | KEX (PC re-release) | OpenGL → Metal (Apple driver) | **Working** | Not measured |
 | **Ion Fury** | Build / EDuke32 | Software rendering | **Working** | Not measured |
-| **Dome Keeper** | Godot | OpenGL | **Working** | Not measured |
-| **WRATH: Aeon of Ruin** | DarkPlaces (Quake-derived) | OpenGL | **Working** | Not measured |
+| **Dome Keeper** | Godot | OpenGL → Metal (Apple driver) | **Working** | Not measured |
+| **WRATH: Aeon of Ruin** | DarkPlaces (Quake-derived) | OpenGL → Metal (Apple driver) | **Working** | Not measured |
 | **Elden Ring** | FromSoftware in-house engine | DXMT-based DirectX 12 → Metal | **Working** | Not measured |
+
+**OpenGL → Metal** means the game uses OpenGL through Wine and Apple's Metal-backed OpenGL driver on the test Mac. This is a separate path from DXMT and D3DMetal. [How to read the graphics paths →](TESTED_GAMES.md#reading-the-graphics-paths)
 
 **Working** means gameplay works in the tested configuration. Hollow Knight was checked through the current installed app on September 23; the other rows record checks of specific development configurations. **[Test dates, verified functions and remaining issues →](TESTED_GAMES.md)**
 
