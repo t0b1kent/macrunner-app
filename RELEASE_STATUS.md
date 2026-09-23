@@ -11,12 +11,18 @@ MacRunner has been built as a standalone native Mac application. Public distribu
 | Application | Release build and packaging completed successfully |
 | Bundle integrity | Local ad hoc signature verification passed |
 | App checks | Focused CPU suites passed for launch status, installation relocation, graphics selection, localization and update coordination |
-| Packaging checks | 13 archive/update packaging checks and 13 media-assembly checks passed |
-| Media runtime | 31 media plugins packaged; 20 required elements loaded and the video decoder created in an isolated check |
+| Packaging checks | 13 archive/update packaging checks and 16 media-assembly checks passed |
+| Media runtime | 33 media plugins packaged; all 27 selected playback elements loaded and created in an isolated check |
 | Languages | 12 localizations checked for matching keys and valid substitutions |
 | Bundled tools | A diagnostic launch found the required helper tools inside the app |
 
 These checks validate the application and packaging. They do not establish game compatibility or replace testing on other Macs. Local ad hoc signing is not Developer ID signing or notarization for public distribution.
+
+### Hollow Knight: local gameplay check
+
+Gameplay was confirmed on the development Mac on September 23 after a title-specific startup correction. The test also identified missing video-playback components, which have been added to the packaged runtime and passed isolated component checks. Complete cinematic playback still needs another game-level check.
+
+Normal exit is not yet reliable: after the user reported leaving the game, its process remained active and was stopped through MacRunner. Long-session stability, save/reload and performance measurements remain unverified. This result applies to the tested configuration, not every Mac or game.
 
 ## Graphics: current bundle
 
