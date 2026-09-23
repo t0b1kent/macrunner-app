@@ -26,7 +26,9 @@ Public download preparation also includes completing third-party license notices
 
 Gameplay was confirmed on the development Mac on September 23 after a title-specific startup correction. The test also identified missing video-playback components, which have been added to the packaged runtime and passed isolated component checks. Complete cinematic playback still needs another game-level check.
 
-Normal exit is not yet reliable: after the user reported leaving the game, its process remained active and was stopped through MacRunner. Long-session stability, save/reload and performance measurements remain unverified. This result applies to the tested configuration, not every Mac or game.
+An earlier session left the game process running after the user exited, requiring MacRunner's Stop button. In the latest check on September 23, the user confirmed that launching, entering the game and exiting all worked normally. This is a user-observed successful cycle; startup time and process cleanup were not independently measured in that latest session. Long-session stability, save/reload and performance measurements remain unverified. This result applies to the tested configuration, not every Mac or game.
+
+**[Tested games and their runtime/graphics paths →](TESTED_GAMES.md)**
 
 ## Graphics: current bundle
 
@@ -48,7 +50,7 @@ This work is in a **separate development branch**, not the preview app bundle.
 | 33 actual geometry shaders | Compile with controlled companion vertex/pixel shaders; 27 use original root signatures and 6 use synthetic signatures. |
 | 27 GPU-rendered geometry-shader test frames | 3 non-indexed and 24 indexed cases, with 27,648 pixel checks; bounded triangle-list tests with one instance/group. |
 
-The next work is complete pipeline integration and game-level validation. Current optimization focuses on **Elden Ring**, with rendering correctness and performance as active goals. These results do not establish that the game is fully playable or meets a particular frame rate.
+**Elden Ring: tested & working — DirectX 12.** On September 23, the maintainer confirmed successful DirectX 12 launch and gameplay, superseding the older menu-only report. Current optimization focuses on rendering quality and performance. The game check is separate from the isolated graphics milestones above; no measured frame-rate target has been published.
 
 ### Ray-tracing research
 
@@ -73,7 +75,7 @@ Before delivery can be enabled:
 ## Next release milestones
 
 - Validate the complete choose, add, and launch workflow with an agreed engine bundle.
-- Publish compatibility results tied to specific program and engine versions.
+- Expand the published tested-games list with repeat checks and additional configurations.
 - Complete signed distribution and update-delivery validation.
 - Prepare a public download when those checks are complete.
 
