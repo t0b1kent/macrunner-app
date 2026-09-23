@@ -26,7 +26,7 @@ MacRunner is built around a simple idea: **choose an app or game, add it to your
 
 | 1 · Choose | 2 · Add | 3 · Launch |
 | --- | --- | --- |
-| Pick the Windows app or game you want to use. | Keep it in your MacRunner library with its own settings. | Start it from the app and follow its status in one place. |
+| Pick the Windows app or game you want to use. | Keep your games and apps together in one library. | Start it from the app and follow its status in one place. |
 
 ### People, tools & foundations
 
@@ -39,7 +39,7 @@ MacRunner is made possible by these people, tools, and the many upstream contrib
 ### Made to feel at home on macOS
 
 - **A native interface.** Built with SwiftUI, with a library, settings, and diagnostic tools inside a regular Mac app.
-- **One place for your software.** Organize programs and their launch settings without piecing together a separate workflow for each one.
+- **One place for your software.** Find your games and apps together in your MacRunner library.
 - **A complete bundle.** The app, runtime, and graphics components are packaged as one matched version.
 - **Updates designed to stay in sync.** The update system is being prepared to deliver that complete bundle through MacRunner.
 - **12 interface languages.** Localization resources are included and checked for consistency.
