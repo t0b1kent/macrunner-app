@@ -23,6 +23,26 @@ Gameplay benchmark results have not yet been published for these titles. **Not m
 
 All entries below used **FEX + Wine**. FEX translates x86-64 CPU instructions; Wine provides Windows API compatibility. The graphics path is listed separately for each game.
 
+## Game engines & test coverage
+
+The **game engine** is the technology used to build the game. It is separate from MacRunner's FEX/Wine runtime and graphics translation. The short **Working** status on the main page means gameplay works in the tested configuration; the detailed results below describe the functions actually checked.
+
+| Game | Game engine | What this adds to the test set |
+| --- | --- | --- |
+| **Hollow Knight** | [Unity](https://unity.com/made-with-unity/hollow-knight) | A Unity title running through Direct3D 11 → Metal. |
+| **Factorio** | [Custom engine (Wube)](https://www.factorio.com/blog/post/fff-230) | A custom renderer and simulation workload. |
+| **Vampire Survivors** | Unity (IL2CPP) | The tested Unity build uses an IL2CPP-compiled game assembly; a different Unity execution path. |
+| **Hedon Bloodrite** | GZDoom | Doom-derived engine technology using OpenGL. |
+| **DOOM 64** | KEX (PC re-release) | The PC re-release's KEX framework and OpenGL path. |
+| **Ion Fury** | [Build / EDuke32](https://3drealms.com/games/ion-fury/) | Build-derived technology using the tested software renderer. |
+| **Dome Keeper** | [Godot](https://godotengine.org/showcase/dome-keeper/) | A Godot title using OpenGL. |
+| **WRATH: Aeon of Ruin** | [DarkPlaces (Quake-derived)](https://github.com/Official3DRealms/wrath-darkplaces) | Quake-derived 3D engine technology using OpenGL. |
+| **Elden Ring** | [FromSoftware in-house engine](https://careers.fromsoftware.jp/jp/interview_008.html) | A proprietary modern 3D engine using the DirectX 12 → Metal development path. |
+
+This selection provides coverage across different engines, runtime requirements and graphics APIs. A result applies to the tested game and configuration; other titles using the same engine still need their own checks.
+
+Engine labels describe the inspected game versions. In particular, **Vampire Survivors** refers to the tested Unity/IL2CPP build, and **DOOM 64** refers to the PC re-release. Local runtime evidence identifies UnityPlayer/GameAssembly for Vampire Survivors, GZDoom resources for Hedon, KEX in the DOOM 64 runtime, and EDuke32 in Ion Fury.
+
 ## Current installed app
 
 | Game | Graphics path | Check date | Confirmed result | FPS | Still to verify |
