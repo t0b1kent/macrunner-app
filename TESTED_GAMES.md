@@ -28,13 +28,15 @@ These results came from earlier development configurations. **They have not all 
 | **Dome Keeper** | Native OpenGL path through Wine | September 12, 2026 | Movement, audio, return to menu and continuation of saved state; a repeated mining-scene run with voluntary exit. | Shutdown resource warnings remained; longer sessions need verification. |
 | **WRATH: Aeon of Ruin** | Native OpenGL path through Wine | September 14, 2026 | User-confirmed gameplay, audio and loading. | The run ended through a test timer. Manual save/reload, voluntary exit and long sessions were not verified. |
 
-## Elden Ring — active development
+## Elden Ring — tested & working
 
-**Path:** FEX + Wine + MacRunner's experimental **DXMT-based DirectX 12 → Metal** development path, separate from the current preview app's Direct3D 10/11 bundle.
+**Status: Tested & working — DirectX 12.**
 
-On **September 16, 2026**, the original menus and character-creation interface rendered, with sound and input confirmed. The character preview was black and loading remained unresolved. **Gameplay is not verified.**
+**Path:** FEX + Wine + MacRunner's **DXMT-based DirectX 12 → Metal** development path, separate from the current preview app's Direct3D 10/11 bundle.
 
-Later work has reached shader-loading and controlled GPU-rendering milestones. These are graphics-development results, not evidence of a completed playable game session. Full in-game ray tracing is also still in development. [Detailed graphics progress →](RELEASE_STATUS.md#directx-12-development)
+The maintainer confirmed on **September 23, 2026** that the game had already been launched successfully with DirectX 12 and was working in gameplay. This newer confirmation supersedes the earlier September 16 menu-only status. The status describes the tested configuration.
+
+**Current focus: further optimization**, including rendering quality and performance. Full in-game ray tracing remains in development. [Detailed graphics progress →](RELEASE_STATUS.md#directx-12-development)
 
 ## Development hardware
 
