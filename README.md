@@ -13,7 +13,7 @@
   <a href="#progress">Progress</a> ·
   <a href="https://github.com/t0b1kent/macrunner-app/issues/1">Vote for the next title</a> ·
   <a href="RELEASE_STATUS.md">Release status</a> ·
-  <a href="CREDITS.md">Credits</a>
+  <a href="#contributors--credits">Contributors &amp; credits</a>
 </p>
 
 ---
@@ -22,19 +22,27 @@ MacRunner is built around a simple idea: **choose an app or game, add it to your
 
 **Currently in local preview.** The native app has been built for local testing. End-to-end game launching is still being validated; public downloads and automatic update delivery are being prepared. Compatibility depends on the app and the engine version.
 
+## Contributors & credits
+
+| Person, tool or project | Role |
+| --- | --- |
+| **[t0b1kent](https://github.com/t0b1kent)** | Project creator and maintainer |
+| **Jev** | Special thanks |
+| **Claude · Anthropic** | AI assistance during development |
+| **Codex · OpenAI** | AI assistance during development, review and validation |
+| **Wine contributors** | Windows API compatibility |
+| **FEX contributors** | x86/x86-64 translation technology |
+| **DXMT contributors** | Direct3D 10/11 translation to Metal |
+| **Apple Metal, Swift and SwiftUI teams** | Native graphics and application foundations |
+| **All other upstream authors and maintainers** | [Complete project and dependency acknowledgements](CREDITS.md) |
+
+These credits recognise people, development tools and upstream projects. GitHub's sidebar separately lists authors of commits to this public presentation repository. Acknowledgements do not imply affiliation or endorsement.
+
 ## The experience
 
 | 1 · Choose | 2 · Add | 3 · Launch |
 | --- | --- | --- |
 | Pick the Windows app or game you want to use. | Keep your games and apps together in one library. | Start it from the app and follow its status in one place. |
-
-### People, tools & foundations
-
-| Project | AI development assistance | Special thanks | Runtime & graphics |
-| --- | --- | --- | --- |
-| [t0b1kent](https://github.com/t0b1kent) | **Claude · Codex** | **Jev** | **Wine · FEX · DXMT · Metal** |
-
-MacRunner is made possible by these people, tools, and the many upstream contributors whose work it builds on. **[Full credits and acknowledgements →](CREDITS.md)**
 
 ### Made to feel at home on macOS
 
