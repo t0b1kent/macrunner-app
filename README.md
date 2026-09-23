@@ -1,55 +1,105 @@
 <p align="center">
-  <img src="assets/macrunner-icon.png" width="120" height="120" alt="Значок MacRunner">
+  <img src="assets/macrunner-icon.png" width="128" height="128" alt="MacRunner app icon">
 </p>
 
 <h1 align="center">MacRunner</h1>
 
-<p align="center"><strong>Windows-приложения на Apple Silicon. Управление — в привычном интерфейсе macOS.</strong></p>
+<p align="center"><strong>Your Windows apps. Your Mac.</strong></p>
 
-<p align="center">Предварительная версия · Нативный интерфейс · Единый комплект приложения и движка</p>
+<p align="center">A native macOS app for bringing Windows software to Apple Silicon.</p>
 
-MacRunner — разрабатываемое приложение для запуска и организации Windows-программ и игр на Mac с Apple Silicon. Нативный интерфейс объединяет библиотеку программ, подготовку окружения, управление запуском и диагностику. Цель проекта — сделать эти действия доступными без ручной работы с командами.
+<p align="center">
+  <a href="#the-experience">The experience</a> ·
+  <a href="#progress">Progress</a> ·
+  <a href="https://github.com/t0b1kent/macrunner-app/issues/1">Vote for the next title</a> ·
+  <a href="RELEASE_STATUS.md">Release status</a> ·
+  <a href="CREDITS.md">Credits</a>
+</p>
 
-Это публичная страница проекта: здесь собраны его возможности, достижения и планы. Исходный код разрабатывается в приватном репозитории. Установочные пакеты пока не публикуются.
+---
 
-## Что уже сделано
+MacRunner is built around a simple idea: **choose an app or game, add it to your library, and launch it from one familiar Mac interface.** The application brings together the runtime, graphics components, settings, and diagnostics needed to make that experience possible.
 
-- **Приложение для macOS.** Версия MacRunner 1.0.2 установлена как обычное приложение со своим значком. Проверены окно, поиск, каталог, выбор файла и сведения о версии.
-- **Движок внутри приложения.** Интерфейс, Wine/FEX и графические компоненты упаковываются вместе. Проверка состава и контрольных сумм помогает исключать случайное смешивание компонентов разных сборок.
-- **Подготовка обновлений.** Реализована локальная интеграция Sparkle для замены всего комплекта. Добавлены защита от пересечения обновления с запуском программы и обработка неопределённого результата установки.
-- **Автоматические проверки.** Пройдены 61 CPU-тест приложения и 13 тестов упаковки. Эти результаты относятся к приложению и механизму выпуска; совместимость игр проверяется отдельно.
-- **12 локализаций.** Проверены одинаковый набор из 347 строк и корректность подстановок во всех языковых ресурсах.
+**Currently in local preview.** The native app has been built for local testing. End-to-end game launching is still being validated; public downloads and automatic update delivery are being prepared. Compatibility depends on the app and the engine version.
 
-## Текущий статус
+## The experience
 
-| Направление | Состояние |
+| 1 · Choose | 2 · Add | 3 · Launch |
+| --- | --- | --- |
+| Pick the Windows app or game you want to use. | Keep it in your MacRunner library with its own settings. | Start it from the app and follow its status in one place. |
+
+### Made to feel at home on macOS
+
+- **A native interface.** Built with SwiftUI, with a library, settings, and diagnostic tools inside a regular Mac app.
+- **One place for your software.** Organize programs and their launch settings without piecing together a separate workflow for each one.
+- **A complete bundle.** The app, runtime, and graphics components are packaged as one matched version.
+- **Updates designed to stay in sync.** The update system is being prepared to deliver that complete bundle through MacRunner.
+- **12 interface languages.** Localization resources are included and checked for consistency.
+
+## Progress
+
+| Milestone | What it means |
 | --- | --- |
-| Приложение | Локальная предварительная сборка 1.0.2 |
-| Комплект движка | `fex-dx11-20260914`, экспериментальный путь для 64-битных Direct3D 10/11 программ |
-| Обновления по воздуху | Локальная часть подготовлена; доставка ещё не подключена |
-| DirectX 12 | Отдельная исследовательская ветка; в этот комплект не входит |
-| Совместимость | Подтверждается для конкретной программы, версии и комплекта |
-| Публичная загрузка | Пока недоступна |
+| **Native Mac app** | Local preview 1.0.2 builds and packages successfully. |
+| **74 automated checks** | Application and packaging checks pass, including update coordination and recovery. |
+| **45,998 shaders** | The separate DirectX 12 development path passes native loading and parsing/reflection checks for this shader corpus. |
+| **27 targeted GPU frames** | Geometry-shader tests pass, including indexed drawing. These are controlled tests, not full game validation. |
 
-Наличие профиля запуска не означает подтверждённую поддержку игры. Полная поддержка всех версий DirectX и 32-битных Windows-программ сейчас не заявляется.
+### Current focus: Elden Ring
 
-## Как устроены обновления
+Current optimization work focuses on **Elden Ring**, including rendering correctness, pipeline integration, and performance. DirectX 12 has reached shader-loading and targeted GPU-validation milestones. **Ray-tracing research** has also passed isolated shadow/radiance and acceleration-structure tests; full in-game DXR remains in development.
 
-Единицей обновления выбран весь пакет MacRunner: приложение, движок и графика одной согласованной версии. Это позволяет доставлять улучшения через встроенную проверку обновлений, сохраняя согласованность компонентов.
+These graphics results belong to a separate development branch. The current app bundle uses an experimental **Wine/FEX/DXMT path for 64-bit Direct3D 10/11**. Individual games still need their own compatibility checks. [Read the exact scope of each milestone →](RELEASE_STATUS.md)
 
-Сейчас обновления отключены: ещё нужны HTTPS-лента, подписанные архивы и проверка реального перехода между установленными версиями. Частичные загрузки изменений не реализованы. Подробнее — в [состоянии выпуска](RELEASE_STATUS.md).
+**Full 32-bit Windows support is still in development.** Apple Developer account approval is also pending. Account approval alone will not complete 32-bit implementation or compatibility testing.
 
-## Что дальше
+## How it works
 
-1. Проверить пользовательские сценарии приложения и согласованного движка.
-2. Подключить подписанную доставку обновлений и проверить отмену, обрыв загрузки и сохранение пользовательских данных.
-3. Подготовить публичную сборку с проверенной подписью и notarization.
-4. Публиковать результаты совместимости с указанием версии программы и комплекта.
+| Part of a Windows program | Path to your Mac |
+| --- | --- |
+| CPU instructions | Windows x86-64 → FEX translation → Apple Silicon CPU |
+| Windows system calls and APIs | Wine → macOS |
+| Direct3D 10/11 graphics in the current bundle | DXMT → Metal → Apple GPU |
 
-Интерфейс собирается для macOS 14 и новее. Поддержка всего комплекта на конкретных версиях macOS требует отдельной проверки перед публичным выпуском.
+**Metal is the native graphics backend.** Windows APIs, CPU instructions, and shaders still need translation. The separate DirectX 12 development path also targets Metal; it is not included in the current preview bundle.
 
-## English
+## Availability
 
-MacRunner is an experimental native macOS application for managing and running Windows software on Apple Silicon. A local preview combines the SwiftUI interface, runtime, and graphics components in one versioned bundle. App and packaging tests pass; game compatibility is evaluated separately. This public repository contains project information and artwork. Source development is private; public binaries and live update delivery are still in preparation.
+MacRunner is intended for **Macs with Apple Silicon**. The interface targets **macOS 14 or later**; validation of the complete runtime on supported macOS versions is part of release preparation.
 
-<sub>Статус обновлён 23 сентября 2026 года.</sub>
+There is no public installer yet. This repository is the project's public presentation and progress page; application source code and binaries are not included here.
+
+Next: validate the complete app workflow, prepare signed distribution, and test real updates between installed versions. [See what's ready and what's next →](RELEASE_STATUS.md)
+
+## Help choose what's next
+
+Elden Ring is the current focus. Help choose which **games and apps to optimize next**: add a 👍 reaction to an existing title, or suggest one title per comment.
+
+**[Vote or suggest a title →](https://github.com/t0b1kent/macrunner-app/issues/1)**
+
+A vote guides priorities; it is not a promise of compatibility or a release date.
+
+## Development Mac
+
+The current primary development and test machine is:
+
+| | |
+| --- | --- |
+| Mac | MacBook Pro |
+| Chip | Apple M1 Pro |
+| CPU | 8 cores · 6 performance + 2 efficiency |
+| GPU | 14 cores |
+| Unified memory | 32 GB |
+| Operating system | macOS 27.0 · build 26A428 |
+
+This is the machine used for current development, not a minimum specification or certification of other Macs.
+
+## Built with a lot of help
+
+MacRunner builds on the work of **Wine, FEX, DXMT**, and the many projects that support them. Development has been assisted by **Claude** and **Codex**. Special thanks to **Jev**.
+
+We want the people and projects behind this work to be visible. [Meet the foundations and acknowledgements →](CREDITS.md)
+
+---
+
+<p align="center"><sub>Independent project · Experimental preview · Updated September 23, 2026</sub></p>

@@ -1,38 +1,69 @@
-# Состояние выпуска MacRunner
+# Release status
 
-23 сентября 2026 года · Локальная предварительная версия 1.0.2
+**MacRunner 1.0.2 · Local preview · September 23, 2026**
 
-MacRunner собран как самостоятельный пакет приложения. Текущий комплект движка — `fex-dx11-20260914`; отдельные экспериментальные разработки DirectX 12 в него не включены.
+MacRunner has been built as a standalone native Mac application. Public distribution is being prepared. The current engine bundle is `fex-dx11-20260914`; it is separate from ongoing DirectX 12 research.
 
-## Подтверждено
+## Ready in the local preview
 
-- Release-сборка и упаковка успешно завершены.
-- Проверка локальной ad hoc подписи пакета прошла. Это не подтверждение Developer ID или notarization для публичного распространения.
-- Пройдены 61 CPU-тест приложения, включая 16 тестов обновлений, и 13 тестов упаковки.
-- Проверены ресурсы 12 локализаций: одинаковые 347 ключей и корректные подстановки.
-- Служебный запуск подтвердил наличие вспомогательных инструментов внутри пакета.
-- Приложение установлено в macOS со значком; проверены обычное окно, поиск, каталог и диалог выбора программы.
+| Area | Verified result |
+| --- | --- |
+| Application | Release build and packaging completed successfully |
+| Bundle integrity | Local ad hoc signature verification passed |
+| App checks | 61 CPU tests passed, including 16 update tests |
+| Packaging checks | 13 tests passed |
+| Languages | 12 localizations checked for matching keys and valid substitutions |
+| Bundled tools | A diagnostic launch found the required helper tools inside the app |
 
-Эти проверки не устанавливают совместимость игр и не заменяют проверку установки на других Mac.
+These checks validate the application and packaging. They do not establish game compatibility or replace testing on other Macs. Local ad hoc signing is not Developer ID signing or notarization for public distribution.
 
-## Механизм обновлений
+## Graphics: current bundle
 
-Sparkle подготовлен к обновлению приложения, движка и графики одним комплектом. Упаковка проверяет состав и контрольные суммы компонентов. Запуск и подготовка Windows-программы не должны пересекаться с установкой обновления; соответствующие проверки включены в тесты.
+The current app bundle contains an experimental Wine/FEX/DXMT route for **64-bit Direct3D 10/11** software. FEX translates x86-64 CPU instructions, Wine provides Windows API compatibility, and DXMT translates graphics to Metal. A listed launch profile is not a compatibility certification.
 
-Если состояние установки нельзя достоверно определить, запуск программ блокируется до завершения проверки восстановления. Такой сценарий проверен локально на уровне приложения. Реальный переход между двумя подписанными версиями ещё предстоит проверить.
+Support for every DirectX version, every Windows game, or 32-bit Windows software is not claimed.
 
-В текущей локальной сборке отсутствуют адрес ленты и открытый ключ обновлений, поэтому OTA отключено. Дельта-обновления не реализованы: подготовлена доставка полного архива.
+### 32-bit support and developer account
 
-## До включения OTA
+Full 32-bit Windows support is still in development. Apple Developer account approval is pending. These are separate unfinished milestones: account approval does not itself complete the 32-bit implementation or compatibility validation required before support can be claimed.
 
-1. Выбрать HTTPS-хостинг ленты и архивов.
-2. Настроить публичный ключ проверки обновлений и подписывать архивы у уполномоченного владельца ключа.
-3. Проверить Developer ID, notarization и необходимые права всего комплекта.
-4. Проверить реальное обновление, отмену, обрыв загрузки, повреждённую подпись и сохранность данных.
-5. Подготовить первую сборку с настроенной лентой и ключом для однократной установки. После этого сможет использоваться встроенное обновление.
+## DirectX 12 development
 
-## Совместимость
+This work is in a **separate development branch**, not the preview app bundle.
 
-Текущий графический путь предназначен для экспериментальной работы с 64-битными Direct3D 10/11 программами. Подтверждения универсальной совместимости с Windows-играми, всеми версиями DirectX или 32-битными программами нет. Публичная таблица совместимости появится по мере отдельных проверок конкретных приложений.
+| Verified milestone | Scope |
+| --- | --- |
+| 45,998 ordinary shaders | Pass the native loader and shader parsing/reflection checks; this is not execution of every complete graphics pipeline. |
+| 33 actual geometry shaders | Compile with controlled companion vertex/pixel shaders; 27 use original root signatures and 6 use synthetic signatures. |
+| 27 GPU-rendered geometry-shader test frames | 3 non-indexed and 24 indexed cases, with 27,648 pixel checks; bounded triangle-list tests with one instance/group. |
 
-В публичном репозитории размещены описание проекта и визуальные материалы. Исходный код находится в приватном репозитории; установочные пакеты пока не публикуются.
+The next work is complete pipeline integration and game-level validation. Current optimization focuses on **Elden Ring**, with rendering correctness and performance as active goals. These results do not establish that the game is fully playable or meets a particular frame rate.
+
+### Ray-tracing research
+
+Isolated shadow/radiance and acceleration-structure tests have passed through the Wine/FEX path, including 24 targeted ray cases and 48 acceleration-structure cases on September 22.
+
+The public DirectX ray-tracing state-object and ray-dispatch path is not yet connected. Complete coverage of the game's 4,281 ray-tracing libraries, in-game ray tracing, and performance validation remain open. Ray tracing is not a released feature of the current bundle.
+
+## Updates
+
+MacRunner uses Sparkle to prepare for updating the **app, runtime, and graphics together**. Bundle contents and checksums are verified during packaging. Tests cover coordination between program launch and update installation, including recovery when an installation's result is uncertain.
+
+Automatic update delivery is **disabled in the local preview**: a production feed and verification key have not been configured. Real updates between two installed, signed releases still need validation. The prepared format is a complete archive; delta downloads are not implemented.
+
+Before delivery can be enabled:
+
+1. Choose HTTPS hosting for the update feed and archives.
+2. Configure the public verification key and prepare signed archives.
+3. Validate Developer ID signing, notarization, and runtime entitlements.
+4. Test a real update, cancellation, interrupted downloads, invalid signatures, and preservation of user data.
+5. Install the first release containing the configured feed and key once; later updates can use the built-in updater.
+
+## Next release milestones
+
+- Validate the complete choose, add, and launch workflow with an agreed engine bundle.
+- Publish compatibility results tied to specific program and engine versions.
+- Complete signed distribution and update-delivery validation.
+- Prepare a public download when those checks are complete.
+
+[Back to MacRunner](README.md) · [Credits](CREDITS.md)
