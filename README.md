@@ -27,23 +27,25 @@ MacRunner is built around a simple idea: **choose an app or game, add it to your
 
 **Test Mac:** MacBook Pro · **Apple M1 Pro** (8-core CPU / 14-core GPU) · **32 GB unified memory** · **macOS 27.0**. [Full machine details below.](#development-mac)
 
-**Current installed app — September 23:** Hollow Knight gameplay, launching and normal exit have been confirmed by the tester on the development Mac.
+**Compatibility runtime: FEX + Wine.** The game engine is the technology the game itself was built with; the graphics column shows the path used to run it on this Mac.
 
-| Game | Runtime & graphics | Observed result | FPS |
-| --- | --- | --- | --- |
-| **Hollow Knight** | FEX + Wine + DXMT → Metal | **Gameplay confirmed in the current app**, including a successful entry/exit cycle | Not measured |
-| **Factorio** | FEX + Wine + DXMT → Metal | Earlier check: tutorial gameplay, save and reload confirmed | Not measured |
-| **Vampire Survivors** | FEX + Wine + DXMT → Metal | Earlier check: gameplay, movement, audio and exit confirmed | Not measured |
-| **Hedon Bloodrite** | FEX + Wine + OpenGL | Earlier check: gameplay, controls, audio and save/reload confirmed | Not measured |
-| **DOOM 64** | FEX + Wine + OpenGL | Earlier check: in-level rendering, controls, audio and save/load confirmed | Not measured |
-| **Ion Fury** | FEX + Wine + software rendering | Earlier check: gameplay, save/load and exit confirmed; accelerated OpenGL unresolved | Not measured |
-| **Dome Keeper** | FEX + Wine + OpenGL | Earlier check: movement, audio and saved-state continuation confirmed | Not measured |
-| **WRATH: Aeon of Ruin** | FEX + Wine + OpenGL | Earlier check: gameplay, audio and loading confirmed | Not measured |
-| **Elden Ring** | FEX + Wine + DXMT-based DirectX 12 → Metal | **Tested & working — DirectX 12**, confirmed by the maintainer; optimization continues | Not measured |
+| Game | Game engine | Graphics | Status | FPS |
+| --- | --- | --- | --- | --- |
+| **Hollow Knight** | Unity | DXMT → Metal | **Working** | Not measured |
+| **Factorio** | Custom engine (Wube) | DXMT → Metal | **Working** | Not measured |
+| **Vampire Survivors** | Unity (IL2CPP) | DXMT → Metal | **Working** | Not measured |
+| **Hedon Bloodrite** | GZDoom | OpenGL | **Working** | Not measured |
+| **DOOM 64** | KEX (PC re-release) | OpenGL | **Working** | Not measured |
+| **Ion Fury** | Build / EDuke32 | Software rendering | **Working** | Not measured |
+| **Dome Keeper** | Godot | OpenGL | **Working** | Not measured |
+| **WRATH: Aeon of Ruin** | DarkPlaces (Quake-derived) | OpenGL | **Working** | Not measured |
+| **Elden Ring** | FromSoftware in-house engine | DXMT-based DirectX 12 → Metal | **Working** | Not measured |
 
-The earlier checks used development configurations and have not all been repeated in the current app. They are recorded results, not a compatibility guarantee. **[Test dates, paths and remaining issues →](TESTED_GAMES.md)**
+**Working** means gameplay works in the tested configuration. Hollow Knight was checked through the current installed app on September 23; the other rows record checks of specific development configurations. **[Test dates, verified functions and remaining issues →](TESTED_GAMES.md)**
 
 **FPS results will be added after timed gameplay checks**, with resolution, graphics settings and the tested scene recorded. “Not measured” is a pending measurement, not a zero-FPS result.
+
+**Why these games?** Together they exercise Unity, Godot, custom engines and Doom/Build/Quake-derived technology, across Direct3D 11, Direct3D 12, OpenGL and software rendering. This variety helps find issues shared by different kinds of games. Results remain title-specific. [Game engines and test coverage →](TESTED_GAMES.md#game-engines--test-coverage)
 
 ## Contributors & credits
 
