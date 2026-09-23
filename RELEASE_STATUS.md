@@ -10,8 +10,9 @@ MacRunner has been built as a standalone native Mac application. Public distribu
 | --- | --- |
 | Application | Release build and packaging completed successfully |
 | Bundle integrity | Local ad hoc signature verification passed |
-| App checks | 61 CPU tests passed, including 16 update tests |
-| Packaging checks | 13 tests passed |
+| App checks | Focused CPU suites passed for launch status, installation relocation, graphics selection, localization and update coordination |
+| Packaging checks | 13 archive/update packaging checks and 13 media-assembly checks passed |
+| Media runtime | 31 media plugins packaged; 20 required elements loaded and the video decoder created in an isolated check |
 | Languages | 12 localizations checked for matching keys and valid substitutions |
 | Bundled tools | A diagnostic launch found the required helper tools inside the app |
 

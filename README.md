@@ -49,7 +49,7 @@ MacRunner is made possible by these people, tools, and the many upstream contrib
 | Milestone | What it means |
 | --- | --- |
 | **Native Mac app** | Local preview 1.0.2 builds and packages successfully. |
-| **74 automated checks** | Application and packaging checks pass, including update coordination and recovery. |
+| **Automated application checks** | Launch status, installation, localization, packaging and update coordination are covered by passing checks. |
 | **45,998 shaders** | The separate DirectX 12 development path passes native loading and parsing/reflection checks for this shader corpus. |
 | **27 targeted GPU frames** | Geometry-shader tests pass, including indexed drawing. These are controlled tests, not full game validation. |
 
