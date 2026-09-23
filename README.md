@@ -73,7 +73,7 @@ These graphics results belong to a separate development branch. The current app 
 
 ## Availability
 
-MacRunner is intended for **Macs with Apple Silicon**. The interface targets **macOS 14 or later**; validation of the complete runtime on supported macOS versions is part of release preparation.
+MacRunner is intended for **Macs with Apple Silicon**. The current development bundle contains libraries that require **macOS 27.0**. A broader supported macOS range and launch on Macs with standard security settings have not yet been validated.
 
 There is no public installer yet. This repository is the project's public presentation and progress page; application source code and binaries are not included here.
 

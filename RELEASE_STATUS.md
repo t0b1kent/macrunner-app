@@ -18,6 +18,10 @@ MacRunner has been built as a standalone native Mac application. Public distribu
 
 These checks validate the application and packaging. They do not establish game compatibility or replace testing on other Macs. Local ad hoc signing is not Developer ID signing or notarization for public distribution.
 
+The exact development bundle currently requires **macOS 27.0** because of its bundled media dependencies. Launch on Macs with standard security settings remains unverified. The main application and Wine/FEX runtime are ARM64; an optional Intel-only Legendary store helper may require Rosetta. The confirmed core game path does not use Rosetta.
+
+Public download preparation also includes completing third-party license notices and the corresponding source/build materials required by the distributed LGPL/GPL components. Those materials are not yet ready; a download is not being advertised as available.
+
 ### Hollow Knight: local gameplay check
 
 Gameplay was confirmed on the development Mac on September 23 after a title-specific startup correction. The test also identified missing video-playback components, which have been added to the packaged runtime and passed isolated component checks. Complete cinematic playback still needs another game-level check.
