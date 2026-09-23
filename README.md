@@ -10,6 +10,7 @@
 
 <p align="center">
   <a href="#the-experience">The experience</a> ·
+  <a href="#tested-games--engines">Tested games &amp; engines</a> ·
   <a href="#progress">Progress</a> ·
   <a href="https://github.com/t0b1kent/macrunner-app/issues/1">Vote for the next title</a> ·
   <a href="RELEASE_STATUS.md">Release status</a> ·
@@ -20,7 +21,27 @@
 
 MacRunner is built around a simple idea: **choose an app or game, add it to your library, and launch it from one familiar Mac interface.** The application brings together the runtime, graphics components, settings, and diagnostics needed to make that experience possible.
 
-**Currently in local preview.** The native app has been built for local testing. End-to-end game launching is still being validated; public downloads and automatic update delivery are being prepared. Compatibility depends on the app and the engine version.
+**Currently in local preview.** Hollow Knight has been played through the installed app on the development Mac, including a successful launch and normal exit in the latest user check. Broader compatibility, public downloads and automatic update delivery are being prepared. [See the tested games and engines below.](#tested-games--engines)
+
+## Tested games & engines
+
+**Current installed app — September 23:** Hollow Knight gameplay, launching and normal exit have been confirmed by the tester on the development Mac.
+
+| Game | Runtime & graphics | Observed result |
+| --- | --- | --- |
+| **Hollow Knight** | FEX + Wine + DXMT → Metal | **Gameplay confirmed in the current app**, including a successful entry/exit cycle |
+| **Factorio** | FEX + Wine + DXMT → Metal | Earlier check: tutorial gameplay, save and reload confirmed |
+| **Vampire Survivors** | FEX + Wine + DXMT → Metal | Earlier check: gameplay, movement, audio and exit confirmed |
+| **Hedon Bloodrite** | FEX + Wine + OpenGL | Earlier check: gameplay, controls, audio and save/reload confirmed |
+| **DOOM 64** | FEX + Wine + OpenGL | Earlier check: in-level rendering, controls, audio and save/load confirmed |
+| **Ion Fury** | FEX + Wine + software rendering | Earlier check: gameplay, save/load and exit confirmed; accelerated OpenGL unresolved |
+| **Dome Keeper** | FEX + Wine + OpenGL | Earlier check: movement, audio and saved-state continuation confirmed |
+| **WRATH: Aeon of Ruin** | FEX + Wine + OpenGL | Earlier check: gameplay, audio and loading confirmed |
+| **Elden Ring** | FEX + Wine + DXMT-based DirectX 12 → Metal | **Tested & working — DirectX 12**, confirmed by the maintainer; optimization continues |
+
+The earlier checks used development configurations and have not all been repeated in the current app. They are recorded results, not a compatibility guarantee. **[Test dates, paths and remaining issues →](TESTED_GAMES.md)**
+
+**Test Mac:** MacBook Pro · Apple M1 Pro · 14-core GPU · 32 GB memory. Current development OS: macOS 27.0. [Full machine details below.](#development-mac)
 
 ## Contributors & credits
 
@@ -63,7 +84,7 @@ These credits recognise people, development tools and upstream projects. GitHub'
 
 ### Current focus: Elden Ring
 
-Current optimization work focuses on **Elden Ring**, including rendering correctness, pipeline integration, and performance. DirectX 12 has reached shader-loading and targeted GPU-validation milestones. **Ray-tracing research** has also passed isolated shadow/radiance and acceleration-structure tests; full in-game DXR remains in development.
+**Elden Ring is tested and working on the DirectX 12 path**, as confirmed by the maintainer. Current optimization work focuses on rendering quality and performance. Graphics development has also reached shader-loading and targeted GPU-validation milestones. **Ray-tracing research** has passed isolated shadow/radiance and acceleration-structure tests; full in-game DXR remains in development.
 
 These graphics results belong to a separate development branch. The current app bundle uses an experimental **Wine/FEX/DXMT path for 64-bit Direct3D 10/11**. Individual games still need their own compatibility checks. [Read the exact scope of each milestone →](RELEASE_STATUS.md)
 
