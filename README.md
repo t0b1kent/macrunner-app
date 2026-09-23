@@ -28,6 +28,14 @@ MacRunner is built around a simple idea: **choose an app or game, add it to your
 | --- | --- | --- |
 | Pick the Windows app or game you want to use. | Keep it in your MacRunner library with its own settings. | Start it from the app and follow its status in one place. |
 
+### People, tools & foundations
+
+| Project | AI development assistance | Special thanks | Runtime & graphics |
+| --- | --- | --- | --- |
+| [t0b1kent](https://github.com/t0b1kent) | **Claude · Codex** | **Jev** | **Wine · FEX · DXMT · Metal** |
+
+MacRunner is made possible by these people, tools, and the many upstream contributors whose work it builds on. **[Full credits and acknowledgements →](CREDITS.md)**
+
 ### Made to feel at home on macOS
 
 - **A native interface.** Built with SwiftUI, with a library, settings, and diagnostic tools inside a regular Mac app.
