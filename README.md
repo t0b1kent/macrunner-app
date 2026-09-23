@@ -25,23 +25,25 @@ MacRunner is built around a simple idea: **choose an app or game, add it to your
 
 ## Tested games & engines
 
+**Test Mac:** MacBook Pro · **Apple M1 Pro** (8-core CPU / 14-core GPU) · **32 GB unified memory** · **macOS 27.0**. [Full machine details below.](#development-mac)
+
 **Current installed app — September 23:** Hollow Knight gameplay, launching and normal exit have been confirmed by the tester on the development Mac.
 
-| Game | Runtime & graphics | Observed result |
-| --- | --- | --- |
-| **Hollow Knight** | FEX + Wine + DXMT → Metal | **Gameplay confirmed in the current app**, including a successful entry/exit cycle |
-| **Factorio** | FEX + Wine + DXMT → Metal | Earlier check: tutorial gameplay, save and reload confirmed |
-| **Vampire Survivors** | FEX + Wine + DXMT → Metal | Earlier check: gameplay, movement, audio and exit confirmed |
-| **Hedon Bloodrite** | FEX + Wine + OpenGL | Earlier check: gameplay, controls, audio and save/reload confirmed |
-| **DOOM 64** | FEX + Wine + OpenGL | Earlier check: in-level rendering, controls, audio and save/load confirmed |
-| **Ion Fury** | FEX + Wine + software rendering | Earlier check: gameplay, save/load and exit confirmed; accelerated OpenGL unresolved |
-| **Dome Keeper** | FEX + Wine + OpenGL | Earlier check: movement, audio and saved-state continuation confirmed |
-| **WRATH: Aeon of Ruin** | FEX + Wine + OpenGL | Earlier check: gameplay, audio and loading confirmed |
-| **Elden Ring** | FEX + Wine + DXMT-based DirectX 12 → Metal | **Tested & working — DirectX 12**, confirmed by the maintainer; optimization continues |
+| Game | Runtime & graphics | Observed result | FPS |
+| --- | --- | --- | --- |
+| **Hollow Knight** | FEX + Wine + DXMT → Metal | **Gameplay confirmed in the current app**, including a successful entry/exit cycle | Not measured |
+| **Factorio** | FEX + Wine + DXMT → Metal | Earlier check: tutorial gameplay, save and reload confirmed | Not measured |
+| **Vampire Survivors** | FEX + Wine + DXMT → Metal | Earlier check: gameplay, movement, audio and exit confirmed | Not measured |
+| **Hedon Bloodrite** | FEX + Wine + OpenGL | Earlier check: gameplay, controls, audio and save/reload confirmed | Not measured |
+| **DOOM 64** | FEX + Wine + OpenGL | Earlier check: in-level rendering, controls, audio and save/load confirmed | Not measured |
+| **Ion Fury** | FEX + Wine + software rendering | Earlier check: gameplay, save/load and exit confirmed; accelerated OpenGL unresolved | Not measured |
+| **Dome Keeper** | FEX + Wine + OpenGL | Earlier check: movement, audio and saved-state continuation confirmed | Not measured |
+| **WRATH: Aeon of Ruin** | FEX + Wine + OpenGL | Earlier check: gameplay, audio and loading confirmed | Not measured |
+| **Elden Ring** | FEX + Wine + DXMT-based DirectX 12 → Metal | **Tested & working — DirectX 12**, confirmed by the maintainer; optimization continues | Not measured |
 
 The earlier checks used development configurations and have not all been repeated in the current app. They are recorded results, not a compatibility guarantee. **[Test dates, paths and remaining issues →](TESTED_GAMES.md)**
 
-**Test Mac:** MacBook Pro · Apple M1 Pro · 14-core GPU · 32 GB memory. Current development OS: macOS 27.0. [Full machine details below.](#development-mac)
+**FPS results will be added after timed gameplay checks**, with resolution, graphics settings and the tested scene recorded. “Not measured” is a pending measurement, not a zero-FPS result.
 
 ## Contributors & credits
 
