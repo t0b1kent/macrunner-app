@@ -24,11 +24,12 @@ These acknowledgements do not imply affiliation or endorsement.
 
 ## Supporting libraries
 
-The bundled runtime and its recorded notices identify the following supporting projects:
+The bundled runtime's dependency inventory and accompanying notices identify the following supporting projects:
 
-- **Media and graphics:** [dav1d](https://code.videolan.org/videolan/dav1d), [FFmpeg](https://ffmpeg.org/), [FreeType](https://www.freetype.org/), [GStreamer](https://gstreamer.freedesktop.org/), [LAME](https://lame.sourceforge.io/), [libvpx](https://www.webmproject.org/code/), [Opus](https://www.opus-codec.org/), [ORC](https://gstreamer.freedesktop.org/modules/orc.html), [SDL2](https://www.libsdl.org/), [SVT-AV1](https://gitlab.com/AOMediaCodec/SVT-AV1), [x264](https://www.videolan.org/developers/x264.html), and [x265](https://bitbucket.org/multicoreware/x265_git).
+- **Media playback and codecs:** [dav1d](https://code.videolan.org/videolan/dav1d), [FFmpeg](https://ffmpeg.org/), [FLAC](https://xiph.org/flac/), [GStreamer](https://gstreamer.freedesktop.org/), [LAME](https://lame.sourceforge.io/), [libvpx](https://www.webmproject.org/code/), [mpg123](https://www.mpg123.de/), [Ogg/libogg](https://xiph.org/ogg/), [Opus](https://www.opus-codec.org/), [ORC](https://gstreamer.freedesktop.org/modules/orc.html), [SVT-AV1](https://gitlab.com/AOMediaCodec/SVT-AV1), [Theora](https://www.theora.org/), [VMAF/libvmaf](https://github.com/Netflix/vmaf), [Vorbis/libvorbis](https://xiph.org/vorbis/), [x264](https://www.videolan.org/developers/x264.html), and [x265](https://bitbucket.org/multicoreware/x265_git).
+- **Graphics and imaging:** [FreeType](https://www.freetype.org/), [libjpeg-turbo](https://libjpeg-turbo.org/), [libpng](https://www.libpng.org/pub/png/libpng.html), and [SDL2](https://www.libsdl.org/).
 - **Security and cryptography:** [GMP](https://gmplib.org/), [GnuTLS](https://gnutls.org/), [Nettle/Hogweed](https://www.lysator.liu.se/~nisse/nettle/), [OpenSSL](https://openssl-library.org/), [libtasn1](https://www.gnu.org/software/libtasn1/), and [p11-kit](https://p11-glue.github.io/p11-glue/p11-kit.html).
-- **Platform utilities:** [GNU gettext/libintl](https://www.gnu.org/software/gettext/), [GLib/GObject/GModule](https://docs.gtk.org/glib/), [libidn2](https://www.gnu.org/software/libidn/#libidn2), [libunistring](https://www.gnu.org/software/libunistring/), [libusb](https://libusb.info/), and [PCRE2](https://www.pcre.org/).
+- **Platform utilities:** [GNU gettext/libintl](https://www.gnu.org/software/gettext/), [GLib/GObject/GModule/GIO](https://docs.gtk.org/glib/), [libidn2](https://www.gnu.org/software/libidn/#libidn2), [libunistring](https://www.gnu.org/software/libunistring/), [libusb](https://libusb.info/), and [PCRE2](https://www.pcre.org/).
 
 Sparkle's notices additionally acknowledge **bsdiff, sais-lite, and the portable Ed25519 implementation by orlp**.
 
