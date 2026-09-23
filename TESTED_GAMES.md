@@ -59,11 +59,11 @@ These results came from earlier development configurations. **They have not all 
 | --- | --- | --- | --- | --- | --- |
 | **Factorio** | DXMT: Direct3D 11 → Metal | September 11, 2026 | User-confirmed tutorial gameplay, saving, returning to the menu and reloading. | Not measured | Long sessions and measured performance were not established. |
 | **Vampire Survivors** | DXMT: Direct3D 11 → Metal | September 11, 2026 | User-confirmed gameplay, movement, audio and voluntary exit, with a gameplay screenshot. | Not measured | Long-session stability and measured performance were not established. |
-| **Hedon Bloodrite** | OpenGL through Wine | September 12, 2026 | User-confirmed gameplay, keyboard/mouse, audio, saving and reload at the saved position; clean exits recorded. | Not measured | Broader scene coverage and long-session performance were not established. |
-| **DOOM 64** | OpenGL through Wine | September 12, 2026 | In-level rendering, mouse, audio and save/load; a subsequent English-keyboard-layout check confirmed keyboard operation. Intro/attract sequence and voluntary exit were also accepted. | Not measured | Other keyboard layouts and long sessions need further testing. |
+| **Hedon Bloodrite** | OpenGL → Metal (Apple driver) | September 12, 2026 | User-confirmed gameplay, keyboard/mouse, audio, saving and reload at the saved position; clean exits recorded. | Not measured | Broader scene coverage and long-session performance were not established. |
+| **DOOM 64** | OpenGL → Metal (Apple driver) | September 12, 2026 | In-level rendering, mouse, audio and save/load; a subsequent English-keyboard-layout check confirmed keyboard operation. Intro/attract sequence and voluntary exit were also accepted. | Not measured | Other keyboard layouts and long sessions need further testing. |
 | **Ion Fury** | Software renderer | September 12, 2026 | User-confirmed gameplay, save/load and voluntary exit. | Not measured | Accelerated OpenGL remained unresolved. This was not a GPU-accelerated rendering result. |
-| **Dome Keeper** | Native OpenGL path through Wine | September 12, 2026 | Movement, audio, return to menu and continuation of saved state; a repeated mining-scene run with voluntary exit. | Not measured | Shutdown resource warnings remained; longer sessions need verification. |
-| **WRATH: Aeon of Ruin** | Native OpenGL path through Wine | September 14, 2026 | User-confirmed gameplay, audio and loading. | Not measured | The run ended through a test timer. Manual save/reload, voluntary exit and long sessions were not verified. |
+| **Dome Keeper** | OpenGL → Metal (Apple driver) | September 12, 2026 | Movement, audio, return to menu and continuation of saved state; a repeated mining-scene run with voluntary exit. | Not measured | Shutdown resource warnings remained; longer sessions need verification. |
+| **WRATH: Aeon of Ruin** | OpenGL → Metal (Apple driver) | September 14, 2026 | User-confirmed gameplay, audio and loading. | Not measured | The run ended through a test timer. Manual save/reload, voluntary exit and long sessions were not verified. |
 
 ## Elden Ring — tested & working
 
@@ -80,7 +80,8 @@ The maintainer confirmed on **September 23, 2026** that the game had already bee
 ## Reading the graphics paths
 
 - **DXMT → Metal:** Direct3D 10/11 graphics are translated to Apple's Metal API and executed by the GPU. Translation is still involved.
-- **OpenGL through Wine:** these runs used an OpenGL path; they should not be described as DXMT/Metal results.
+- **OpenGL → Metal (Apple driver):** the game uses OpenGL through Wine, and macOS executes those graphics calls through Apple's Metal-backed OpenGL driver on the tested M1 Pro. Metal participates, but this is separate from DXMT and D3DMetal. The recorded OpenGL version strings and driver traces establish this path for Hedon, DOOM 64, Dome Keeper and WRATH.
+- **D3DMetal:** a Direct3D-to-Metal translation component. It is different from the Metal API itself and from Apple's OpenGL driver; the OpenGL rows above are not D3DMetal runs.
 - **Software rendering:** rendering work is performed in software, as in the recorded Ion Fury check.
 - **Experimental DXMT-based DirectX 12 → Metal:** MacRunner's separate development path, not a released feature of the current app bundle or a claim of upstream DXMT DirectX 12 support.
 
