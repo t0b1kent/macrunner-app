@@ -2,7 +2,7 @@
 
 **MacRunner 1.0.2 · Local preview · September 23, 2026**
 
-MacRunner has been built as a standalone native Mac application. Public distribution is being prepared. The current engine bundle is `fex-dx11-20260914`; it is separate from ongoing DirectX 12 research.
+MacRunner has been built as a standalone native Mac application. Public distribution is being prepared. The current Wine/FEX/DXMT engine bundle is separate from ongoing DirectX 12 research.
 
 ## Ready in the local preview
 
