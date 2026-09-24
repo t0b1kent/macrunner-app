@@ -61,6 +61,7 @@ MacRunner is built around a simple idea: **choose an app or game, add it to your
 | **Wine contributors** | Windows API compatibility |
 | **FEX contributors** | x86/x86-64 translation technology |
 | **DXMT contributors** | Direct3D 10/11 translation to Metal |
+| **MacRunner DirectX 12 development** | DXMT-based DirectX 12 → Metal integration, shader and runtime work; [Elden Ring gameplay confirmed by the maintainer](TESTED_GAMES.md#elden-ring--tested--working) |
 | **Apple Metal, Swift and SwiftUI teams** | Native graphics and application foundations |
 | **All other upstream authors and maintainers** | [Complete project and dependency acknowledgements](CREDITS.md) |
 

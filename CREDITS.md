@@ -22,6 +22,12 @@ These acknowledgements do not imply affiliation or endorsement.
 | [PLCrashReporter](https://github.com/microsoft/plcrashreporter) | Crash-reporting support |
 | Swift, SwiftUI, and Apple's macOS/Metal technologies | The native interface and platform foundations |
 
+## MacRunner DirectX 12 development
+
+MacRunner's separate **DXMT-based DirectX 12 → Metal** development path includes shader and runtime integration and targeted graphics validation. **Elden Ring gameplay has been confirmed by the maintainer** in the tested configuration. The upstream DXMT foundation is credited above; the DirectX 12 integration is MacRunner development work.
+
+Full in-game ray tracing remains in development, and compatibility is checked per game. [Graphics development status](RELEASE_STATUS.md#directx-12-development) · [Elden Ring results](TESTED_GAMES.md#elden-ring--tested--working).
+
 ## Supporting libraries
 
 The bundled runtime's dependency inventory and accompanying notices identify the following supporting projects:
