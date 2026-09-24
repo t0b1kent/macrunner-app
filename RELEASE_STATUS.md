@@ -44,7 +44,9 @@ Support for every DirectX version, every Windows game, or 32-bit Windows softwar
 
 ### 32-bit support and developer account
 
-Full 32-bit Windows support is still in development. Apple Developer account approval is pending. These are separate unfinished milestones: account approval does not itself complete the 32-bit implementation or compatibility validation required before support can be claimed.
+Windows x64 is HyperBridge's primary integration target. Full Windows x86 / 32-bit support is a future milestone. Apple Developer account approval is pending; approval does not itself complete the 32-bit implementation or compatibility validation.
+
+The host Mac and Wine's native components use ARM64. Windows ARM64 applications have a separate native-code path through Wine, but standalone Windows ARM64 application support has not yet been validated here. Mixed ARM64EC/x64 workloads may still need x64 translation. [Architecture scope →](HYPERBRIDGE.md#host-and-windows-architectures)
 
 ## DirectX 12 development
 

@@ -22,7 +22,7 @@
 
 MacRunner is built around a simple idea: **choose an app or game, add it to your library, and launch it from one familiar Mac interface.** The application brings together the runtime, graphics components, settings, and diagnostics needed to make that experience possible.
 
-**The next chapter is HyperBridge:** MacRunner's own **x86-64 → ARM64 translation engine**, developed for Apple Silicon. The project is moving toward an **open-source engine release under MIT**, with Wine providing Windows API compatibility and Metal handling graphics through the relevant translation components. [Explore the engine, its current scope and roadmap →](HYPERBRIDGE.md)
+**The next chapter is HyperBridge:** MacRunner's own **x86-64 → ARM64 translation engine for Windows x64 software on Apple Silicon**. The project is moving toward an **open-source engine release under MIT**, with Wine providing Windows API compatibility and Metal handling graphics through the relevant translation components. [Explore the engine, its current scope and roadmap →](HYPERBRIDGE.md)
 
 **Development preview.** HyperBridge integration is in progress. The installed app and game results below come from earlier runtime configurations and will be retested on the independent engine. Public source and download links will be added when those artifacts are published.
 
@@ -100,7 +100,9 @@ These credits recognise people, development tools and upstream projects. GitHub'
 
 **Elden Ring remains the graphics optimization focus.** DirectX 12 gameplay was confirmed by the maintainer on the earlier development configuration. Graphics work has also reached shader-loading and targeted GPU-validation milestones. **Ray-tracing research** has passed isolated shadow/radiance and acceleration-structure tests; full in-game DXR remains in development. These results do not yet establish the same game's operation on HyperBridge. [Read the scope of each milestone →](RELEASE_STATUS.md)
 
-**Full 32-bit Windows support is still in development.** Apple Developer account approval is also pending. Account approval alone will not complete 32-bit implementation or compatibility testing.
+**Windows x64 is the primary focus; full Windows x86 / 32-bit support is a future milestone.** Native Windows ARM64 application support requires separate Wine validation and is not confirmed yet. [Host and Windows architectures →](HYPERBRIDGE.md#host-and-windows-architectures)
+
+Apple Developer account approval is also pending. Account approval alone will not complete 32-bit implementation or compatibility testing.
 
 ## How it works
 

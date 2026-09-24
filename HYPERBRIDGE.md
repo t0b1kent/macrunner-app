@@ -1,6 +1,6 @@
 # HyperBridge
 
-**MacRunner's independently developed x86-64 → ARM64 translation engine for Apple Silicon.**
+**MacRunner's independently developed x86-64 → ARM64 translation engine for Windows x64 software on Apple Silicon.**
 
 HyperBridge is being developed as MacRunner's own CPU translation core. The aim is to make the engine inspectable, buildable and open to contributions through a future open-source release. **MIT has been selected for original HyperBridge code; source publication is planned.** This repository currently presents the project and its progress. [License terms and third-party scope →](HYPERBRIDGE_LICENSE.md)
 
@@ -18,6 +18,18 @@ HyperBridge translates supported x86-64 instructions into ARM64 code for executi
 | **MacRunner app** | The macOS library, launch controls, runtime packaging and diagnostics |
 
 The independent translation core and its Wine integration are distinct from the earlier runtime used for MacRunner's recorded game sessions. HyperBridge is not presented as a replacement for Wine or as a graphics API.
+
+## Host and Windows architectures
+
+**Host platform: Apple Silicon Macs running macOS (ARM64).** This describes the Mac's processor; the architecture of a Windows executable is a separate question.
+
+| Windows executable | Execution path | Scope |
+| --- | --- | --- |
+| **x64 / x86-64** | HyperBridge translates CPU instructions to ARM64; Wine provides Windows compatibility | Primary focus; initial isolated checks passed, broader integration remains in development |
+| **x86 / 32-bit** | Planned 32-bit guest support through the compatibility runtime | Future milestone; full support is not available yet |
+| **ARM64** | ARM64 CPU execution with Wine handling Windows APIs, loading and calling conventions | Not yet validated as a supported application target; this native-code route needs separate testing |
+
+Windows ARM64 programs do not need x64 → ARM64 instruction translation for their ARM64 code. They still need Wine's Windows compatibility work. An **ARM64EC** application may also contain x64 modules; those modules still need the x64 translation path. This table describes execution paths and development scope, not blanket application compatibility.
 
 ## Verified progress
 
@@ -40,6 +52,7 @@ Passing isolated fixtures is an integration milestone, not proof of full instruc
 3. Repeat real application and game checks: launch, input, audio, gameplay, save/reload and clean exit.
 4. Record comparable performance measurements with the game version, resolution, settings, test scene and frame timings.
 5. Integrate the validated engine into MacRunner's application bundle.
+6. Expand to full Windows x86 / 32-bit support and validate native Windows ARM64 applications separately.
 
 ## Open-source release roadmap
 
