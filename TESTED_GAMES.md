@@ -4,6 +4,8 @@
 
 This page records what has actually been observed while developing MacRunner. A title in the library or launch-profile catalog is not automatically a tested game. Results apply to the configurations used for those sessions.
 
+**HyperBridge transition:** the game sessions and FPS figures on this page were recorded using earlier runtime configurations. **They are not HyperBridge compatibility or performance results.** The independent engine is being integrated and will receive its own application/game validation. [HyperBridge status and roadmap →](HYPERBRIDGE.md)
+
 ## Test Mac
 
 | Component | Test configuration |
@@ -21,11 +23,11 @@ This is the primary development machine. Historical checks do not establish that
 
 The FPS values below are **maintainer-reported gameplay observations on the test Mac**, reported on September 24, 2026. Resolution, graphics settings, scene and sample duration have not yet been recorded, so these figures are not standardized benchmark averages or minimums. **Not measured** means a result is still pending. Future benchmark checks will record these conditions alongside frame timings.
 
-All entries below used **FEX + Wine**. FEX translates x86-64 CPU instructions; Wine provides Windows API compatibility. The graphics path is listed separately for each game.
+**Historical test runtime: FEX + Wine.** All game entries below used that earlier runtime. Its identity is retained to make the results reproducible; these checks will not be relabelled as HyperBridge runs. The graphics path is listed separately for each game.
 
 ## Game engines & test coverage
 
-The **game engine** is the technology used to build the game. It is separate from MacRunner's FEX/Wine runtime and graphics translation. The short **Working** status on the main page means gameplay works in the tested configuration; the detailed results below describe the functions actually checked.
+The **game engine** is the technology used to build the game. It is separate from the CPU compatibility runtime and graphics translation. The short **Working** result on the main page describes the earlier tested configuration; the detailed results below identify the functions actually checked.
 
 | Game | Game engine | What this adds to the test set |
 | --- | --- | --- |
@@ -44,7 +46,7 @@ This selection provides coverage across different engines, runtime requirements 
 
 Engine labels describe the inspected game versions. In particular, **Vampire Survivors** refers to the tested Unity/IL2CPP build, and **DOOM 64** refers to the PC re-release. Local runtime evidence identifies UnityPlayer/GameAssembly for Vampire Survivors, GZDoom resources for Hedon, KEX in the DOOM 64 runtime, and EDuke32 in Ion Fury.
 
-## Current installed app
+## September 23 installed-app check
 
 | Game | Graphics path | Check date | Confirmed result | FPS | Still to verify |
 | --- | --- | --- | --- | --- | --- |

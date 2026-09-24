@@ -15,12 +15,22 @@ These acknowledgements do not imply affiliation or endorsement.
 
 | Project | Contribution |
 | --- | --- |
+| **HyperBridge development** | MacRunner's independently developed x86-64 → ARM64 translation core and ongoing Wine integration |
 | [Wine](https://www.winehq.org/) | Windows API compatibility |
-| [FEX](https://github.com/FEX-Emu/FEX) | x86/x86-64 translation technology used in the runtime work |
 | [DXMT](https://github.com/3Shain/dxmt) | Direct3D 10/11 translation to Metal |
 | [Sparkle](https://sparkle-project.org/) | The macOS update framework used by the application |
 | [PLCrashReporter](https://github.com/microsoft/plcrashreporter) | Crash-reporting support |
 | Swift, SwiftUI, and Apple's macOS/Metal technologies | The native interface and platform foundations |
+
+## HyperBridge component provenance
+
+The independent engine includes **SoftFloat-derived floating-point routines** and **Cephes mathematical routines**. Their original licenses, copyright notices and applicable attribution remain part of the source release requirements.
+
+The SoftFloat-derived files were obtained from the [FEX source tree](https://github.com/FEX-Emu/FEX). This is component provenance, not a dependency on the FEX translation runtime. The component notices record the imported files and modifications.
+
+## Earlier runtime acknowledgements
+
+**FEX contributors** are credited for the translation runtime used in MacRunner's earlier packaged builds and the [recorded game tests](TESTED_GAMES.md). Those results predate the independent HyperBridge integration. This acknowledgement preserves the origin of that earlier work; HyperBridge is now the project's engine-development direction.
 
 ## MacRunner DirectX 12 development
 
@@ -30,7 +40,7 @@ Full in-game ray tracing remains in development, and compatibility is checked pe
 
 ## Supporting libraries
 
-The bundled runtime's dependency inventory and accompanying notices identify the following supporting projects:
+The earlier preview bundle's dependency inventory and accompanying notices identify the following supporting projects. The final HyperBridge-based bundle will have its own verified component inventory:
 
 - **Media playback and codecs:** [dav1d](https://code.videolan.org/videolan/dav1d), [FFmpeg](https://ffmpeg.org/), [FLAC](https://xiph.org/flac/), [GStreamer](https://gstreamer.freedesktop.org/), [LAME](https://lame.sourceforge.io/), [libvpx](https://www.webmproject.org/code/), [mpg123](https://www.mpg123.de/), [Ogg/libogg](https://xiph.org/ogg/), [Opus](https://www.opus-codec.org/), [ORC](https://gstreamer.freedesktop.org/modules/orc.html), [SVT-AV1](https://gitlab.com/AOMediaCodec/SVT-AV1), [Theora](https://www.theora.org/), [VMAF/libvmaf](https://github.com/Netflix/vmaf), [Vorbis/libvorbis](https://xiph.org/vorbis/), [x264](https://www.videolan.org/developers/x264.html), and [x265](https://bitbucket.org/multicoreware/x265_git).
 - **Graphics and imaging:** [FreeType](https://www.freetype.org/), [libjpeg-turbo](https://libjpeg-turbo.org/), [libpng](https://www.libpng.org/pub/png/libpng.html), and [SDL2](https://www.libsdl.org/).

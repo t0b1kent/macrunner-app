@@ -1,8 +1,14 @@
 # Release status
 
-**MacRunner 1.0.2 · Local preview · September 23, 2026**
+**MacRunner local preview · HyperBridge integration in progress · September 24, 2026**
 
-MacRunner has been built as a standalone native Mac application. Public distribution is being prepared. The current Wine/FEX/DXMT engine bundle is separate from ongoing DirectX 12 research.
+MacRunner has been built as a standalone native Mac application. The project is now moving toward its own **HyperBridge x86-64 → ARM64 engine** and a future open-source engine release. The installed 1.0.2 preview, the independent HyperBridge integration and DirectX 12 graphics research are distinct development configurations.
+
+## HyperBridge transition
+
+The independent core is implemented and undergoing Wine integration. Initial isolated Windows x64 console and C++ checks passed with the HyperBridge backend verified. Broader CPU, threading and exception-handling checks still have unresolved failures, and real game validation on the new runtime remains pending.
+
+Existing game results and FPS figures belong to the earlier runtime. They will be repeated on HyperBridge before becoming compatibility claims for the new engine. [Engine status and source-release roadmap →](HYPERBRIDGE.md)
 
 ## Ready in the local preview
 
@@ -18,7 +24,7 @@ MacRunner has been built as a standalone native Mac application. Public distribu
 
 These checks validate the application and packaging. They do not establish game compatibility or replace testing on other Macs. Local ad hoc signing is not Developer ID signing or notarization for public distribution.
 
-The exact development bundle currently requires **macOS 27.0** because of its bundled media dependencies. Launch on Macs with standard security settings remains unverified. The main application and Wine/FEX runtime are ARM64; an optional Intel-only Legendary store helper may require Rosetta. The confirmed core game path does not use Rosetta.
+The exact earlier development bundle requires **macOS 27.0** because of its bundled media dependencies. Launch on Macs with standard security settings remains unverified. The main application and bundled runtime are ARM64; an optional Intel-only Legendary store helper may require Rosetta. The recorded core game path does not use Rosetta. These are preview-bundle facts, not a finalized HyperBridge release support matrix.
 
 Public download preparation also includes completing third-party license notices and the corresponding source/build materials required by the distributed LGPL/GPL components. Those materials are not yet ready; a download is not being advertised as available.
 
@@ -30,9 +36,9 @@ An earlier session left the game process running after the user exited, requirin
 
 **[Tested games and their runtime/graphics paths →](TESTED_GAMES.md)**
 
-## Graphics: current bundle
+## Graphics: earlier preview bundle
 
-The current app bundle contains an experimental Wine/FEX/DXMT route for **64-bit Direct3D 10/11** software. FEX translates x86-64 CPU instructions, Wine provides Windows API compatibility, and DXMT translates graphics to Metal. A listed launch profile is not a compatibility certification.
+The installed preview uses the [earlier runtime documented in the game tests](TESTED_GAMES.md) for **64-bit Direct3D 10/11** software. Wine provides Windows API compatibility and DXMT translates graphics to Metal. The HyperBridge-based replacement is still being integrated. A listed launch profile is not a compatibility certification.
 
 Support for every DirectX version, every Windows game, or 32-bit Windows software is not claimed.
 
@@ -54,7 +60,7 @@ This work is in a **separate development branch**, not the preview app bundle.
 
 ### Ray-tracing research
 
-Isolated shadow/radiance and acceleration-structure tests have passed through the Wine/FEX path, including 24 targeted ray cases and 48 acceleration-structure cases on September 22.
+Isolated shadow/radiance and acceleration-structure tests passed through the earlier runtime, including 24 targeted ray cases and 48 acceleration-structure cases on September 22. These are graphics-research results, not HyperBridge integration results.
 
 The public DirectX ray-tracing state-object and ray-dispatch path is not yet connected. Complete coverage of the game's 4,281 ray-tracing libraries, in-game ray tracing, and performance validation remain open. Ray tracing is not a released feature of the current bundle.
 
@@ -74,8 +80,10 @@ Before delivery can be enabled:
 
 ## Next release milestones
 
-- Validate the complete choose, add, and launch workflow with an agreed engine bundle.
-- Expand the published tested-games list with repeat checks and additional configurations.
+- Apply the selected MIT terms to the original HyperBridge source release, preserve component notices and prepare clean source-release materials. [License scope →](HYPERBRIDGE_LICENSE.md)
+- Complete the independent engine's Wine integration and resolve outstanding execution failures.
+- Validate the complete choose, add, and launch workflow with the HyperBridge engine bundle.
+- Repeat the recorded game checks on HyperBridge and publish results with comparable benchmark conditions.
 - Complete signed distribution and update-delivery validation.
 - Prepare a public download when those checks are complete.
 
