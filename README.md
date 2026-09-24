@@ -31,7 +31,8 @@ MacRunner is built around a simple idea: **choose an app or game, add it to your
 
 | Game | Game engine | Graphics path | Status | FPS |
 | --- | --- | --- | --- | --- |
-| **Hollow Knight** | Unity | DXMT → Metal | **Working** | Not measured |
+| **Hollow Knight** | Unity | DXMT → Metal | **Working** | **60** |
+| **Divinity: Original Sin — Enhanced Edition** | Divinity Engine | DXMT → Metal | **Working** | **100** |
 | **Factorio** | Custom engine (Wube) | DXMT → Metal | **Working** | Not measured |
 | **Vampire Survivors** | Unity (IL2CPP) | DXMT → Metal | **Working** | Not measured |
 | **Hedon Bloodrite** | GZDoom | OpenGL → Metal (Apple driver) | **Working** | Not measured |
@@ -45,7 +46,7 @@ MacRunner is built around a simple idea: **choose an app or game, add it to your
 
 **Working** means gameplay works in the tested configuration. Hollow Knight was checked through the current installed app on September 23; the other rows record checks of specific development configurations. **[Test dates, verified functions and remaining issues →](TESTED_GAMES.md)**
 
-**FPS results will be added after timed gameplay checks**, with resolution, graphics settings and the tested scene recorded. “Not measured” is a pending measurement, not a zero-FPS result.
+**FPS values are maintainer-reported gameplay observations on the test Mac**, reported on September 24, 2026. Resolution, graphics settings, scene and sample duration have not yet been recorded for these figures. “Not measured” means a result is still pending, not zero FPS.
 
 **Why these games?** Together they exercise Unity, Godot, custom engines and Doom/Build/Quake-derived technology, across Direct3D 11, Direct3D 12, OpenGL and software rendering. This variety helps find issues shared by different kinds of games. Results remain title-specific. [Game engines and test coverage →](TESTED_GAMES.md#game-engines--test-coverage)
 
