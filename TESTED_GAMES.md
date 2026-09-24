@@ -1,6 +1,6 @@
 # Tested games & engines
 
-**Last updated: September 23, 2026**
+**Last updated: September 24, 2026**
 
 This page records what has actually been observed while developing MacRunner. A title in the library or launch-profile catalog is not automatically a tested game. Results apply to the configurations used for those sessions.
 
@@ -19,7 +19,7 @@ This is the primary development machine. Historical checks do not establish that
 
 ## FPS measurements
 
-Gameplay benchmark results have not yet been published for these titles. **Not measured** means the measurement is pending. Future results will record the measured FPS together with resolution, graphics settings, test scene, duration and graphics path.
+The FPS values below are **maintainer-reported gameplay observations on the test Mac**, reported on September 24, 2026. Resolution, graphics settings, scene and sample duration have not yet been recorded, so these figures are not standardized benchmark averages or minimums. **Not measured** means a result is still pending. Future benchmark checks will record these conditions alongside frame timings.
 
 All entries below used **FEX + Wine**. FEX translates x86-64 CPU instructions; Wine provides Windows API compatibility. The graphics path is listed separately for each game.
 
@@ -30,6 +30,7 @@ The **game engine** is the technology used to build the game. It is separate fro
 | Game | Game engine | What this adds to the test set |
 | --- | --- | --- |
 | **Hollow Knight** | [Unity](https://unity.com/made-with-unity/hollow-knight) | A Unity title running through Direct3D 11 → Metal. |
+| **Divinity: Original Sin — Enhanced Edition** | [Divinity Engine](https://forums.larian.com/ubbthreads.php?Number=580882&ubb=showflat) | Larian's RPG engine using Direct3D 11 → Metal. |
 | **Factorio** | [Custom engine (Wube)](https://www.factorio.com/blog/post/fff-230) | A custom renderer and simulation workload. |
 | **Vampire Survivors** | Unity (IL2CPP) | The tested Unity build uses an IL2CPP-compiled game assembly; a different Unity execution path. |
 | **Hedon Bloodrite** | GZDoom | Doom-derived engine technology using OpenGL. |
@@ -47,7 +48,7 @@ Engine labels describe the inspected game versions. In particular, **Vampire Sur
 
 | Game | Graphics path | Check date | Confirmed result | FPS | Still to verify |
 | --- | --- | --- | --- | --- | --- |
-| **Hollow Knight** | **DXMT: Direct3D 11 → Metal** | September 23, 2026 | The tester confirmed gameplay and subsequently a successful launch, game entry and normal exit in the installed app. | Not measured | Repeated-run reliability, long sessions, save/reload, complete cinematic playback and measured performance. |
+| **Hollow Knight** | **DXMT: Direct3D 11 → Metal** | September 23, 2026 | The tester confirmed gameplay and subsequently a successful launch, game entry and normal exit in the installed app. FPS reported on September 24. | **60** | Repeated-run reliability, long sessions, save/reload, complete cinematic playback and a timed benchmark with recorded settings. |
 
 A title-specific startup correction was applied. Missing media components were also added and passed isolated component checks. An earlier session required MacRunner's Stop button after the game had been exited; the latest user check completed normally. Startup duration and residual-process cleanup were not independently measured in that latest session.
 
@@ -57,6 +58,7 @@ These results came from earlier development configurations. **They have not all 
 
 | Game | Graphics path | Check date | What was verified | FPS | Remaining limits |
 | --- | --- | --- | --- | --- | --- |
+| **Divinity: Original Sin — Enhanced Edition** | DXMT: Direct3D 11 → Metal | September 14, 2026 | User-confirmed gameplay and menu navigation. The maintainer reported 100 FPS on September 24; the FPS observation is separate from the earlier development check. | **100** | Save/reload, voluntary exit, long sessions and complete automated graphics-path verification. The earlier run ended through a test timer. |
 | **Factorio** | DXMT: Direct3D 11 → Metal | September 11, 2026 | User-confirmed tutorial gameplay, saving, returning to the menu and reloading. | Not measured | Long sessions and measured performance were not established. |
 | **Vampire Survivors** | DXMT: Direct3D 11 → Metal | September 11, 2026 | User-confirmed gameplay, movement, audio and voluntary exit, with a gameplay screenshot. | Not measured | Long-session stability and measured performance were not established. |
 | **Hedon Bloodrite** | OpenGL → Metal (Apple driver) | September 12, 2026 | User-confirmed gameplay, keyboard/mouse, audio, saving and reload at the saved position; clean exits recorded. | Not measured | Broader scene coverage and long-session performance were not established. |
