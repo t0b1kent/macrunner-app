@@ -1,12 +1,21 @@
 # HyperBridge
 
-**MacRunner's independently developed x86-64 → ARM64 translation engine for Windows x64 software on Apple Silicon.**
+**MacRunner's x86-64 / x86 → ARM64 CPU engine for Windows software on Apple Silicon.**
 
-HyperBridge is being developed as MacRunner's own CPU translation core. The aim is to make the engine inspectable, buildable and open to contributions through a future open-source release. **MIT has been selected for original HyperBridge code; source publication is planned.** This repository currently presents the project and its progress. [License terms and third-party scope →](HYPERBRIDGE_LICENSE.md)
+HyperBridge is built on **[FEX-Emu](https://github.com/FEX-Emu/FEX)** (MIT) and carries MacRunner's own patch series on top of it. Its source, build script, releases, status and measurements are public under the MIT license at **[t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge)**. FEX-Emu has not reviewed or endorsed these modifications, and they are not contributions to FEX-Emu. [License terms and third-party scope →](HYPERBRIDGE_LICENSE.md)
+
+## Engine version in MacRunner
+
+| MacRunner | HyperBridge engine |
+| --- | --- |
+| **1.0.3** development preview | **[engine 0015](https://github.com/t0b1kent/hyperbridge/releases/tag/engine-0015)**: FEX-Emu `fd141ed6d` with patches 0001–0015 |
+| 1.0.2 local preview | FEX-Emu `fd141ed6d` with patches 0001–0007 |
+
+What changed in each engine build is listed in its [release notes](https://github.com/t0b1kent/hyperbridge/releases). How the engine compares with Microsoft Prism, the FEX build in CrossOver Preview and native macOS code: [HyperBridge compared](https://github.com/t0b1kent/hyperbridge/blob/main/COMPARISON.md).
 
 ## What the engine does
 
-HyperBridge translates supported x86-64 instructions into ARM64 code for execution on Apple Silicon. Its implementation includes instruction decoding, an intermediate representation, ARM64 code generation, translated-code caching, arithmetic and memory handling, and bridges to native functions.
+HyperBridge translates x86-64 and x86 instructions into ARM64 code and runs them on Apple Silicon, inside Wine's ARM64EC (64-bit programs) and WOW64 (32-bit programs) execution models.
 
 | Component | Responsibility |
 | --- | --- |
@@ -17,7 +26,7 @@ HyperBridge translates supported x86-64 instructions into ARM64 code for executi
 | **Metal** | Native graphics execution on the Apple GPU |
 | **MacRunner app** | The macOS library, launch controls, runtime packaging and diagnostics |
 
-The independent translation core and its Wine integration are distinct from the earlier runtime used for MacRunner's recorded game sessions. HyperBridge is not presented as a replacement for Wine or as a graphics API.
+HyperBridge is not a replacement for Wine or a graphics API.
 
 ## Host and Windows architectures
 
@@ -25,47 +34,14 @@ The independent translation core and its Wine integration are distinct from the 
 
 | Windows executable | Execution path | Scope |
 | --- | --- | --- |
-| **x64 / x86-64** | HyperBridge translates CPU instructions to ARM64; Wine provides Windows compatibility | Primary focus; initial isolated checks passed, broader integration remains in development |
-| **x86 / 32-bit** | Planned 32-bit guest support through the compatibility runtime | Future milestone; full support is not available yet |
-| **ARM64** | ARM64 CPU execution with Wine handling Windows APIs, loading and calling conventions | Not yet validated as a supported application target; this native-code route needs separate testing |
+| **x64 / x86-64** | HyperBridge (`xtajit64.dll`, ARM64EC) translates CPU instructions to ARM64; Wine provides Windows compatibility | Primary focus; games checked on it are listed in [tested games](TESTED_GAMES.md) |
+| **x86 / 32-bit** | HyperBridge (`xtajit.dll`, WOW64) | Included in the engine; game validation for 32-bit titles is still limited |
+| **ARM64** | ARM64 CPU execution with Wine handling Windows APIs, loading and calling conventions | Not yet validated as a supported application target |
 
-Windows ARM64 programs do not need x64 → ARM64 instruction translation for their ARM64 code. They still need Wine's Windows compatibility work. An **ARM64EC** application may also contain x64 modules; those modules still need the x64 translation path. This table describes execution paths and development scope, not blanket application compatibility.
-
-## Verified progress
-
-**Status snapshot: September 24, 2026.**
-
-| Area | Current evidence |
-| --- | --- |
-| Translation core | Implemented instruction translation, arithmetic, memory, code-cache and native-call mechanisms with focused validation suites |
-| Wine integration | Separate HyperBridge runtime modules build and load through Wine's emulator interface |
-| First isolated Windows x64 checks | A console fixture and a C++ fixture passed their expected-output checks with the independent HyperBridge backend verified |
-| Broader execution checks | CPU, threading and exception-handling integration still have unresolved failures |
-| Full applications and games | Compatibility runs on the new independent runtime are still pending |
-
-Passing isolated fixtures is an integration milestone, not proof of full instruction coverage, full Windows compatibility or game readiness. The [existing game and FPS results](TESTED_GAMES.md) remain attributed to the earlier configurations that produced them.
-
-## What comes next
-
-1. Resolve the remaining CPU, threading and exception-handling integration failures.
-2. Complete native-call, graphics and media integration through Wine.
-3. Repeat real application and game checks: launch, input, audio, gameplay, save/reload and clean exit.
-4. Record comparable performance measurements with the game version, resolution, settings, test scene and frame timings.
-5. Integrate the validated engine into MacRunner's application bundle.
-6. Expand to full Windows x86 / 32-bit support and validate native Windows ARM64 applications separately.
-
-## Open-source release roadmap
-
-- **Completed: MIT selected** for original HyperBridge code, with third-party terms kept separate. [License →](HYPERBRIDGE_LICENSE.md)
-- Preserve the licenses and provenance of third-party components.
-- Prepare a clean source tree with build requirements and reproducible build/test instructions.
-- Publish the source repository, contribution guide, issue templates and an explicit support matrix.
-- Attach release notes and checksums to any future engine binaries.
-
-An engine-source release and a signed MacRunner application release are separate milestones. Neither public download is available from this presentation repository yet.
+Windows ARM64 programs do not need x64 → ARM64 instruction translation for their ARM64 code. An **ARM64EC** application may also contain x64 modules; those modules still need the x64 translation path.
 
 ## Foundations and acknowledgements
 
-HyperBridge has its own translation core and uses third-party components where appropriate, including SoftFloat-derived arithmetic code and Cephes routines. Their original notices and source provenance will accompany the source release. [Full credits and provenance →](CREDITS.md)
+HyperBridge is FEX-Emu with MacRunner's modifications. The engine binaries statically link components of the FEX-Emu source tree ({fmt}, xxHash, unordered_dense, range-v3, rpmalloc, tiny-json, cpp-optparse, Cephes, SoftFloat 3e); their notices ship with every engine release and inside the app. [Full credits and provenance →](CREDITS.md)
 
 [MacRunner](README.md) · [Application release status](RELEASE_STATUS.md) · [Recorded game tests](TESTED_GAMES.md)

@@ -1,16 +1,30 @@
 # Release status
 
-**MacRunner local preview · HyperBridge integration in progress · September 24, 2026**
+**MacRunner 1.0.3 development preview · HyperBridge engine 0015 · September 29, 2026**
 
-MacRunner has been built as a standalone native Mac application. The project is now moving toward its own **HyperBridge x86-64 → ARM64 engine** and a future open-source engine release. The installed 1.0.2 preview, the independent HyperBridge integration and DirectX 12 graphics research are distinct development configurations.
+MacRunner is a standalone native Mac application. Its CPU engine is **HyperBridge**: FEX-Emu with MacRunner's patch series, public under MIT at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). The 1.0.3 preview and the DirectX 12 graphics research are distinct development configurations.
 
-## HyperBridge transition
+## MacRunner 1.0.3 development preview
 
-The independent core is implemented and undergoing Wine integration. Initial isolated Windows x64 console and C++ checks passed with the HyperBridge backend verified. Broader CPU, threading and exception-handling checks still have unresolved failures, and real game validation on the new runtime remains pending.
+**[Download from the release page](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.3).** Apple Silicon, macOS 27.0.
 
-Existing game results and FPS figures belong to the earlier runtime. They will be repeated on HyperBridge before becoming compatibility claims for the new engine. [Engine status and source-release roadmap →](HYPERBRIDGE.md)
+| Change from 1.0.2 | What it means |
+| --- | --- |
+| **HyperBridge engine 0015** | Replaces the 1.0.2 engine. [What changed in the engine →](https://github.com/t0b1kent/hyperbridge/releases/tag/engine-0015) |
+| **Faster start-up** | `MACRUNNER_HB_MAPSCAN_SKIP=1` is now on by default: Wine no longer scans the whole address space when it maps memory. Hollow Knight reached its menu in about 45 s instead of about 3 minutes in our measurements |
+| **Cleaner runtime** | 20 leftover backup files (64 MB) removed from the bundled Wine |
 
-## Ready in the local preview
+**Checked on this exact engine:** Hollow Knight 1.5.12620 (Windows build) starts, loads a save and plays King's Pass; frame rate at the 120 Hz display limit on the test Mac. [Measurements →](TESTED_GAMES.md#macrunner-103--hyperbridge-engine-0015)
+
+**Not yet re-checked on 1.0.3:** the other titles in [tested games](TESTED_GAMES.md), long sessions, save/reload and clean exit across games.
+
+**Distribution status:** signed ad hoc, **not notarized** (Apple Developer account approval is pending), automatic updates off. macOS may refuse the first launch; the release notes describe how to open it. The release attaches the license texts and the **corresponding source of the bundled LGPL/GPL components** (Wine and DXMT with MacRunner's changes, and the third-party libraries listed in the inventory).
+
+## Engine
+
+MacRunner 1.0.3 uses HyperBridge [engine 0015](https://github.com/t0b1kent/hyperbridge/releases/tag/engine-0015). The engine's status, measurements (including the comparison with Prism, CrossOver Preview and native code) and roadmap are on the [HyperBridge page](https://github.com/t0b1kent/hyperbridge). [Engine versions in MacRunner →](HYPERBRIDGE.md)
+
+## Checked in the 1.0.2 local preview
 
 | Area | Verified result |
 | --- | --- |
@@ -26,7 +40,7 @@ These checks validate the application and packaging. They do not establish game 
 
 The exact earlier development bundle requires **macOS 27.0** because of its bundled media dependencies. Launch on Macs with standard security settings remains unverified. The main application and bundled runtime are ARM64; an optional Intel-only Legendary store helper may require Rosetta. The recorded core game path does not use Rosetta. These are preview-bundle facts, not a finalized HyperBridge release support matrix.
 
-Public download preparation also includes completing third-party license notices and the corresponding source/build materials required by the distributed LGPL/GPL components. Those materials are not yet ready; a download is not being advertised as available.
+The 1.0.3 release attaches the third-party license texts and the corresponding source of the distributed LGPL/GPL components.
 
 ### Hollow Knight: local gameplay check
 
@@ -36,9 +50,9 @@ An earlier session left the game process running after the user exited, requirin
 
 **[Tested games and their runtime/graphics paths →](TESTED_GAMES.md)**
 
-## Graphics: earlier preview bundle
+## Graphics
 
-The installed preview uses the [earlier runtime documented in the game tests](TESTED_GAMES.md) for **64-bit Direct3D 10/11** software. Wine provides Windows API compatibility and DXMT translates graphics to Metal. The HyperBridge-based replacement is still being integrated. A listed launch profile is not a compatibility certification.
+MacRunner 1.0.3 runs **64-bit Direct3D 10/11** software through **DXMT**, which translates the graphics calls to Metal; Wine provides Windows API compatibility and HyperBridge translates the CPU instructions. Earlier game results in the [game tests](TESTED_GAMES.md) used the previous runtime. A listed launch profile is not a compatibility certification.
 
 Support for every DirectX version, every Windows game, or 32-bit Windows software is not claimed.
 
@@ -82,11 +96,8 @@ Before delivery can be enabled:
 
 ## Next release milestones
 
-- Apply the selected MIT terms to the original HyperBridge source release, preserve component notices and prepare clean source-release materials. [License scope →](HYPERBRIDGE_LICENSE.md)
-- Complete the independent engine's Wine integration and resolve outstanding execution failures.
-- Validate the complete choose, add, and launch workflow with the HyperBridge engine bundle.
-- Repeat the recorded game checks on HyperBridge and publish results with comparable benchmark conditions.
-- Complete signed distribution and update-delivery validation.
-- Prepare a public download when those checks are complete.
+- Repeat the recorded game checks on HyperBridge and publish results with comparable benchmark conditions (game version, scene, settings, frame timings).
+- Move to newer HyperBridge engine builds after their checks ([engine releases](https://github.com/t0b1kent/hyperbridge/releases)).
+- Developer ID signing, notarization and update-delivery validation once the Apple Developer account is approved.
 
 [Back to MacRunner](README.md) · [Credits](CREDITS.md)

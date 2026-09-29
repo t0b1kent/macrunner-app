@@ -1,10 +1,10 @@
 # Tested games & engines
 
-**Last updated: September 24, 2026**
+**Last updated: September 29, 2026**
 
 This page records what has actually been observed while developing MacRunner. A title in the library or launch-profile catalog is not automatically a tested game. Results apply to the configurations used for those sessions.
 
-**HyperBridge transition:** the game sessions and FPS figures on this page were recorded using earlier runtime configurations. **They are not HyperBridge compatibility or performance results.** The independent engine is being integrated and will receive its own application/game validation. [HyperBridge status and roadmap →](HYPERBRIDGE.md)
+**HyperBridge:** the first section below was measured on MacRunner 1.0.3 with HyperBridge engine 0015. The other sessions and FPS figures on this page were recorded with earlier configurations; they will be repeated on HyperBridge. [HyperBridge status and roadmap →](HYPERBRIDGE.md)
 
 ## Test Mac
 
@@ -45,6 +45,18 @@ The **game engine** is the technology used to build the game. It is separate fro
 This selection provides coverage across different engines, runtime requirements and graphics APIs. A result applies to the tested game and configuration; other titles using the same engine still need their own checks.
 
 Engine labels describe the inspected game versions. In particular, **Vampire Survivors** refers to the tested Unity/IL2CPP build, and **DOOM 64** refers to the PC re-release. Local runtime evidence identifies UnityPlayer/GameAssembly for Vampire Survivors, GZDoom resources for Hedon, KEX in the DOOM 64 runtime, and EDuke32 in Ion Fury.
+
+## MacRunner 1.0.3 · HyperBridge engine 0015
+
+**Hollow Knight 1.5.12620** (GOG, Windows x86-64 build, Unity 6000.0.61f1), September 29, 2026. 1280×720 window, V-Sync on, 120 Hz built-in display. Start from a saved game in King's Pass, measured in gameplay for about two minutes. Frames from the Metal HUD log.
+
+| Measurement | MacRunner 1.0.3 |
+| --- | --- |
+| Graphics path | DXMT: Direct3D 11 → Metal |
+| First frame · main menu · gameplay after launch | 23–25 s · 42–44 s · 55–60 s |
+| Frame rate in King's Pass | **107–117 FPS** (limit 120, median frame 8.33 ms) |
+
+Four runs on September 29, with the Mac in normal use: 110, 117 and 113 FPS on the 1.0.3 engine, and 107 FPS on the exact 1.0.3 bundle with the Mac under extra load. How the engine compares with the native macOS build of the same game and with other x86 emulators: [HyperBridge compared](https://github.com/t0b1kent/hyperbridge/blob/main/COMPARISON.md).
 
 ## September 23 installed-app check
 

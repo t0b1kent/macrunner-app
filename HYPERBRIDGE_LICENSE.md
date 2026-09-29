@@ -1,10 +1,10 @@
 # HyperBridge license
 
-**License selected: MIT. Source publication is planned.**
+**License: MIT. Source: [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge).**
 
-The license below applies to original HyperBridge code owned by **t0b1kent**. It does not relicense Wine, SoftFloat-derived code, Cephes, other third-party components, or material carrying its own license or copyright notice. Those components retain their respective terms and notices. See [credits and component provenance](CREDITS.md).
+The license below applies to original HyperBridge code owned by **t0b1kent**, including MacRunner's modifications to FEX-Emu. HyperBridge's engine is **[FEX-Emu](https://github.com/FEX-Emu/FEX)** with those modifications; FEX-Emu code stays under its own MIT license (Copyright (c) 2019 Ryan Houdek and FEX contributors). The license below does not relicense FEX-Emu, Wine, SoftFloat-derived code, Cephes, other third-party components, or material carrying its own license or copyright notice. Those components retain their respective terms and notices. See [credits and component provenance](CREDITS.md).
 
-This page records the engine's chosen license. The HyperBridge source repository and public source archive have not yet been published.
+The source repository is public, and every [engine release](https://github.com/t0b1kent/hyperbridge/releases) carries the license texts of the components linked into its binaries.
 
 ## MIT License
 

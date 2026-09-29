@@ -15,7 +15,8 @@ These acknowledgements do not imply affiliation or endorsement.
 
 | Project | Contribution |
 | --- | --- |
-| **HyperBridge development** | MacRunner's independently developed x86-64 → ARM64 translation core and ongoing Wine integration |
+| **HyperBridge** | MacRunner's x86-64 / x86 → ARM64 CPU engine: FEX-Emu with MacRunner's patch series ([source](https://github.com/t0b1kent/hyperbridge)) |
+| [FEX-Emu](https://github.com/FEX-Emu/FEX) | The x86 → ARM64 emulator HyperBridge is built on (MIT) |
 | [Wine](https://www.winehq.org/) | Windows API compatibility |
 | [DXMT](https://github.com/3Shain/dxmt) | Direct3D 10/11 translation to Metal |
 | [Sparkle](https://sparkle-project.org/) | The macOS update framework used by the application |
@@ -24,13 +25,13 @@ These acknowledgements do not imply affiliation or endorsement.
 
 ## HyperBridge component provenance
 
-The independent engine includes **SoftFloat-derived floating-point routines** and **Cephes mathematical routines**. Their original licenses, copyright notices and applicable attribution remain part of the source release requirements.
+HyperBridge's engine binaries statically link components of the FEX-Emu source tree: **{fmt}, xxHash, unordered_dense, range-v3, rpmalloc, tiny-json, cpp-optparse, Cephes and SoftFloat 3e**. Their license texts ship with every [engine release](https://github.com/t0b1kent/hyperbridge/releases).
 
-The SoftFloat-derived files were obtained from the [FEX source tree](https://github.com/FEX-Emu/FEX). This is component provenance, not a dependency on the FEX translation runtime. The component notices record the imported files and modifications.
+MacRunner's earlier, independently written translator (`src/` in the HyperBridge repository, now the reference side of the HB↔FEX oracle) includes **SoftFloat-derived floating-point routines** obtained from the FEX source tree and **Cephes mathematical routines**; its notices record the imported files and modifications.
 
 ## Earlier runtime acknowledgements
 
-**FEX contributors** are credited for the translation runtime used in MacRunner's earlier packaged builds and the [recorded game tests](TESTED_GAMES.md). Those results predate the independent HyperBridge integration. This acknowledgement preserves the origin of that earlier work; HyperBridge is now the project's engine-development direction.
+**FEX contributors** are credited for the translation runtime of MacRunner's earlier packaged builds and the [recorded game tests](TESTED_GAMES.md). Since MacRunner 1.0.3 that engine is published as HyperBridge: FEX-Emu with MacRunner's patch series.
 
 ## MacRunner DirectX 12 development
 
@@ -40,7 +41,7 @@ Full in-game ray tracing remains in development, and compatibility is checked pe
 
 ## Supporting libraries
 
-The earlier preview bundle's dependency inventory and accompanying notices identify the following supporting projects. The final HyperBridge-based bundle will have its own verified component inventory:
+The bundle's dependency inventory and accompanying notices identify the following supporting projects. The inventory of MacRunner 1.0.3, with versions and licenses, is part of its [source package](RELEASE_STATUS.md#macrunner-103-development-preview):
 
 - **Media playback and codecs:** [dav1d](https://code.videolan.org/videolan/dav1d), [FFmpeg](https://ffmpeg.org/), [FLAC](https://xiph.org/flac/), [GStreamer](https://gstreamer.freedesktop.org/), [LAME](https://lame.sourceforge.io/), [libvpx](https://www.webmproject.org/code/), [mpg123](https://www.mpg123.de/), [Ogg/libogg](https://xiph.org/ogg/), [Opus](https://www.opus-codec.org/), [ORC](https://gstreamer.freedesktop.org/modules/orc.html), [SVT-AV1](https://gitlab.com/AOMediaCodec/SVT-AV1), [Theora](https://www.theora.org/), [VMAF/libvmaf](https://github.com/Netflix/vmaf), [Vorbis/libvorbis](https://xiph.org/vorbis/), [x264](https://www.videolan.org/developers/x264.html), and [x265](https://bitbucket.org/multicoreware/x265_git).
 - **Graphics and imaging:** [FreeType](https://www.freetype.org/), [libjpeg-turbo](https://libjpeg-turbo.org/), [libpng](https://www.libpng.org/pub/png/libpng.html), and [SDL2](https://www.libsdl.org/).
@@ -51,6 +52,6 @@ Sparkle's notices additionally acknowledge **bsdiff, sais-lite, and the portable
 
 Thank you to their authors, maintainers, testers, and contributors, including the contributors to the dependencies they build on. Project names and trademarks belong to their respective owners.
 
-This page is an acknowledgement, not a replacement for third-party license texts or a claim that distribution review is complete. License notices and any required source availability must be handled for the actual distributed components before a public binary release. Attribution will be updated as the bundled components change.
+This page is an acknowledgement, not a replacement for third-party license texts. The MacRunner 1.0.3 release attaches the license texts and the corresponding source of its LGPL/GPL components. Attribution will be updated as the bundled components change.
 
 [Back to MacRunner](README.md) · [Release status](RELEASE_STATUS.md)
