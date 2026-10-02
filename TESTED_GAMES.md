@@ -1,10 +1,10 @@
 # Tested games & engines
 
-**Last updated: September 29, 2026**
+**Last updated: October 2, 2026**
 
 This page records what has actually been observed while developing MacRunner. A title in the library or launch-profile catalog is not automatically a tested game. Results apply to the configurations used for those sessions.
 
-**HyperBridge:** the first section below was measured on MacRunner 1.0.3 with HyperBridge engine 0015. The other sessions and FPS figures on this page were recorded with earlier configurations; they will be repeated on HyperBridge. [HyperBridge status and roadmap →](HYPERBRIDGE.md)
+**Current ordinary release: MacRunner 1.0.6 (October 1).** The September 29 FPS section below was measured on 1.0.3 with engine 0015; those figures have not been re-measured on 1.0.6. Other entries keep their original configurations. The separate Indiana preview and unreleased signed-loader checks are identified explicitly. [HyperBridge status →](HYPERBRIDGE.md)
 
 ## Test Mac
 
@@ -15,7 +15,7 @@ This page records what has actually been observed while developing MacRunner. A 
 | CPU | 8 cores: 6 performance + 2 efficiency |
 | GPU | 14 cores |
 | Unified memory | 32 GB |
-| Current OS | macOS 27.0, build 26A428 |
+| October 2 OS | macOS 27.0.1, build 26A434; September 29 benchmark OS: 27.0, build 26A428 |
 
 This is the primary development machine. Historical checks do not establish that each earlier session used this exact OS build. [Current installation requirements and release readiness →](RELEASE_STATUS.md)
 
@@ -91,7 +91,29 @@ These results came from earlier development configurations. **They have not all 
 
 The maintainer confirmed on **September 23, 2026** that the game had already been launched successfully with DirectX 12 and was working in gameplay. This newer confirmation supersedes the earlier September 16 menu-only status. The status describes the tested configuration.
 
-**Current focus: further optimization**, including rendering quality and performance. Full in-game ray tracing remains in development. [Detailed graphics progress →](RELEASE_STATUS.md#directx-12-development)
+**Current focus: further optimization**, including rendering quality and performance. **Ray tracing is experimental, not released.** [Detailed graphics progress →](RELEASE_STATUS.md#directx-12-development)
+
+## Release checks since 1.0.3
+
+These checks retain the scope recorded in the release notes; they do not promote the earlier gameplay entries to 1.0.6 results.
+
+| Build and date | Observed result | Limit |
+| --- | --- | --- |
+| 1.0.4, September 29 | Hollow Knight checked with the Wine-server mapping fix | One title and configuration |
+| 1.0.5, September 30 | Hollow Knight, ABZU and Divinity reach their menus; crypto known-answer tests pass 12/12 | No new FPS measurement. Indiana stops at its Vulkan requirement. Automated Hedon and Stardew runs omit app profiles and do not replace the historical gameplay checks. |
+| 1.0.6, October 1 | Hollow Knight reaches its main menu on this engine; Hedon's added OpenGL profile produces presented frames | Hollow Knight gameplay and FPS were not re-verified. Hedon's menu and gameplay were not visually verified; no new FPS figure. |
+
+## Heroes III — signed-loader development
+
+**October 1, 2026:** Heroes III reaches its main menu through WOW64/HyperBridge on our Developer ID-signed Wine loader. The selected loader and live process were verified. A rare post-menu crash remains open. This is unreleased 32-bit development, not a 1.0.6 compatibility claim; gameplay, input, saving and FPS were not established.
+
+## Indiana Jones — 1.0.6-indiana experimental preview
+
+**October 1, 2026:** Indiana Jones and the Great Circle, Windows GOG version, uses HyperBridge inside ARM64EC Wine 11 and a separate MoltenVK Vulkan → Metal build. On a 2021 MacBook Pro M1 Pro with 32 GB and macOS 27.0, the release notes report **about 10–12 FPS at minimum settings**. These are the preview's observations, not new measurements for this page.
+
+**Known issues:** firing a weapon hung the GPU and restarted the macOS session on M1 Pro; save all your work before playing. Split frames, stutter and sky artifacts remain. The preview replaces four shared engine files and can affect other titles. **Ray tracing is experimental, not released.**
+
+Add `TheGreatCircle.exe` to MacRunner and press Play. If the game asks “Run In Safe Mode?” after an interrupted session, the preview notes say to choose No. This preview is separate from the ordinary 1.0.6 bundle and does not certify other Macs or games. [Preview notes](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.6-indiana)
 
 ## Reading the graphics paths
 

@@ -1,28 +1,45 @@
 # Release status
 
-**MacRunner 1.0.3 development preview · HyperBridge engine 0015 · September 29, 2026**
+**MacRunner 1.0.6 development preview · HyperBridge series 0001–0026 · Updated October 2, 2026**
 
-MacRunner is a standalone native Mac application. Its CPU engine is **HyperBridge**: FEX-Emu with MacRunner's patch series, public under MIT at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). The 1.0.3 preview and the DirectX 12 graphics research are distinct development configurations.
+MacRunner is a standalone native Mac application. Its CPU engine is **HyperBridge**: FEX-Emu with MacRunner's patch series, public under MIT at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). The ordinary 1.0.6 preview, the separate 1.0.6-indiana experimental preview and DirectX 12 graphics research are distinct configurations.
 
-## MacRunner 1.0.3 development preview
+## MacRunner 1.0.6 development preview
 
-**[Download from the release page](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.3).** Apple Silicon, macOS 27.0.
+**[Download from the release page](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.6).** Released October 1, 2026; Apple Silicon, macOS 27.0.
 
-| Change from 1.0.2 | What it means |
+| Release | What changed since the previous preview |
 | --- | --- |
-| **HyperBridge engine 0015** | Replaces the 1.0.2 engine. [What changed in the engine →](https://github.com/t0b1kent/hyperbridge/releases/tag/engine-0015) |
-| **Faster start-up** | `MACRUNNER_HB_MAPSCAN_SKIP=1` is now on by default: Wine no longer scans the whole address space when it maps memory. Hollow Knight reached its menu in about 45 s instead of about 3 minutes in our measurements |
-| **Cleaner runtime** | 20 leftover backup files (64 MB) removed from the bundled Wine |
+| **1.0.4 · September 29** | Fixes an uninitialized placement hint and failure-path memory clearing in Wine's server shared-memory mapping. Engine 0015 is unchanged. |
+| **1.0.5 · September 30** | Exposes SSE4.2, AES, PCLMULQDQ and SHA through `FEX_HOSTFEATURES=enablecrypto`; 12/12 crypto known-answer checks pass. Wine reports one L3 cache and loads unaligned shared writable executable sections as private copies. Those sections are not shared between processes as on Windows. |
+| **1.0.6 · October 1** | Updates the FEX recipe to 0001–0026. Enables the x18 ABI-trust transition path, corrected DIV/IDIV exceptions and restoration of pre-exception EFLAGS. Also includes safe exits at guest address zero, thread-scoped memory-ordering handling and executable-range fixes. Newer experimental switches remain off. |
+| **1.0.6 · Hedon profile** | Adds a forward-compatible OpenGL context profile; frames are presented, but menu and gameplay were not visually verified. |
 
-**Checked on this exact engine:** Hollow Knight 1.5.12620 (Windows build) starts, loads a save and plays King's Pass; frame rate at the 120 Hz display limit on the test Mac. [Measurements →](TESTED_GAMES.md#macrunner-103--hyperbridge-engine-0015)
+**CPU validation:** the packaged x64 DIV/IDIV probe matches all 88 Windows-on-ARM reference cases, including fault registers. EFLAGS restoration matches the retained reference within ARM64EC's context limits. These probes do not establish whole-game correctness. The regression comparison still records floating-point, alias/W^X and 32-bit startup failures; its early FP candidate is not an accepted release engine.
 
-**Not yet re-checked on 1.0.3:** the other titles in [tested games](TESTED_GAMES.md), long sessions, save/reload and clean exit across games.
+**Game measurements:** the September 29 Hollow Knight FPS results remain on 1.0.3/engine 0015. No new final-package game-speed measurement is claimed here. Long sessions, save/reload and clean exit still require title-specific checks. [Dated observations →](TESTED_GAMES.md)
 
-**Distribution status:** signed ad hoc, **not notarized** (Apple Developer account approval is pending), automatic updates off. macOS may refuse the first launch; the release notes describe how to open it. The release attaches the license texts and the **corresponding source of the bundled LGPL/GPL components** (Wine and DXMT with MacRunner's changes, and the third-party libraries listed in the inventory).
+**Distribution status of released 1.0.6:** signed ad hoc, **not notarized**, automatic updates off. The release includes the corresponding source of its bundled LGPL/GPL components. Apple approved the developer account on October 1. Our Developer ID provisioning profile carries Apple's cross-architecture-support entitlement, and a native probe succeeds. Our Wine loader is now Developer ID-signed; Apple accepted a trial notarization on October 2. This is preparation for the next release, not notarization of the released 1.0.6 app or proof of installation on other Macs.
+
+### Separate Indiana preview
+
+**[1.0.6-indiana](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.6-indiana), October 1:** experimental support for Indiana Jones and the Great Circle (Windows GOG version) through HyperBridge/Wine 11 and MoltenVK. The notes report about 10–12 FPS at minimum settings on M1 Pro. Firing a weapon hung the GPU and restarted the macOS session; split frames, stutter and sky artifacts remain. Save your work before trying it. Its four shared engine-file replacements can affect other titles. **Ray tracing is experimental, not released.** [Exact preview scope →](TESTED_GAMES.md#indiana-jones--106-indiana-experimental-preview)
 
 ## Engine
 
-MacRunner 1.0.3 uses HyperBridge [engine 0015](https://github.com/t0b1kent/hyperbridge/releases/tag/engine-0015). The engine's status, measurements (including the comparison with Prism, CrossOver Preview and native code) and roadmap are on the [HyperBridge page](https://github.com/t0b1kent/hyperbridge). [Engine versions in MacRunner →](HYPERBRIDGE.md)
+MacRunner 1.0.6 uses FEX-Emu `fd141ed6d` with MacRunner patches 0001–0026. The [comparison with Prism, CrossOver Preview and native code](https://github.com/t0b1kent/hyperbridge/blob/main/COMPARISON.md) retains its September 29 numbers: engine 0015, with the explicitly marked 1.0.2 floating-point snapshot. It is not a benchmark of 1.0.6. [Engine versions →](HYPERBRIDGE.md)
+
+## How we test
+
+Three stands replay bounded inputs without starting a game. These are diagnostic checks, not FPS benchmarks or compatibility certificates. A PASS can include explicitly classified known defects; missing/reference-gap states are reported separately.
+
+| Stand and dated result | What it found or checked | What it does not check |
+| --- | --- | --- |
+| **CPU · stages 4–6, October 1–2** | Stage 4: 499,487 of 540,861 saved states checked, 499,478 equal; all six code-generation mutations detected. Translated-block coverage by title: 59.9–96.9%. Stage 5: 500,595 checked, six known engine mismatches and zero new ones; two VEX reference gaps corrected by independent rules. Stage 6 adds an independent MXCSR status-flag oracle: 7,168 hardware-reference pairs / 14,336 executions, zero errors. The accepted-engine corpus run reports 651 known states, including 650 in the missing-status-flags class, and zero new states. Two full runs agree. | Separate blocks do not establish EC/native ABI correctness, SMC/aliases, cache lifetime, gameplay or FPS. x87 and unmasked #XM are outside this status oracle; memory writes of flags are not covered. The recorded YMM upper halves are all zero. Stage 5 still has 19 states without a reference and 602 mapping failures. |
+| **32-bit · stage 1, October 1** | 616 saved states from four titles at base zero and a shifted 8 TiB base; 296/296 PE probes equal at each base. Unicorn32 plus independent integer x87 rules compare 80-bit state, FCW/FSW/FTW and memory. Five mutations and six guard controls detected. Found pop-tag, sticky-invalid and saved-tag defects: 22, 4 and 32 cases respectively; empty-slot bytes remain disputed. | Small corpus: 105–194 blocks per title. Not Wine startup, native ABI, GPU, gameplay or speed. Known defects make this first-stage gate return failure even with zero new cases. A recorded wall-clock timeout remains explicit. |
+| **Graphics · October 2** | Native Direct3D 11 trace replay without Wine: 300 Hollow Knight, 191 Divinity and 248 ABZU frames, three repeats per series. Two full series on macOS 27.0.1 give 4,434 exact frame comparisons against truth recorded on 27.0. Ten identity controls and six negative controls behave as expected. | Selected recorded frames, not whole games, gameplay FPS, DirectX 12, Vulkan or ray tracing. One earlier Divinity frame had four RGB samples differ by ±1 (0.00027%, PSNR 109.8 dB); six later repeats did not reproduce it and the cause is open. Historical device capabilities were not fully recorded. |
+
+The processor stand revealed both engine defects and gaps in Unicorn; independent VEX and MXCSR rules keep those distinct. The graphics stand exposed a replay pipeline-state reset that skipped draws. Its A/A timing check reported 6.64% spread and 2.37% CV with frame readback included; this is measurement noise, not a product speed claim. The CPU and 32-bit stand sources are published in [hyperbridge/stands](https://github.com/t0b1kent/hyperbridge/tree/main/stands), without game recordings or binaries; the graphics stand patch is being prepared for the DXMT fork.
 
 ## Checked in the 1.0.2 local preview
 
@@ -52,13 +69,15 @@ An earlier session left the game process running after the user exited, requirin
 
 ## Graphics
 
-MacRunner 1.0.3 runs **64-bit Direct3D 10/11** software through **DXMT**, which translates the graphics calls to Metal; Wine provides Windows API compatibility and HyperBridge translates the CPU instructions. Earlier game results in the [game tests](TESTED_GAMES.md) used the previous runtime. A listed launch profile is not a compatibility certification.
+The ordinary MacRunner 1.0.6 preview runs **64-bit Direct3D 10/11** software through **DXMT**, which translates the graphics calls to Metal; Wine provides Windows API compatibility and HyperBridge translates the CPU instructions. Earlier game results in the [game tests](TESTED_GAMES.md) retain their recorded runtime. A listed launch profile is not a compatibility certification.
 
 Support for every DirectX version, every Windows game, or 32-bit Windows software is not claimed.
 
 ### 32-bit support and developer account
 
-Windows x64 is HyperBridge's primary integration target. Full Windows x86 / 32-bit support is a future milestone. Apple Developer account approval is pending; approval does not itself complete the 32-bit implementation or compatibility validation.
+Windows x64 is the released integration target. On October 1, Heroes III reached the main menu on our Developer ID-signed Wine loader. A rare post-menu crash remains open. This 32-bit path is in development and is not in released 1.0.6; menu evidence does not establish gameplay or general compatibility.
+
+**Hardware memory ordering (October 2):** the entitlement probe passes; integration of hardware TSO into the engine continues. New threads require their own explicit enablement. No speed result is established.
 
 The host Mac and Wine's native components use ARM64. Windows ARM64 applications have a separate native-code path through Wine, but standalone Windows ARM64 application support has not yet been validated here. Mixed ARM64EC/x64 workloads may still need x64 translation. [Architecture scope →](HYPERBRIDGE.md#host-and-windows-architectures)
 
@@ -74,11 +93,13 @@ This work is in a **separate development branch**, not the preview app bundle.
 
 **Elden Ring: tested & working — DirectX 12.** On September 23, the maintainer confirmed successful DirectX 12 launch and gameplay, superseding the older menu-only report. Current optimization focuses on rendering quality and performance. The game check is separate from the isolated graphics milestones above; no measured frame-rate target has been published.
 
-### Ray-tracing research
+### Ray tracing
 
-Isolated shadow/radiance and acceleration-structure tests passed through the earlier runtime, including 24 targeted ray cases and 48 acceleration-structure cases on September 22. These are graphics-research results, not HyperBridge integration results.
+**Experimental, not released.**
 
-The public DirectX ray-tracing state-object and ray-dispatch path is not yet connected. Complete coverage of the game's 4,281 ray-tracing libraries, in-game ray tracing, and performance validation remain open. Ray tracing is not a released feature of the current bundle.
+**Historical research, September 22, 2026:** isolated shadow/radiance and acceleration-structure tests passed through the earlier runtime, including 24 targeted ray cases and 48 acceleration-structure cases. These are graphics-research results, not HyperBridge integration results.
+
+At that checkpoint, the public DirectX ray-tracing state-object and ray-dispatch path was not connected. Complete coverage of the game's 4,281 ray-tracing libraries, in-game ray tracing, and performance validation remained open. These dated results do not establish ray tracing in MacRunner 1.0.6 or in the separate Indiana preview.
 
 ## Updates
 
@@ -98,6 +119,6 @@ Before delivery can be enabled:
 
 - Repeat the recorded game checks on HyperBridge and publish results with comparable benchmark conditions (game version, scene, settings, frame timings).
 - Move to newer HyperBridge engine builds after their checks ([engine releases](https://github.com/t0b1kent/hyperbridge/releases)).
-- Developer ID signing, notarization and update-delivery validation once the Apple Developer account is approved.
+- Validate the prepared Developer ID-signed and trial-notarized loader in the complete app, including game checks and real update delivery.
 
 [Back to MacRunner](README.md) · [Credits](CREDITS.md)

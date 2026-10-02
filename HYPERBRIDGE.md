@@ -8,6 +8,9 @@ HyperBridge is built on **[FEX-Emu](https://github.com/FEX-Emu/FEX)** (MIT) and 
 
 | MacRunner | HyperBridge engine |
 | --- | --- |
+| **1.0.6**, October 1, 2026 | FEX-Emu `fd141ed6d` with patches **0001–0026**; x18 ABI trust, DIV/IDIV exception correction and pre-exception EFLAGS restoration enabled by default |
+| **1.0.5**, September 30, 2026 | Engine 0015; `FEX_HOSTFEATURES=enablecrypto` exposes SSE4.2, AES, PCLMULQDQ and SHA; Wine fixes L3 reporting and unaligned shared-section loading |
+| **1.0.4**, September 29, 2026 | Engine 0015; Wine-server mapping fix |
 | **1.0.3** development preview | **[engine 0015](https://github.com/t0b1kent/hyperbridge/releases/tag/engine-0015)**: FEX-Emu `fd141ed6d` with patches 0001–0015 |
 | 1.0.2 local preview | FEX-Emu `fd141ed6d` with patches 0001–0007 |
 
@@ -35,10 +38,16 @@ HyperBridge is not a replacement for Wine or a graphics API.
 | Windows executable | Execution path | Scope |
 | --- | --- | --- |
 | **x64 / x86-64** | HyperBridge (`xtajit64.dll`, ARM64EC) translates CPU instructions to ARM64; Wine provides Windows compatibility | Primary focus; games checked on it are listed in [tested games](TESTED_GAMES.md) |
-| **x86 / 32-bit** | HyperBridge (`xtajit.dll`, WOW64) | Included in the engine; game validation for 32-bit titles is still limited |
+| **x86 / 32-bit** | HyperBridge (`xtajit.dll`, WOW64) | Development only, not working in released 1.0.6. Heroes III reached its main menu on our signed Wine loader on October 1; a rare post-menu crash remains open. Gameplay and broad compatibility are unverified. |
 | **ARM64** | ARM64 CPU execution with Wine handling Windows APIs, loading and calling conventions | Not yet validated as a supported application target |
 
 Windows ARM64 programs do not need x64 → ARM64 instruction translation for their ARM64 code. An **ARM64EC** application may also contain x64 modules; those modules still need the x64 translation path.
+
+## Hardware memory ordering and signing
+
+**October 2, 2026:** our Developer ID provisioning profile carries Apple's cross-architecture-support entitlement, and a native probe succeeds. Integration of hardware x86 memory ordering (TSO) into the engine is in progress; speed has not been measured. The September 29 comparison used software ordering and remains dated to that engine.
+
+The Apple Developer account was approved on October 1. Our Wine loader is signed with Developer ID, and Apple accepted a trial notarization on October 2. This is preparation for the next release: the released 1.0.6 app remains signed ad hoc and not notarized. The separate 1.0.6-indiana preview does not establish general game compatibility. [Release boundaries and testing stands →](RELEASE_STATUS.md)
 
 ## Foundations and acknowledgements
 
