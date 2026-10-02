@@ -41,6 +41,7 @@ The **game engine** is the technology used to build the game. It is separate fro
 | **Dome Keeper** | [Godot](https://godotengine.org/showcase/dome-keeper/) | A Godot title using OpenGL. |
 | **WRATH: Aeon of Ruin** | [DarkPlaces (Quake-derived)](https://github.com/Official3DRealms/wrath-darkplaces) | Quake-derived 3D engine technology using OpenGL. |
 | **Elden Ring** | [FromSoftware in-house engine](https://careers.fromsoftware.jp/jp/interview_008.html) | A proprietary modern 3D engine using the DirectX 12 → Metal development path. |
+| **Indiana Jones and the Great Circle** | MachineGames Motor (id Tech-based) | A modern Vulkan title through MoltenVK → Metal; available only in the separate experimental 1.0.6-indiana preview. |
 
 This selection provides coverage across different engines, runtime requirements and graphics APIs. A result applies to the tested game and configuration; other titles using the same engine still need their own checks.
 

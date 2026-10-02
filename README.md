@@ -46,12 +46,15 @@ A separate [1.0.6-indiana experimental preview](https://github.com/t0b1kent/macr
 | **Dome Keeper** | Godot | OpenGL → Metal (Apple driver) | **Working** | Not measured |
 | **WRATH: Aeon of Ruin** | DarkPlaces (Quake-derived) | OpenGL → Metal (Apple driver) | **Working** | Not measured |
 | **Elden Ring** | FromSoftware in-house engine | DXMT-based DirectX 12 → Metal | **Working** | Not measured |
+| **Indiana Jones and the Great Circle** | MachineGames Motor (id Tech-based) | Vulkan → MoltenVK → Metal | **Experimental preview ([1.0.6-indiana](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.6-indiana)): played in a level** | **about 10–12** at minimum settings |
 
 **OpenGL → Metal** means the game uses OpenGL through Wine and Apple's Metal-backed OpenGL driver on the test Mac. This is a separate path from DXMT and D3DMetal. [How to read the graphics paths →](TESTED_GAMES.md#reading-the-graphics-paths)
 
-**Working** means gameplay works in the tested configuration. Hollow Knight was checked on MacRunner 1.0.3 with HyperBridge engine 0015 on September 29; the other rows record checks of specific development configurations. **[Test dates, verified functions and remaining issues →](TESTED_GAMES.md)**
+**Working** means gameplay works in the tested configuration. **Indiana Jones and the Great Circle** is listed from the separate experimental 1.0.6-indiana preview (October 1, M1 Pro): launched from MacRunner and played in a level at about 10–12 FPS on minimum settings; ray tracing does not work, split frames and sky artifacts remain, and firing a weapon hung the GPU — [details and limits](TESTED_GAMES.md#indiana-jones--106-indiana-experimental-preview). Hollow Knight was checked on MacRunner 1.0.3 with HyperBridge engine 0015 on September 29; the other rows record checks of specific development configurations. **[Test dates, verified functions and remaining issues →](TESTED_GAMES.md)**
 
 **Hollow Knight's FPS was measured** on September 29, 2026 (1280×720, V-Sync on, King's Pass, Metal HUD log; [details](TESTED_GAMES.md#macrunner-103--hyperbridge-engine-0015)). **The other FPS values are maintainer-reported gameplay observations on the test Mac**, reported on September 24, 2026; resolution, graphics settings, scene and sample duration have not yet been recorded for them. “Not measured” means a result is still pending, not zero FPS.
+
+**Other dated observations, not gameplay-verified:** ABZU reaches its menu on 1.0.5 (September 30); Stardew Valley reached the menu on September 13; Heroes III (32-bit) reaches its main menu on our signed Wine loader in unreleased development (October 1). [What was and was not checked →](TESTED_GAMES.md#release-checks-since-103)
 
 **Why these games?** Together they exercise Unity, Godot, custom engines and Doom/Build/Quake-derived technology, across Direct3D 11, Direct3D 12, OpenGL and software rendering. This variety helps find issues shared by different kinds of games. Results remain title-specific. [Game engines and test coverage →](TESTED_GAMES.md#game-engines--test-coverage)
 
