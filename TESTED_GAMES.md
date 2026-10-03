@@ -1,10 +1,32 @@
 # Tested games & engines
 
-**Last updated: October 2, 2026**
+**Last updated: October 3, 2026**
 
 This page records what has actually been observed while developing MacRunner. A title in the library or launch-profile catalog is not automatically a tested game. Results apply to the configurations used for those sessions.
 
 **Current ordinary release: MacRunner 1.0.6 (October 1).** The September 29 FPS section below was measured on 1.0.3 with engine 0015; those figures have not been re-measured on 1.0.6. Other entries keep their original configurations. The separate Indiana preview and unreleased signed-loader checks are identified explicitly. [HyperBridge status →](HYPERBRIDGE.md)
+
+## MacRunner 1.0.7 · October 3 checks
+
+[MacRunner 1.0.7 is available as a pre-release](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.7). These checks cover startup and menus. They do not establish new gameplay, saving or long-session results.
+
+| Game | Checked in 1.0.7 | Still to check | FPS from one screenshot |
+| --- | --- | --- | --- |
+| Hollow Knight | Language selection displayed on first launch; an earlier check reached the main menu. | Gameplay in this pass. | 115.66 at language selection |
+| Divinity: Original Sin — Enhanced Edition | Main menu and player profiles displayed. | Gameplay, saving and normal exit in this pass. | 120, at the display's 120 Hz limit |
+| Factorio | Not rechecked for this release. | Its earlier gameplay and save/load results are listed below. | Not measured |
+| Vampire Survivors | Not rechecked for this release. | Its earlier gameplay and audio results are listed below. | Not measured |
+| Hedon Bloodrite 2.4.2 | Main menu displayed; closing the window and quitting through the game menu both completed without an error. | Gameplay and long sessions in this pass. | Not measured |
+| DOOM 64 | Not rechecked for this release. | Its earlier gameplay and save/load results are listed below. | Not measured |
+| Ion Fury | Start opened the Voidpoint intro, where the game remained for the rest of the check. | Reaching the main menu; startup remains under investigation. | Not measured |
+| Dome Keeper | Not rechecked for this release. | Its earlier gameplay and saved-state results are listed below. | Not measured |
+| WRATH: Aeon of Ruin | Loading screen displayed; the game opened its data files and selected Apple M1 Pro graphics. | Startup remains under investigation. | Not measured |
+
+The two FPS readings come from individual screenshots at 1512×982 on an M1 Pro running macOS 27.0. They are not benchmark averages or comparisons with earlier releases.
+
+Heroes III also reached its main menu. Sound does not work correctly yet (silent or distorted, depending on the setup); gameplay, saving and wider 32-bit compatibility have not been accepted.
+
+The earlier Elden Ring development checks below are separate from this release. Elden Ring, the Indiana Jones preview and ray tracing are outside the 1.0.7 package.
 
 ## Test Mac
 
@@ -76,7 +98,7 @@ These results came from earlier development configurations. **They have not all 
 | **Divinity: Original Sin — Enhanced Edition** | DXMT: Direct3D 11 → Metal | September 14, 2026 | User-confirmed gameplay and menu navigation. The maintainer reported 100 FPS on September 24; the FPS observation is separate from the earlier development check. | **100** | Save/reload, voluntary exit, long sessions and complete automated graphics-path verification. The earlier run ended through a test timer. |
 | **Factorio** | DXMT: Direct3D 11 → Metal | September 11, 2026 | User-confirmed tutorial gameplay, saving, returning to the menu and reloading. | Not measured | Long sessions and measured performance were not established. |
 | **Vampire Survivors** | DXMT: Direct3D 11 → Metal | September 11, 2026 | User-confirmed gameplay, movement, audio and voluntary exit, with a gameplay screenshot. | Not measured | Long-session stability and measured performance were not established. |
-| **Hedon Bloodrite** | OpenGL → Metal (Apple driver) | September 12, 2026 | User-confirmed gameplay, keyboard/mouse, audio, saving and reload at the saved position; clean exits recorded. | Not measured | Broader scene coverage and long-session performance were not established. |
+| **Hedon Bloodrite** | OpenGL → Metal (Apple driver) | September 12, 2026 | User-confirmed gameplay, keyboard/mouse, audio, saving and reload at the saved position. Menu exit was also confirmed without an error in 1.0.7. | Not measured | Broader scene coverage and long-session performance were not established. |
 | **DOOM 64** | OpenGL → Metal (Apple driver) | September 12, 2026 | In-level rendering, mouse, audio and save/load; a subsequent English-keyboard-layout check confirmed keyboard operation. Intro/attract sequence and voluntary exit were also accepted. | Not measured | Other keyboard layouts and long sessions need further testing. |
 | **Ion Fury** | Software renderer | September 12, 2026 | User-confirmed gameplay, save/load and voluntary exit. | Not measured | Accelerated OpenGL remained unresolved. This was not a GPU-accelerated rendering result. |
 | **Dome Keeper** | OpenGL → Metal (Apple driver) | September 12, 2026 | Movement, audio, return to menu and continuation of saved state; a repeated mining-scene run with voluntary exit. | Not measured | Shutdown resource warnings remained; longer sessions need verification. |
