@@ -1,10 +1,38 @@
 # Tested games & engines
 
-**Last updated: October 3, 2026**
+**Last updated: October 5, 2026**
 
 This page records what has actually been observed while developing MacRunner. A title in the library or launch-profile catalog is not automatically a tested game. Results apply to the configurations used for those sessions.
 
-**Current ordinary release: MacRunner 1.0.6 (October 1).** The September 29 FPS section below was measured on 1.0.3 with engine 0015; those figures have not been re-measured on 1.0.6. Other entries keep their original configurations. The separate Indiana preview and unreleased signed-loader checks are identified explicitly. [HyperBridge status →](HYPERBRIDGE.md)
+**Current ordinary release: MacRunner 1.0.8 (October 5).** The September 29 FPS section below was measured on 1.0.3 with engine 0015; those figures have not been re-measured on 1.0.8. Other entries keep their original configurations. The separate Indiana preview is identified explicitly. [HyperBridge status →](HYPERBRIDGE.md)
+
+## MacRunner 1.0.8 · October 5 checks
+
+[MacRunner 1.0.8 is available as a pre-release](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.8). These are unattended startup checks without any input: each game was stopped a few seconds after the screen in the table appeared. They do not establish gameplay, input, saving or long-session results.
+
+| Game | Reached in the check | Build | FPS from one screenshot |
+| --- | --- | --- | --- |
+| Hollow Knight | Main menu | Final 1.0.8 | 116 in the menu |
+| ABZU | Main menu | Final 1.0.8 | 77 in the menu |
+| Divinity: Original Sin — Enhanced Edition | Main menu | Final 1.0.8 | 96 in the menu |
+| Stardew Valley | Main menu | Final 1.0.8 | Not measured |
+| Heroes of Might and Magic III (32-bit) | Main menu | Final 1.0.8 | Not measured |
+| Vampire Survivors | Start screen | Same engine code and settings, before final packaging | Not measured |
+| Hedon Bloodrite | Start screen | Same engine code and settings, before final packaging | Not measured |
+| WRATH: Aeon of Ruin | Loading screen in the recorded check; the maintainer then saw the main menu | Same engine code and settings, before final packaging | Not measured |
+| Dome Keeper | A game screen with its pause menu | Same engine code and settings, before final packaging | Not measured |
+| Ion Fury | Its own setup dialog; the game screen was not verified | Earlier 1.0.8 candidate | Not measured |
+| Factorio, DOOM 64 | Not rechecked for this release | — | Not measured |
+
+The FPS readings come from individual Metal HUD screenshots on an M1 Pro running macOS 27.0. They are not benchmark averages.
+
+**Sound.** Music in Heroes of Might and Magic III plays and Hedon's sound mix no longer breaks; the maintainer confirmed both by ear on a pre-release 1.0.8 build on October 4. Sound was not listened to again on the final build.
+
+**Keyboard layout.** While a game runs, the app switches to a Latin keyboard layout and restores the previous one on exit. Game controls under a non-Latin layout have not been re-verified with this switch.
+
+**Speed.** Compared with 1.0.7, the game used 23% less CPU time per frame in Hollow Knight's menu (alternating runs, run-to-run spread 0.9%); the frame rate was already at the display's 120 Hz limit. With the new startup defaults, Hollow Knight reached its menu in 25.4 s instead of 31.1 s, and ABZU's time changed by −1.5%; both were measured on this engine code before final packaging.
+
+Elden Ring, the Indiana Jones preview, DirectX 12 and ray tracing are outside the 1.0.8 package.
 
 ## MacRunner 1.0.7 · October 3 checks
 
@@ -118,15 +146,19 @@ The maintainer confirmed on **September 23, 2026** that the game had already bee
 
 ## Release checks since 1.0.3
 
-These checks retain the scope recorded in the release notes; they do not promote the earlier gameplay entries to 1.0.6 results.
+These checks retain the scope recorded in the release notes; they do not promote the earlier gameplay entries to results for later releases.
 
 | Build and date | Observed result | Limit |
 | --- | --- | --- |
 | 1.0.4, September 29 | Hollow Knight checked with the Wine-server mapping fix | One title and configuration |
 | 1.0.5, September 30 | Hollow Knight, ABZU and Divinity reach their menus; crypto known-answer tests pass 12/12 | No new FPS measurement. Indiana stops at its Vulkan requirement. Automated Hedon and Stardew runs omit app profiles and do not replace the historical gameplay checks. |
 | 1.0.6, October 1 | Hollow Knight reaches its main menu on this engine; Hedon's added OpenGL profile produces presented frames | Hollow Knight gameplay and FPS were not re-verified. Hedon's menu and gameplay were not visually verified; no new FPS figure. |
+| 1.0.7, October 3 | Hollow Knight, Divinity and Hedon reach their menus; Stardew Valley (.NET 6) reaches its menu; Heroes III reaches its menu without working sound | Startup and menus only; see the 1.0.7 table above. |
+| 1.0.8, October 5 | Five titles reach their main menus on the final build; see the 1.0.8 table above | Unattended startup checks only; gameplay and FPS were not re-verified. |
 
 ## Heroes III — signed-loader development
+
+**October 5, 2026 (1.0.8):** Heroes III can be started from the app and reaches its main menu with music; see the 1.0.8 checks above. Gameplay, saving and wider 32-bit compatibility are not established.
 
 **October 1, 2026:** Heroes III reaches its main menu through WOW64/HyperBridge on our Developer ID-signed Wine loader. The selected loader and live process were verified. A rare post-menu crash remains open. This is unreleased 32-bit development, not a 1.0.6 compatibility claim; gameplay, input, saving and FPS were not established.
 
