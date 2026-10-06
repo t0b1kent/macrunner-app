@@ -29,6 +29,42 @@ Run from a clean checkout on that approved cloud runner:
 
     bash build/jobs/repro109-python-helper-build-github.sh "$RUNNER_TEMP/repro109-helper-results"
 
+For a short source-worker diagnosis, set ONE dispatch input:
+
+| Input | Value for the first failed package | Meaning |
+| --- | --- | --- |
+| `only_package` | `flit-core` | Build this pinned package after its pinned prerequisites. |
+| `only_step` | `1` | Select the 1-based package slot from `python-helpers.build.lock.json`. |
+
+Leave both inputs empty for the complete helper build. Both inputs together,
+unknown package names and slots outside 1..23 are refused. Shell values pass
+as arguments, not executable text. Offline `--only-step 1` without `--build`
+prints the selection plan and performs no acquisition or vendor execution.
+
+The selected run calls the SAME `helper_package_worker.py` and SAME source
+hashes as the full build. It uses a fresh venv from the pinned cloud bootstrap
+Python 3.14.7, with `--without-pip`; it skips OpenSSL/CPython compilation and
+does not produce helper executables. Earlier package slots are rebuilt into
+that venv, so a late selector includes all preceding pinned prerequisites.
+Slot 1 downloads and builds only flit-core 3.12.0. Its build budget is 180s,
+with a 4-minute outer step limit; other selected runs have a 20-minute budget.
+Queue time, upload time and actual duration are measured by Actions; a
+2–3-minute turnaround is a target, not a locally established timing result.
+All selected results are `DIAGNOSTIC_ONLY_NOT_HELPER_ACCEPTANCE`; they cannot
+accept the source-built Python 3.14.5/OpenSSL 3.6.4 runtime or final helpers.
+
+The artifact retains the complete selected worker stdout and stderr separately
+(`flit-core-wheel.stdout.log` and `flit-core-wheel.stderr.log`), the driver and
+wrapper exit codes, UTC/monotonic timeline, exact allowlisted child environment,
+toolchain receipt, source acquisition hash/coverage and worker diagnostics.
+Diagnostics record versions/state for pip, setuptools, flit, flit-core,
+packaging and wheel before/after execution, plus root/suffix METADATA counts,
+paths and built-wheel SHA even when the metadata reader refuses the wheel.
+No ambient token or arbitrary environment dump is passed to source workers.
+The combined stdout/stderr cap is 64 MiB per command; exceeding it stops the
+owned process group and records `LOG_LIMIT_DROPPED`. Retained bytes remain
+complete up to that stop. Downloaded source bodies stay in cloud work.
+
 Provider facts and `REPRO109_HELPER_PROFILE=github-macos15-arm64` pass explicitly
 to source-built package workers. Xcode Cloud is a separate unchanged JOB;
 the GitHub job never sets `CI_XCODE_CLOUD=TRUE`.
@@ -46,7 +82,8 @@ owned prefix and repeat both helper CLI checks. Source acquisition reuses
 existing bounded official-host/SHA transports. Jobs use three CPU workers,
 a 120-minute build deadline and a 150-minute workflow deadline.
 
-Upload helpers.tar.gz, licenses and complete bounded reports even on failure;
+Full runs upload helpers.tar.gz and licenses; all runs upload complete bounded
+reports even on failure;
 `.body` source responses remain in cloud work, with SHA/size/coverage receipts.
 Actions artifacts are temporary (14 days); the curator preserves accepted
 outputs in the designated private evidence/release store. No release upload

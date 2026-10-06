@@ -82,11 +82,19 @@ def check_requirements(requirements):
     return checked
 
 
-def wheel_info(path):
+def wheel_info(path, diagnostics=None):
     with zipfile.ZipFile(path) as archive:
-        metadata_names = [n for n in archive.namelist() if n.endswith('.dist-info/METADATA')]
+        # Vendored distributions may carry their own nested METADATA. Only the
+        # wheel's root dist-info directory describes the built distribution.
+        suffix_names = [n for n in archive.namelist() if n.endswith('.dist-info/METADATA')]
+        metadata_names = [n for n in suffix_names if len(PurePosixPath(n).parts) == 2]
+        if diagnostics is not None:
+            diagnostics['wheel_metadata'] = dict(root_count=len(metadata_names),
+                suffix_count=len(suffix_names), root_paths=metadata_names,
+                suffix_paths=suffix_names, wheel_sha256=native.framework.sha(path))
         if len(metadata_names) != 1:
-            raise ValueError('Exactly one built-wheel metadata required')
+            raise ValueError('Exactly one built-wheel metadata required; '
+                             f'root_count={len(metadata_names)}; suffix_count={len(suffix_names)}')
         metadata = email.parser.BytesParser().parsebytes(archive.read(metadata_names[0]))
         entries = {}
         entry = metadata_names[0].rsplit('/', 1)[0] + '/entry_points.txt'
@@ -112,7 +120,7 @@ def install_bootstrap(path, prefix):
         archive.extractall(destination)
 
 
-def build(source, name, version, wheels, prefix, bootstrap, legacy, distribution=None):
+def build(source, name, version, wheels, prefix, bootstrap, legacy, distribution=None, diagnostics=None):
     backend_name, requirements, roots = backend_config(source, legacy)
     checked = check_requirements(requirements)
     for root in reversed(roots):
@@ -132,7 +140,7 @@ def build(source, name, version, wheels, prefix, bootstrap, legacy, distribution
     wheel = wheels / filename
     if not wheel.is_file():
         raise ValueError('Built wheel missing')
-    metadata = wheel_info(wheel)
+    metadata = wheel_info(wheel, diagnostics)
     if canonical(metadata['name']) != canonical(distribution or name) or metadata['version'] != version:
         raise ValueError('Source-built wheel name/version drift')
     if bootstrap:
@@ -154,13 +162,36 @@ def main():
     parser.add_argument('--wheels', type=Path, required=True)
     parser.add_argument('--prefix', type=Path, required=True)
     parser.add_argument('--receipt', type=Path, required=True)
+    parser.add_argument('--diagnostics', type=Path)
     parser.add_argument('--bootstrap', action='store_true')
     args = parser.parse_args()
     os.chdir(args.source)
-    result = build(args.source.resolve(), args.name, args.version, args.wheels.resolve(),
-                   args.prefix.resolve(), args.bootstrap, ['setuptools>=40.8.0', 'wheel'], args.distribution)
-    args.receipt.write_text(json.dumps(result, sort_keys=True, indent=2) + '\n')
-    print(json.dumps(dict(status=result['status'], name=args.name, version=args.version)))
+    def versions():
+        rows = {}
+        for name in ['pip', 'setuptools', 'flit', 'flit-core', 'packaging', 'wheel']:
+            try:
+                rows[name] = dict(state='PRESENT', version=importlib.metadata.version(name))
+            except importlib.metadata.PackageNotFoundError:
+                rows[name] = dict(state='NOT_INSTALLED')
+        return rows
+
+    diagnostics = dict(schema=1, status='STARTED', name=args.name, version=args.version,
+                       python=sys.version, executable=sys.executable, prefix=sys.prefix,
+                       versions_before=versions(), wheel_metadata='NOT_REACHED')
+    try:
+        result = build(args.source.resolve(), args.name, args.version, args.wheels.resolve(),
+                       args.prefix.resolve(), args.bootstrap, ['setuptools>=40.8.0', 'wheel'],
+                       args.distribution, diagnostics)
+        args.receipt.write_text(json.dumps(result, sort_keys=True, indent=2) + '\n')
+        diagnostics['status'] = 'SOURCE_WHEEL_BUILT'
+        print(json.dumps(dict(status=result['status'], name=args.name, version=args.version)))
+    except Exception as error:
+        diagnostics.update(status='FAILED', first_failure=dict(exception=type(error).__name__, message=str(error)))
+        raise
+    finally:
+        diagnostics['versions_after'] = versions()
+        if args.diagnostics:
+            args.diagnostics.write_text(json.dumps(diagnostics, sort_keys=True, indent=2) + '\n')
 
 
 if __name__ == '__main__':

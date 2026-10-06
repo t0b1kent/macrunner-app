@@ -71,8 +71,30 @@ def portable_cli(prefix, product, command):
         hidden.rename(prefix)
 
 
+def selection(lock, only_package=None, only_step=None):
+    order = lock['build_order']
+    if only_package is not None and only_step is not None:
+        raise ValueError('Choose only one package or step selector')
+    if only_step is not None:
+        if type(only_step) is not int or not 1 <= only_step <= len(order):
+            raise ValueError('Package step must be between 1 and ' + str(len(order)))
+        only_package = order[only_step - 1]
+    if only_package is None:
+        return None
+    if only_package not in order:
+        raise ValueError('Selected package is absent from pinned build order')
+    index = order.index(only_package)
+    return dict(package=only_package, step=index + 1, build_order=order[:index + 1],
+                prerequisite_policy='REBUILD_PRECEDING_PINNED_SLOTS',
+                native_runtime='NOT_BUILT_CLOUD_BOOTSTRAP_VENV',
+                classification='DIAGNOSTIC_ONLY_NOT_HELPER_ACCEPTANCE')
+
+
 def build(args, lock):
     native.require_cloud()
+    selected = selection(lock, getattr(args, 'only_package', None), getattr(args, 'only_step', None))
+    if selected and native.profile() != 'github-macos15-arm64':
+        raise ValueError('Scoped package diagnosis requires the GitHub ARM64 profile')
     if args.work.exists() or args.work.is_symlink():
         raise ValueError('Fresh complete helper workspace required')
     args.work.mkdir(parents=True)
@@ -86,6 +108,7 @@ def build(args, lock):
                   driver_sha256=native.framework.sha(__file__), first_failure=None,
                   ARM64EC='NOT_APPLICABLE_NATIVE_HELPERS', whole_app='NOT_ENABLED',
                   r2_comparison='NOT_ENABLED', license_review='NOT_ACCEPTED', install_skipped=0)
+    result['selection'] = selected or dict(classification='COMPLETE_SOURCE_HELPERS')
     env = None
 
     def save():
@@ -101,15 +124,18 @@ def build(args, lock):
         name = row['name']; receipt = reports / (name + '-wheel.json')
         argv = [str(python), '-B', '-I', str(HERE / 'helper_package_worker.py'),
                 '--source', str(source), '--name', name, '--version', row['version'],
-                '--wheels', str(wheels), '--prefix', str(prefix), '--receipt', str(receipt)]
+                '--wheels', str(wheels), '--prefix', str(prefix), '--receipt', str(receipt),
+                '--diagnostics', str(reports / (name + '-worker-diagnostics.json'))]
         if bootstrap:
             argv.append('--bootstrap')
         if name == 'legendary':
             argv.extend(['--distribution', 'legendary-gl'])
         package_env = dict(env, SETUPTOOLS_SCM_PRETEND_VERSION=row['version'])
-        log = reports / (name + '-wheel.log')
+        native.framework.write_json(reports / (name + '-build-environment.json'), package_env)
+        log = reports / (name + '-wheel.stdout.log')
         result['phase'] = name + '-wheel'; save()
-        runner.command(argv, source, package_env, log, reports, name + '-wheel', deadline, timeout=1200)
+        runner.command(argv, source, package_env, log, reports, name + '-wheel', deadline, timeout=1200,
+                       stderr_log=reports / (name + '-wheel.stderr.log'))
         built = json.loads(receipt.read_text())
         if not bootstrap:
             command([str(python), '-B', '-I', '-m', 'pip', 'install', '--no-index', '--no-deps',
@@ -140,7 +166,23 @@ def build(args, lock):
 
     try:
         save()
-        python, prefix = native.build(args.work / 'native', reports / 'native', deadline, args.jobs)
+        if selected:
+            tool = native.github_toolchain()
+            if '.'.join(map(str, sys.version_info[:3])) != tool['bootstrap_python']:
+                raise ValueError('Scoped GitHub bootstrap Python pin differs')
+            native_reports = reports / 'native'; native_reports.mkdir()
+            sdk, cc, cxx = runner.toolchain_preflight(tool, native_reports)
+            prefix = args.work / 'native/prefix'; prefix.parent.mkdir()
+            env = runner.environment(prefix, tool, cc, cxx, sdk)
+            command([sys.executable, '-B', '-I', '-m', 'venv', '--without-pip', str(prefix)],
+                    args.work, 'scoped-bootstrap-venv', 60)
+            python = prefix / 'bin/python3'
+            native.framework.write_json(native_reports / 'native-runtime.json',
+                dict(status='NOT_BUILT_DIAGNOSTIC_BOOTSTRAP_VENV', toolchain=tool,
+                     bootstrap_python=sys.version.split()[0], source_python='NOT_BUILT',
+                     source_openssl='NOT_BUILT', interpreter_sha256=native.framework.sha(python)))
+        else:
+            python, prefix = native.build(args.work / 'native', reports / 'native', deadline, args.jobs)
         native_report = json.loads((reports / 'native/toolchain-preflight.json').read_text())
         tool = json.loads((reports / 'native/native-runtime.json').read_text())['toolchain']
         actual = native_report['actual']
@@ -157,7 +199,7 @@ def build(args, lock):
                        GITHUB_ACTIONS='true', RUNNER_OS='macOS', RUNNER_ARCH='ARM64')
         native.framework.write_json(reports / 'build-environment.json', env)
         sources = {}
-        for name in lock['build_order']:
+        for name in selected['build_order'] if selected else lock['build_order']:
             row = lock['packages'][name]
             result['phase'] = name + '-source'; save()
             archive = args.work / (name + '.source')
@@ -180,6 +222,12 @@ def build(args, lock):
                 command(['/usr/bin/python3', '-B', '-I', str(HERE / 'check-macho-arch.py'),
                          str(source / 'PyInstaller/bootloader')], args.work, 'bootloader-architectures', 120)
             package(source, row, name in lock['bootstrap_wheels'])
+        if selected:
+            result.update(status='SCOPED_SOURCE_PACKAGE_BUILT_DIAGNOSTIC_ONLY', phase='complete',
+                          helpers='NOT_ENABLED', native_runtime='NOT_BUILT_CLOUD_BOOTSTRAP_VENV',
+                          source_python_acceptance='NOT_ENABLED', source_openssl_acceptance='NOT_ENABLED',
+                          install_skipped='NATIVE_RUNTIME_AND_HELPER_PRODUCTS')
+            return
         by_name = {row['name']: row for row in lock['helpers']}
         for name in ['legendary', 'gogdl']:
             row = by_name[name]; source = args.work / (name + '-source')
@@ -247,10 +295,15 @@ def main():
     parser.add_argument('--publish-dir', type=Path)
     parser.add_argument('--minutes', type=int, default=120)
     parser.add_argument('--jobs', type=int, default=8)
+    scope = parser.add_mutually_exclusive_group()
+    scope.add_argument('--only-package')
+    scope.add_argument('--only-step', type=int)
     args = parser.parse_args(); lock = read_lock()
+    selected = selection(lock, args.only_package, args.only_step)
     if not args.build:
         print(json.dumps(dict(status='PLAN_ONLY', source_packages=len(lock['packages']),
-                              helpers=['legendary', 'gogdl'], network=0, builds=0, install='skipped')))
+                              helpers=['legendary', 'gogdl'], selection=selected,
+                              network=0, builds=0, install='skipped')))
         return
     if args.work is None or args.publish_dir is None or not 1 <= args.minutes <= 120:
         raise ValueError('Bounded cloud workspace/publication paths required')

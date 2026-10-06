@@ -12,9 +12,22 @@ repo=$(cd "$(dirname "$0")/.." && pwd -P)
 work="${RUNNER_TEMP:?}/repro109-python-helper-build-work"
 [ ! -e "$work" ]
 export REPRO109_HELPER_PROFILE=github-macos15-arm64
+set --
+minutes=120
+if [ -n "${REPRO109_HELPER_ONLY_PACKAGE:-}" ]; then
+  set -- "$@" --only-package "$REPRO109_HELPER_ONLY_PACKAGE"
+  minutes=20
+fi
+if [ -n "${REPRO109_HELPER_ONLY_STEP:-}" ]; then
+  set -- "$@" --only-step "$REPRO109_HELPER_ONLY_STEP"
+  minutes=20
+fi
+if [ "${REPRO109_HELPER_ONLY_PACKAGE:-}" = flit-core ] || [ "${REPRO109_HELPER_ONLY_STEP:-}" = 1 ]; then
+  minutes=3
+fi
 rc=0
 python3 -B -I "$repo/repro109app/build_python_helpers.py" --build \
-  --work "$work" --publish-dir "$out" --minutes 120 --jobs 3 \
+  --work "$work" --publish-dir "$out" --minutes "$minutes" --jobs 3 "$@" \
   > "$out/helper-driver.log" 2>&1 || rc=$?
 printf '%s\n' "$rc" > "$out/helper-build-rc.txt"
 if [ -d "$work/reports" ]; then

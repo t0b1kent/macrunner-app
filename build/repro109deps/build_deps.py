@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Source dependency batch. --check-inputs is offline; --build is cloud only."""
 import argparse
+from contextlib import ExitStack
 import hashlib
 import json
 import os
@@ -173,13 +174,18 @@ def event(out, **fields):
         stream.write(json.dumps(record, sort_keys=True) + '\n')
 
 
-def command(argv, cwd, env, log, out, component, deadline, timeout=1800):
+def command(argv, cwd, env, log, out, component, deadline, timeout=1800, stderr_log=None):
     event(out, component=component, state='START', argv=argv, cwd=str(cwd), log=log.name)
     started = time.monotonic()
-    with log.open('ab') as stream:
+    def log_bytes():
+        return log.stat().st_size + (stderr_log.stat().st_size if stderr_log else 0)
+
+    with ExitStack() as stack:
+        stream = stack.enter_context(log.open('ab'))
+        errors = stack.enter_context(stderr_log.open('ab')) if stderr_log else subprocess.STDOUT
         try:
             child = subprocess.Popen(argv, cwd=cwd, env=env, stdin=subprocess.DEVNULL,
-                                     stdout=stream, stderr=subprocess.STDOUT, start_new_session=True)
+                                     stdout=stream, stderr=errors, start_new_session=True)
         except Exception as error:
             stream.write(('SPAWN_ERROR: ' + type(error).__name__ + '\n').encode())
             stream.flush()
@@ -189,7 +195,7 @@ def command(argv, cwd, env, log, out, component, deadline, timeout=1800):
         while child.poll() is None:
             if time.monotonic() - started > timeout or time.monotonic() > deadline:
                 reason = 'TIMEOUT'
-            elif log.stat().st_size > MAX_LOG:
+            elif log_bytes() > MAX_LOG:
                 reason = 'LOG_LIMIT_DROPPED'
             if reason:
                 os.killpg(child.pid, signal.SIGTERM)
@@ -201,9 +207,12 @@ def command(argv, cwd, env, log, out, component, deadline, timeout=1800):
                 break
             time.sleep(0.5)
     event(out, component=component, state=reason or 'EXIT', rc=child.returncode,
-          seconds=time.monotonic() - started, log_bytes=log.stat().st_size)
+          seconds=time.monotonic() - started, log_bytes=log_bytes(),
+          stderr_log=stderr_log.name if stderr_log else 'COMBINED_IN_STDOUT_LOG')
     if not ((_repro_check_27_0 := reason) is (_repro_check_27_1 := None) and (_repro_check_27_2 := child.returncode) == (_repro_check_27_3 := 0)):
         failure_evidence.capture(log, out, component, rc=child.returncode, reason=reason)
+        if stderr_log:
+            failure_evidence.capture(stderr_log, out, component + '-stderr', rc=child.returncode, reason=reason)
         raise AssertionError(_check_message('reason is None and child.returncode == 0', {'reason': locals().get('_repro_check_27_0', 'NOT_EVALUATED'), 'None': locals().get('_repro_check_27_1', 'NOT_EVALUATED'), 'child.returncode': locals().get('_repro_check_27_2', 'NOT_EVALUATED'), '0': locals().get('_repro_check_27_3', 'NOT_EVALUATED')}, f'{component}: {reason or child.returncode}; {log.name}'))
 
 

@@ -1,6 +1,17 @@
 name: REPRO109 source-built Python helpers ARM64 fallback
 on:
   workflow_dispatch:
+    inputs:
+      only_package:
+        description: 'Diagnostic package (e.g. flit-core); empty means full helpers'
+        required: false
+        default: ''
+        type: string
+      only_step:
+        description: 'Diagnostic package slot 1..23; choose this OR only_package'
+        required: false
+        default: ''
+        type: string
 permissions:
   contents: read
 concurrency:
@@ -13,6 +24,8 @@ jobs:
     env:
       DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
       REPRO109_HELPER_PROFILE: github-macos15-arm64
+      REPRO109_HELPER_ONLY_PACKAGE: ${{ inputs.only_package }}
+      REPRO109_HELPER_ONLY_STEP: ${{ inputs.only_step }}
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
       - name: Checkout owner-approved published recipe revision
@@ -21,7 +34,8 @@ jobs:
           ref: ${{ github.sha }}
           persist-credentials: false
           fetch-depth: 1
-      - name: Build pinned sources and verify ARM64 portable help
+      - name: Build selected pinned source step or complete ARM64 helpers
+        timeout-minutes: ${{ (inputs.only_package == 'flit-core' || inputs.only_step == '1') && 4 || 145 }}
         shell: bash
         run: bash build/jobs/repro109-python-helper-build-github.sh "$RUNNER_TEMP/repro109-helper-results"
       - name: Preserve complete bounded reports and helpers
