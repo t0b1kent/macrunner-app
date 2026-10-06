@@ -1,9 +1,13 @@
 """Own inert controls. No vendor archive, import, compiler, or network."""
 import os
+import contextlib
+import io
+import json
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import types
 import unittest
 from unittest import mock
 
@@ -82,6 +86,46 @@ class NativeRuntimeTests(unittest.TestCase):
         for jobs in [0, 17, True, 1.5]:
             with self.subTest(jobs=jobs), self.assertRaises(ValueError):
                 native.python_steps(self.root, self.root / 'prefix', jobs)
+
+    def smoke_fixture(self, number, *, version_info=(3, 6, 0, 4, 0),
+                      python=(3, 14, 5), architecture='arm64'):
+        modules = {
+            'ctypes': types.SimpleNamespace(), 'json': json,
+            'platform': types.SimpleNamespace(machine=lambda: architecture),
+            'sqlite3': types.SimpleNamespace(sqlite_version='OWN_SQLITE'),
+            'ssl': types.SimpleNamespace(OPENSSL_VERSION_NUMBER=number,
+                                         OPENSSL_VERSION_INFO=version_info,
+                                         OPENSSL_VERSION='OpenSSL OWN_INERT'),
+            'sys': types.SimpleNamespace(version_info=python),
+            'zlib': types.SimpleNamespace(ZLIB_RUNTIME_VERSION='OWN_ZLIB'),
+        }
+        self.smoke_stdout = io.StringIO()
+        with mock.patch.dict(sys.modules, modules), contextlib.redirect_stdout(self.smoke_stdout):
+            exec(native.runtime_smoke_code(), {})
+
+    def test_openssl3_patch_is_not_legacy_fix_field(self):
+        self.assertNotEqual((3, 6, 0, 4, 0)[:3], (3, 6, 4))
+        self.smoke_fixture(0x30600040)
+        row = json.loads(self.smoke_stdout.getvalue())
+        self.assertEqual(row['openssl_semver'], [3, 6, 4])
+        self.assertEqual(row['openssl_version_info'], [3, 6, 0, 4, 0])
+
+    def test_wrong_openssl_versions_refuse_with_actual_values(self):
+        for number in [0x30600000, 0x30600030, 0x30600050, 0x30700040, 0x10101000]:
+            with self.subTest(number=hex(number)), self.assertRaises(RuntimeError):
+                self.smoke_fixture(number)
+            self.assertEqual(json.loads(self.smoke_stdout.getvalue())['openssl_version_number'], hex(number))
+
+    def test_legacy_tuple_false_positive_is_refused(self):
+        with self.assertRaises(RuntimeError):
+            self.smoke_fixture(0x30604000, version_info=(3, 6, 4, 0, 0))
+        self.assertEqual(json.loads(self.smoke_stdout.getvalue())['openssl_semver'], [3, 6, 0])
+
+    def test_python_and_architecture_guards_remain_active(self):
+        for python, architecture in [((3, 14, 4), 'arm64'), ((3, 14, 5), 'x86_64')]:
+            with self.subTest(python=python, architecture=architecture), self.assertRaises(RuntimeError):
+                self.smoke_fixture(0x30600040, python=python, architecture=architecture)
+            self.assertTrue(self.smoke_stdout.getvalue())
 
 
 if __name__ == '__main__':

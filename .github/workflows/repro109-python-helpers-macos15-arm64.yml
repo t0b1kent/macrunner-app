@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 1
       - name: Build pinned sources and verify ARM64 portable help
         shell: bash
-        run: bash jobs/repro109-python-helper-build-github.sh "$RUNNER_TEMP/repro109-helper-results"
+        run: bash build/jobs/repro109-python-helper-build-github.sh "$RUNNER_TEMP/repro109-helper-results"
       - name: Preserve complete bounded reports and helpers
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

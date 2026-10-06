@@ -2,11 +2,11 @@
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import time
 import urllib.parse
 
-API = 'https://api.github.com/repos/t0b1kent/xcode-cloud-probe'
 ASSET_HOSTS = {'release-assets.githubusercontent.com', 'objects.githubusercontent.com', 'github.com'}
 PUBLIC_HOSTS = ASSET_HOSTS | {'files.pythonhosted.org'}
 SOURCE_HOSTS = PUBLIC_HOSTS | {'codeload.github.com', 'ftp.gnu.org',
@@ -34,15 +34,29 @@ def transport_failure(curl_rc, status):
     return None, False
 
 
+def private_api():
+    remote = os.environ.get('RESULTS_REMOTE', '')
+    if not remote:
+        raise ValueError('RESULTS_REMOTE is required for private release access')
+    if not re.fullmatch(r'https://github\.com/[A-Za-z0-9][A-Za-z0-9-]{0,38}/'
+                        r'[A-Za-z0-9][A-Za-z0-9_.-]{0,99}', remote):
+        raise ValueError('RESULTS_REMOTE must be an explicit GitHub HTTPS repository URL without credentials')
+    owner, repository = urllib.parse.urlparse(remote).path.strip('/').split('/')
+    if repository.endswith('.git'):
+        repository = repository[:-4]
+    return 'https://api.github.com/repos/' + owner + '/' + repository
+
+
 def transfer(asset_id, target, limit, timeout_seconds=90):
     if type(asset_id) is not int or asset_id < 1 or type(limit) is not int or limit < 1:
         raise ValueError('curl transfer identity/limit refused')
+    api = private_api()
     token = os.environ.get('RESULTS_TOKEN') or os.environ.get('GH_TOKEN') or os.environ.get('GITHUB_TOKEN')
     if not token:
         raise ValueError('Private release access NOT_ENABLED: agreed cloud token is absent')
     if any(ord(c) < 32 or ord(c) > 126 for c in token):
         raise ValueError('Private release token format refused')
-    url = API+'/releases/assets/'+str(asset_id)
+    url = api+'/releases/assets/'+str(asset_id)
     return _transfer(url, target, limit, timeout_seconds, token)
 
 
@@ -57,10 +71,11 @@ def public_transfer(url, target, limit, timeout_seconds=90):
 def metadata_transfer(path, target, limit):
     if (path and not path.startswith('/')) or '..' in path.split('/') or '?' in path or '#' in path:
         raise ValueError('Private API path refused')
+    api = private_api()
     token = os.environ.get('RESULTS_TOKEN') or os.environ.get('GH_TOKEN') or os.environ.get('GITHUB_TOKEN')
     if not token or any(ord(c) < 32 or ord(c) > 126 for c in token):
         raise ValueError('Private API credential unavailable or malformed')
-    return _transfer(API + path, target, limit, 90, token,
+    return _transfer(api + path, target, limit, 90, token,
                      accept='application/vnd.github+json', metadata_only=True)
 
 

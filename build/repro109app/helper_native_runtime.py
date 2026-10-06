@@ -107,6 +107,25 @@ def require_cloud():
         raise ValueError('Vendor acquisition/execution is Xcode Cloud ARM64 only')
 
 
+def runtime_smoke_code():
+    # OpenSSL 3 encodes MAJOR/MINOR/PATCH as 0xMNN00PP0. The legacy
+    # five-field Python tuple has PATCH at index 3, not index 2.
+    return ('import ctypes,json,platform,sqlite3,ssl,sys,zlib\n'
+            'number=ssl.OPENSSL_VERSION_NUMBER\n'
+            'version=((number>>28)&15,(number>>20)&255,(number>>4)&255)\n'
+            'print(json.dumps({"python":list(sys.version_info[:3]),'
+            '"architecture":platform.machine(),"openssl":ssl.OPENSSL_VERSION,'
+            '"openssl_version_info":list(ssl.OPENSSL_VERSION_INFO),'
+            '"openssl_version_number":hex(number),"openssl_semver":list(version),'
+            '"sqlite":sqlite3.sqlite_version,"zlib":zlib.ZLIB_RUNTIME_VERSION}),flush=True)\n'
+            'if sys.version_info[:3]!=(3,14,5):\n'
+            '    raise RuntimeError("Source-built Python version differs from pin")\n'
+            'if platform.machine()!="arm64":\n'
+            '    raise RuntimeError("Source-built Python architecture differs from arm64")\n'
+            'if version!=(3,6,4):\n'
+            '    raise RuntimeError("Runtime OpenSSL semantic version differs from 3.6.4")\n')
+
+
 def build(work, reports, deadline, jobs=8):
     """Called by the final helper job; result is a private build-time interpreter.
 
@@ -197,13 +216,7 @@ def build(work, reports, deadline, jobs=8):
             item.update(status='BUILT', licenses=runner.licenses(source, prefix, name))
             save()
         interpreter = prefix / 'bin/python3.14'
-        smoke = ('import ctypes,json,platform,sqlite3,ssl,sys,zlib; '
-                 'assert sys.version_info[:3]==(3,14,5); '
-                 'assert platform.machine()=="arm64"; '
-                 'assert ssl.OPENSSL_VERSION_INFO[:3]==(3,6,4); '
-                 'print(json.dumps({"python":list(sys.version_info[:3]),'
-                 '"architecture":platform.machine(),"openssl":ssl.OPENSSL_VERSION,'
-                 '"sqlite":sqlite3.sqlite_version,"zlib":zlib.ZLIB_RUNTIME_VERSION}))')
+        smoke = runtime_smoke_code()
         command([str(interpreter), '-B', '-I', '-c', smoke], work, 'native-python-smoke', 120)
         command(['/usr/bin/python3', '-B', '-I', str(HERE / 'check-macho-arch.py'),
                  str(prefix)], work, 'native-runtime-architectures', 120)

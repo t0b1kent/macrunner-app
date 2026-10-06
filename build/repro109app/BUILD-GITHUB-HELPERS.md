@@ -1,5 +1,11 @@
 # ARM64 Python helper build: GitHub fallback
 
+All helper build sources live under `build/`; the workflow alone lives under
+`.github/workflows/`. Resolve commands from the checkout root. Relative imports
+stay within `build/` and do not depend on a local lane or absolute source path.
+Checkpoint publication requires an explicit `RESULTS_REMOTE`; this GitHub
+helper workflow does not publish checkpoints and does not set that variable.
+
 This workflow is a source-only proposal for owner-approved publication into
 `t0b1kent/macrunner-app`. Copy only the publication manifest files to its root.
 Do not publish the private clone, its history, `jobs/JOB`, cloud dispatcher,
@@ -21,7 +27,7 @@ do not claim byte-identical tool installations or results.
 
 Run from a clean checkout on that approved cloud runner:
 
-    bash jobs/repro109-python-helper-build-github.sh "$RUNNER_TEMP/repro109-helper-results"
+    bash build/jobs/repro109-python-helper-build-github.sh "$RUNNER_TEMP/repro109-helper-results"
 
 Provider facts and `REPRO109_HELPER_PROFILE=github-macos15-arm64` pass explicitly
 to source-built package workers. Xcode Cloud is a separate unchanged JOB;

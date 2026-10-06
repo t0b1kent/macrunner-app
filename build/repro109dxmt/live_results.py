@@ -1,8 +1,9 @@
-"""Small durable stage receipts; reuse the existing private results publisher."""
+"""Small durable stage receipts; publication requires an explicit destination."""
 from datetime import datetime, timezone
 import json
 import os
 import argparse
+import re
 from pathlib import Path
 import subprocess
 import signal
@@ -40,9 +41,12 @@ class LiveResults:
 
     def _publish_once(self, path):
         # Only the tiny checkpoint folder is pushed, never prefix/archive/raw logs.
-        remote = os.environ.get('RESULTS_REMOTE', 'https://github.com/t0b1kent/xcode-cloud-probe.git')
-        if remote != 'https://github.com/t0b1kent/xcode-cloud-probe.git':
-            raise ValueError('Checkpoint remote must be the private project repository')
+        remote = os.environ.get('RESULTS_REMOTE', '')
+        if not remote:
+            raise ValueError('RESULTS_REMOTE is required for checkpoint publication')
+        if not re.fullmatch(r'https://github\.com/[A-Za-z0-9][A-Za-z0-9-]{0,38}/'
+                            r'[A-Za-z0-9][A-Za-z0-9_.-]{0,99}', remote):
+            raise ValueError('RESULTS_REMOTE must be an explicit GitHub HTTPS repository URL without credentials')
         log = self.reports / 'checkpoint-publish.log'
         with log.open('ab') as stream:
             argv = ['bash', str(self.repo / 'ci_scripts/publish-results.sh'), str(path),
