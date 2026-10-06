@@ -1,0 +1,35 @@
+name: REPRO109 source-built Python helpers ARM64 fallback
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: repro109-python-helpers-macos15-arm64
+  cancel-in-progress: false
+jobs:
+  helpers:
+    runs-on: macos-15
+    timeout-minutes: 150
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      REPRO109_HELPER_PROFILE: github-macos15-arm64
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout owner-approved published recipe revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Build pinned sources and verify ARM64 portable help
+        shell: bash
+        run: bash jobs/repro109-python-helper-build-github.sh "$RUNNER_TEMP/repro109-helper-results"
+      - name: Preserve complete bounded reports and helpers
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: repro109-python-helpers-arm64-${{ github.sha }}
+          path: ${{ runner.temp }}/repro109-helper-results/
+          if-no-files-found: error
+          retention-days: 14
+          include-hidden-files: false

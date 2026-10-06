@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "classification": "PINNED_CLOUD_BUILD_INPUTS_NOT_ACCEPTED_HELPERS",
+  "candidate_lock_sha256": "5702896e055c03189ac5263f14aeac11659223596174edcc8dbc24e439359f03",
+  "static_requirements": {
+    "results_revision": "9716f23a11f688fa6f547587f1689d14407325b3",
+    "run_path": "runs/20261006T142838Z-b45-repro109-python-helper-closure/RESULT.json",
+    "git_blob": "42c3c3d6c5dd96e7abcb76bef5ba9490eec6c3d6",
+    "bytes": 23536,
+    "sha256": "180425500ee984e7a7337414009c5d2b351d71343465131506bf89e79dc6860a"
+  },
+  "source_changes": [
+    {
+      "name": "setuptools-scm",
+      "version": "8.3.1",
+      "role": "build",
+      "reason": "b45 urllib3 requires setuptools-scm>=8,<9; candidate 9.2.0 does not satisfy it",
+      "metadata_url": "https://pypi.org/pypi/setuptools-scm/8.3.1/json",
+      "url": "https://files.pythonhosted.org/packages/b9/19/7ae64b70b2429c48c3a7a4ed36f50f94687d3bfcd0ae2f152367b6410dff/setuptools_scm-8.3.1.tar.gz",
+      "bytes": 78088,
+      "maximum_size": 134217728,
+      "sha256": "3d555e92b75dacd037d32bafdf94f97af51ea29ae8c7b234cf94b7a5bd242a63"
+    },
+    {
+      "name": "calver",
+      "version": "2025.10.20",
+      "role": "build",
+      "reason": "b45 trove-classifiers declares calver in build-system and setup_requires",
+      "metadata_url": "https://pypi.org/pypi/calver/2025.10.20/json",
+      "url": "https://files.pythonhosted.org/packages/4a/96/0c57e3e228ffc54074867406b659b197678674f1f0bf600d114965289834/calver-2025.10.20.tar.gz",
+      "bytes": 8101,
+      "maximum_size": 134217728,
+      "sha256": "c98b376c2424642224d456b2f70c51402343e008c63d204634665e1a2a2835f5"
+    }
+  ],
+  "build_order": [
+    "flit-core", "setuptools", "packaging", "pip", "wheel",
+    "setuptools-scm", "calver", "trove-classifiers", "pathspec", "pluggy",
+    "hatchling", "hatch-vcs", "editables", "altgraph", "macholib",
+    "pyinstaller-hooks-contrib", "pyinstaller", "charset-normalizer", "idna",
+    "urllib3", "certifi", "requests", "filelock"
+  ],
+  "bootstrap_wheels": ["flit-core", "setuptools", "packaging"],
+  "legacy_backend": "setuptools.build_meta:__legacy__",
+  "legacy_requirements": ["setuptools>=40.8.0", "wheel"],
+  "build_environment": {
+    "PIP_NO_INDEX": "1",
+    "PIP_DISABLE_PIP_VERSION_CHECK": "1",
+    "PIP_NO_BUILD_ISOLATION": "1",
+    "CHARSET_NORMALIZER_USE_MYPYC": "0"
+  },
+  "helpers": "SOURCE_BUILD_REQUIRED",
+  "dynamic_backend_requirements": "VERIFY_IN_CLOUD_BEFORE_EACH_BUILD",
+  "license_review": "NOT_ACCEPTED"
+}
