@@ -12,11 +12,13 @@ import stat
 import sys
 import tarfile
 import time
+from types import SimpleNamespace
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import helper_native_runtime as native
 import helper_package_worker as worker
+import helper_tail as tail
 
 
 def read_lock():
@@ -120,6 +122,41 @@ def verify_source(args, lock):
     return result
 
 
+def verify_tail_source(args, lock):
+    """Run actual post-package source/license operations in independent cloud cells."""
+    native.require_cloud()
+    if args.work.exists() or args.work.is_symlink():
+        raise ValueError('Fresh source-tail workspace required')
+    args.work.mkdir(parents=True)
+    reports = args.work / 'reports'; reports.mkdir()
+    runner = native.framework.load_runner(); env = native.framework.build_env()
+    deadline = time.monotonic() + min(args.minutes, 15) * 60
+    result = dict(schema=1, status='STARTED', phase=args.tail_axis, first_failure=None,
+                  selection=args.tail_axis, compile='NOT_ENABLED', install='skipped',
+                  classification='DIAGNOSTIC_ONLY_NOT_HELPER_ACCEPTANCE',
+                  driver_sha256=native.framework.sha(__file__),
+                  lock_sha256=native.framework.sha(HERE / 'python-helpers.build.lock.json'))
+    def mark(label):
+        result['phase'] = label
+        native.framework.write_json(reports / 'RESULT.json', result)
+    def command(argv, cwd, label, timeout):
+        mark(label); log = reports / (label + '.log')
+        runner.command(argv, cwd, env, log, reports, label, deadline, timeout=timeout)
+        return log.read_bytes()
+    try:
+        rows = {row['name']: row for row in lock['helpers']}
+        result['source'] = tail.source_axis(args.tail_axis, rows, args.work, args.work / 'license-prefix',
+            lambda row, destination: checkout_source(row, destination, command, args.work), runner, command, mark)
+        result['status'] = 'PASS_SOURCE_TAIL_AXIS_NOT_HELPER_ACCEPTANCE'
+    except Exception as error:
+        result.update(status='FAILED', first_failure=dict(phase=result['phase'],
+                      exception=type(error).__name__, message=str(error)))
+        raise
+    finally:
+        native.framework.write_json(reports / 'RESULT.json', result)
+    return result
+
+
 def portable_cli(prefix, product, command):
     hidden = prefix.with_name('prefix-inactive-for-helper-smoke')
     if hidden.exists() or hidden.is_symlink():
@@ -166,6 +203,12 @@ def selection(lock, only_package=None, only_step=None):
 def build(args, lock):
     native.require_cloud()
     selected = selection(lock, getattr(args, 'only_package', None), getattr(args, 'only_step', None))
+    tail_axis = getattr(args, 'tail_axis', None)
+    if tail_axis:
+        if selected or getattr(args, 'native_only', False) or tail_axis not in tail.BUILD_AXES:
+            raise ValueError('Compiled tail diagnosis requires one exclusive valid axis')
+        selected = dict(build_order=lock['build_order'], classification='DIAGNOSTIC_ONLY_FULL_TAIL_BOOTSTRAP',
+                        native_runtime='NOT_BUILT_CLOUD_BOOTSTRAP_VENV', tail_axis=tail_axis)
     native_only = getattr(args, 'native_only', False)
     if native_only and selected:
         raise ValueError('Native full-mode diagnosis cannot use package selectors')
@@ -196,7 +239,7 @@ def build(args, lock):
         runner.command(argv, cwd, env, log, reports, label, deadline, timeout=timeout)
         return log.read_bytes()
 
-    def package(source, row, bootstrap=False):
+    def package(source, row, bootstrap=False, collect_licenses=True):
         name = row['name']; receipt = reports / (name + '-wheel.json')
         argv = [str(python), '-B', '-I', str(HERE / 'helper_package_worker.py'),
                 '--source', str(source), '--name', name, '--version', row['version'],
@@ -217,7 +260,7 @@ def build(args, lock):
             command(install_argv(python, wheels / built['wheel'], name), source, name + '-install', 300)
             if name == 'pip':
                 command([str(python), '-B', '-I', '-m', 'pip', '--version'], source, 'pip-bootstrap-smoke', 60)
-        built['licenses'] = runner.licenses(source, prefix, name)
+        built['licenses'] = runner.licenses(source, prefix, name) if collect_licenses else 'NOT_ENABLED_IN_INDEPENDENT_BUILD_AXIS'
         result['packages'].append(built); save()
         return built
 
@@ -289,64 +332,29 @@ def build(args, lock):
                 command(['/usr/bin/python3', '-B', '-I', str(HERE / 'check-macho-arch.py'),
                          str(source / 'PyInstaller/bootloader')], args.work, 'bootloader-architectures', 120)
             package(source, row, name in lock['bootstrap_wheels'])
-        if selected:
+        if selected and not tail_axis:
             result.update(status='SCOPED_SOURCE_PACKAGE_BUILT_DIAGNOSTIC_ONLY', phase='complete',
                           helpers='NOT_ENABLED', native_runtime='NOT_BUILT_CLOUD_BOOTSTRAP_VENV',
                           source_python_acceptance='NOT_ENABLED', source_openssl_acceptance='NOT_ENABLED',
                           install_skipped='NATIVE_RUNTIME_AND_HELPER_PRODUCTS')
             return
-        by_name = {row['name']: row for row in lock['helpers']}
-        for name in ['legendary', 'gogdl']:
-            row = by_name[name]; source = args.work / (name + '-source')
-            proof = checkout(row, source)
-            if name == 'legendary':
-                if native.framework.sha(source / 'requirements.txt') != row['requirements_sha256']:
-                    raise ValueError('Legendary runtime requirements drift')
-            else:
-                if native.framework.sha(source / 'pyproject.toml') != row['pyproject_sha256']:
-                    raise ValueError('Gogdl source controls drift')
-                link = command(['/usr/bin/git', '-C', str(source), 'ls-tree', 'HEAD', 'xdelta3'],
-                               args.work, 'gogdl-xdelta-gitlink', 30).decode().split()
-                if len(link) != 4 or link[:3] != ['160000', 'commit', by_name['xdelta3']['revision']]:
-                    raise ValueError('Gogdl xdelta3 submodule revision drift')
-                proof['xdelta3'] = checkout(by_name['xdelta3'], source / 'xdelta3')
-                proof['xdelta3']['licenses'] = runner.licenses(source / 'xdelta3', prefix, 'xdelta3')
-            built = package(source, row)
-            if name == 'gogdl':
-                command([str(python), '-B', '-I', '-c',
-                         'import gogdl.xdelta3; print("GOGDL_XDELTA3_IMPORT=PASS")'],
-                        args.work, 'gogdl-native-extension-smoke', 120)
-            entry = built['console_scripts'].get(name)
-            if not isinstance(entry, str) or not re.fullmatch(r'[A-Za-z_][\w.]*:[A-Za-z_]\w*', entry):
-                raise ValueError('Helper console entry point missing or unsafe')
-            module, function = entry.split(':')
-            script = args.work / (name + '-entry.py')
-            script.write_text('from ' + module + ' import ' + function + '\nif __name__ == "__main__":\n    ' + function + '()\n')
-            command([str(python), '-B', '-I', '-m', 'PyInstaller', '--clean', '--noconfirm', '--onefile',
-                     '--target-architecture', 'arm64', '--name', name, '--distpath', str(product),
-                     '--workpath', str(args.work / (name + '-pyinstaller')), '--specpath', str(args.work),
-                     '--collect-submodules', name, '--collect-data', 'certifi', str(script)],
-                    args.work, name + '-freeze', 1200)
-            command([str(product / name), '--help'], args.work, name + '-cli-help', 120)
-            proof.update(status='SOURCE_BUILT_CLI_HELP_PASS', version=row['version'],
-                         bytes=(product / name).stat().st_size, sha256=native.framework.sha(product / name))
-            result['helpers'].append(proof); save()
-        command([str(python), '-B', '-I', '-m', 'pip', 'check'], args.work, 'runtime-dependency-closure', 120)
-        command(['/usr/bin/python3', '-B', '-I', str(HERE / 'check-macho-arch.py'), str(prefix)],
-                args.work, 'compiled-python-extensions-architectures', 120)
-        command(['/usr/bin/python3', '-B', '-I', str(HERE / 'check-macho-arch.py'), str(product)],
-                args.work, 'helpers-architectures', 120)
-        portable_cli(prefix, product, command)
-        shutil.copytree(prefix / 'share/licenses', product / 'licenses')
+        def mark(label):
+            result['phase'] = label; save()
+        context = SimpleNamespace(work=args.work, publish_dir=args.publish_dir, prefix=prefix,
+            python=python, product=product, here=HERE, rows={row['name']: row for row in lock['helpers']},
+            runner=runner, command=command, checkout=checkout, package=package, portable_cli=portable_cli,
+            sha=native.framework.sha, result=result, save=save, mark=mark)
+        tail.run(context, tail_axis)
+        if tail_axis:
+            result.update(status='PASS_COMPILED_TAIL_AXIS_NOT_HELPER_ACCEPTANCE', phase='complete',
+                license_review='NOT_ENABLED_IN_INDEPENDENT_BUILD_AXIS',
+                source_python_acceptance='NOT_ENABLED', source_openssl_acceptance='NOT_ENABLED')
+            return
         archive = args.work / 'helpers.tar.gz'
-        with tarfile.open(archive, 'w:gz') as stream:
-            for path in sorted(product.iterdir()): stream.add(path, arcname=path.name)
         result.update(status='SOURCE_HELPERS_BUILT_NOT_FINAL_APP', phase='complete',
                       archive=dict(name=archive.name, bytes=archive.stat().st_size, sha256=native.framework.sha(archive)),
                       embedded_dylib_relocation='PREFIX_HIDDEN_CLI_SMOKE_PASS_ONLY',
                       r2_function_section_comparison='NOT_ENABLED')
-        args.publish_dir.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(archive, args.publish_dir / archive.name)
     except Exception as error:
         result.update(status='FAILED', first_failure=dict(phase=result['phase'],
                       exception=type(error).__name__, message=str(error)))
@@ -367,10 +375,12 @@ def main():
     scope.add_argument('--only-package')
     scope.add_argument('--only-step', type=int)
     scope.add_argument('--native-only', action='store_true',
-                       help='Run the unchanged full-mode native producer, then stop before source packages')
+                        help='Run the unchanged full-mode native producer, then stop before source packages')
+    scope.add_argument('--tail-axis', choices=tail.AXES,
+                       help='One independent post-package diagnostic; never complete helper acceptance')
     args = parser.parse_args(); lock = read_lock()
     if args.verify_source:
-        if args.build or args.only_package or args.only_step is not None or args.native_only or args.work is None or not 1 <= args.minutes <= 15:
+        if args.build or args.only_package or args.only_step is not None or args.native_only or args.tail_axis or args.work is None or not 1 <= args.minutes <= 15:
             raise ValueError('Source-only mode requires a fresh bounded workspace without package selectors')
         print(json.dumps(verify_source(args, lock)))
         return
@@ -378,10 +388,14 @@ def main():
     if not args.build:
         print(json.dumps(dict(status='PLAN_ONLY', source_packages=len(lock['packages']),
                               helpers=['legendary', 'gogdl'], selection=selected, native_only=args.native_only,
+                              tail_axis=args.tail_axis,
                               network=0, builds=0, install='skipped')))
         return
     if args.work is None or args.publish_dir is None or not 1 <= args.minutes <= 120:
         raise ValueError('Bounded cloud workspace/publication paths required')
+    if args.tail_axis in tail.SOURCE_AXES:
+        print(json.dumps(verify_tail_source(args, lock)))
+        return
     build(args, lock)
 
 

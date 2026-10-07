@@ -94,6 +94,26 @@ only. Actual GitHub source build, full embedded dylib relocation, final app,
 license acceptance, r2 function/section comparison, four stands and public
 BUILD.md execution remain unaccepted until their real results are measured.
 
+Post-package coverage uses the same `helper_tail.py` operations as the complete
+producer. The source matrix has 40 independent cells with `fail-fast: false`:
+the unchanged 27 prerequisites plus three source-license collectors, the gogdl
+Git submodule binding, two helper wheel/freeze/CLI routes, dependency closure,
+both architecture checks, prefix-hidden CLI smoke, license copying, tar archive
+creation and the byte-checked output copy.
+
+The nine compiled tail cells rebuild all 23 pinned source-package prerequisites
+inside the existing diagnostic bootstrap Python environment; they do not build
+CPython/OpenSSL again. Source/license cells do not need that package prefix.
+License collectors execute independently from helper compilation so one license
+failure cannot hide compiler, freeze, dependency, architecture or archive errors.
+These diagnostic products explicitly carry unaccepted license/runtime status.
+Only the complete producer collects all helper licenses and can report complete
+source helpers; the source matrix cannot grant final application acceptance.
+Run the matrix first and preserve the full failure list before another complete
+build. A downstream cell with failed prerequisites is FAILED, never PASS.
+Per-job limits: 15 minutes for source tails, 60 minutes for compiled tails;
+the producer work deadline for compiled tails is 45 minutes, three CPU workers.
+
 Official runner references:
 [hardware/labels](https://docs.github.com/en/actions/reference/runners/github-hosted-runners),
 [macOS 15 ARM64 tools](https://github.com/actions/runner-images/blob/main/images/macos/macos-15-arm64-Readme.md).

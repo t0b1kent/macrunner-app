@@ -28,6 +28,10 @@ fi
 if [ "${REPRO109_HELPER_NATIVE_ONLY:-0}" = 1 ]; then
   set -- "$@" --native-only
 fi
+if [ -n "${REPRO109_HELPER_TAIL_AXIS:-}" ]; then
+  set -- "$@" --tail-axis "$REPRO109_HELPER_TAIL_AXIS"
+  minutes=45
+fi
 rc=0
 python3 -B -I "$repo/repro109app/build_python_helpers.py" --build \
   --work "$work" --publish-dir "$out" --minutes "$minutes" --jobs 3 "$@" \

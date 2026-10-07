@@ -1,4 +1,4 @@
-name: REPRO109 full-mode native runtime, 23 packages and 3 helper source slots
+name: REPRO109 full-mode native runtime, 23 packages, 3 sources and 13 tail slots
 
 on:
   workflow_dispatch:
@@ -42,6 +42,75 @@ jobs:
           if-no-files-found: error
           retention-days: 14
           include-hidden-files: false
+  tail-source:
+    name: Post-package source operation ${{ matrix.axis }}
+    runs-on: macos-15
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        axis: [licenses-legendary, licenses-gogdl, licenses-xdelta3, gitlink-gogdl]
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      REPRO109_HELPER_PROFILE: github-macos15-arm64
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout the exact dispatched recipe revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Use the full producer's checkout, Git index and license collector
+        env:
+          TAIL_AXIS: ${{ matrix.axis }}
+        run: >-
+          /usr/bin/python3 -I -B build/repro109app/build_python_helpers.py --build
+          --tail-axis "$TAIL_AXIS" --work "$RUNNER_TEMP/repro109-tail-source"
+          --publish-dir "$RUNNER_TEMP/repro109-tail-source-unused" --minutes 8
+      - name: Preserve complete bounded source and license reports
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: repro109-helper-tail-${{ matrix.axis }}-${{ github.sha }}
+          path: ${{ runner.temp }}/repro109-tail-source/reports/
+          if-no-files-found: error
+          retention-days: 14
+  tail-build:
+    name: Post-package build or finalization ${{ matrix.axis }}
+    runs-on: macos-15
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        axis: [helper-legendary, helper-gogdl, runtime-dependency-closure, compiled-python-extensions-architectures, helpers-architectures, prefix-hidden-cli, licenses-copy, archive, publish-copy]
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      REPRO109_HELPER_PROFILE: github-macos15-arm64
+      REPRO109_HELPER_ONLY_PACKAGE: ''
+      REPRO109_HELPER_ONLY_STEP: ''
+      REPRO109_HELPER_NATIVE_ONLY: '0'
+      REPRO109_HELPER_TAIL_AXIS: ${{ matrix.axis }}
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout the exact dispatched recipe revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Rebuild all 23 pinned prerequisites, then the selected real tail operation
+        timeout-minutes: 55
+        shell: bash
+        run: bash build/jobs/repro109-python-helper-build-github.sh "$RUNNER_TEMP/repro109-helper-results"
+      - name: Preserve diagnostic outputs and complete bounded reports
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: repro109-helper-tail-${{ matrix.axis }}-${{ github.sha }}
+          path: ${{ runner.temp }}/repro109-helper-results/
+          if-no-files-found: error
+          retention-days: 14
   helper-source:
     name: Exact helper source ${{ matrix.helper }}
     runs-on: macos-15
