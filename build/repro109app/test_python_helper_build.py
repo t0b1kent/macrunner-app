@@ -47,12 +47,13 @@ class HelperBuildTests(unittest.TestCase):
         digest, count = builder.source_inventory(source, stage)
         buffer = io.BytesIO()
         with tarfile.open(fileobj=buffer, mode='w') as archive:
-            info = tarfile.TarInfo('root/owned.c'); info.mode = 0o644
+            info = tarfile.TarInfo('root/owned.c'); info.mode = 0o664
             info.size = len(path.read_bytes()); archive.addfile(info, io.BytesIO(path.read_bytes()))
         buffer.seek(0)
         with tarfile.open(fileobj=buffer) as archive:
             item = archive.getmembers()[0]; data = archive.extractfile(item).read()
-            rows = [dict(path='owned.c', bytes=len(data), sha256=hashlib.sha256(data).hexdigest(), mode=oct(item.mode))]
+            rows = [dict(path='owned.c', bytes=len(data), sha256=hashlib.sha256(data).hexdigest(),
+                         mode='0o755' if item.mode & 0o111 else '0o644')]
         oracle = hashlib.sha256(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
         self.assertEqual((digest, count), (oracle, 1))
 

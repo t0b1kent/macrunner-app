@@ -1,4 +1,4 @@
-name: REPRO109 all 23 source helper package slots
+name: REPRO109 23 package and 3 helper source slots
 
 on:
   workflow_dispatch:
@@ -11,6 +11,39 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  helper-source:
+    name: Exact helper source ${{ matrix.helper }}
+    runs-on: macos-15
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        helper: [legendary, gogdl, xdelta3]
+    env:
+      REPRO109_HELPER_PROFILE: github-macos15-arm64
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout the exact dispatched recipe revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Verify the same pinned checkout and byte census as the full build
+        shell: bash
+        run: >-
+          /usr/bin/python3 -I -B build/repro109app/build_python_helpers.py
+          --verify-source "${{ matrix.helper }}"
+          --work "$RUNNER_TEMP/repro109-helper-source" --minutes 8
+      - name: Preserve the complete bounded source-check reports
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: repro109-helper-source-${{ matrix.helper }}-${{ github.sha }}
+          path: ${{ runner.temp }}/repro109-helper-source/reports/
+          if-no-files-found: error
+          retention-days: 14
+          include-hidden-files: true
   package:
     name: Source package slot ${{ matrix.step }}
     runs-on: macos-15

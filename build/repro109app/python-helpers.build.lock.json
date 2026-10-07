@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "classification": "PINNED_CLOUD_BUILD_INPUTS_NOT_ACCEPTED_HELPERS",
-  "candidate_lock_sha256": "5702896e055c03189ac5263f14aeac11659223596174edcc8dbc24e439359f03",
+  "candidate_lock_sha256": "a03547bfdb8664d60c3523d534487a00b75e616889477954028a9d8f7892a027",
   "static_requirements": {
     "results_revision": "9716f23a11f688fa6f547587f1689d14407325b3",
     "run_path": "runs/20261006T142838Z-b45-repro109-python-helper-closure/RESULT.json",

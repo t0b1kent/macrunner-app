@@ -40,7 +40,7 @@ def read_lock():
 
 def source_inventory(source, stage_log):
     rows = []
-    # Tar census used regular files only, with octal permission bits.
+    # Git preserves executable permission, not archive/checkout write permissions.
     for record in stage_log.split(b'\0'):
         if not record:
             continue
@@ -53,10 +53,71 @@ def source_inventory(source, stage_log):
         if path.is_symlink() or not path.is_file() or not path.resolve().is_relative_to(source.resolve()):
             raise ValueError('Tracked regular helper source missing or escapes source')
         data = path.read_bytes()
+        executable = mode == b'100755'
+        if bool(path.stat().st_mode & stat.S_IXUSR) != executable:
+            raise ValueError('Helper executable mode differs from Git index')
         rows.append(dict(path=relative, bytes=len(data), sha256=hashlib.sha256(data).hexdigest(),
-                         mode=oct(stat.S_IMODE(path.stat().st_mode))))
+                          mode='0o755' if executable else '0o644'))
     raw = json.dumps(sorted(rows, key=lambda x: x['path']), sort_keys=True, separators=(',', ':')).encode()
     return hashlib.sha256(raw).hexdigest(), len(rows)
+
+
+def checkout_source(row, destination, command, work):
+    if destination.is_symlink() or (destination.exists() and any(destination.iterdir())):
+        raise ValueError('Helper checkout requires fresh or empty gitlink directory')
+    destination.mkdir(exist_ok=True)
+    command(['/usr/bin/git', 'init', '-q', str(destination)], work, row['name'] + '-git-init', 30)
+    command(['/usr/bin/git', '-C', str(destination), 'fetch', '--depth=1', '--no-tags',
+             row['url'], row['revision']], work, row['name'] + '-git-fetch', 300)
+    command(['/usr/bin/git', '-C', str(destination), 'checkout', '--detach', '-q', row['revision']],
+            work, row['name'] + '-git-checkout', 60)
+    actual = command(['/usr/bin/git', '-C', str(destination), 'rev-parse', 'HEAD'], work,
+                     row['name'] + '-git-head', 30).decode().strip()
+    if actual != row['revision']:
+        raise ValueError('Helper source revision drift')
+    inventory = command(['/usr/bin/git', '-C', str(destination), 'ls-files', '--stage', '-z'], work,
+                        row['name'] + '-git-inventory', 30)
+    digest, count = source_inventory(destination, inventory)
+    if digest != row['source_inventory_sha256']:
+        raise ValueError('Helper source byte inventory differs: ' + row['name'] +
+                         '; expected=' + row['source_inventory_sha256'] +
+                         '; actual=' + digest + '; files=' + str(count))
+    for filename, field in [('requirements.txt', 'requirements_sha256'),
+                            ('pyproject.toml', 'pyproject_sha256')]:
+        if field in row and native.framework.sha(destination / filename) != row[field]:
+            raise ValueError('Helper source controls drift: ' + row['name'])
+    return dict(name=row['name'], revision=actual, source_inventory_sha256=digest, files=count)
+
+
+def verify_source(args, lock):
+    """Exercise the full build's exact checkout/census without building native tools."""
+    native.require_cloud()
+    if args.work.exists() or args.work.is_symlink():
+        raise ValueError('Fresh source-check workspace required')
+    args.work.mkdir(parents=True)
+    reports = args.work / 'reports'; reports.mkdir()
+    runner = native.framework.load_runner()
+    env = native.framework.build_env()
+    deadline = time.monotonic() + args.minutes * 60
+    result = dict(schema=1, status='STARTED', phase='source-check', first_failure=None,
+                  selection=args.verify_source, compile='NOT_ENABLED', install='skipped')
+    def command(argv, cwd, label, timeout):
+        result['phase'] = label
+        native.framework.write_json(reports / 'RESULT.json', result)
+        log = reports / (label + '.log')
+        runner.command(argv, cwd, env, log, reports, label, deadline, timeout=timeout)
+        return log.read_bytes()
+    try:
+        row = next(r for r in lock['helpers'] if r['name'] == args.verify_source)
+        result['source'] = checkout_source(row, args.work / (row['name'] + '-source'), command, args.work)
+        result['status'] = 'PASS_EXACT_HELPER_SOURCE'
+    except Exception as error:
+        result.update(status='FAILED', first_failure=dict(phase=result['phase'],
+                      exception=type(error).__name__, message=str(error)))
+        raise
+    finally:
+        native.framework.write_json(reports / 'RESULT.json', result)
+    return result
 
 
 def portable_cli(prefix, product, command):
@@ -158,24 +219,7 @@ def build(args, lock):
         return built
 
     def checkout(row, destination):
-        if destination.is_symlink() or (destination.exists() and any(destination.iterdir())):
-            raise ValueError('Helper checkout requires fresh or empty gitlink directory')
-        destination.mkdir(exist_ok=True)
-        command(['/usr/bin/git', 'init', '-q', str(destination)], args.work, row['name'] + '-git-init', 30)
-        command(['/usr/bin/git', '-C', str(destination), 'fetch', '--depth=1', '--no-tags',
-                 row['url'], row['revision']], args.work, row['name'] + '-git-fetch', 300)
-        command(['/usr/bin/git', '-C', str(destination), 'checkout', '--detach', '-q', row['revision']],
-                args.work, row['name'] + '-git-checkout', 60)
-        actual = command(['/usr/bin/git', '-C', str(destination), 'rev-parse', 'HEAD'], args.work,
-                         row['name'] + '-git-head', 30).decode().strip()
-        if actual != row['revision']:
-            raise ValueError('Helper source revision drift')
-        inventory = command(['/usr/bin/git', '-C', str(destination), 'ls-files', '--stage', '-z'], args.work,
-                            row['name'] + '-git-inventory', 30)
-        digest, count = source_inventory(destination, inventory)
-        if digest != row['source_inventory_sha256']:
-            raise ValueError('Helper source byte inventory differs from retained input: ' + row['name'])
-        return dict(name=row['name'], revision=actual, source_inventory_sha256=digest, files=count)
+        return checkout_source(row, destination, command, args.work)
 
     try:
         save()
@@ -304,6 +348,7 @@ def build(args, lock):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--build', action='store_true')
+    parser.add_argument('--verify-source', choices=['legendary', 'gogdl', 'xdelta3'])
     parser.add_argument('--work', type=Path)
     parser.add_argument('--publish-dir', type=Path)
     parser.add_argument('--minutes', type=int, default=120)
@@ -312,6 +357,11 @@ def main():
     scope.add_argument('--only-package')
     scope.add_argument('--only-step', type=int)
     args = parser.parse_args(); lock = read_lock()
+    if args.verify_source:
+        if args.build or args.only_package or args.only_step is not None or args.work is None or not 1 <= args.minutes <= 15:
+            raise ValueError('Source-only mode requires a fresh bounded workspace without package selectors')
+        print(json.dumps(verify_source(args, lock)))
+        return
     selected = selection(lock, args.only_package, args.only_step)
     if not args.build:
         print(json.dumps(dict(status='PLAN_ONLY', source_packages=len(lock['packages']),

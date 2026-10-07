@@ -1,12 +1,14 @@
 {
   "architecture": "arm64",
   "classification": "CANDIDATE_SOURCE_LOCK_NOT_BUILD_READY",
+  "source_inventory_algorithm": "SHA256 sorted compact JSON(path,bytes,sha256,mode); Git regular files; mode 0o644/0o755 from Git executable bit; archive write permissions excluded",
   "helpers": [
     {
       "name": "legendary",
       "requirements_sha256": "d3a0c101893d31bb95b98b75e24873d9aceddb751296b5fa234f33e2d0fd58df",
       "revision": "56d439ed2d3d9f34e2b08fa23e627c23a487b8d6",
-      "source_inventory_sha256": "6bd1f32f034bc89cf9ad99d12358f9a7bdac3265b300e0b765cf9afae8ab4668",
+      "retained_archive_inventory_sha256": "6bd1f32f034bc89cf9ad99d12358f9a7bdac3265b300e0b765cf9afae8ab4668",
+      "source_inventory_sha256": "63416b4547c5496138fbb42c461f2f4f605290ec86d5caf081aad85a36156b35",
       "url": "https://github.com/legendary-gl/legendary.git",
       "version": "0.20.34"
     },
@@ -14,14 +16,16 @@
       "name": "gogdl",
       "pyproject_sha256": "033c4ad95301cc55d7b9fe3cf9b13de0261ef9561ab880e490a878a876ca84ea",
       "revision": "47b753a4afc901090603591778a3278c57f822ec",
-      "source_inventory_sha256": "a5f56f008872dd36db6737900f65e2d70694863b0eff5adbac5d0b0ed098f204",
+      "retained_archive_inventory_sha256": "a5f56f008872dd36db6737900f65e2d70694863b0eff5adbac5d0b0ed098f204",
+      "source_inventory_sha256": "58059dcdb0b947ac8c16a8142e28a1854f5dd288084eaa3352bbeff0c1259eae",
       "url": "https://github.com/Heroic-Games-Launcher/heroic-gogdl.git",
       "version": "1.2.1"
     },
     {
       "name": "xdelta3",
       "revision": "0525275fe4b553a10f38e455d30c60dc6ed9b45d",
-      "source_inventory_sha256": "141d8cd6077cbaaeb5c12971b69581f64658c28aa80249f4797849f93fcff77f",
+      "retained_archive_inventory_sha256": "141d8cd6077cbaaeb5c12971b69581f64658c28aa80249f4797849f93fcff77f",
+      "source_inventory_sha256": "0890165b054ccc4b505e9a5a508eaa1289c2b7dc4e729ade29735a56bfe2faba",
       "url": "https://github.com/jmacd/xdelta.git"
     }
   ],
