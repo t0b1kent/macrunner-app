@@ -560,6 +560,29 @@ def toolchain_preflight(tool, out):
         clang = output('clang_path', ['xcrun', '--find', 'clang'])
         clangxx = output('clangxx_path', ['xcrun', '--find', 'clang++'])
         output('apple_clang', [clang, '--version'])
+        github27 = tool.get('profile') == 'github-xcode27-arm64'
+        if github27:
+            # Gather the whole tool family before comparing any version. The
+            # first cloud sample did not query ar/libtool/Swift: record them,
+            # including nonzero version-query rc, without inventing pins.
+            report['version_capture_only'] = list(tool['version_capture_only'])
+            report['version_query_status'] = {}
+            for name, argv in [
+                    ('apple_clangxx', [clangxx, '--version']),
+                    ('apple_ld', ['xcrun', 'ld', '-v']),
+                    ('ar_path', ['xcrun', '--find', 'ar']),
+                    ('libtool_path', ['xcrun', '--find', 'libtool']),
+                    ('swift_path', ['xcrun', '--find', 'swift']),
+                    ('ar', ['xcrun', 'ar', '--version']),
+                    ('libtool', ['xcrun', 'libtool', '-V']),
+                    ('swift', ['xcrun', 'swift', '--version']),
+                    ('macos_build', ['sw_vers', '-buildVersion'])]:
+                try:
+                    output(name, argv)
+                    report['version_query_status'][name] = 'PRESENT' if actual[name] else 'EMPTY'
+                except Exception as exc:
+                    report['version_query_status'][name] = 'FAILED'
+                    report.setdefault('version_query_errors', {})[name] = str(exc)
         if tool.get('profile') == 'xcode-cloud':
             output('apple_ld', ['xcrun', 'ld', '-v'])
             output('macos_build', ['sw_vers', '-buildVersion'])
@@ -575,7 +598,23 @@ def toolchain_preflight(tool, out):
             if actual[key] != expected:
                 raise AssertionError(_check_message(str(expected), {key: actual[key]}, key+' differs'))
         expected_clang = tool.get('apple_clang', 'Apple clang version 21.')
-        if expected_clang not in actual['apple_clang']:
+        if github27:
+            for name in ['apple_clang', 'apple_clangxx']:
+                if actual.get(name, '').splitlines()[:1] != [expected_clang]:
+                    raise ValueError('GitHub Xcode27: expected ' + expected_clang + '; actual=' + actual.get(name, 'NOT_PRESENT'))
+            if not re.search(r'PROJECT:ld-' + re.escape(tool['ld']) + r'(?![\w.])', actual.get('apple_ld', '')):
+                raise ValueError('GitHub Xcode27: expected ld-' + tool['ld'] + '; actual=' + actual.get('apple_ld', 'NOT_PRESENT'))
+            # The app producer already requires Apple Swift 6.x. Check that
+            # same family before fetching frameworks, rather than after them.
+            if not re.search(r'Apple Swift version ' + str(tool['swift_major']) + r'\.', actual.get('swift', '')):
+                raise ValueError('GitHub Xcode27: expected Apple Swift major ' + str(tool['swift_major']) + '; actual=' + actual.get('swift', 'NOT_PRESENT'))
+            tool.update(extra_tool_versions={name: actual.get(name, 'NOT_PRESENT')
+                                             for name in tool['version_capture_only']},
+                        extra_tool_query_status={name: report['version_query_status'][name]
+                                                 for name in tool['version_capture_only']},
+                        exact_pins_state='CORE_EXACT_PINS_VERIFIED_EXTRA_VERSIONS_NOT_PINNED')
+            report['measured_effective_toolchain'] = dict(tool)
+        elif expected_clang not in actual['apple_clang']:
             raise AssertionError(_check_message(expected_clang,
                                                  {'apple_clang': actual['apple_clang']}))
         if tool.get('profile') == 'xcode-cloud':

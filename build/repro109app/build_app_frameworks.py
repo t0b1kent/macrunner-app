@@ -185,6 +185,14 @@ def cloud_profile():
     raise ValueError('Cloud source work requires GitHub Actions or Xcode Cloud')
 
 
+def selected_toolchain(lock, profile):
+    if profile == 'github':
+        return copy.deepcopy(lock['github_toolchain'])
+    if profile == 'xcode-cloud':
+        return copy.deepcopy(lock['toolchain'])
+    raise ValueError('Unknown framework toolchain profile')
+
+
 def build(args, lock):
     profile = cloud_profile()
     selected = selected_components(lock, getattr(args, 'only', ''))
@@ -217,9 +225,9 @@ def build(args, lock):
             raise CheckpointFailure('Durable publication failed: ' + str(exc)) from exc
     try:
         checkpoint('PRECHECK', 'JOB_STARTED')
-        tool = copy.deepcopy(lock['toolchain'])
-        runner.toolchain_preflight(tool, reports)
+        tool = selected_toolchain(lock, profile)
         result['toolchain'] = tool
+        runner.toolchain_preflight(tool, reports)
         prefix = args.work / 'prefix'
         prefix.mkdir()
         for row in selected:

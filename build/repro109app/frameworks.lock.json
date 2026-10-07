@@ -11,6 +11,18 @@
     "apple_clang": "Apple clang version 21.",
     "deployment_target": "14.0"
   },
+  "github_toolchain": {
+    "profile": "github-xcode27-arm64",
+    "xcode": "27.0",
+    "xcode_build": "27A266a",
+    "sdk": "27.0",
+    "ld": "27037.1",
+    "apple_clang": "Apple clang version 21.0.0 (clang-2100.3.34.2)",
+    "swift_major": 6,
+    "deployment_target": "14.0",
+    "version_capture_only": ["ar", "libtool", "swift"],
+    "provenance": "GitHub run 37673027741, native-fullmode and plcrashreporter toolchain-preflight.json, SHA256 bea61959d76c58def2a8b19c388b2ea24b756866c853be6627c2e857d3ff63d4; extra tool versions were NOT_ENABLED in that capture"
+  },
   "components": [
     {
       "name": "sparkle",

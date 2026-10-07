@@ -34,6 +34,8 @@ class PublicAppTests(unittest.TestCase):
                 args = SimpleNamespace(work=root / 'work', publish_dir=root / 'published',
                                        minutes=1, jobs=1, only=component)
                 def stop(*words):
+                    self.assertEqual(words[0]['profile'], 'github-xcode27-arm64')
+                    self.assertEqual(words[0]['ld'], '27037.1')
                     raise RuntimeError('OWN_TOOLCHAIN_STOP_AFTER_CHECKPOINT')
                 runner = SimpleNamespace(toolchain_preflight=stop)
                 with patch.dict(os.environ, {'GITHUB_ACTIONS': 'true'}, clear=True), \
@@ -156,6 +158,122 @@ class PublicAppTests(unittest.TestCase):
         lock['frameworks_recipe']['driver_sha256'] = '0' * 64
         with self.assertRaises(ValueError):
             source.framework_module(lock)
+
+
+class ToolchainProfileTests(unittest.TestCase):
+    def setUp(self):
+        self.lock = frameworks.read_lock()
+        self.runner = frameworks.load_runner()
+        self.temp = tempfile.TemporaryDirectory(dir=os.environ['REPRO109_TEST_TMP'])
+        self.addCleanup(self.temp.cleanup)
+        self.out = Path(self.temp.name)
+        self.fixture = {
+            ('xcodebuild', '-version'): 'Xcode 27.0\nBuild version 27A266a\n',
+            ('xcrun', '--show-sdk-version'): '27.0\n',
+            ('xcrun', '--show-sdk-path'): '/OWN/SDK\n',
+            ('xcrun', '--find', 'clang'): '/OWN/clang\n',
+            ('xcrun', '--find', 'clang++'): '/OWN/clang++\n',
+            ('/OWN/clang', '--version'): 'Apple clang version 21.0.0 (clang-2100.3.34.2)\nOWN_FIXTURE\n',
+            ('/OWN/clang++', '--version'): 'Apple clang version 21.0.0 (clang-2100.3.34.2)\nOWN_FIXTURE\n',
+            ('xcrun', 'ld', '-v'): '@(#)PROGRAM:ld PROJECT:ld-27037.1\nOWN_FIXTURE\n',
+            ('xcrun', '--find', 'ar'): '/OWN/ar\n',
+            ('xcrun', '--find', 'libtool'): '/OWN/libtool\n',
+            ('xcrun', '--find', 'swift'): '/OWN/swift\n',
+            ('xcrun', 'ar', '--version'): 'OWN_UNPINNED_AR_VERSION\n',
+            ('xcrun', 'libtool', '-V'): 'OWN_UNPINNED_LIBTOOL_VERSION\n',
+            ('xcrun', 'swift', '--version'): 'Apple Swift version 6.OWN_FIXTURE\n',
+            ('sw_vers', '-buildVersion'): '26A428\n',
+        }
+        self.returncodes = {}
+        self.calls = []
+
+    def fake_command(self, argv, **kwargs):
+        words = tuple(argv)
+        self.calls.append(words)
+        return SimpleNamespace(returncode=self.returncodes.get(words, 0), stdout=self.fixture[words])
+
+    def run_preflight(self, profile='github'):
+        tool = frameworks.selected_toolchain(self.lock, profile)
+        with patch.object(self.runner.subprocess, 'run', side_effect=self.fake_command):
+            self.runner.toolchain_preflight(tool, self.out)
+        return tool
+
+    def receipt(self):
+        return json.loads((self.out / 'toolchain-preflight.json').read_text())
+
+    def assert_family_captured(self):
+        report = self.receipt()
+        for name in ['xcode', 'sdk', 'apple_clang', 'apple_clangxx', 'apple_ld', 'ar', 'libtool', 'swift']:
+            self.assertIn(name, report['actual'])
+        self.assertEqual(len(report['commands']), len(self.fixture))
+
+    def test_profile_selection_preserves_cloud_pins(self):
+        original = copy.deepcopy(self.lock)
+        github = frameworks.selected_toolchain(self.lock, 'github')
+        cloud = frameworks.selected_toolchain(self.lock, 'xcode-cloud')
+        self.assertEqual(github['ld'], '27037.1')
+        self.assertEqual(cloud, original['toolchain'])
+        self.assertEqual(cloud['ld'], '27037.1.0')
+        github['ld'] = cloud['ld'] = 'OWN_MUTATED'
+        self.assertEqual(self.lock, original)
+        with self.assertRaises(ValueError):
+            frameworks.selected_toolchain(self.lock, 'foreign')
+
+    def test_github_observed_core_and_unpinned_tool_family(self):
+        tool = self.run_preflight()
+        self.assert_family_captured()
+        self.assertEqual(self.receipt()['status'], 'PRESENT')
+        self.assertEqual(tool['version_capture_only'], ['ar', 'libtool', 'swift'])
+        self.assertEqual(set(tool['extra_tool_query_status'].values()), {'PRESENT'})
+        self.assertEqual(tool['exact_pins_state'], 'CORE_EXACT_PINS_VERIFIED_EXTRA_VERSIONS_NOT_PINNED')
+
+    def test_all_pinned_siblings_refused_after_family_capture(self):
+        changes = [
+            (('xcodebuild', '-version'), 'Xcode 27.0\nBuild version OWN_DIFFERENT\n'),
+            (('xcrun', '--show-sdk-version'), '27.1\n'),
+            (('/OWN/clang', '--version'), 'Apple clang version 21.0.0 (clang-OTHER)\n'),
+            (('/OWN/clang++', '--version'), 'Apple clang version 21.0.0 (clang-OTHER)\n'),
+            (('xcrun', 'swift', '--version'), 'Apple Swift version 7.OWN_FIXTURE\n'),
+            (('xcrun', 'ld', '-v'), '@(#)PROGRAM:ld PROJECT:ld-27037.1.0\n'),
+            (('xcrun', 'ld', '-v'), '@(#)PROGRAM:ld PROJECT:ld-27037.10\n'),
+            (('xcrun', 'ld', '-v'), '@(#)PROGRAM:ld PROJECT:ld-27037.1extra\n'),
+        ]
+        for words, value in changes:
+            with self.subTest(words=words, value=value):
+                original = self.fixture[words]
+                self.fixture[words] = value
+                with self.assertRaises((ValueError, AssertionError)):
+                    self.run_preflight()
+                self.assertEqual(self.receipt()['status'], 'FAILED')
+                self.assert_family_captured()
+                self.fixture[words] = original
+
+    def test_capture_only_failure_preserves_raw_and_continues_family(self):
+        self.returncodes[('xcrun', 'libtool', '-V')] = 1
+        tool = self.run_preflight()
+        self.assert_family_captured()
+        self.assertEqual(tool['extra_tool_query_status']['libtool'], 'FAILED')
+        report = self.receipt()
+        row = next(row for row in report['commands'] if row['argv'] == ['xcrun', 'libtool', '-V'])
+        self.assertEqual(row['rc'], 1)
+        self.assertEqual(row['stdout'], self.fixture[('xcrun', 'libtool', '-V')])
+        self.assertEqual(report['version_query_status']['swift'], 'PRESENT')
+        self.assertEqual(report['status'], 'PRESENT')
+
+    def test_empty_unpinned_version_is_explicit(self):
+        self.fixture[('xcrun', 'ar', '--version')] = ''
+        tool = self.run_preflight()
+        self.assertEqual(tool['extra_tool_query_status']['ar'], 'EMPTY')
+        self.assert_family_captured()
+
+    def test_cloud_still_requires_cloud_ld_version(self):
+        with self.assertRaises(ValueError):
+            self.run_preflight('xcode-cloud')
+        self.assertNotIn(('xcrun', 'ar', '--version'), self.calls)
+        self.fixture[('xcrun', 'ld', '-v')] = '@(#)PROGRAM:ld PROJECT:ld-27037.1.0\n'
+        tool = self.run_preflight('xcode-cloud')
+        self.assertEqual(tool['exact_pins_state'], 'MEASURED_BEFORE_SOURCES')
+        self.assertEqual(self.receipt()['status'], 'PRESENT')
 
 
 if __name__ == '__main__':
