@@ -166,6 +166,9 @@ def selection(lock, only_package=None, only_step=None):
 def build(args, lock):
     native.require_cloud()
     selected = selection(lock, getattr(args, 'only_package', None), getattr(args, 'only_step', None))
+    native_only = getattr(args, 'native_only', False)
+    if native_only and selected:
+        raise ValueError('Native full-mode diagnosis cannot use package selectors')
     if selected and native.profile() != 'github-macos15-arm64':
         raise ValueError('Scoped package diagnosis requires the GitHub ARM64 profile')
     if args.work.exists() or args.work.is_symlink():
@@ -240,6 +243,13 @@ def build(args, lock):
                      source_openssl='NOT_BUILT', interpreter_sha256=native.framework.sha(python)))
         else:
             python, prefix = native.build(args.work / 'native', reports / 'native', deadline, args.jobs)
+        if native_only:
+            result.update(status='FULL_MODE_NATIVE_RUNTIME_BUILT_DIAGNOSTIC_ONLY',
+                          phase='native-runtime-complete',
+                          selection=dict(classification='FULL_MODE_NATIVE_RUNTIME_ONLY'),
+                          native_runtime='SOURCE_BUILT', package_slots='NOT_ENABLED',
+                          helpers='NOT_ENABLED')
+            return
         native_report = json.loads((reports / 'native/toolchain-preflight.json').read_text())
         tool = json.loads((reports / 'native/native-runtime.json').read_text())['toolchain']
         actual = native_report['actual']
@@ -356,16 +366,18 @@ def main():
     scope = parser.add_mutually_exclusive_group()
     scope.add_argument('--only-package')
     scope.add_argument('--only-step', type=int)
+    scope.add_argument('--native-only', action='store_true',
+                       help='Run the unchanged full-mode native producer, then stop before source packages')
     args = parser.parse_args(); lock = read_lock()
     if args.verify_source:
-        if args.build or args.only_package or args.only_step is not None or args.work is None or not 1 <= args.minutes <= 15:
+        if args.build or args.only_package or args.only_step is not None or args.native_only or args.work is None or not 1 <= args.minutes <= 15:
             raise ValueError('Source-only mode requires a fresh bounded workspace without package selectors')
         print(json.dumps(verify_source(args, lock)))
         return
     selected = selection(lock, args.only_package, args.only_step)
     if not args.build:
         print(json.dumps(dict(status='PLAN_ONLY', source_packages=len(lock['packages']),
-                              helpers=['legendary', 'gogdl'], selection=selected,
+                              helpers=['legendary', 'gogdl'], selection=selected, native_only=args.native_only,
                               network=0, builds=0, install='skipped')))
         return
     if args.work is None or args.publish_dir is None or not 1 <= args.minutes <= 120:

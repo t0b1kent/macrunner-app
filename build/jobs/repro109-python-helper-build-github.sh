@@ -25,6 +25,9 @@ fi
 if [ "${REPRO109_HELPER_ONLY_PACKAGE:-}" = flit-core ] || [ "${REPRO109_HELPER_ONLY_STEP:-}" = 1 ]; then
   minutes=3
 fi
+if [ "${REPRO109_HELPER_NATIVE_ONLY:-0}" = 1 ]; then
+  set -- "$@" --native-only
+fi
 rc=0
 python3 -B -I "$repo/repro109app/build_python_helpers.py" --build \
   --work "$work" --publish-dir "$out" --minutes "$minutes" --jobs 3 "$@" \
