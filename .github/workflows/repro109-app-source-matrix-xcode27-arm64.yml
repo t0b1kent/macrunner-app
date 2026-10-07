@@ -5,14 +5,14 @@ permissions:
   contents: read
 jobs:
   stage:
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 130
     strategy:
       fail-fast: false
       matrix:
         stage: [offline-normal, offline-optimized, sparkle, plcrashreporter, native-fullmode]
     env:
-      DEVELOPER_DIR: /Applications/Xcode_27.0.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_27.app/Contents/Developer
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
