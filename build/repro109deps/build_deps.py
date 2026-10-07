@@ -475,7 +475,7 @@ def licenses(source, prefix, name):
              for x in source.glob(pattern) if x.is_file()}
     for relative in ['docs/LICENSE.TXT', 'docs/FTL.TXT', 'docs/GPLv2.TXT', 'COPYING.LESSER',
                      'LICENSES/LGPL-2.1-or-later.txt', 'LICENSES/MIT.txt',
-                     'gettext-runtime/intl/COPYING.LIB']:
+                     'gettext-runtime/intl/COPYING.LIB', 'xdelta3/LICENSE']:
         path = source / relative
         if path.is_file():
             paths.add(path)
