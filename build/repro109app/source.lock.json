@@ -1,0 +1,72 @@
+{
+  "classification": "TEXT_SOURCE_SNAPSHOT_WITH_BYTE_EXACT_IMAGE_MATERIALIZATION_NOT_COMPILED",
+  "encoded_assets": [
+    {
+      "bytes": 386346,
+      "encoded_path": "scripts/assets/AppIcon-1024.png.b64",
+      "path": "scripts/assets/AppIcon-1024.png",
+      "sha256": "8fa609abef3ccfa1902a25e66bab03eff241288e87e105773107d998fe155f7e"
+    },
+    {
+      "bytes": 684881,
+      "encoded_path": "scripts/assets/AppIcon.icns.b64",
+      "path": "scripts/assets/AppIcon.icns",
+      "sha256": "be217c11f738543abc74fc4f65bd143fd881cd4d09bbf832039aa0eaefce57ab"
+    }
+  ],
+  "excluded_bytes": 67068800,
+  "excluded_files": 381,
+  "excluded_inventory_sha256": "e396cc61fb9014e00c09aeb00b8892529fffc94a9ea1857b014fa94e362f7e86",
+  "frameworks_input": "REQUIRE_SOURCE_BUILT_SAME_CLOUD_PREFIX",
+  "frameworks_recipe": {
+    "driver_sha256": "8bf12637d686de36e8b1e51cd1dea3d073444bc357e6c0b2c46b7c8d2074b1e5",
+    "lock_sha256": "33da1e39c20691ffed4d6ea7995946c1c56a4513d56a18369fcb22bb526cc34e"
+  },
+  "generated_fixture": {
+    "bytes": 512,
+    "path": "Tests/Fixtures/test-pe.exe",
+    "sha256": "8c2a2f7328e85fc0868e174dd80057bbb9e136b5229d8d6f3ed316c67f37cd3b"
+  },
+  "incomplete_runtime_inputs": [
+    "legendary",
+    "gogdl",
+    "innoextract",
+    "engine",
+    "loader"
+  ],
+  "inventory_algorithm": "sorted POSIX paths; UTF8 canonical JSON list of path/sha256/bytes/executable; ensure_ascii=false, sort_keys=true, separators comma/colon",
+  "portable_gate": {
+    "input_sha256": "9d577fd06380c22bfe1a573b92e74f1b614ced8649254f01287e398a4ddee371",
+    "path": "scripts/app32-gate.sh",
+    "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
+  },
+  "schema": 1,
+  "source_bytes": 4147584,
+  "source_exclusions": [
+    "Frameworks/**",
+    "Vendor/**",
+    "Sources/MacRunnerControlCenter/Resources/tools/gogdl",
+    "Sources/MacRunnerControlCenter/Resources/tools/legendary",
+    "Tests/Fixtures/test-pe.exe"
+  ],
+  "source_files": 375,
+  "source_inventory_sha256": "a6e7b5a7a0f21812decf944cb931c78dbf47616b48b7e4cee4e47ec80b867288",
+  "source_origin": {
+    "source_bytes": 3789786,
+    "source_files": 375,
+    "source_inventory_sha256": "c857fb0f6246916d1575080e0df0d822eace124db908d1ea0554088f2e346f7e"
+  },
+  "source_release": {
+    "archive_identity": "HISTORICAL_API_AND_LOCAL_DIGEST_MATCH_NOT_REFETCHED",
+    "archive_sha256": "43f842ce2056c8f248e3bdd3a34dde84c1a741f8d05ef0262b2919e3af8e139d",
+    "asset": "MacRunner-1.0.8-sources.tar.gz",
+    "repository": "t0b1kent/macrunner-app",
+    "tag": "v1.0.8"
+  },
+  "source_transformations": [
+    "Synthetic fixture roots instead of machine roots",
+    "OS-selected home and synthetic mailbox in privacy self-tests; sanitizer unchanged",
+    "APP32 selects complete checkout through MACRUNNER_ROOT",
+    "Base64 image source restored to exact pinned PNG/ICNS bytes"
+  ]
+}

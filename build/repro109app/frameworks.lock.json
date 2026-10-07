@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "classification": "DIAGNOSTIC_ONLY_NOT_GOLDEN",
+  "architecture": "arm64",
+  "deployment_target": "14.0",
+  "toolchain": {
+    "profile": "xcode-cloud",
+    "xcode_major": 27,
+    "sdk": "27.0",
+    "ld": "27037.1.0",
+    "apple_clang": "Apple clang version 21.",
+    "deployment_target": "14.0"
+  },
+  "components": [
+    {
+      "name": "sparkle",
+      "version": "2.6.4",
+      "url": "https://github.com/sparkle-project/Sparkle.git",
+      "revision": "0ef1ee0220239b3776f433314515fd849025673f",
+      "tag_provenance": "refs/tags/2.6.4, unauthenticated git ls-remote 2026-10-05",
+      "documentation": "https://github.com/sparkle-project/Sparkle/tree/2.6.4",
+      "project": "Sparkle.xcodeproj",
+      "target": "Sparkle",
+      "product": "Sparkle.framework",
+      "required_binaries": [
+        "Versions/B/Sparkle",
+        "Versions/B/Autoupdate",
+        "Versions/B/Updater.app/Contents/MacOS/Updater",
+        "Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader",
+        "Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer"
+      ],
+      "license_candidates": ["LICENSE", "LICENSE.txt", "LICENSE.md"]
+    },
+    {
+      "name": "plcrashreporter",
+      "version": "1.11.2",
+      "url": "https://github.com/microsoft/plcrashreporter.git",
+      "revision": "6752f71de206f6a53fa6a758c3660fd9a7fe7527",
+      "tag_provenance": "refs/tags/1.11.2, unauthenticated git ls-remote 2026-10-05",
+      "documentation": "https://github.com/microsoft/plcrashreporter/tree/1.11.2",
+      "project": "CrashReporter.xcodeproj",
+      "target": "CrashReporter",
+      "product": "CrashReporter.framework",
+      "required_binaries": ["Versions/A/CrashReporter"],
+      "license_candidates": ["LICENSE", "LICENSE.txt", "LICENSE.md"]
+    }
+  ]
+}

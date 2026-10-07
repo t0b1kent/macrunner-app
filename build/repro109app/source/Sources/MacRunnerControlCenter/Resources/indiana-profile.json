@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "profiles": [{
+    "id": "indiana-jones-great-circle",
+    "name": "Indiana Jones and the Great Circle",
+    "exe": ["TheGreatCircle.exe"],
+    "apis": ["vulkan"],
+    "evidence": "artifacts/indiana-20260929/indiana-run.sh and run-r32-lifetime-capture.sh; runtime validation of the release bundle is pending",
+    "environment": {
+      "MVK_CONFIG_ENABLE_EXPERIMENTAL_RAY_TRACING": "1",
+      "MACRUNNER_HB_MAPSCAN_SKIP": "1",
+      "FEX_HOSTFEATURES": "enablecrypto",
+      "MACRUNNER_FEX_RA_NO_X16": "1",
+      "MACRUNNER_MVK_NULL_DESCRIPTOR": "1",
+      "MACRUNNER_MVK_SUBGROUP_STAGES": "1",
+      "MACRUNNER_MVK_FAKE_SAMPLER_MINMAX": "1",
+      "MACRUNNER_MVK_SPARSE_BUFFERS": "1",
+      "MACRUNNER_MVK_DROP_UNSUPPORTED_FEATURES": "1",
+      "MACRUNNER_MVK_SUBGROUP_REQUIRED": "1",
+      "MACRUNNER_MVK_SPARSE_FULL_BACKING": "1",
+      "MACRUNNER_MVK_DYNSTRIDE_TRIM": "1"
+    }
+  }]
+}

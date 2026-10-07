@@ -1,0 +1,177 @@
+{
+  "schema": 1,
+  "note": "Launch routing only. Test results are generated from TESTED_GAMES.md.",
+  "profiles": [
+    {
+      "id": "hedon",
+      "name": "Hedon",
+      "exe": [
+        "hedon.exe"
+      ],
+      "apis": [
+        "opengl"
+      ],
+      "environment": {
+        "CX_FWD_COMPAT_GL_CTX": "1"
+      },
+      "evidence": "artifacts/games-corpus-20260930/CURRENT-RESULT.md: without the historical forward-compatible context setting Wine falls back to OpenGL 2.1 and glGetStringi is NULL; setting 1 reaches OpenGL 4.1 Core on engine 1.0.5. Menu/gameplay on this build remain unverified."
+    },
+    {
+      "id": "hollow-knight",
+      "name": "Hollow Knight",
+      "exe": [
+        "Hollow Knight.exe",
+        "hollow_knight.exe"
+      ],
+      "apis": [
+        "d3d11"
+      ],
+      "environment": {
+        "MACRUNNER_HB_MAPSCAN_SKIP": "1"
+      },
+      "evidence": "UnityPlayer.dll imports d3d11.dll; runs reach the D3D11 swapchain through DXMT"
+    },
+    {
+      "id": "abzu",
+      "name": "ABZU",
+      "exe": [
+        "AbzuGame.exe",
+        "AbzuGame-Win64-Shipping.exe"
+      ],
+      "apis": [
+        "d3d11"
+      ],
+      "evidence": "Unreal Engine 4; AbzuGame-Win64-Shipping.exe imports d3d11.dll"
+    },
+    {
+      "id": "divinity-os-ee",
+      "name": "Divinity: Original Sin Enhanced Edition",
+      "exe": [
+        "EoCApp.exe"
+      ],
+      "apis": [
+        "d3d11"
+      ],
+      "evidence": "EoCApp.exe imports d3d11.dll; dxmt-instr.log records DXGI/D3D11 attach"
+    },
+    {
+      "id": "wrath",
+      "name": "WRATH: Aeon of Ruin",
+      "exe": [
+        "wrath.exe",
+        "wrath-sdl.exe"
+      ],
+      "apis": [
+        "opengl"
+      ],
+      "evidence": "artifacts/wrath-20260914/RESULT.md: native Wine/FEX/OpenGL selected"
+    },
+    {
+      "id": "ion-fury",
+      "name": "Ion Fury",
+      "exe": [
+        "fury.exe"
+      ],
+      "apis": [
+        "opengl"
+      ],
+      "evidence": "artifacts/ion-fury-20260912/evidence: CGL (OpenGL) sampler probes"
+    },
+    {
+      "id": "factorio",
+      "name": "Factorio",
+      "exe": [
+        "factorio.exe"
+      ],
+      "apis": [
+        "d3d11"
+      ],
+      "evidence": "graphics-d3d11-only (the bundled DXMT) was built and verified on Factorio"
+    },
+    {
+      "id": "elden-ring",
+      "name": "ELDEN RING",
+      "exe": [
+        "eldenring.exe",
+        "start_protected_game.exe"
+      ],
+      "siblings": [
+        "eldenring.exe"
+      ],
+      "apis": [
+        "d3d12"
+      ],
+      "evidence": "eldenring.exe imports d3d12.dll; runs 090-093 record D3D12 command lists"
+    },
+    {
+      "id": "skyrim-se",
+      "name": "The Elder Scrolls V: Skyrim Special Edition",
+      "exe": [
+        "SkyrimSE.exe",
+        "SkyrimSELauncher.exe"
+      ],
+      "apis": [
+        "d3d11"
+      ],
+      "evidence": "SkyrimSE.exe imports D3D11CreateDeviceAndSwapChain; artifacts/skyrim-se-20260915/DXMT-SIDECAR.md"
+    },
+    {
+      "id": "crysis",
+      "name": "Crysis",
+      "exe": [
+        "Crysis.exe",
+        "Crysis64.exe"
+      ],
+      "apis": [
+        "d3d9",
+        "d3d10"
+      ],
+      "renderArgs": {
+        "d3d9": [
+          "-dx9"
+        ],
+        "d3d10": [
+          "-dx10"
+        ]
+      },
+      "evidence": "the GOG build ships CryRenderD3D9.dll and CryRenderD3D10.dll (artifacts/crysis-20260915/EXTRACTION.md)"
+    },
+    {
+      "id": "heroes-iii",
+      "name": "Heroes III",
+      "exe": ["Heroes3.exe"],
+      "apis": ["ddraw"],
+      "emulateModeset": true,
+      "environment": {
+        "WINE_D3D_CONFIG": "renderer=gdi,csmt=disabled",
+        "WINEDLLOVERRIDES": "winedbg.exe=d;ddraw=b;d3d8=b;d3d9=b;wined3d=b;d3d11,dxgi,d3d10core,winemetal=n,b",
+        "MACRUNNER_PE32_USD_ALIAS": "0"
+      },
+      "evidence": "artifacts/pe32-av-20261002/run-heroes3.py and artifacts/release-108-20261004/run-field.py: builtin DirectDraw, GDI renderer, csmt disabled. Developer runs reached the menu; app-path acceptance is recorded separately in artifacts/app32-20261004/HANDOFF-APP32.md."
+    },
+    {
+      "id": "diablo",
+      "name": "Diablo",
+      "exe": ["Diablo.exe"],
+      "apis": ["ddraw"],
+      "emulateModeset": true,
+      "cdromDataFilename": "DIABDAT.MPQ",
+      "environment": {
+        "WINE_D3D_CONFIG": "renderer=gdi,csmt=disabled",
+        "WINEDLLOVERRIDES": "winedbg.exe=d;ddraw=b;d3d8=b;d3d9=b;wined3d=b;d3d11,dxgi,d3d10core,winemetal=n,b"
+      },
+      "evidence": "Diablo.exe uses DirectDraw (artifacts/claude-hb-work/curator/owner-session-20261004/SESSION.md). Uses the builtin Wine PE32 GDI route; menu acceptance is pending and must be recorded in artifacts/app32-20261004/HANDOFF-APP32.md."
+    },
+    {
+      "id": "deltarune",
+      "name": "DELTARUNE",
+      "exe": [
+        "DELTARUNE.exe"
+      ],
+      "apis": [
+        "d3d11"
+      ],
+      "evidence": "DELTARUNE.exe imports d3d11.dll (GameMaker)"
+    }
+  ]
+}

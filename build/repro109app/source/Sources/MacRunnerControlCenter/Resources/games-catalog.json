@@ -1,0 +1,1379 @@
+{
+  "version": 1,
+  "generated": "2026-09-12",
+  "games": [
+    {
+      "id": "doom-retro",
+      "name": "Doom Retro",
+      "author": "Brad Harding",
+      "kind": "opensource",
+      "engine": "idTech1",
+      "bitness": "x86-64",
+      "summary_en": "Polished classic Doom source port",
+      "summary_ru": "Аккуратный порт классического Doom",
+      "download": {
+        "url": "https://github.com/bradharding/doomretro/releases/download/v6.3/doomretro-6.3-win64.zip",
+        "host_kind": "github",
+        "size_mb": 4,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Only a win64 asset is published; no Mac build. Needs a Doom IWAD (free Freedoom works).",
+      "notes_ru": "Публикуется только сборка win64, Mac-сборки нет. Нужен WAD от Doom (годится бесплатный Freedoom).",
+      "cover": {
+        "url": "https://repository-images.githubusercontent.com/15365681/879e0e26-4f8e-4513-9022-eb6926bf1aac",
+        "width": 1280,
+        "height": 640,
+        "verified_status": 200,
+        "source": "github"
+      }
+    },
+    {
+      "id": "inter-doom",
+      "name": "International Doom",
+      "author": "Julia Nechaevskaya",
+      "kind": "opensource",
+      "engine": "idTech1",
+      "bitness": "x86-64",
+      "summary_en": "Doom port with Russian localisation",
+      "summary_ru": "Порт Doom с русской локализацией",
+      "download": {
+        "url": "https://github.com/JNechaevsky/international-doom/releases/download/9.0/inter-doom-9.0-win64.zip",
+        "host_kind": "github",
+        "size_mb": 12,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Release carries win32, win64 and linux64 only. Needs a Doom IWAD.",
+      "notes_ru": "В релизе только win32, win64 и linux64. Нужен WAD от Doom.",
+      "cover": {
+        "url": "https://repository-images.githubusercontent.com/661411044/2b3b0101-8455-49dc-83ac-f8b156805f24",
+        "width": 1280,
+        "height": 640,
+        "verified_status": 200,
+        "source": "github"
+      }
+    },
+    {
+      "id": "openapoc",
+      "name": "OpenApoc",
+      "author": "OpenApoc project",
+      "kind": "remake",
+      "engine": "Custom (SDL2/OpenGL)",
+      "bitness": "x86-64",
+      "summary_en": "Open X-COM Apocalypse reimplementation",
+      "summary_ru": "Открытая реализация X-COM Apocalypse",
+      "download": {
+        "url": "https://github.com/OpenApoc/OpenApoc/releases/download/20260910/OpenApoc-x64-20260910.zip",
+        "host_kind": "github",
+        "size_mb": 42,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Portable x64 archive; release has no Mac asset. Requires original X-COM Apocalypse data.",
+      "notes_ru": "Портативный архив x64, Mac-ассета в релизе нет. Нужны данные оригинальной X-COM Apocalypse.",
+      "cover": {
+        "url": "https://raw.githubusercontent.com/OpenApoc/OpenApoc/master/data/wallpaper.jpg",
+        "width": 1920,
+        "height": 1080,
+        "verified_status": 200,
+        "source": "github"
+      }
+    },
+    {
+      "id": "dwarf-fortress",
+      "name": "Dwarf Fortress (classic)",
+      "author": "Bay 12 Games",
+      "kind": "freeware",
+      "engine": "Custom (SDL2)",
+      "bitness": "x86-64",
+      "summary_en": "Legendary free colony simulation",
+      "summary_ru": "Легендарный бесплатный симулятор колонии",
+      "download": {
+        "url": "https://www.bay12games.com/dwarves/df_53_16_win.zip",
+        "host_kind": "official",
+        "size_mb": 15,
+        "verified_status": 200,
+        "landing_url": "https://www.bay12games.com/dwarves/",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Bay 12 download page offers Windows and Linux only. Self-contained.",
+      "notes_ru": "На странице загрузок Bay 12 только Windows и Linux. Всё включено, данных со стороны не нужно.",
+      "cover": {
+        "url": "https://www.bay12games.com/dwarves/screens/medium.png",
+        "width": 1032,
+        "height": 1548,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "nblood",
+      "name": "NBlood",
+      "author": "nukeykt",
+      "kind": "remake",
+      "engine": "Build",
+      "bitness": "x86-64",
+      "summary_en": "Blood source port on Build engine",
+      "summary_ru": "Порт Blood на движке Build",
+      "download": {
+        "url": "https://github.com/nukeykt/NBlood/releases/download/r14387/nblood_win64_20260826-r14387.7z",
+        "host_kind": "github",
+        "size_mb": 3,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Release has win32/win64 only, no Mac. Requires BLOOD.RFF from the original game.",
+      "notes_ru": "В релизе только win32/win64, Mac нет. Нужен BLOOD.RFF из оригинальной игры.",
+      "cover": {
+        "url": "https://github.com/user-attachments/assets/f517d412-ac7f-4002-ab47-35e41bab9f26",
+        "width": 640,
+        "height": 480,
+        "verified_status": 200,
+        "source": "github"
+      }
+    },
+    {
+      "id": "rbdoom3bfg",
+      "name": "RBDOOM-3-BFG",
+      "author": "Robert Beckebans",
+      "kind": "opensource",
+      "engine": "idTech4 (BFG)",
+      "bitness": "x86-64",
+      "summary_en": "Modernised Doom 3 BFG engine fork",
+      "summary_ru": "Обновлённый форк движка Doom 3 BFG",
+      "download": {
+        "url": "https://github.com/RobertBeckebans/RBDOOM-3-BFG/releases/download/v1.6.0/RBDOOM-3-BFG-1.6.0.22-full-win64-20250510-git-ba39ba6.7z",
+        "host_kind": "github",
+        "size_mb": 1571,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Single win64 asset, no Mac build. Large; requires Doom 3 BFG game data.",
+      "notes_ru": "Единственный ассет win64, Mac-сборки нет. Большой; нужны данные Doom 3 BFG.",
+      "cover": {
+        "url": "https://raw.githubusercontent.com/RobertBeckebans/RBDOOM-3-BFG/master/base/guis/assets/loadscreens/default.jpg",
+        "width": 1920,
+        "height": 1080,
+        "verified_status": 200,
+        "source": "github"
+      }
+    },
+    {
+      "id": "the-dark-mod",
+      "name": "The Dark Mod",
+      "author": "The Dark Mod Team",
+      "kind": "mod",
+      "engine": "idTech4",
+      "bitness": "x86-64",
+      "summary_en": "Standalone Thief-like stealth game",
+      "summary_ru": "Самостоятельный стелс в духе Thief",
+      "download": {
+        "url": "https://update.thedarkmod.com/zipsync/tdm_installer.exe.zip",
+        "host_kind": "official",
+        "size_mb": 1,
+        "verified_status": 200,
+        "landing_url": "https://www.thedarkmod.com/downloads/",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Officially 64-bit only (32-bit is a separate optional exe). Small downloader fetches ~4 GB.",
+      "notes_ru": "Официально только 64 бита (32-бит отдельным необязательным exe). Маленький загрузчик тянет ~4 ГБ.",
+      "cover": {
+        "url": "https://www.thedarkmod.com/wp-content/uploads/2026/03/displace3.jpg",
+        "width": 1280,
+        "height": 720,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "demonology-101",
+      "name": "Demonology 101",
+      "author": "Ludipe",
+      "kind": "freeware",
+      "engine": "Construct",
+      "bitness": "x86-64",
+      "summary_en": "Text-based supernatural detective game",
+      "summary_ru": "Текстовый детектив про демонологию",
+      "download": {
+        "url": "https://ludipe.itch.io/demonology-101",
+        "host_kind": "itch",
+        "size_mb": 117,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Platforms row lists HTML5 and Windows only. Win64 confirmed by the file name.",
+      "notes_ru": "В строке платформ только HTML5 и Windows. Разрядность подтверждена именем файла (win64).",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzE0NDYwNjE0LmdpZg==/original/y0Cb5R.gif",
+        "width": 630,
+        "height": 500,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "not-my-dad",
+      "name": "Not My Dad (demo)",
+      "author": "Escapebox",
+      "kind": "demo",
+      "engine": "Unreal Engine",
+      "bitness": "x86-64",
+      "summary_en": "Retro first-person psychological horror",
+      "summary_ru": "Ретро-хоррор от первого лица",
+      "download": {
+        "url": "https://escapebox.itch.io/not-my-dad",
+        "host_kind": "itch",
+        "size_mb": 501,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Platforms row: Windows only. UE4/UE5 do not build 32-bit Windows.",
+      "notes_ru": "Строка платформ: только Windows. UE4/UE5 32-битную Windows не собирают.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzI5OTE2MzU5LmdpZg==/original/T7aLP6.gif",
+        "width": 315,
+        "height": 250,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "little-corners",
+      "name": "little corners",
+      "author": "weekendgames",
+      "kind": "freeware",
+      "engine": "Unreal Engine",
+      "bitness": "x86-64",
+      "summary_en": "Cozy minimalist diorama builder",
+      "summary_ru": "Уютный конструктор диорам",
+      "download": {
+        "url": "https://weekendgames.itch.io/little-corners",
+        "host_kind": "itch",
+        "size_mb": 602,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Platforms row: Windows only. UE builds 64-bit Windows only.",
+      "notes_ru": "Строка платформ: только Windows. UE собирает только 64-битную Windows.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzIzOTE5OTc0LnBuZw==/original/7xwAKD.png",
+        "width": 1232,
+        "height": 706,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "purrgatory",
+      "name": "purrgatory",
+      "author": "nivrad00",
+      "kind": "freeware",
+      "engine": "Godot",
+      "bitness": "x86-64",
+      "summary_en": "Hand-drawn cat afterlife visual novel",
+      "summary_ru": "Рисованная новелла о загробном мире кошек",
+      "download": {
+        "url": "https://nivrad00.itch.io/purrgatory",
+        "host_kind": "itch",
+        "size_mb": 129,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Platforms row: HTML5 and Windows. Bitness inferred from Godot (see notes on Godot below).",
+      "notes_ru": "Строка платформ: HTML5 и Windows. Разрядность выведена из движка Godot, версия страницей не подтверждена.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzEyMjIxMjAwLmdpZg==/original/iTOgtd.gif",
+        "width": 630,
+        "height": 500,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "prerolled",
+      "name": "Prerolled",
+      "author": "red sauce",
+      "kind": "freeware",
+      "engine": "Godot",
+      "bitness": "x86-64",
+      "summary_en": "Cozy dice deck-building roguelite",
+      "summary_ru": "Уютный рогалик с кубиками",
+      "download": {
+        "url": "https://red-sauce.itch.io/prerolled",
+        "host_kind": "itch",
+        "size_mb": 82,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Platforms row: HTML5 and Windows. Made with Godot per the page.",
+      "notes_ru": "Строка платформ: HTML5 и Windows. Движок Godot указан на странице автором.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzI5Njk0NTA4LnBuZw==/original/vDXDV%2B.png",
+        "width": 630,
+        "height": 500,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "sovereign-tower",
+      "name": "Sovereign Tower",
+      "author": "wildwits",
+      "kind": "freeware",
+      "engine": "Godot",
+      "bitness": "x86-64",
+      "summary_en": "Hand-drawn medieval choice game",
+      "summary_ru": "Рисованная средневековая игра выбора",
+      "download": {
+        "url": "https://wildwits.itch.io/sovereign-tower",
+        "host_kind": "itch",
+        "size_mb": 872,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Platforms row: HTML5 and Windows. Made with Godot per the page.",
+      "notes_ru": "Строка платформ: HTML5 и Windows. Движок Godot указан на странице.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzI1MTA0OTA2LnBuZw==/original/qcCGSE.png",
+        "width": 1080,
+        "height": 1920,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "gunpact",
+      "name": "GUNPACT",
+      "author": "zelkovawrk",
+      "kind": "freeware",
+      "engine": "Godot",
+      "bitness": "x86-64",
+      "summary_en": "Small fast-paced 2D shooter",
+      "summary_ru": "Небольшой скоростной 2D-шутер",
+      "download": {
+        "url": "https://zelkovawrk.itch.io/gunpact",
+        "host_kind": "itch",
+        "size_mb": 38,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Platforms row: HTML5 and Windows. Made with Godot per the page.",
+      "notes_ru": "Строка платформ: HTML5 и Windows. Движок Godot указан на странице.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1hZ2UvNDk5Mjg5NS8yOTg4ODgzNy5wbmc=/original/4TUqaq.png",
+        "width": 1323,
+        "height": 933,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "beyond-all-reason",
+      "name": "Beyond All Reason",
+      "author": "BAR Team",
+      "kind": "opensource",
+      "engine": "Recoil (Spring fork)",
+      "bitness": "both",
+      "summary_en": "Large-scale free RTS",
+      "summary_ru": "Масштабная бесплатная RTS",
+      "download": {
+        "url": "https://github.com/beyond-all-reason/BYAR-Chobby/releases/download/v1.2988.0/Beyond-All-Reason-1.2988.0.exe",
+        "host_kind": "github",
+        "size_mb": 89,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Site states Mac is explicitly unsupported (no OpenGL 4.3 on Apple). Installer stub is PE32/i386, game payload is 64-bit.",
+      "notes_ru": "На сайте Mac объявлен НЕподдерживаемым (нет OpenGL 4.3 у Apple). Установщик по заголовку PE32/i386, сама игра 64-битная.",
+      "cover": {
+        "url": "https://cdn.prod.website-files.com/5c68622246b367adf6f3041d/60d97aab6fdf2731bde767e8_BAR_Web_OG-media-2021_1200_V2.png",
+        "width": 1200,
+        "height": 630,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "dcs-world",
+      "name": "DCS World",
+      "author": "Eagle Dynamics",
+      "kind": "freeware",
+      "engine": "EDGE (custom)",
+      "bitness": "both",
+      "summary_en": "Study-level free combat flight sim",
+      "summary_ru": "Подробный бесплатный авиасимулятор",
+      "download": {
+        "url": "https://www.digitalcombatsimulator.com/upload/iblock/959/d33ul8g3arxnzc1ejgdaa8uev8gvmew2/DCS_World_web.exe",
+        "host_kind": "official",
+        "size_mb": 12,
+        "verified_status": 200,
+        "landing_url": "https://www.digitalcombatsimulator.com/en/downloads/world/stable/",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Requirements page says 64-bit Windows 10 minimum, but the web installer itself reads PE32/i386.",
+      "notes_ru": "На странице требований минимум 64-битная Windows 10, но сам сетевой установщик по заголовку PE32/i386.",
+      "cover": {
+        "url": "https://www.digitalcombatsimulator.com/upload/iblock/215/iilq35eng4co4xu7iw27bwdld7q7678r/home%20page_cover%20%281%29.png",
+        "width": 450,
+        "height": 300,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "warframe",
+      "name": "Warframe",
+      "author": "Digital Extremes",
+      "kind": "freeware",
+      "engine": "Evolution Engine",
+      "bitness": "both",
+      "summary_en": "Free co-op space ninja shooter",
+      "summary_ru": "Бесплатный кооп-шутер про космических ниндзя",
+      "download": {
+        "url": "https://content.warframe.com/dl/Warframe.msi",
+        "host_kind": "official",
+        "size_mb": 105,
+        "verified_status": 200,
+        "landing_url": "https://www.warframe.com/download",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Windows-only client (32-bit client was retired). MSI installer, not a PE executable.",
+      "notes_ru": "Клиент только под Windows (32-битный снят). Это MSI-установщик, а не PE-программа.",
+      "cover": {
+        "url": "https://www-static.warframe.com/images/landing/warframe-metacard.png",
+        "width": 1920,
+        "height": 1080,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "openfodder",
+      "name": "Open Fodder",
+      "author": "Open Fodder project",
+      "kind": "remake",
+      "engine": "Custom (SDL2)",
+      "bitness": "both",
+      "summary_en": "Cannon Fodder engine remake",
+      "summary_ru": "Ремейк движка Cannon Fodder",
+      "download": {
+        "url": "https://github.com/OpenFodder/openfodder/releases/download/2.0.0/OpenFodder-Installer.exe",
+        "host_kind": "github",
+        "size_mb": 16,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "CI builds both x64 and Win32; installer stub is PE32/i386. Ships playable Amiga demo data.",
+      "notes_ru": "Сборка идёт и для x64, и для Win32; установщик по заголовку PE32/i386. Демо-данные Amiga включены, играбельно сразу.",
+      "cover": {
+        "url": "https://user-images.githubusercontent.com/1327406/49718991-f1bd6e00-fcaf-11e8-88e3-68136828c2d1.png",
+        "width": 2000,
+        "height": 1405,
+        "verified_status": 200,
+        "source": "github"
+      }
+    },
+    {
+      "id": "rigs-of-rods",
+      "name": "Rigs of Rods",
+      "author": "Rigs of Rods team",
+      "kind": "opensource",
+      "engine": "Ogre3D",
+      "bitness": "both",
+      "summary_en": "Soft-body physics vehicle simulator",
+      "summary_ru": "Симулятор техники с мягкой физикой",
+      "download": {
+        "url": "https://github.com/RigsOfRods/rigs-of-rods/releases/download/2026.01/rigs-of-rods-2026.01.exe",
+        "host_kind": "github",
+        "size_mb": 151,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Only a Windows installer is released, no Mac asset. Docs call it the 64-bit installer; the stub reads PE32.",
+      "notes_ru": "В релизе только установщик под Windows, Mac-ассета нет. Документация называет его 64-битным, сам stub по заголовку PE32.",
+      "cover": {
+        "url": "https://raw.githubusercontent.com/RigsOfRods/rigs-of-rods/master/doc/images/RoR_Banner.png",
+        "width": 950,
+        "height": 250,
+        "verified_status": 200,
+        "source": "github"
+      }
+    },
+    {
+      "id": "stunt-rally",
+      "name": "Stunt Rally",
+      "author": "Stunt Rally team",
+      "kind": "opensource",
+      "engine": "Ogre3D + Bullet",
+      "bitness": "both",
+      "summary_en": "Free rally racing with track editor",
+      "summary_ru": "Бесплатные ралли-гонки с редактором трасс",
+      "download": {
+        "url": "https://github.com/stuntrally/stuntrally/releases/download/2.7/StuntRally-2.7-installer.exe",
+        "host_kind": "github",
+        "size_mb": 1121,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Installer-only release, no Mac asset; stub reads PE32/i386. Self-contained.",
+      "notes_ru": "В релизе только установщик, Mac-ассета нет; stub по заголовку PE32/i386. Всё включено.",
+      "cover": {
+        "url": "https://repository-images.githubusercontent.com/1595156/a23297bb-ae72-45a9-9694-ded69c76ab8f",
+        "width": 1280,
+        "height": 436,
+        "verified_status": 200,
+        "source": "github"
+      }
+    },
+    {
+      "id": "lotro",
+      "name": "The Lord of the Rings Online",
+      "author": "Standing Stone Games",
+      "kind": "freeware",
+      "engine": "Turbine Engine",
+      "bitness": "both",
+      "summary_en": "Free Tolkien MMORPG",
+      "summary_ru": "Бесплатная MMORPG по Толкину",
+      "download": {
+        "url": "https://akamai.lotro.com/lotro/lotrolive.exe",
+        "host_kind": "official",
+        "size_mb": 44,
+        "verified_status": 200,
+        "landing_url": "https://www.lotro.com/en/game/download",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "No Mac client is offered any more. Downloader stub is PE32/i386; the game client ships 32- and 64-bit.",
+      "notes_ru": "Mac-клиент больше не предлагается. Загрузчик по заголовку PE32/i386; сам клиент есть и 32-, и 64-битный.",
+      "cover": {
+        "url": "https://assets-cdn.daybreakgames.com/uploads/dcsclient/000/000/341/666.jpg?v=1.0",
+        "width": 768,
+        "height": 900,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "ddo",
+      "name": "Dungeons & Dragons Online",
+      "author": "Standing Stone Games",
+      "kind": "freeware",
+      "engine": "Turbine Engine",
+      "bitness": "both",
+      "summary_en": "Free D&D action MMORPG",
+      "summary_ru": "Бесплатная MMORPG по D&D",
+      "download": {
+        "url": "https://akamai.ddo.com/ddo/ddolive.exe",
+        "host_kind": "official",
+        "size_mb": 45,
+        "verified_status": 200,
+        "landing_url": "https://www.ddo.com/en/game/download",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "No Mac client offered. Downloader stub is PE32/i386; client ships 32- and 64-bit.",
+      "notes_ru": "Mac-клиент не предлагается. Загрузчик по заголовку PE32/i386; клиент есть и 32-, и 64-битный.",
+      "cover": {
+        "url": "https://assets-cdn.daybreakgames.com/uploads/dcsclient/000/000/341/581.jpg?v=1.0",
+        "width": 768,
+        "height": 1100,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "mwll",
+      "name": "MechWarrior: Living Legends",
+      "author": "MWLL Team",
+      "kind": "mod",
+      "engine": "CryEngine 2",
+      "bitness": "both",
+      "summary_en": "Free BattleTech mech combat shooter",
+      "summary_ru": "Свободный меха-шутер по BattleTech",
+      "download": {
+        "url": "https://mechlivinglegends.net/download/MWLL-Installer.exe",
+        "host_kind": "official",
+        "size_mb": 72,
+        "verified_status": 200,
+        "landing_url": "https://mechlivinglegends.net/#downloads",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Standalone since 2022, no Mac build. CryEngine 2 installs Bin32 and Bin64; installer stub is PE32/i386.",
+      "notes_ru": "С 2022 года самостоятельная, Mac-сборки нет. CryEngine 2 ставит Bin32 и Bin64; установщик по заголовку PE32/i386.",
+      "cover": {
+        "url": "https://mechlivinglegends.net/Images/Logo_Emblem.png",
+        "width": 1316,
+        "height": 1316,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "orbiter",
+      "name": "Orbiter 2024",
+      "author": "Martin Schweiger / Orbiter team",
+      "kind": "freeware",
+      "engine": "Custom (Direct3D)",
+      "bitness": "both",
+      "summary_en": "Realistic free spaceflight simulator",
+      "summary_ru": "Реалистичный бесплатный симулятор космолётов",
+      "download": {
+        "url": "https://cdn.openorbiter.space/orbiter-releases/Orbiter-2024.zip",
+        "host_kind": "official",
+        "size_mb": 2739,
+        "verified_status": 200,
+        "landing_url": "https://github.com/orbitersim/orbiter/releases",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Windows-only project (Direct3D). Archive carries both builds; very large download.",
+      "notes_ru": "Проект только под Windows (Direct3D). В архиве обе сборки; загрузка очень большая.",
+      "cover": {
+        "url": "https://raw.githubusercontent.com/orbitersim/orbiter/master/Src/Orbiter/Bitmaps/banner.png",
+        "width": 700,
+        "height": 100,
+        "verified_status": 200,
+        "source": "github"
+      }
+    },
+    {
+      "id": "grimms-hollow",
+      "name": "Grimm's Hollow",
+      "author": "ghosthum",
+      "kind": "freeware",
+      "engine": "RPG Maker MV",
+      "bitness": "both",
+      "summary_en": "Ghost-hunting turn-based RPG",
+      "summary_ru": "Пошаговая RPG про охоту на призраков",
+      "download": {
+        "url": "https://ghosthum.itch.io/grimms-hollow",
+        "host_kind": "itch",
+        "size_mb": 277,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Platforms row: Windows only. RPG Maker MV runs on NW.js, which ships 32- and 64-bit.",
+      "notes_ru": "Строка платформ: только Windows. RPG Maker MV работает на NW.js, а тот идёт и 32-, и 64-битным.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzI2NTUzNzMucG5n/original/Em6%2Bao.png",
+        "width": 1438,
+        "height": 810,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "cave-story",
+      "name": "Cave Story (Doukutsu Monogatari)",
+      "author": "Studio Pixel (Daisuke Amaya)",
+      "kind": "freeware",
+      "engine": "Custom (Win32/DirectDraw)",
+      "bitness": "x86-32",
+      "summary_en": "Landmark freeware metroidvania",
+      "summary_ru": "Легендарная freeware-метроидвания",
+      "download": {
+        "url": "https://studiopixel.jp/binaries/dou_1006.zip",
+        "host_kind": "official",
+        "size_mb": 1,
+        "verified_status": 200,
+        "landing_url": "https://studiopixel.jp/archives/index.html",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Original Japanese freeware from the author's own site. 2004 DirectDraw build, 32-bit only.",
+      "notes_ru": "Оригинальная японская freeware-версия с сайта самого автора. Сборка 2004 года на DirectDraw, только 32 бита.",
+      "cover": {
+        "url": "https://studiopixel.jp/doukutsumonogatari/title.png",
+        "width": 160,
+        "height": 120,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "rrootage",
+      "name": "rRootage",
+      "author": "Kenta Cho (ABA Games)",
+      "kind": "opensource",
+      "engine": "Custom (D + SDL/OpenGL)",
+      "bitness": "x86-32",
+      "summary_en": "Abstract boss-rush bullet-hell shooter",
+      "summary_ru": "Абстрактный bullet-hell из одних боссов",
+      "download": {
+        "url": "https://abagames.sakura.ne.jp/windows/rr0_24.zip",
+        "host_kind": "official",
+        "size_mb": 5,
+        "verified_status": 200,
+        "landing_url": "https://www.asahi-net.or.jp/~cs8k-cyu/windows/rr_e.html",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Author's page offers Windows binaries plus source only. Written in the D language; 2003 build, 32-bit.",
+      "notes_ru": "На странице автора только сборка под Windows и исходники. Написана на языке D; сборка 2003 года, 32 бита."
+    },
+    {
+      "id": "noitu-love",
+      "name": "Noitu Love and the Army of Grinning Darns",
+      "author": "Konjak (Joakim Sandberg)",
+      "kind": "freeware",
+      "engine": "Clickteam MMF",
+      "bitness": "x86-32",
+      "summary_en": "2006 run-and-gun action platformer",
+      "summary_ru": "Экшен-платформер 2006 года",
+      "download": {
+        "url": "https://www.konjak.org/noitulove.zip",
+        "host_kind": "official",
+        "size_mb": 8,
+        "verified_status": 200,
+        "landing_url": "https://www.konjak.org/",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Author's site lists Windows only. Clickteam MMF exports 32-bit exclusively.",
+      "notes_ru": "На сайте автора указана только Windows. Clickteam MMF собирает исключительно 32-битное."
+    },
+    {
+      "id": "an-untitled-story",
+      "name": "An Untitled Story",
+      "author": "Maddy Thorson",
+      "kind": "freeware",
+      "engine": "Game Maker 6/7",
+      "bitness": "x86-32",
+      "summary_en": "Large open-world metroidvania platformer",
+      "summary_ru": "Большая метроидвания с открытым миром",
+      "download": {
+        "url": "https://maddymakesgames.com/games/AnUntitledStory.zip",
+        "host_kind": "official",
+        "size_mb": 19,
+        "verified_status": 200,
+        "landing_url": "https://maddymakesgames.com/",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Only OSX siblings on that site are the Celeste Classic files, not this one. Game Maker 6/7 is 32-bit only.",
+      "notes_ru": "Рядом на сайте OSX-версии есть только у Celeste Classic, у этой игры нет. Game Maker 6/7 только 32-битный.",
+      "cover": {
+        "url": "https://maddymakesgames.com/images/an_untitled_story.png",
+        "width": 630,
+        "height": 257,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "give-up-robot",
+      "name": "Give Up Robot",
+      "author": "Maddy Thorson",
+      "kind": "freeware",
+      "engine": "Flash projector",
+      "bitness": "x86-32",
+      "summary_en": "Grappling-hook physics puzzle platformer",
+      "summary_ru": "Платформер-головоломка с крюком",
+      "download": {
+        "url": "https://maddymakesgames.com/games/GiveUpRobot.zip",
+        "host_kind": "official",
+        "size_mb": 8,
+        "verified_status": 200,
+        "landing_url": "https://maddymakesgames.com/",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Windows-only zip from the author's site. Standalone Flash projector is 32-bit.",
+      "notes_ru": "Zip только под Windows с сайта автора. Автономный проектор Flash 32-битный.",
+      "cover": {
+        "url": "https://maddymakesgames.com/images/give_up_robot.png",
+        "width": 357,
+        "height": 108,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "warning-forever",
+      "name": "Warning Forever",
+      "author": "Hikoza T. Ohkubo (hikware)",
+      "kind": "freeware",
+      "engine": "Custom (Win32/DirectX)",
+      "bitness": "x86-32",
+      "summary_en": "Endless adaptive boss-only shooter",
+      "summary_ru": "Бесконечный шмап из одних боссов",
+      "download": {
+        "url": "http://www.hikware.com/Archive/wf108.zip",
+        "host_kind": "official",
+        "size_mb": 1,
+        "verified_status": 200,
+        "landing_url": "https://www.hikware.com/Prod/index.html#wf",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Author's archive page, Windows only. 2003 DirectX build, 32-bit. Tiny download.",
+      "notes_ru": "Страница-архив автора, только Windows. Сборка 2003 года на DirectX, 32 бита. Крошечная загрузка.",
+      "cover": {
+        "url": "https://www.hikware.com/Prod/tit_wf.png",
+        "width": 360,
+        "height": 270,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "gang-garrison-2",
+      "name": "Gang Garrison 2",
+      "author": "Gang Garrison 2 team",
+      "kind": "opensource",
+      "engine": "GameMaker 8",
+      "bitness": "x86-32",
+      "summary_en": "2D pixel Team Fortress 2 demake",
+      "summary_ru": "2D-демейк Team Fortress 2",
+      "download": {
+        "url": "https://www.ganggarrison.com/download.php?file=1",
+        "host_kind": "official",
+        "size_mb": 20,
+        "verified_status": 200,
+        "landing_url": "https://www.ganggarrison.com/downloads.html",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Official project site, Windows only. GameMaker 8 exports 32-bit only.",
+      "notes_ru": "Официальный сайт проекта, только Windows. GameMaker 8 собирает только 32-битное.",
+      "cover": {
+        "url": "https://www.ganggarrison.com/img/ss1big.png",
+        "width": 800,
+        "height": 600,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "abbaye-des-morts",
+      "name": "l'Abbaye des Morts",
+      "author": "Locomalito",
+      "kind": "freeware",
+      "engine": "GameMaker",
+      "bitness": "x86-32",
+      "summary_en": "Minimalist ZX-style cave platformer",
+      "summary_ru": "Минималистичный платформер в духе ZX",
+      "download": {
+        "url": "https://locomalito.com/files/abbaye-des-morts.zip",
+        "host_kind": "official",
+        "size_mb": 3,
+        "verified_status": 200,
+        "landing_url": "https://locomalito.com/games/abbaye-des-morts",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Windows only on the page; other ports are third-party. data.win in the zip confirms GameMaker. Very small.",
+      "notes_ru": "На странице только Windows, прочие порты сторонние. data.win в архиве подтверждает GameMaker. Очень маленькая.",
+      "cover": {
+        "url": "https://locomalito.com/images/editions/abbaye-des-morts-edition.jpg",
+        "width": 1200,
+        "height": 800,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "scp-containment-breach",
+      "name": "SCP - Containment Breach",
+      "author": "Undertow Games (Joonas Rikkonen)",
+      "kind": "freeware",
+      "engine": "Blitz3D",
+      "bitness": "x86-32",
+      "summary_en": "SCP facility survival horror",
+      "summary_ru": "Хоррор на выживание в комплексе SCP",
+      "download": {
+        "url": "https://undertowgames.com/file/scp/SCP%20-%20Containment%20Breach%20v1.3.11.zip",
+        "host_kind": "official",
+        "size_mb": 235,
+        "verified_status": 200,
+        "landing_url": "https://www.scpcbgame.com/",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Developer's own domain (the site's other mirror is a file locker, deliberately not used). BlitzMovie.dll and B3D tools in the zip confirm Blitz3D, which is 32-bit only.",
+      "notes_ru": "Домен самого разработчика (второе зеркало на сайте — файлообменник, намеренно не берём). BlitzMovie.dll и утилиты B3D в архиве подтверждают Blitz3D, а он только 32-битный.",
+      "cover": {
+        "url": "https://www.scpcbgame.com/images/aaa1.jpg",
+        "width": 1440,
+        "height": 900,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "opennox",
+      "name": "OpenNox",
+      "author": "OpenNox project",
+      "kind": "remake",
+      "engine": "Go + original Nox engine",
+      "bitness": "x86-32",
+      "summary_en": "Nox action-RPG modernised source port",
+      "summary_ru": "Современный порт экшен-RPG Nox",
+      "download": {
+        "url": "https://github.com/OpenNox/OpenNox/releases/download/v1.9.0-alpha13/OpenNox-v1.9.0-alpha13.exe",
+        "host_kind": "github",
+        "size_mb": 60,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "No Mac asset. Unusual mix: Go wrapper over the original engine; all portable DLLs read PE32/i386. Requires original Nox data.",
+      "notes_ru": "Mac-ассета нет. Необычная смесь: обёртка на Go поверх оригинального движка; все DLL портативной сборки по заголовку PE32/i386. Нужны данные оригинального Nox.",
+      "cover": {
+        "url": "https://raw.githubusercontent.com/OpenNox/OpenNox/main/docs/images/logo.png",
+        "width": 800,
+        "height": 691,
+        "verified_status": 200,
+        "source": "github"
+      }
+    },
+    {
+      "id": "alien-arena",
+      "name": "Alien Arena",
+      "author": "Alien Arena Team (ex-COR Entertainment)",
+      "kind": "freeware",
+      "engine": "CRX (idTech2 fork)",
+      "bitness": "x86-32",
+      "summary_en": "Retro-sci-fi arena deathmatch shooter",
+      "summary_ru": "Ретро-фантастический арена-шутер",
+      "download": {
+        "url": "https://alienarena.org/arena/files/alienarena.exe",
+        "host_kind": "official",
+        "size_mb": 3,
+        "verified_status": 200,
+        "landing_url": "https://alienarena.org/",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Official site, Windows binary. PE header reads i386. This URL is the bare executable.",
+      "notes_ru": "Официальный сайт, сборка под Windows. Заголовок PE даёт i386. По этой ссылке только исполняемый файл.",
+      "cover": {
+        "url": "https://alienarena.org/slashbot-classic.png",
+        "width": 547,
+        "height": 750,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "space-funeral",
+      "name": "Space Funeral",
+      "author": "thecatamites (Stephen Gillmurphy)",
+      "kind": "freeware",
+      "engine": "RPG Maker 2003",
+      "bitness": "x86-32",
+      "summary_en": "Surreal lo-fi RPG Maker adventure",
+      "summary_ru": "Сюрреалистичная lo-fi RPG",
+      "download": {
+        "url": "https://thecatamites.itch.io/space-funeral",
+        "host_kind": "itch",
+        "size_mb": 46,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Author's own itch page; Platforms row reads Windows. RPG Maker 2003 runtime is 32-bit only.",
+      "notes_ru": "Страница itch самого автора; в строке платформ только Windows. Среда RPG Maker 2003 только 32-битная.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzc4NTY1NDMucG5n/original/DcFz4U.png",
+        "width": 577,
+        "height": 503,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "mogeko-castle",
+      "name": "Mogeko Castle",
+      "author": "funamusea (Deep-sea prisoner)",
+      "kind": "freeware",
+      "engine": "RPG Maker VX Ace",
+      "bitness": "x86-32",
+      "summary_en": "Surreal horror JRPG",
+      "summary_ru": "Сюрреалистичный хоррор-JRPG",
+      "download": {
+        "url": "https://funamusea.itch.io/mogeko-castle",
+        "host_kind": "itch",
+        "size_mb": 79,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Author's own itch page, Windows only. RGSS runtime of VX/VX Ace is 32-bit.",
+      "notes_ru": "Страница itch самого автора, только Windows. Среда RGSS у VX/VX Ace 32-битная.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzk2ODIwOTIucG5n/original/JjHaYR.png",
+        "width": 640,
+        "height": 480,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "a-date-in-the-park",
+      "name": "A Date in the Park",
+      "author": "shaun9991",
+      "kind": "freeware",
+      "engine": "Adventure Game Studio",
+      "bitness": "x86-32",
+      "summary_en": "Surreal point-and-click park mystery",
+      "summary_ru": "Сюрреалистичный квест в парке",
+      "download": {
+        "url": "https://shaun9991.itch.io/a-date-in-the-park",
+        "host_kind": "itch",
+        "size_mb": 43,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Developer's itch page, Windows only. AGS 3.x runtime is 32-bit.",
+      "notes_ru": "Страница itch разработчика, только Windows. Среда AGS 3.x 32-битная.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1hZ2UvMjExNTUvODM3NTEucG5n/original/Ct9E2q.png",
+        "width": 315,
+        "height": 250,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "mr-tomatos",
+      "name": "Mr.TomatoS",
+      "author": "oxtord",
+      "kind": "freeware",
+      "engine": "Clickteam Fusion",
+      "bitness": "x86-32",
+      "summary_en": "Creepy talking tomato pet game",
+      "summary_ru": "Жуткий питомец-помидор",
+      "download": {
+        "url": "https://oxtord.itch.io/mrtomatos",
+        "host_kind": "itch",
+        "size_mb": 224,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Developer's itch page, Windows only. Clickteam Fusion 2.5 Windows export is 32-bit.",
+      "notes_ru": "Страница itch разработчика, только Windows. Экспорт Clickteam Fusion 2.5 под Windows 32-битный.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzM5NDIzNTAuZ2lm/original/1sVuZu.gif",
+        "width": 600,
+        "height": 476,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "do-something",
+      "name": "Do Something (Attachment-45)",
+      "author": "Attachment Studios",
+      "kind": "freeware",
+      "engine": "LÖVE",
+      "bitness": "x86-32",
+      "summary_en": "Simple endless clicker game",
+      "summary_ru": "Простая бесконечная игра-кликер",
+      "download": {
+        "url": "https://attachment-studios.itch.io/dosomething",
+        "host_kind": "itch",
+        "size_mb": 10,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Windows only. Bitness confirmed by the file name itself ('Windows-32-Bit Executable').",
+      "notes_ru": "Только Windows. Разрядность подтверждена самим именем файла («Windows-32-Bit Executable»).",
+      "cover": {
+        "url": "https://img.itch.zone/aW1hZ2UvNzM1ODQ5LzQwOTYwNzAucG5n/original/Rpro9h.png",
+        "width": 1366,
+        "height": 724,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "nehrim",
+      "name": "Nehrim: At Fate's Edge",
+      "author": "SureAI",
+      "kind": "mod",
+      "engine": "Gamebryo",
+      "bitness": "x86-32",
+      "summary_en": "Full Oblivion total conversion",
+      "summary_ru": "Полная тотальная переделка Oblivion",
+      "download": {
+        "url": "http://dl1.sureai.net/files/pro/nehrim/dow/en/NehrimInstall_1.5.0.8_EN.exe",
+        "host_kind": "official",
+        "size_mb": 1720,
+        "verified_status": 200,
+        "landing_url": "https://sureai.net/games/nehrim/",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Studio's own file server (unlike Enderal, which is Steam/GOG only). Oblivion.exe is 32-bit. Requires a copy of Oblivion.",
+      "notes_ru": "Файловый сервер самой студии (в отличие от Enderal, который только в Steam/GOG). Oblivion.exe 32-битный. Нужна копия Oblivion.",
+      "cover": {
+        "url": "https://sureai.net/hp/img/pro/nehrim/nehrim.png",
+        "width": 1920,
+        "height": 500,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "trackmania-nations",
+      "name": "TrackMania Nations Forever",
+      "author": "Nadeo / Ubisoft",
+      "kind": "freeware",
+      "engine": "Nadeo GameBox",
+      "bitness": "x86-32",
+      "summary_en": "Free stadium time-trial racer",
+      "summary_ru": "Бесплатные гонки на время",
+      "download": {
+        "url": "https://nadeo-download.cdn.ubi.com/trackmaniaforever/tmnationsforever_setup.exe",
+        "host_kind": "official",
+        "size_mb": 506,
+        "verified_status": 200,
+        "landing_url": "https://www.trackmaniaforever.com/",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Publisher's own CDN, Windows only. PE header of the installer reads i386; 2008 build.",
+      "notes_ru": "CDN самого издателя, только Windows. Заголовок PE установщика даёт i386; сборка 2008 года."
+    },
+    {
+      "id": "movie-battles-2",
+      "name": "Movie Battles II",
+      "author": "Movie Battles II Team",
+      "kind": "mod",
+      "engine": "idTech3",
+      "bitness": "x86-32",
+      "summary_en": "Star Wars team saber combat mod",
+      "summary_ru": "Командные бои на мечах по «Звёздным войнам»",
+      "download": {
+        "url": "https://update.moviebattles.org/launcher/MBII_Launcher_Setup.msi",
+        "host_kind": "official",
+        "size_mb": 5,
+        "verified_status": 200,
+        "landing_url": "https://community.moviebattles.org/pages/download/",
+        "landing_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Mod ships no Mac build; MSI launcher plus .NET. Base Jedi Academy is 32-bit and required.",
+      "notes_ru": "Сама модификация Mac-сборки не несёт; установщик MSI плюс .NET. Нужна базовая Jedi Academy, она 32-битная.",
+      "cover": {
+        "url": "https://www.moviebattles.org/img/dotf2.jpg",
+        "width": 1920,
+        "height": 1080,
+        "verified_status": 200,
+        "source": "official"
+      }
+    },
+    {
+      "id": "opensurge",
+      "name": "Open Surge",
+      "author": "Alexandre Martins",
+      "kind": "opensource",
+      "engine": "Allegro 5",
+      "bitness": "x86-32",
+      "summary_en": "Free retro platformer and game engine",
+      "summary_ru": "Бесплатный ретро-платформер и движок",
+      "download": {
+        "url": "https://github.com/alemart/opensurge/releases/download/v0.6.1.3/opensurge-0.6.1.3-windows.zip",
+        "host_kind": "github",
+        "size_mb": 39,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Windows zip, no Mac asset. PE header of opensurge.exe inside the zip reads i386. Self-contained.",
+      "notes_ru": "Zip под Windows, Mac-ассета нет. Заголовок PE у opensurge.exe внутри архива даёт i386. Всё включено.",
+      "cover": {
+        "url": "https://repository-images.githubusercontent.com/136194837/3a9d0a65-440b-4ba2-bb8a-d3409ca6c17a",
+        "width": 1280,
+        "height": 640,
+        "verified_status": 200,
+        "source": "github"
+      }
+    },
+    {
+      "id": "failrooms",
+      "name": "FailRooms (demo)",
+      "author": "Leon Camayo",
+      "kind": "demo",
+      "engine": "Unreal Engine",
+      "bitness": "x86-64",
+      "summary_en": "Liminal-space backrooms horror demo",
+      "summary_ru": "Хоррор-демо в духе backrooms",
+      "download": {
+        "url": "https://leonncamayo.itch.io/failrooms",
+        "host_kind": "itch",
+        "size_mb": 743,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Platforms row: Windows only. UE builds 64-bit Windows only.",
+      "notes_ru": "Строка платформ: только Windows. UE собирает только 64-битную Windows.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzI5Nzc0NzkyLmdpZg==/original/SfLagE.gif",
+        "width": 630,
+        "height": 500,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "two-rivers-hypothesis",
+      "name": "The Two Rivers Hypothesis",
+      "author": "grubwall",
+      "kind": "freeware",
+      "engine": "Unreal Engine",
+      "bitness": "x86-64",
+      "summary_en": "Short interactive fiction exploration",
+      "summary_ru": "Короткая интерактивная история",
+      "download": {
+        "url": "https://grubwall.itch.io/the-two-rivers-hypothesis",
+        "host_kind": "itch",
+        "size_mb": 267,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Platforms row: Windows only. Free download, UE 64-bit.",
+      "notes_ru": "Строка платформ: только Windows. Загрузка бесплатная, UE 64-битный.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzE0MDA2NDIzLnBuZw==/original/3vcBPh.png",
+        "width": 630,
+        "height": 500,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "perfect-vermin",
+      "name": "Perfect Vermin",
+      "author": "Talia",
+      "kind": "freeware",
+      "engine": "Unreal Engine",
+      "bitness": "x86-64",
+      "summary_en": "Surreal office demolition action game",
+      "summary_ru": "Сюрреалистичный экшен о сносе офиса",
+      "download": {
+        "url": "https://itsthetalia.itch.io/perfect-vermin",
+        "host_kind": "itch",
+        "size_mb": 277,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Platforms row: Windows and Linux, no macOS. UE 64-bit.",
+      "notes_ru": "Строка платформ: Windows и Linux, macOS нет. UE 64-битный.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzQwOTIzMDAuZ2lm/original/%2FAQMca.gif",
+        "width": 628,
+        "height": 500,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "project-feline",
+      "name": "Project Feline (pre-alpha)",
+      "author": "Raymond Cripps",
+      "kind": "demo",
+      "engine": "Unreal Engine",
+      "bitness": "x86-64",
+      "summary_en": "Fast character-action running game",
+      "summary_ru": "Скоростной экшен с бегом по стенам",
+      "download": {
+        "url": "https://raymondafcripps.itch.io/feline",
+        "host_kind": "itch",
+        "size_mb": 2900,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Platforms row: Windows only. Bitness stated in the file name itself ('Windows, 64-bit'). Very large download.",
+      "notes_ru": "Строка платформ: только Windows. Разрядность прямо в имени файла («Windows, 64-bit»). Загрузка очень большая.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzMwNzYzMDUuanBn/original/xC1JkL.jpg",
+        "width": 1280,
+        "height": 720,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "they-are-here",
+      "name": "They Are Here (demo + prologue)",
+      "author": "Deklazon",
+      "kind": "demo",
+      "engine": "Unreal Engine",
+      "bitness": "x86-64",
+      "summary_en": "Alien abduction found-footage horror",
+      "summary_ru": "Хоррор о похищении пришельцами",
+      "download": {
+        "url": "https://deklazon.itch.io/they-are-here",
+        "host_kind": "itch",
+        "size_mb": 2200,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Platforms row: Windows only. Free demo of a paid game; UE 64-bit. Large download.",
+      "notes_ru": "Строка платформ: только Windows. Бесплатное демо платной игры; UE 64-битный. Загрузка большая.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzI5MTcwMDMzLmpwZw==/original/mukiSX.jpg",
+        "width": 1080,
+        "height": 1080,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "little-horrors-mortuary",
+      "name": "Little Horrors: The Mortuary",
+      "author": "caliebre",
+      "kind": "freeware",
+      "engine": "Godot",
+      "bitness": "x86-64",
+      "summary_en": "Short hand-drawn horror adventure",
+      "summary_ru": "Короткое рисованное хоррор-приключение",
+      "download": {
+        "url": "https://caliebre.itch.io/little-horrors-the-mortuary",
+        "host_kind": "itch",
+        "size_mb": 108,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Platforms row: Windows and Linux, no macOS. Windows build shipped as a single .exe.",
+      "notes_ru": "Строка платформ: Windows и Linux, macOS нет. Сборка под Windows одним .exe.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzI5NDE2NDY4LnBuZw==/original/yzxrgW.png",
+        "width": 628,
+        "height": 496,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    },
+    {
+      "id": "sinner-maker",
+      "name": "Sinner Maker (demo)",
+      "author": "SM Pantokrator",
+      "kind": "demo",
+      "engine": "Godot",
+      "bitness": "x86-64",
+      "summary_en": "Dark narrative Godot adventure demo",
+      "summary_ru": "Демо мрачного повествовательного приключения",
+      "download": {
+        "url": "https://sm-pantokrator.itch.io/sinner-maker",
+        "host_kind": "itch",
+        "size_mb": 151,
+        "verified_status": 200
+      },
+      "mac_native": false,
+      "notes_en": "Platforms row: HTML5, Windows, Linux, Android - no macOS.",
+      "notes_ru": "Строка платформ: HTML5, Windows, Linux, Android — macOS нет.",
+      "cover": {
+        "url": "https://img.itch.zone/aW1nLzI1NTI3NTE2LnBuZw==/original/h2Sy5R.png",
+        "width": 630,
+        "height": 500,
+        "verified_status": 200,
+        "source": "itch"
+      }
+    }
+  ]
+}

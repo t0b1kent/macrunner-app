@@ -1,0 +1,1601 @@
+{
+  "version": 1,
+  "generated": "2026-09-12",
+  "note_ru": "Ссылки на значки с сайтов производителей. Файлы НЕ копируются в проект: приложение скачивает и кеширует само. Размеры прочитаны из БАЙТОВ файла, не из атрибута sizes. Каждая ссылка проверена HEAD + range-GET по подписи и перепроверена вторым независимым заходом: 177 из 177 живые. Поле format — то, что сервер отдал НАШЕМУ клиенту: часть CDN отдаёт webp/avif по Accept, поэтому по той же ссылке приложение может получить другую упаковку (картинка та же). publisher_mark=true — знак ИЗДАТЕЛЯ, а не программы; витрина вправе предпочесть монограмму. Знаки площадок (GitHub, SourceForge) намеренно НЕ включены: осьминожка GitHub на плитке хуже монограммы. ДОБАВЛЕНО 12.09: 34 записи переписаны на СВОЙ значок программы вместо фирменного знака (kind=appstore — Mac App Store artworkUrl512; product-icon — CDN производителя: res.cdn.office.net, damassets.autodesk.net, Microsoft Store, репозиторий microsoft/PowerToys; package-icon — значок из пакета Chocolatey, извлечённый из официального EXE; wikimedia — Викисклад). У этих записей publisher_mark отсутствует намеренно. Каждая ссылка проверена HEAD + range-GET по подписи файла ДВАЖДЫ, размеры прочитаны из байтов, набор осмотрен контактным листом; повторы отсеяны сверкой SHA-256.",
+  "icons": {
+    "adobe.premierepro": {
+      "url": "https://www.adobe.com/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "aimp.aimp": {
+      "url": "https://aimp.ru/v2/theme/images/tile180.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "altium.designer": {
+      "url": "https://cdn.files.altium.com/sites/default/files/favicons/altium.com/apple-touch-icon.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "angusjohnson.pdftkbuilder": {
+      "url": "https://www.angusj.com/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "angusjohnson.resourcehacker": {
+      "url": "https://www.angusj.com/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "aomei.backupper": {
+      "url": "https://www.ubackup.com/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "aomei.partitionassistant": {
+      "url": "https://www.diskpart.com/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "ascon.kompas3d": {
+      "url": "https://kompas.ru/images/favicon.png",
+      "width": 256,
+      "height": 256,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "auslogics.boostspeed": {
+      "url": "https://www.auslogics.com/favicon.ico",
+      "width": 64,
+      "height": 64,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "autodesk.3dsmax": {
+      "url": "https://damassets.autodesk.net/content/dam/autodesk/www/product-imagery/badge-150x150/simplified-badges/3ds-max-2023-simplified-badge-150x150.png",
+      "width": 150,
+      "height": 150,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Autodesk CDN product badge"
+    },
+    "autodesk.advancesteel": {
+      "url": "https://damassets.autodesk.net/content/dam/autodesk/www/product-imagery/badge-150x150/simplified-badges/advance-steel-2023-simplified-badge-150x150.png",
+      "width": 150,
+      "height": 150,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Autodesk CDN product badge"
+    },
+    "autodesk.autocad": {
+      "url": "https://damassets.autodesk.net/content/dam/autodesk/www/product-imagery/badge-150x150/simplified-badges/autocad-2023-simplified-badge-150x150.png",
+      "width": 150,
+      "height": 150,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Autodesk CDN product badge"
+    },
+    "autodesk.autocadlt": {
+      "url": "https://damassets.autodesk.net/content/dam/autodesk/www/product-imagery/badge-150x150/simplified-badges/autocad-lt-2023-simplified-badge-150x150.png",
+      "width": 150,
+      "height": 150,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Autodesk CDN product badge"
+    },
+    "autodesk.civil3d": {
+      "url": "https://damassets.autodesk.net/content/dam/autodesk/www/product-imagery/badge-150x150/simplified-badges/civil-3d-2023-simplified-badge-150x150.png",
+      "width": 150,
+      "height": 150,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Autodesk CDN product badge"
+    },
+    "autodesk.designreview": {
+      "url": "https://damassets.autodesk.net/content/dam/autodesk/www/product-imagery/badge-150x150/simplified-badges/design-review-2023-simplified-badge-150x150.png",
+      "width": 150,
+      "height": 150,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Autodesk CDN product badge"
+    },
+    "autodesk.dwgtrueview": {
+      "url": "https://damassets.autodesk.net/content/dam/autodesk/www/product-imagery/badge-150x150/simplified-badges/dwg-trueview-2023-simplified-badge-150x150.png",
+      "width": 150,
+      "height": 150,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Autodesk CDN product badge"
+    },
+    "autodesk.eagle": {
+      "url": "https://www.autodesk.com/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 10 программ"
+    },
+    "autodesk.inventor": {
+      "url": "https://damassets.autodesk.net/content/dam/autodesk/www/product-imagery/badge-150x150/simplified-badges/inventor-professional-2023-simplified-badge-150x150.png",
+      "width": 150,
+      "height": 150,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Autodesk CDN product badge"
+    },
+    "autodesk.navisworksfreedom": {
+      "url": "https://damassets.autodesk.net/content/dam/autodesk/www/product-imagery/badge-150x150/simplified-badges/navisworks-freedom-2023-simplified-badge-150x150.png",
+      "width": 150,
+      "height": 150,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Autodesk CDN product badge"
+    },
+    "autodesk.navisworksmanage": {
+      "url": "https://damassets.autodesk.net/content/dam/autodesk/www/product-imagery/badge-150x150/simplified-badges/navisworks-manage-2023-simplified-badge-150x150.png",
+      "width": 150,
+      "height": 150,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Autodesk CDN product badge"
+    },
+    "autodesk.revit": {
+      "url": "https://damassets.autodesk.net/content/dam/autodesk/www/product-imagery/badge-150x150/simplified-badges/revit-2023-simplified-badge-150x150.png",
+      "width": 150,
+      "height": 150,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Autodesk CDN product badge"
+    },
+    "autodesk.robotstructural": {
+      "url": "https://damassets.autodesk.net/content/dam/autodesk/www/product-imagery/badge-150x150/simplified-badges/robot-structural-analysis-professional-2023-simplified-badge-150x150.png",
+      "width": 150,
+      "height": 150,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Autodesk CDN product badge"
+    },
+    "autohotkey.autohotkey": {
+      "url": "https://avatars.githubusercontent.com/u/1413373?s=256&v=4",
+      "width": 256,
+      "height": 256,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "via": "github-org-AutoHotkey",
+      "via_reason_ru": "autohotkey.com целиком за Cloudflare (403 на все пути)"
+    },
+    "autoit.autoit": {
+      "url": "https://www.autoitscript.com/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "bandicam.bandicam": {
+      "url": "https://www.bandicam.com/img/256-bandicam.png",
+      "width": 256,
+      "height": 256,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "bandisoft.honeyview": {
+      "url": "https://en.bandisoft.com/apple-touch-icon.png",
+      "width": 140,
+      "height": 140,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "bentley.microstation": {
+      "url": "https://www.bentley.com/web-app-manifest-512x512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "знак Bentley, отдельного значка MicroStation на сайте нет",
+      "via": "manifest"
+    },
+    "bentley.plaxis": {
+      "url": "https://www.bentley.com/web-app-manifest-512x512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "корневой значок домена с 2 программами",
+      "via": "manifest"
+    },
+    "bentley.staadpro": {
+      "url": "https://www.bentley.com/apple-touch-icon.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "корневой значок домена с 2 программами"
+    },
+    "blizzard.battlenet": {
+      "url": "https://d2zsxgsqjmrnrw.cloudfront.net/images/favicon-196x196.c3a4cd54fdaeec566e96c37dba35cbca5eccba52.png",
+      "width": 196,
+      "height": 196,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "boriseyrich.artweaver": {
+      "url": "https://www.artweaver.de/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "bullzip.pdfprinter": {
+      "url": "https://www.bullzip.com/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "cnc.mastercam": {
+      "url": "https://www.mastercam.com/wp-content/uploads/fbrfg/web-app-manifest-512x512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "via": "manifest"
+    },
+    "codecguide.klitecodecpack": {
+      "url": "https://codecguide.com/mpc_logo.png",
+      "width": 64,
+      "height": 64,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "cpuid.cpuz": {
+      "url": "https://www.cpuid.com/medias/images/apple-touch-icon-precomposed.png",
+      "width": 194,
+      "height": 194,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "cpuid.hwmonitor": {
+      "url": "https://www.cpuid.com/medias/images/apple-touch-icon-precomposed.png",
+      "width": 194,
+      "height": 194,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "crystaldewworld.crystaldiskinfo": {
+      "url": "https://crystalmark.info/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "crystaldewworld.crystaldiskmark": {
+      "url": "https://crystalmark.info/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "csi.etabs": {
+      "url": "https://www.csiamerica.com/csi/favicon/csi-android-icon-192x192.png",
+      "width": 192,
+      "height": 192,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "webp",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "csi.sap2000": {
+      "url": "https://www.csiamerica.com/csi/favicon/csi-android-icon-192x192.png",
+      "width": 192,
+      "height": 192,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "dassault.solidworks": {
+      "url": "https://www.3ds.com/asset/img/favicon/android/android-chrome-192x192.png",
+      "width": 192,
+      "height": 192,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "discord.discord": {
+      "url": "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/6266bc493fb42d4e27bb8393_847541504914fd33810e70a0ea73177e.ico",
+      "width": 256,
+      "height": 256,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "dlubal.rfem": {
+      "url": "https://www.dlubal.com/assets/img/favicons/favicon_180-180.png?v=d881b792-d8d1-4e67-b947-0c6546a5fc26",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "webp"
+    },
+    "dotpdn.paintdotnet": {
+      "url": "https://paint.net/apple-touch-icon.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "easeus.partitionmaster": {
+      "url": "https://www.easeus.com/images_2016/fav.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "easeus.todobackup": {
+      "url": "https://www.easeus.com/images_2016/fav.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "embarcadero.devcpp": {
+      "url": "https://www.embarcadero.com/android-chrome-512x512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "via": "manifest"
+    },
+    "emsisoft.emergencykit": {
+      "url": "https://www.emsisoft.com/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "epicgames.epicgameslauncher": {
+      "url": "https://dev.epicgames.com/docs/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "store.epicgames.com за Cloudflare; знак Epic с их же dev-сайта"
+    },
+    "eset.nod32": {
+      "url": "https://web-assets.eset.com/typo3conf/ext/eset_base/Resources/Public/img/device/android-chrome-512x512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "via": "manifest"
+    },
+    "faststone.capture": {
+      "url": "https://www.faststone.org/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "faststone.viewer": {
+      "url": "https://www.faststone.org/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "finalwire.aida64": {
+      "url": "https://www.aida64.com/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "geoslope.geostudio": {
+      "url": "https://www.seequent.com/wp-content/uploads/cropped-Seequent-Logo_Monogram-White-infill-270x270.png",
+      "width": 270,
+      "height": 270,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "via": "manifest"
+    },
+    "ghisler.totalcommander": {
+      "url": "https://www.ghisler.com/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "glasswire.glasswire": {
+      "url": "https://www.glasswire.com/img/favicon-256.png",
+      "width": 256,
+      "height": 256,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "via": "manifest"
+    },
+    "gpsoftware.directoryopus": {
+      "url": "https://www.gpsoft.com.au/favicon.ico",
+      "width": 64,
+      "height": 64,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "guru3d.afterburner": {
+      "url": "https://www.guru3d.com/data/themes/frontend/Guru3D/images/favicon_512x512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ",
+      "via": "manifest"
+    },
+    "guru3d.rtss": {
+      "url": "https://www.guru3d.com/data/themes/frontend/Guru3D/images/favicon_512x512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ",
+      "via": "manifest"
+    },
+    "ideastatica.ideastatica": {
+      "url": "https://www.ideastatica.com/icon.png?icon.0r2r5tcgzjj85.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "jamsoftware.heavyload": {
+      "url": "https://www.jam-software.com/themes/custom/jam_theme/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ"
+    },
+    "jamsoftware.treesize": {
+      "url": "https://www.jam-software.com/themes/custom/jam_theme/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ"
+    },
+    "jamsoftware.ultrasearch": {
+      "url": "https://www.jam-software.com/themes/custom/jam_theme/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ"
+    },
+    "jetbrains.dotpeek": {
+      "url": "https://www.jetbrains.com/icon-512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ",
+      "via": "manifest"
+    },
+    "jetbrains.dottrace": {
+      "url": "https://www.jetbrains.com/icon-512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ",
+      "via": "manifest"
+    },
+    "jetbrains.dotultimate": {
+      "url": "https://www.jetbrains.com/icon-512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ",
+      "via": "manifest"
+    },
+    "jetbrains.resharper": {
+      "url": "https://www.jetbrains.com/icon-512.png?r=1234",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "знак JetBrains, значок ReSharper на сайте не отдаётся"
+    },
+    "jrsoftware.innosetup": {
+      "url": "https://jrsoftware.org/apple-touch-icon.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "kde.krita": {
+      "url": "https://krita.org/android-chrome-512x512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "via": "manifest"
+    },
+    "lumion.lumion": {
+      "url": "https://lumion.com/favicon/android-chrome-512x512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "via": "manifest"
+    },
+    "magix.vegaspro": {
+      "url": "https://www.vegascreativesoftware.com/favicon.ico",
+      "width": 256,
+      "height": 256,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "знак Boris FX (владелец VEGAS), отдельного значка VEGAS Pro на сайте нет"
+    },
+    "malwarebytes.adwcleaner": {
+      "url": "https://www.malwarebytes.com/wp-content/uploads/sites/2/2026/09/M-Icon-blue-favicon.png?w=192",
+      "width": 192,
+      "height": 192,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "mathworks.matlab": {
+      "url": "https://www.mathworks.com/favicon.ico",
+      "width": 256,
+      "height": 256,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "mcneel.rhino": {
+      "url": "https://www.rhino3d.com/8/v8-icon-small.png",
+      "width": 360,
+      "height": 364,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "mhnexus.hxd": {
+      "url": "https://mh-nexus.de/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "microsoft.access": {
+      "url": "https://res.cdn.office.net/files/fabric-cdn-prod_20230815.001/assets/brand-icons/product/png/access_96x3.png",
+      "width": 288,
+      "height": 288,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Office brand-icon CDN"
+    },
+    "microsoft.debugdiag": {
+      "url": "https://www.microsoft.com/favicon.ico?v2",
+      "width": 128,
+      "height": 128,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 11 программ"
+    },
+    "microsoft.edge": {
+      "url": "https://explore.microsoft.com/apple-touch-icon.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "microsoft.excel": {
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/c9/d7/c1/c9d7c127-86ac-95ff-5525-abd02b4450bb/Excel_macOS-0-0-85-220-0-0-0-6-0-2x.png/512x512bb.png",
+      "width": 512,
+      "height": 512,
+      "kind": "appstore",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Mac App Store 462058435"
+    },
+    "microsoft.microsoft365": {
+      "url": "https://res.cdn.office.net/files/fabric-cdn-prod_20230815.001/assets/brand-icons/product/png/office_96x3.png",
+      "width": 288,
+      "height": 288,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Office brand-icon CDN"
+    },
+    "microsoft.mouseandkeyboardcenter": {
+      "url": "https://support.microsoft.com/apple-touch-icon.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "microsoft.mousewithoutborders": {
+      "url": "https://raw.githubusercontent.com/microsoft/PowerToys/main/doc/images/icons/MouseWithoutBorders.png",
+      "width": 192,
+      "height": 192,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "microsoft/PowerToys repo"
+    },
+    "microsoft.outlook": {
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/18/f3/0b/18f30b38-af02-5788-44b7-7a9a1391f700/Outlook_macOS-0-0-85-220-0-0-0-6-0-2x.png/512x512bb.png",
+      "width": 512,
+      "height": 512,
+      "kind": "appstore",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Mac App Store 985367838"
+    },
+    "microsoft.powerbi": {
+      "url": "https://www.microsoft.com/favicon.ico",
+      "width": 128,
+      "height": 128,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "microsoft.powerpoint": {
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/dc/a8/36/dca836e5-40d2-48fb-2ddc-3b329d92d125/Powerpoint_macOS-0-0-85-220-0-0-0-6-0-2x.png/512x512bb.png",
+      "width": 512,
+      "height": 512,
+      "kind": "appstore",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Mac App Store 462062816"
+    },
+    "microsoft.powertoys": {
+      "url": "https://raw.githubusercontent.com/microsoft/PowerToys/main/doc/images/icons/PowerToys%20icon/PNG/PowerToysAppList.targetsize-256.png",
+      "width": 256,
+      "height": 256,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "microsoft/PowerToys repo"
+    },
+    "microsoft.project": {
+      "url": "https://res.cdn.office.net/files/fabric-cdn-prod_20230815.001/assets/brand-icons/product/png/project_96x3.png",
+      "width": 288,
+      "height": 288,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Office brand-icon CDN"
+    },
+    "microsoft.publisher": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Microsoft_Office_Publisher_%282019-present%29.svg?width=512",
+      "width": 960,
+      "height": 861,
+      "kind": "wikimedia",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Wikimedia Commons, Wikidata Q368338 P154"
+    },
+    "microsoft.sqlserver": {
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Microsoft_SQL_Server_2025_icon.svg?width=512",
+      "width": 960,
+      "height": 960,
+      "kind": "wikimedia",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Wikimedia Commons File:Microsoft SQL Server 2025 icon.svg"
+    },
+    "microsoft.ssms": {
+      "url": "https://cdn.jsdelivr.net/gh/flcdrg/au-packages@e34b71fbc2db5b85474afc7ac9e7c51b6336e66e/sql-server-management-studio/icons/ssms21-icon.png",
+      "width": 256,
+      "height": 256,
+      "kind": "package-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Chocolatey sql-server-management-studio"
+    },
+    "microsoft.sysinternals.autoruns": {
+      "url": "https://learn.microsoft.com/apple-touch-icon.png",
+      "width": 192,
+      "height": 192,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 19 программ"
+    },
+    "microsoft.sysinternals.debugview": {
+      "url": "https://cdn.jsdelivr.net/gh/dgalbraith/chocolatey-packages@4a952cb67d3ba380d5d8dc2c26f1c41270affedf/icons/dbgview.png",
+      "width": 256,
+      "height": 256,
+      "kind": "package-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Chocolatey dbgview"
+    },
+    "microsoft.sysinternals.processexplorer": {
+      "url": "https://cdn.jsdelivr.net/gh/Thilas/chocolatey-packages@de52ec688c3894483381c83c0c964fbb3b5eb960/procexp/icon.png",
+      "width": 128,
+      "height": 128,
+      "kind": "package-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Chocolatey procexp"
+    },
+    "microsoft.sysinternals.processmonitor": {
+      "url": "https://cdn.jsdelivr.net/gh/Thilas/chocolatey-packages@de52ec688c3894483381c83c0c964fbb3b5eb960/procmon/icon.png",
+      "width": 256,
+      "height": 256,
+      "kind": "package-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Chocolatey procmon"
+    },
+    "microsoft.sysinternals.pstools": {
+      "url": "https://learn.microsoft.com/apple-touch-icon.png",
+      "width": 192,
+      "height": 192,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 19 программ"
+    },
+    "microsoft.sysinternals.rammap": {
+      "url": "https://cdn.jsdelivr.net/gh/dgalbraith/chocolatey-packages@4a952cb67d3ba380d5d8dc2c26f1c41270affedf/icons/rammap.png",
+      "width": 256,
+      "height": 256,
+      "kind": "package-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Chocolatey rammap"
+    },
+    "microsoft.sysinternals.rdcman": {
+      "url": "https://cdn.jsdelivr.net/gh/chocolatey-community/chocolatey-packages@cfd84d3d546b3479bb2c5ece367867ba6e495c30/icons/rdcman.png",
+      "width": 48,
+      "height": 48,
+      "kind": "package-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Chocolatey rdcman"
+    },
+    "microsoft.sysinternals.suite": {
+      "url": "https://cdn.jsdelivr.net/gh/dgalbraith/chocolatey-packages@4a952cb67d3ba380d5d8dc2c26f1c41270affedf/icons/sysinternals.png",
+      "width": 128,
+      "height": 128,
+      "kind": "package-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Chocolatey sysinternals"
+    },
+    "microsoft.sysinternals.sysmon": {
+      "url": "https://learn.microsoft.com/apple-touch-icon.png",
+      "width": 192,
+      "height": 192,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 19 программ"
+    },
+    "microsoft.sysinternals.tcpview": {
+      "url": "https://learn.microsoft.com/apple-touch-icon.png",
+      "width": 192,
+      "height": 192,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 19 программ"
+    },
+    "microsoft.sysinternals.vmmap": {
+      "url": "https://learn.microsoft.com/apple-touch-icon.png",
+      "width": 192,
+      "height": 192,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 19 программ"
+    },
+    "microsoft.sysinternals.zoomit": {
+      "url": "https://cdn.jsdelivr.net/gh/flcdrg/au-packages@e34b71fbc2db5b85474afc7ac9e7c51b6336e66e/zoomit/icons/zoomit.png",
+      "width": 48,
+      "height": 48,
+      "kind": "package-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Chocolatey zoomit"
+    },
+    "microsoft.visio": {
+      "url": "https://res.cdn.office.net/files/fabric-cdn-prod_20230815.001/assets/brand-icons/product/png/visio_96x3.png",
+      "width": 288,
+      "height": 288,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Office brand-icon CDN"
+    },
+    "microsoft.visioviewer": {
+      "url": "https://www.microsoft.com/favicon.ico",
+      "width": 128,
+      "height": 128,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "microsoft.visualstudio": {
+      "url": "https://visualstudio.microsoft.com/wp-content/themes/Avada-Child-Theme/assets/img/favicon/favicon-512.png?ver=1789066767",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "microsoft.vsbuildtools": {
+      "url": "https://visualstudio.microsoft.com/wp-content/themes/Avada-Child-Theme/assets/img/favicon/favicon-512.png?ver=1789066767",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "microsoft.windbg": {
+      "url": "https://store-images.s-microsoft.com/image/apps.39430.14179965677555945.4511bc55-f511-4c63-a99c-6ff01f7fb0af.3a6d737d-da45-47ff-b99c-6a9438490a7e",
+      "width": 150,
+      "height": 150,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Microsoft Store 9PGJGD53TN86"
+    },
+    "microsoft.windowssdk": {
+      "url": "https://learn.microsoft.com/apple-touch-icon.png",
+      "width": 192,
+      "height": 192,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 19 программ"
+    },
+    "microsoft.windowswdk": {
+      "url": "https://learn.microsoft.com/apple-touch-icon.png",
+      "width": 192,
+      "height": 192,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 19 программ"
+    },
+    "microsoft.word": {
+      "url": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/9b/bc/19/9bbc194a-2f8d-f094-5b47-aa4f478067ee/Word_macOS-0-0-85-220-0-0-0-6-0-2x.png/512x512bb.png",
+      "width": 512,
+      "height": 512,
+      "kind": "appstore",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Mac App Store 462054704"
+    },
+    "microsoft.wsl": {
+      "url": "https://store-images.s-microsoft.com/image/apps.61786.14131597032361940.38d2a067-3798-455f-934a-f69935156b3d.eb49d3ac-e311-4e6f-b89b-f1fe8db9d73b",
+      "width": 300,
+      "height": 300,
+      "kind": "product-icon",
+      "verified_status": 200,
+      "format": "png",
+      "origin_ru": "Microsoft Store 9P9TQF7MRM4R"
+    },
+    "midas.civilnx": {
+      "url": "https://www.midasuser.com:443/assets/favicon_32.png",
+      "width": 32,
+      "height": 32,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "midas.mdesk": {
+      "url": "https://www.midasuser.com:443/assets/favicon_32.png",
+      "width": 32,
+      "height": 32,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "minitool.partitionwizard": {
+      "url": "https://www.partitionwizard.com/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "mremoteng.mremoteng": {
+      "url": "https://mremoteng.org/favicon/web-app-manifest-512x512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "via": "manifest"
+    },
+    "msys2.msys2": {
+      "url": "https://www.msys2.org/favicon.ico",
+      "width": 256,
+      "height": 256,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "nanosoft.nanocad": {
+      "url": "https://nanocad.com/favicons/favicon_144x144.png",
+      "width": 144,
+      "height": 144,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "nero.burningrom": {
+      "url": "https://cdnwww.nero.com/nero-com-wGlobal/wGlobal/layout/images/favicon-194x194.png",
+      "width": 194,
+      "height": 194,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "notepadplusplus.notepadplusplus": {
+      "url": "https://notepad-plus-plus.org/apple-touch-icon.png",
+      "width": 256,
+      "height": 256,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "nsis.nsis": {
+      "url": "https://a.fsdn.com/allura/p/nsis/icon",
+      "width": 48,
+      "height": 48,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "via": "sourceforge-project-icon",
+      "via_reason_ru": "nsis.sourceforge.io за Cloudflare; значок проекта с его же хостинга"
+    },
+    "oosoftware.safeerase": {
+      "url": "https://www.oo-software.com/oocontent/themes/oo2026/images/logos/apple-touch-icon-152x152.png?v=2",
+      "width": 152,
+      "height": 152,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "oosoftware.shutup10": {
+      "url": "https://www.oo-software.com/oocontent/themes/oo2026/images/logos/apple-touch-icon-152x152.png?v=2",
+      "width": 152,
+      "height": 152,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "pcfreetime.formatfactory": {
+      "url": "https://www.pcfreetime.com/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "pdfforge.pdfcreator": {
+      "url": "https://www.pdfforge.org/_target/d596cf2ce4f6f243238506190901453247630a07/pdfforge_fav-228x228.png",
+      "width": 228,
+      "height": 228,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "peterpawlowski.foobar2000": {
+      "url": "https://www.foobar2000.org/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "piriform.ccleaner": {
+      "url": "https://s1.pir.fm/pf/favicons--AwgCBwYOBQc/apple-touch-icon.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "piriform.defraggler": {
+      "url": "https://s1.pir.fm/pf/favicons--AwgCBwYOBQc/apple-touch-icon.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ"
+    },
+    "piriform.recuva": {
+      "url": "https://s1.pir.fm/pf/favicons--AwgCBwYOBQc/apple-touch-icon.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ"
+    },
+    "piriform.speccy": {
+      "url": "https://s1.pir.fm/pf/favicons--AwgCBwYOBQc/apple-touch-icon.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ"
+    },
+    "playnite.playnite": {
+      "url": "https://playnite.link/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "ptc.creoview": {
+      "url": "https://ptc-p-001.sitecorecontenthub.cloud/api/public/content/8e362ecf0aa34cb396fe78f43d25c2e9?v=5e0f1d7b",
+      "width": 601,
+      "height": 601,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "rainmeter.rainmeter": {
+      "url": "https://www.rainmeter.net/favicon.ico?v=2",
+      "width": 48,
+      "height": 48,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "realix.hwinfo": {
+      "url": "https://www.hwinfo.com/images/hwi_logo_flat_square_192.png",
+      "width": 192,
+      "height": 192,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "renga.renga": {
+      "url": "https://rengabim.com/favicon.ico",
+      "width": 256,
+      "height": 256,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "rockstargames.launcher": {
+      "url": "https://media-rockstargames-com.akamaized.net/favicons/rockstar/favicon-180x180.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "знак Rockstar Games; у лончера отдельного значка на сайте нет"
+    },
+    "rufus.rufus": {
+      "url": "https://rufus.ie/apple-touch-icon.png",
+      "width": 72,
+      "height": 72,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "sandboxie.plus": {
+      "url": "https://sandboxie-plus.com/wp-content/uploads/sites/2/2025/11/cropped-SandMan-192x192.png",
+      "width": 192,
+      "height": 192,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "scia.sciaengineer": {
+      "url": "https://www.scia.net/themes/custom/itr_ghent_theme/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "sevenzip.sevenzip": {
+      "url": "https://www.7-zip.org/7ziplogo.png",
+      "width": 110,
+      "height": 63,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "sharex.sharex": {
+      "url": "https://getsharex.com/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "siemens.jt2go": {
+      "url": "https://www.siemens.com/img/favicon.svg",
+      "width": 555,
+      "height": 555,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "svg",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ"
+    },
+    "siemens.nx": {
+      "url": "https://www.siemens.com/img/favicon.svg",
+      "width": 555,
+      "height": 555,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "svg",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ"
+    },
+    "siemens.solidedge": {
+      "url": "https://www.siemens.com/img/favicon.svg",
+      "width": 555,
+      "height": 555,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "svg",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ"
+    },
+    "simulia.abaqus": {
+      "url": "https://www.3ds.com/asset/img/favicon/android/android-chrome-192x192.png",
+      "width": 192,
+      "height": 192,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "softland.dopdf": {
+      "url": "https://www.dopdf.com/wpub/images/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "softmaker.flexipdf": {
+      "url": "https://www.softmaker.com/templates/joomaker/images/softmaker-favicon.svg",
+      "width": 149,
+      "height": 149,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "svg"
+    },
+    "specialk.specialk": {
+      "url": "https://www.special-k.info/assets/browsers/android-chrome-512x512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "via": "manifest"
+    },
+    "sumatrapdf.sumatrapdf": {
+      "url": "https://www.sumatrapdfreader.org/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "techpowerup.gpuz": {
+      "url": "https://www.techpowerup.com/apple-touch-icon-180x180.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ"
+    },
+    "techpowerup.nvcleanstall": {
+      "url": "https://www.techpowerup.com/apple-touch-icon-180x180.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ"
+    },
+    "techpowerup.throttlestop": {
+      "url": "https://www.techpowerup.com/apple-touch-icon-180x180.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ"
+    },
+    "tixati.tixati": {
+      "url": "https://tixati.com/files/favicon.png",
+      "width": 64,
+      "height": 64,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "topsystems.tflexcad": {
+      "url": "https://www.tflex.ru/favicon/web-app-manifest-512x512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "via": "manifest"
+    },
+    "trackersoftware.pdftools": {
+      "url": "https://cdn.pdf-xchange.com/static/common/images/apple-touch-icon-114x114.png",
+      "width": 114,
+      "height": 114,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ"
+    },
+    "trackersoftware.pdfxchangeeditor": {
+      "url": "https://cdn.pdf-xchange.com/static/common/images/apple-touch-icon-114x114.png",
+      "width": 114,
+      "height": 114,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ"
+    },
+    "trackersoftware.pdfxchangelite": {
+      "url": "https://cdn.pdf-xchange.com/static/common/images/apple-touch-icon-114x114.png",
+      "width": 114,
+      "height": 114,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 3 программ"
+    },
+    "trimble.sketchup": {
+      "url": "https://sketchup.trimble.com/favicons/android-chrome-512x512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "знак Trimble, отдельного значка SketchUp на сайте нет"
+    },
+    "trimble.teklastructures": {
+      "url": "https://www.tekla.com/favicon.ico",
+      "width": 256,
+      "height": 256,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "unbroken.launchbox": {
+      "url": "https://www.launchbox-app.com/apple-touch-icon-120x120.png",
+      "width": 120,
+      "height": 120,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "valve.steam": {
+      "url": "https://store.steampowered.com/favicon.ico",
+      "width": 256,
+      "height": 256,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "veeam.agent": {
+      "url": "https://cdn.veeam.com/content/dam/veeam/global/2023/favicon_228x228px.png",
+      "width": 228,
+      "height": 228,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "ventoy.ventoy": {
+      "url": "https://www.ventoy.net/favicon.ico",
+      "width": 48,
+      "height": 48,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "videolan.vlc": {
+      "url": "https://images.videolan.org/images/largeVLC.png",
+      "width": 300,
+      "height": 300,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "voidtools.everything": {
+      "url": "https://www.voidtools.com/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "wabbajack.wabbajack": {
+      "url": "https://www.wabbajack.org/favicon.ico",
+      "width": 256,
+      "height": 256,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "winaero.tweaker": {
+      "url": "https://winaero.com/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "winamp.winamp": {
+      "url": "https://framerusercontent.com/images/rswrlRKY76L6M11q49AUUPxWG3Y.png",
+      "width": 32,
+      "height": 32,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "windirstat.windirstat": {
+      "url": "https://windirstat.net/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "winmerge.winmerge": {
+      "url": "https://winmerge.org/engine/images/icon-256x256.png",
+      "width": 256,
+      "height": 256,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "winscp.winscp": {
+      "url": "https://winscp.net/favicon.ico",
+      "width": 64,
+      "height": 64,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico"
+    },
+    "xara.photographicdesigner": {
+      "url": "https://www.xara.com/wp-content/themes/xaracloud/assets/img/favicons/icon-200x200.png",
+      "width": 200,
+      "height": 200,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "xenia.xenia": {
+      "url": "https://xenia.jp/images/icons/android-icon-192x192.png",
+      "width": 192,
+      "height": 192,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "xmediarecode.xmediarecode": {
+      "url": "https://www.xmedia-recode.de/favicon-apple-touch-icon-180x180.png",
+      "width": 180,
+      "height": 180,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "xnsoft.xnview": {
+      "url": "https://www.xnview.com/ico/apple-touch-icon-144-precomposed.png",
+      "width": 144,
+      "height": 144,
+      "kind": "apple-touch",
+      "verified_status": 200,
+      "format": "png"
+    },
+    "zoner.photostudio": {
+      "url": "https://www.zoner.com/__img/zs/favicon/web-app-manifest-512x512.png",
+      "width": 512,
+      "height": 512,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "png",
+      "via": "manifest"
+    },
+    "zwsoft.zwcad": {
+      "url": "https://www.zwsoft.com/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "link-icon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    },
+    "zwsoft.zwcadviewer": {
+      "url": "https://www.zwsoft.com/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "kind": "favicon",
+      "verified_status": 200,
+      "format": "ico",
+      "publisher_mark": true,
+      "publisher_mark_reason_ru": "ссылка общая для 2 программ"
+    }
+  }
+}

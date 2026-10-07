@@ -1,0 +1,470 @@
+/* Набор ключей обязан совпадать с en.lproj — за этим следит LocalizationLintService. */
+
+"Best of All Worlds" = "Лучшее из всех миров";
+"Settings" = "Настройки";
+"AI Troubleshoot" = "AI-диагностика";
+"Steam API Key" = "Steam API ключ";
+"Buy License" = "Купить лицензию";
+"Trial Mode" = "Пробный режим";
+"Add App" = "Добавить приложение";
+"Run" = "Запустить";
+"Library" = "Библиотека";
+
+/* Боковая панель */
+"Add game" = "Добавить игру";
+"Downloads" = "Загрузки";
+"STORES" = "МАГАЗИНЫ";
+"Sign in" = "Войти";
+"Engine 0.9" = "Движок 0.9";
+"FEX + Wine 11, no Rosetta" = "FEX + Wine 11, без Rosetta";
+
+/* Шапка */
+"Search" = "Поиск";
+"Add" = "Добавить";
+"Interface language" = "Язык интерфейса";
+"%d apps" = "%d игр";
+"1 app" = "1 игра";
+"%d of %d" = "%d из %d";
+
+/* Плитки библиотеки */
+"READY" = "ГОТОВО";
+"FAILED" = "НЕ ПОШЛА";
+"HUNG" = "ЗАВИСЛА";
+"NEVER RUN" = "НЕ ЗАПУСКАЛАСЬ";
+"RUNNING" = "ИДЁТ";
+"Launch" = "Запустить";
+"Stop" = "Остановить";
+"Local" = "Локально";
+"running…" = "идёт…";
+
+/* Пустая библиотека и поиск */
+"No matches" = "Ничего не найдено";
+"Nothing in your library matches “%@”." = "В библиотеке нет ничего по запросу «%@».";
+"Clear search" = "Очистить поиск";
+
+/* Настройки */
+"ENGINE" = "ДВИЖОК";
+"MacRunner root" = "Корень MacRunner";
+"Bottles directory" = "Каталог бутылок";
+"Choose…" = "Выбрать…";
+"DEFAULTS" = "ПО УМОЛЧАНИЮ";
+"Default timeout" = "Тайм-аут по умолчанию";
+"seconds" = "секунд";
+"Keep run artifacts" = "Хранить следы прогонов";
+"Verbose debug logs" = "Подробные журналы";
+"ADVANCED" = "ДОПОЛНИТЕЛЬНО";
+"Developer mode" = "Режим разработчика";
+"Unlocks engine internals: D3D artifacts, perf, doctor, corpus, compatibility DB, debug bundles. For developers and power users." = "Открывает внутренности движка: следы D3D, замеры, доктор, корпус, база совместимости, отладочные пакеты. Для разработчиков и опытных пользователей.";
+"Language" = "Язык";
+"Done" = "Готово";
+
+/* Единицы времени */
+"%d ms" = "%d мс";
+"%.1f s" = "%.1f с";
+"%d m %d s" = "%d м %d с";
+"Not set" = "Не задан";
+"Auto" = "Авто";
+"System language" = "Системный";
+
+/* Вход в магазины */
+"The store did not return a sign-in code" = "Магазин не вернул код входа";
+"Sign-in cancelled" = "Вход отменён";
+"Sign in to %@" = "Вход в %@";
+"You sign in on the store’s own page. We never see your password." = "Вы входите на странице самого магазина. Пароль мы не видим.";
+"Cancel" = "Отмена";
+"Sign-in for this store is not ready yet" = "Вход в этот магазин ещё не сделан";
+"Epic, Steam, Battle.net, itch.io and Amazon are next." = "Epic, Steam, Battle.net, itch.io и Amazon — на очереди.";
+
+/* Фильтр по магазину */
+"Show all" = "Показать все";
+"Disconnect" = "Отключить";
+"Nothing from %@ yet" = "Из %@ пока ничего";
+"Signed in. Pulling your purchased list is the next step." = "Вход выполнен. Загрузка списка купленного — следующий шаг.";
+"Sign in to this store to see your games here." = "Войдите в этот магазин, чтобы игры появились здесь.";
+"Loading the store’s sign-in page…" = "Загружаем страницу входа магазина…";
+"Finishing sign-in…" = "Завершаем вход…";
+"Loading…" = "Загрузка…";
+"Epic, Steam, Battle.net and itch.io are next." = "Epic, Steam, Battle.net и itch.io — на очереди.";
+"Programs" = "Программы";
+"Microsoft" = "Microsoft";
+"Development" = "Разработка";
+"Graphics" = "Графика";
+"CAD & Engineering" = "САПР и инженерия";
+"Media" = "Медиа";
+"Office" = "Офис";
+"Utilities" = "Утилиты";
+"Game platforms" = "Игровые платформы";
+"All" = "Все";
+"Mac" = "Mac";
+"Windows" = "Windows";
+"Mac App Store" = "Mac App Store";
+"Official site" = "Официальный сайт";
+"The programs catalogue did not load" = "Каталог программ не загрузился";
+"Nothing in the catalogue matches this search." = "В каталоге ничего не нашлось по этому запросу.";
+"%d programs · %d native for Mac" = "%d программ · %d с родной версией для Mac";
+"There is a native macOS version" = "Есть родная версия для macOS";
+"Native builds run at full speed — no translation involved." = "Родная работает на полной скорости — трансляция не нужна.";
+"Open in %@" = "Открыть в %@";
+"No native macOS version" = "Родной версии для macOS нет";
+"This is exactly what MacRunner is for: the Windows build runs here." = "Ровно для этого MacRunner и нужен: версия для Windows пойдёт здесь.";
+"Windows version (through MacRunner)" = "Версия для Windows (через MacRunner)";
+"Windows version" = "Версия для Windows";
+"Only worth it if you need something the Mac build lacks." = "Нужна, только если в версии для Mac чего-то не хватает.";
+"Download the installer, then add it here and we will run it." = "Скачайте установщик, добавьте его сюда — и мы его запустим.";
+"Open the download page" = "Открыть страницу загрузки";
+"Not in the winget catalogue — install it from the site." = "В каталоге winget его нет — ставить с сайта.";
+"Close" = "Закрыть";
+"Copy" = "Копировать";
+"GOG is connected first; the rest follow." = "Сначала подключаем GOG, остальные следом.";
+"Looking up the installer…" = "Ищу установщик…";
+"Download %@ %@" = "Скачать %@ %@";
+"Could not add this file" = "Не смог добавить этот файл";
+"OK" = "Понятно";
+"Choose a Windows game or program" = "Выберите игру или программу для Windows";
+"“%@” is not a Windows .exe file." = "«%@» — это не .exe для Windows.";
+"Nothing here yet" = "Пока пусто";
+"1 game" = "1 игра";
+"%d games" = "Игр: %d";
+"Edit" = "Изменить";
+"Delete" = "Удалить";
+"Stores" = "Магазины";
+"Connected" = "Подключено";
+"Sign in happens on the store’s own page. We keep only a token." = "Вход происходит на странице самого магазина. У нас остаётся только токен.";
+"Token only — games run in our window" = "Только токен — игры запускаются в нашем окне";
+"Needs the store’s own client running" = "Нужен работающий клиент самого магазина";
+"INTERFACE" = "ИНТЕРФЕЙС";
+"The engine ships inside MacRunner and is already set up. Nothing to configure." = "Движок идёт внутри MacRunner и уже настроен. Настраивать нечего.";
+"Unlocks engine internals: bottles, D3D artifacts, perf, doctor, stores, programs. For developers and power users." = "Открывает внутренности движка: бутылки, артефакты D3D, производительность, доктор, магазины, программы. Для разработчиков.";
+"Remove from library" = "Убрать из библиотеки";
+"Remove “%@” from the library?" = "Убрать «%@» из библиотеки?";
+"Remove" = "Убрать";
+"Site" = "Сайт";
+"Questions" = "Вопросы";
+"Questions and answers" = "Вопросы и ответы";
+"Open the site" = "Открыть сайт";
+"Do I need Rosetta?" = "Нужна ли Rosetta?";
+"How do I add a game?" = "Как добавить игру?";
+"Press “Add game” and pick the .exe — the installer or the game itself. We work out which it is." = "Нажмите «Добавить игру» и выберите .exe — установщик или саму игру. Что это, разберёмся мы.";
+"Which games work?" = "Какие игры работают?";
+"Compatibility varies by game. The graphics support above describes this release, but does not guarantee that every game will run." = "Совместимость зависит от конкретной игры. Поддержка графики выше относится к этому выпуску, но не гарантирует запуск каждой игры.";
+"Why don’t games with anti-cheat run?" = "Почему не идут игры с античитом?";
+"Their protection needs a Windows kernel driver, and macOS has no place to load one. This is not something we can work around." = "Их защите нужен драйвер ядра Windows, а в macOS его загрузить некуда. Это мы обойти не можем.";
+"Where do games get installed?" = "Куда ставятся игры?";
+"Games can be stored in MacRunner’s folders or added from elsewhere. Deleting a game in MacRunner’s folders runs its uninstaller or moves its folder to Trash. Files elsewhere are left in place." = "Игры могут храниться в папках MacRunner или быть добавлены из других мест. При удалении игры из папок MacRunner запускается её деинсталлятор или папка переносится в Корзину. Файлы вне этих папок остаются на месте.";
+"A game does not start — what now?" = "Игра не запускается — что делать?";
+"Tell us the name through the site. A failure with a name attached is what turns into a fix; a failure without one disappears." = "Напишите название через сайт. Отказ с названием превращается в починку, отказ без названия просто теряется.";
+"Do 32-bit games work?" = "Работают ли 32-битные игры?";
+"Not in this release. The bundled engine supports 64-bit Windows programs; compatibility varies by game." = "В этом выпуске — нет. Встроенный движок поддерживает 64-битные программы Windows; совместимость зависит от конкретной игры.";
+"Is it free?" = "Это бесплатно?";
+"Yes. MacRunner is free during early access." = "Да. Пока идёт ранний доступ, MacRunner бесплатный.";
+"No. The bundled engine translates Intel programs without Rosetta." = "Нет. Встроенный движок переводит программы для Intel без Rosetta.";
+"Installed" = "Установленные";
+"Games" = "Игры";
+"%d free games, direct from the authors" = "Бесплатных игр: %d — напрямую от авторов";
+"%d Windows programs" = "Программ для Windows: %d";
+"The games catalogue did not load" = "Каталог игр не загрузился";
+"Freeware" = "Бесплатная";
+"Demo" = "Демоверсия";
+"Open source" = "Открытый код";
+"Remake" = "Ремейк";
+"Mod" = "Модификация";
+"32-bit" = "32 бита";
+"Engine" = "Движок";
+"Architecture" = "Разрядность";
+"Downloads from" = "Скачивается с";
+"Size" = "Размер";
+"This is a 32-bit build. It will not run yet — 32-bit needs a permission from Apple we do not have." = "Это 32-битная сборка. Пока не запустится: для 32 бит нужно разрешение Apple, которого у нас нет.";
+"Download from the author" = "Скачать у автора";
+"Mac is limited" = "Mac урезан";
+"The macOS version is not the same product" = "Версия для macOS — это другой продукт";
+"Some Windows features are missing there." = "Часть возможностей Windows-версии там отсутствует.";
+"ALSO IN THE WINGET CATALOGUE" = "ЕЩЁ В КАТАЛОГЕ WINGET";
+"Preparing the winget catalogue on first use — about 8 MB." = "Готовлю каталог winget — при первом обращении около 8 МБ.";
+"No licence token on this device." = "На этом устройстве лицензии нет.";
+"The licence token is malformed." = "Лицензия имеет неверный вид.";
+"The licence token is not valid base64url." = "Лицензия записана не в base64url.";
+"The licence token is signed but its contents are unreadable." = "Подпись лицензии верна, но её содержимое не читается.";
+"The bundled licence public key is invalid; this build cannot check licences." = "Открытый ключ в этой сборке негоден — проверять лицензии она не может.";
+"Could not read this Mac's hardware identifier." = "Не удалось прочитать аппаратный идентификатор этого Mac.";
+"Keychain refused the licence operation." = "Связка ключей отказала в действии с лицензией.";
+"This licence token is not signed by MacRunner." = "Эта лицензия подписана не MacRunner.";
+"This licence token belongs to another Mac." = "Эта лицензия принадлежит другому Mac.";
+"This licence has expired." = "Срок лицензии истёк.";
+"This device's licence lease has expired; connect to the internet to renew it." = "Аренда лицензии для этого устройства истекла — подключитесь к интернету, чтобы продлить.";
+"Licence" = "Лицензия";
+"Plan, device and renewal" = "Тариф, устройство и продление";
+"No licence on this Mac" = "На этом Mac лицензии нет";
+"MacRunner needs a licence to start a game for the first time. Games you already run keep working." = "Лицензия нужна, чтобы запустить игру в первый раз. Уже запускавшиеся продолжают работать.";
+"It was changed or came from somewhere else." = "Её изменили или она пришла не от нас.";
+"Issued for %@, this Mac is %@" = "Выдана для %@, а этот Mac — %@";
+"PLANS" = "ТАРИФЫ";
+"2 months" = "2 месяца";
+"1 year" = "1 год";
+"1 device" = "1 устройство";
+"Teams" = "Компаниям";
+"more devices" = "больше устройств";
+"write to us" = "напишите нам";
+"Buy on the site" = "Купить на сайте";
+"Active" = "Действует";
+"Connect to the internet once — the device lease needs renewing" = "Подключитесь к интернету один раз — нужно продлить аренду устройства";
+"Expired. Installed games keep working; new ones cannot be started." = "Срок истёк. Установленные игры работают, новые запустить нельзя.";
+"This Mac" = "Этот Mac";
+"Devices" = "Устройств";
+"Paid until" = "Оплачено до";
+"Unbind this Mac" = "Отвязать этот Mac";
+"Unbind this Mac from the licence?" = "Отвязать этот Mac от лицензии?";
+"Unbind" = "Отвязать";
+"The next unbind will only be allowed in one month." = "Следующая отвязка будет разрешена только через месяц.";
+"This licence is bound to this Mac permanently and cannot be moved." = "Эта лицензия закреплена за этим Mac навсегда и не переносится.";
+"Trial" = "Пробный";
+"Perpetual" = "Бессрочный";
+"NO FILE" = "ФАЙЛА НЕТ";
+"File is gone" = "Файл пропал";
+"Open the releases page" = "Открыть страницу выпусков";
+"On that page take the file marked win64." = "На странице берите файл с пометкой win64.";
+"On that page take the Windows file — but this build is 32-bit and will not run yet." = "Берите файл для Windows — но эта сборка 32-битная и пока не запустится.";
+"Yes. Both 32-bit and 64-bit Windows programs run." = "Да. Идут и 32-битные, и 64-битные программы для Windows.";
+"Not a GitHub download link: " = "Not a GitHub download link: ";
+"No published releases on GitHub for " = "No published releases on GitHub for ";
+"No Windows build in the latest release of " = "No Windows build in the latest release of ";
+"GitHub is rate-limiting us (60 requests per hour without a token). Try again later." = "GitHub is rate-limiting us (60 requests per hour without a token). Try again later.";
+"GitHub answered with HTTP " = "GitHub answered with HTTP ";
+"Could not reach GitHub: " = "Could not reach GitHub: ";
+"WHY WE THINK SO" = "ПОЧЕМУ МЫ ТАК РЕШИЛИ";
+"certainty %d%%" = "уверенность %d%%";
+"Run the installer" = "Запустить установку";
+"No, this is the game itself" = "Нет, это сама игра";
+"Add to library" = "Добавить в библиотеку";
+"No, this is an installer" = "Нет, это установщик";
+"Add anyway" = "Всё равно добавить";
+"We do not offer to run this one: uninstallers look the same from outside." = "Запустить не предлагаем: деинсталляторы снаружи выглядят так же.";
+"This looks like an installer" = "Похоже на установщик";
+"This looks like the game itself" = "Похоже на саму игру";
+"This looks like a helper file" = "Похоже на служебный файл";
+"We can run it — it will install the game, and the installed game goes to your library." = "Мы его запустим — он поставит игру, и установленная игра попадёт в библиотеку.";
+"We will add it as is and run it from your library." = "Добавим как есть и будем запускать из библиотеки.";
+"Uninstallers, runtimes and crash handlers look like this. Usually not what you want to add." = "Так выглядят деинсталляторы, рантаймы и обработчики падений. Обычно добавлять нужно не их.";
+"Open a licence file" = "Открыть файл лицензии";
+"Works without internet" = "Работает без интернета";
+"Choose a licence file" = "Выберите файл лицензии";
+"Open" = "Открыть";
+"Uninstall “%@”?" = "Удалить «%@» с компьютера?";
+"Delete “%@” and its files?" = "Удалить «%@» вместе с файлами?";
+"Uninstall" = "Удалить";
+"Move to Trash" = "В корзину";
+"We will start the game’s own uninstaller. Follow its steps — it removes the files and the registry entries it made." = "Запустим родной деинсталлятор игры. Пройдите его шаги — он уберёт и файлы, и записи в реестре, которые сделал сам.";
+"The game folder goes to the Trash, so you can put it back: %@" = "Папка игры отправится в корзину, оттуда её можно вернуть: %@";
+"The files stay where they are — MacRunner did not install this game, so it will not delete it." = "Файлы останутся на месте: эту игру ставили не мы, значит и удалять её не вправе.";
+"The file is already gone from disk. Only the library entry is left to remove." = "Файла на диске уже нет. Осталась только запись в библиотеке.";
+"Could not delete the game" = "Не удалось удалить игру";
+
+/* Добавлено 15.09.2026: меню приложения, тарифы, причины отказа запуска,
+   перетаскивание, подробности отказов лицензии и ключи winget, которых не было. */
+" bytes" = " байт";
+"%d parts, expected 2 (payload.signature)" = "частей %d, а нужно 2 (payload.signature)";
+"%d s" = "%d с";
+"1 Mac" = "1 Mac";
+"1 Mac, one-time, not transferable" = "1 Mac, разовая оплата, без переноса";
+"10 Macs, per year" = "10 Mac, в год";
+"About MacRunner" = "О MacRunner";
+"BACKEND" = "БЭКЕНД";
+"Business" = "Бизнес";
+"Cannot unpack the winget catalog: no unzip tool at " = "Не распаковать каталог winget: нет программы распаковки по пути ";
+"Check for Updates…" = "Проверить обновления…";
+"Could not reach the winget catalog: " = "Не удалось связаться с каталогом winget: ";
+"Could not read the winget manifest for " = "Не удалось прочитать манифест winget для ";
+"Could not start the game" = "Не удалось запустить игру";
+"Delete this game from the library?" = "Удалить эту игру из библиотеки?";
+"Drop a Windows .exe here, or browse to add one." = "Перетащите сюда .exe для Windows или выберите файл.";
+"Drop the .exe to add it" = "Отпустите .exe, чтобы добавить";
+"IOPlatformExpertDevice has no IOPlatformUUID" = "у IOPlatformExpertDevice нет IOPlatformUUID";
+"IOPlatformExpertDevice not found" = "IOPlatformExpertDevice не найден";
+"IOPlatformUUID is not a string or is empty" = "IOPlatformUUID не строка или пуст";
+"LAST RUN" = "ПОСЛЕДНИЙ ЗАПУСК";
+"MacRunner Help" = "Справка MacRunner";
+"MacRunner engine not found. Reinstall MacRunner." = "Движок MacRunner не найден. Переустановите MacRunner.";
+"NOTES" = "ЗАМЕТКИ";
+"No free trial. Refund within 14 days." = "Пробного периода нет. Возврат денег в течение 14 дней.";
+"No such package in the winget catalog: " = "В каталоге winget нет такого пакета: ";
+"Not a winget package ID: " = "Это не идентификатор пакета winget: ";
+"STATUS" = "СОСТОЯНИЕ";
+"TIMEOUT" = "ПРЕДЕЛ ВРЕМЕНИ";
+"The catalog answered with HTTP " = "Каталог ответил кодом HTTP ";
+"The file is missing or is not a Windows program." = "Файла нет или это не программа Windows.";
+"The game crashed." = "Игра упала.";
+"The game exited with an error." = "Игра завершилась с ошибкой.";
+"The game hit its time limit and was stopped." = "Игра упёрлась в предел времени и была остановлена.";
+"The game needs a Windows library (DLL) that is missing." = "Игре нужна библиотека Windows (DLL), которой нет.";
+"The run ended with status %@." = "Запуск завершился с итогом %@.";
+"The winget catalog answered with HTTP " = "Каталог winget ответил кодом HTTP ";
+"The winget catalog archive has no Public/index.db entry." = "В архиве каталога winget нет Public/index.db.";
+"The winget catalog database is unreadable: " = "База каталога winget не читается: ";
+"The winget catalog database lists no packages at all." = "В базе каталога winget нет ни одного пакета.";
+"The winget catalog download is not a ZIP archive: " = "Загруженный каталог winget — не архив ZIP: ";
+"The winget catalog has not been downloaded yet." = "Каталог winget ещё не загружен.";
+"The winget catalog lists no versions for " = "В каталоге winget нет версий для ";
+"The winget manifest is missing for " = "Нет манифеста winget для ";
+"The winget manifest lists no usable installer for " = "В манифесте winget нет подходящего установщика для ";
+"This licence belongs to another Mac" = "Эта лицензия принадлежит другому Mac";
+"Unpacking the winget catalog failed with code " = "Распаковка каталога winget завершилась с кодом ";
+"WHY IT DID NOT RUN" = "ПОЧЕМУ НЕ ЗАПУСТИЛОСЬ";
+"Your library is empty" = "Библиотека пуста";
+"all installer entries lack a URL or a SHA256" = "ни у одного установщика нет URL или SHA256";
+"empty string" = "пустая строка";
+"no Installers: block" = "нет блока Installers:";
+"one half of the token is empty" = "пустая половина токена";
+"payload" = "полезная нагрузка";
+"signature" = "подпись";
+"“%@” is a Windows Installer package (.msi). MacRunner cannot run .msi files yet — use the game’s .exe installer." = "«%@» — пакет Windows Installer (.msi). MacRunner пока не запускает файлы .msi — возьмите установщик игры в виде .exe.";
+
+/* Встроенный движок и установка (23.09.2026) */
+"Could not create the Windows environment (wineboot exit code %d)." = "Не удалось создать среду Windows (wineboot завершился с кодом %d).";
+"The graphics module %@ in the Windows environment does not match the MacRunner engine." = "Графический модуль %@ в среде Windows не совпадает с движком MacRunner.";
+"The MacRunner engine is incomplete: %@ is missing. Reinstall MacRunner." = "Движок MacRunner неполон: нет %@. Переустановите MacRunner.";
+"Not a Windows program or unreadable: %@" = "Это не программа Windows, или файл не читается: %@";
+"The engine was terminated by signal %d." = "Движок остановлен сигналом %d.";
+"Choose what to add to your library." = "Выберите, что добавить в библиотеку.";
+"Not now" = "Не сейчас";
+"Installation finished" = "Установка завершена";
+"Another installer is still running. Finish it first." = "Уже идёт другая установка. Сначала завершите её.";
+"The installer finished, but no new programs appeared. If the game is installed, add its .exe with “Add game”." = "Установщик завершился, но новых программ не появилось. Если игра установлена, добавьте её .exe кнопкой «Добавить игру».";
+"Installing %@" = "Установка: %@";
+"Finish the installation in the installer window. The installed game will be offered here." = "Завершите установку в окне установщика — установленную игру мы предложим здесь.";
+
+/* Автовыбор графики (23.09.2026) */
+"64-bit" = "64 бита";
+"Verified in games" = "Проверено в играх";
+"Tested on test programs" = "Проверено на тестовых программах";
+"Experimental, not verified" = "Экспериментально, не проверено";
+"Not available yet" = "Пока недоступно";
+"Postponed" = "Отложено";
+"Graphics API not determined" = "Графический API не определён";
+"unknown architecture" = "архитектура неизвестна";
+"standard configuration" = "обычная конфигурация";
+"MacRunner cannot tell which processor this program is built for." = "MacRunner не может определить, для какого процессора собрана эта программа.";
+"%@ Windows programs cannot run in this version of MacRunner yet." = "Программы Windows (%@) в этой версии MacRunner пока не запускаются.";
+"The game uses DXGI, but its Direct3D version could not be determined." = "Игра использует DXGI, но версию Direct3D определить не удалось.";
+"The graphics API could not be determined from the game files." = "По файлам игры не удалось определить графический API.";
+"The game files mention several graphics APIs (%@); the one the game uses could not be determined." = "В файлах игры упоминается несколько графических API (%@); какой из них она использует, определить не удалось.";
+"The game may also use %@, which is not available for %@ games. If it chooses it, it will not start." = "Игра может использовать и %@ — для игр (%@) он недоступен. Если игра выберет его, она не запустится.";
+"This game uses %@ (%@). This version of MacRunner has no support for it yet." = "Эта игра использует %@ (%@). В этой версии MacRunner его поддержки пока нет.";
+"Support is postponed." = "Поддержка отложена.";
+"Support is not available yet." = "Поддержка пока недоступна.";
+"This game uses %@ (%@). %@" = "Эта игра использует %@ (%@). %@";
+"%@ for %@ games is experimental in this version: it has not been verified yet." = "%@ для игр (%@) в этой версии экспериментален: он ещё не проверен.";
+"This game needs the %@ graphics set, but another program is still running in the same Windows environment. Close it and try again." = "Этой игре нужен графический набор %@, но в той же среде Windows ещё работает другая программа. Закройте её и попробуйте снова.";
+"Graphics support" = "Поддержка графики";
+"The game chooses its graphics API; MacRunner picks the matching engine parts automatically." = "API графики выбирает сама игра; MacRunner автоматически подбирает к нему нужные части движка.";
+"Engine: %@" = "Движок: %@";
+"The engine package is incomplete." = "Пакет движка неполон.";
+"GRAPHICS" = "ГРАФИКА";
+"MacRunner cannot run this program yet." = "MacRunner пока не может запустить эту программу.";
+
+/* Прошлые результаты игр (23.09.2026) */
+"Gameplay confirmed" = "Геймплей подтверждён";
+"Reached the menu" = "Дошла до меню";
+"Window opened" = "Окно открылось";
+"Test scene passed" = "Тестовая сцена пройдена";
+"Blocked" = "Заблокировано";
+"EARLIER RESULTS" = "РАНЕЕ";
+
+/* Update lifecycle */
+"Finish or cancel the update before starting a program." = "Завершите или отмените обновление перед запуском программы.";
+"Close running programs before updating MacRunner." = "Закройте запущенные программы перед обновлением MacRunner.";
+"Close running programs, then choose Restart to update." = "Закройте запущенные программы, затем выберите «Перезапустить и обновить».";
+"Update %@ is ready." = "Обновление %@ готово.";
+"Restart to update" = "Перезапустить и обновить";
+/* Launch progress */
+"Checking game" = "Проверка игры";
+"Preparing environment" = "Подготовка";
+"Starting process" = "Запуск";
+"Process active" = "Запущено";
+"Stopping" = "Остановка";
+"Stopped" = "Остановлено";
+"The first launch may take longer while the environment is prepared." = "Первый запуск может занять больше времени из-за подготовки окружения.";
+"The process is active. A game window or rendered frames have not been confirmed." = "Открываем программу. Некоторым играм нужно больше времени при первом запуске.";
+"If no game window appears or it stays black, stop and report this launch." = "Запуск занимает больше времени, чем ожидалось. Если окно не появляется или остаётся чёрным, можно остановить запуск.";
+
+/* Редизайн 23.09.2026 */
+"Played %@" = "Играли %@";
+"Not played yet" = "Не запускалась";
+"Play" = "Играть";
+"Show in Finder" = "Показать в Finder";
+"Recently added" = "Недавно добавлена";
+"Continue" = "Продолжить";
+"Free games" = "Бесплатные игры";
+"Help" = "Помощь";
+"Game folder" = "Папка игры";
+"More" = "Ещё";
+"File" = "Файл";
+"Technical details" = "Технические подробности";
+"Updates" = "Обновления";
+"Windows environment" = "Windows-окружение";
+"Open drive C:" = "Открыть диск C:";
+"Open logs folder" = "Папка журналов";
+"About" = "О программе";
+
+/* Заметки к результатам прогонов (graphics-profiles.json, поле note), 23.09.2026 */
+"gameplay, sound, keyboard, return after app switching; save/reload not verified" = "игровой процесс, звук, клавиатура, возврат после переключения приложений; сохранение и загрузка не проверены";
+"gameplay, sound, keyboard, return to menu; mouse and save/reload not verified" = "игровой процесс, звук, клавиатура, возврат в меню; мышь, сохранение и загрузка не проверены";
+"player-profile menu, gameplay and menus confirmed by the user; save/load not verified" = "меню профиля игрока, игровой процесс и меню подтверждены пользователем; сохранение и загрузка не проверены";
+"gameplay and audio confirmed by the user; level loading investigated separately" = "игровой процесс и звук подтверждены пользователем; загрузку уровней разбираем отдельно";
+"automated graphics scene passed 4 of 4 runs" = "автоматическая графическая сцена пройдена в 4 запусках из 4";
+"world renders, character missing (shader cache gaps)" = "мир отрисовывается, персонажа нет (пробелы в кэше шейдеров)";
+"the stock launcher closes after Play; SkyrimSE.exe itself was not started" = "штатный лаунчер закрывается после нажатия «Play»; сам SkyrimSE.exe не запускался";
+"x64 low-address compatibility boundary at startup" = "граница совместимости x64 с младшими адресами при запуске";
+"exits before start: shared .mydata section needs 4 KB page mode" = "закрывается до старта: общей секции .mydata нужен режим страниц 4 КБ";
+
+/* Витрина бесплатных игр, блок 32 бит, 23.09.2026 */
+"Not running yet" = "Пока не запускаются";
+"These are 32-bit builds. They will not run yet — 32-bit needs a permission from Apple we do not have." = "Это 32-битные сборки. Пока не запустятся: для 32 бит нужно разрешение Apple, которого у нас нет.";
+
+/* Подпись при поиске: число не меняет форму слова, 23.09.2026 */
+"Found %d of %d" = "Найдено %d из %d";
+
+
+/* Ссылка на исходный код, 23.09.2026 */
+"Source code on GitHub" = "Исходный код на GitHub";
+
+/* Поддержка проекта: ссылка на страницу сайта, 23.09.2026 */
+"Support the project" = "Поддержать проект";
+"How to help" = "Как помочь";
+
+/* Счётчик FPS (Metal HUD), 23.09.2026 */
+"FPS counter" = "Счётчик FPS";
+"Apple’s Metal HUD over the game: FPS and frame time. Takes effect the next time a game starts." = "Metal HUD от Apple поверх игры: FPS и время кадра. Включается со следующего запуска игры.";
+
+/* Распаковка установщиков без запуска (innoextract), 24.09.2026 */
+"The unpacking tool is missing from MacRunner." = "Инструмент распаковки отсутствует в MacRunner.";
+"Not enough free space: %@ needed, %@ free." = "Не хватает места: нужно %@, свободно %@.";
+"Unpacking was stopped." = "Распаковка остановлена.";
+"This installer cannot be unpacked without running it." = "Этот установщик нельзя распаковать без запуска.";
+"Unpack" = "Распаковать";
+"Checking whether it can be unpacked without running it…" = "Проверяю, можно ли распаковать без запуска…";
+"It can be unpacked without running the installer" = "Можно распаковать без запуска установщика";
+"%@ · about %@" = "%@ · примерно %@";
+"Change…" = "Изменить…";
+"Choose" = "Выбрать";
+"Where to put unpacked games" = "Куда складывать распакованные игры";
+"Unpacking failed: %@" = "Не удалось распаковать: %@";
+"Unpacked to %@, but no game was found there. Add its .exe with “Add game”." = "Распаковано в %@, но игра там не найдена. Добавьте её .exe кнопкой «Добавить игру».";
+"Unpacking %@" = "Распаковка: %@";
+"%d%% — the game will be offered here when it is done." = "%d%% — по окончании игра будет предложена здесь.";
+
+/* Репаки: честное сообщение вместо распаковки, 24.09.2026 */
+"Run the installer anyway" = "Всё равно запустить установщик";
+"This is a repack — not supported yet" = "Это репак — пока не поддерживается";
+"The game is not inside this installer: it sits next to it in compressed archives, and only the installer's own 32-bit tools can unpack them. MacRunner cannot run 32-bit programs yet, so neither unpacking nor running this installer will work for now." = "Игры внутри этого установщика нет: она лежит рядом в сжатых архивах, а распаковать их умеют только собственные 32-битные программы установщика. 32-битные программы MacRunner пока не запускает, поэтому сейчас не получится ни распаковать, ни запустить этот установщик.";
+"If you have a regular installer (for example, from GOG) or an already installed game folder, add that instead." = "Если есть обычный установщик (например, из GOG) или уже установленная папка игры — добавьте их.";
+"Found: %@" = "Найдено: %@";
+"Game page" = "Страница игры";
+"Could not prepare Windows image decoding (WIC registration exit code %d)." = "Не удалось подготовить декодирование изображений Windows (код регистрации WIC %d).";
+"Not rechecked for this release" = "Не перепроверено в этом выпуске";
+"Latin keyboard during games" = "Латинская раскладка во время игр";
+"Use a Latin layout while the game runs, then restore your previous input source." = "На время игры включать латинскую раскладку, после выхода возвращать прежний источник ввода.";
+"This game needs %@ next to its executable. Add the original game data and try again." = "Игре нужен файл %@ рядом с исполняемым файлом. Добавьте оригинальные данные игры и повторите запуск.";
+"No free drive letter is available for this game's CD data." = "Для данных CD этой игры нет свободной буквы диска.";
+"The game closed immediately after launch." = "Игра закрылась сразу после запуска.";
+"Could not prepare the game's CD data (%@, exit code %d)." = "Не удалось подготовить данные CD игры (%@, код %d).";
+"The game's CD data changed while it was being prepared. Try again." = "Данные CD игры изменились во время подготовки. Повторите запуск.";
+"Could not mount the game's CD data as a read-only disc." = "Не удалось подключить данные CD игры как диск только для чтения.";

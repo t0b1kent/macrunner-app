@@ -1,0 +1,472 @@
+/* Ключ — английская фраза. Пропущенный перевод виден английским текстом,
+   а не служебным идентификатором. Сторож LocalizationLintService следит,
+   чтобы наборы ключей в en и ru не разъезжались. */
+
+"Best of All Worlds" = "Best of All Worlds";
+"Settings" = "Settings";
+"AI Troubleshoot" = "AI Troubleshoot";
+"Steam API Key" = "Steam API Key";
+"Buy License" = "Buy License";
+"Trial Mode" = "Trial Mode";
+"Add App" = "Add App";
+"Run" = "Run";
+"Library" = "Library";
+
+/* Боковая панель */
+"Add game" = "Add game";
+"Downloads" = "Downloads";
+"STORES" = "STORES";
+"Sign in" = "Sign in";
+"Engine 0.9" = "Engine 0.9";
+"FEX + Wine 11, no Rosetta" = "FEX + Wine 11, no Rosetta";
+
+/* Шапка */
+"Search" = "Search";
+"Add" = "Add";
+"Interface language" = "Interface language";
+"%d apps" = "%d apps";
+"1 app" = "1 app";
+"%d of %d" = "%d of %d";
+
+/* Плитки библиотеки */
+"READY" = "READY";
+"FAILED" = "FAILED";
+"HUNG" = "HUNG";
+"NEVER RUN" = "NEVER RUN";
+"RUNNING" = "RUNNING";
+"Launch" = "Launch";
+"Stop" = "Stop";
+"Local" = "Local";
+"running…" = "running…";
+
+/* Пустая библиотека и поиск */
+"No matches" = "No matches";
+"Nothing in your library matches “%@”." = "Nothing in your library matches “%@”.";
+"Clear search" = "Clear search";
+
+/* Настройки */
+"ENGINE" = "ENGINE";
+"MacRunner root" = "MacRunner root";
+"Bottles directory" = "Bottles directory";
+"Choose…" = "Choose…";
+"DEFAULTS" = "DEFAULTS";
+"Default timeout" = "Default timeout";
+"seconds" = "seconds";
+"Keep run artifacts" = "Keep run artifacts";
+"Verbose debug logs" = "Verbose debug logs";
+"ADVANCED" = "ADVANCED";
+"Developer mode" = "Developer mode";
+"Unlocks engine internals: D3D artifacts, perf, doctor, corpus, compatibility DB, debug bundles. For developers and power users." = "Unlocks engine internals: D3D artifacts, perf, doctor, corpus, compatibility DB, debug bundles. For developers and power users.";
+"Language" = "Language";
+"Done" = "Done";
+
+/* Единицы времени */
+"%d ms" = "%d ms";
+"%.1f s" = "%.1f s";
+"%d m %d s" = "%d m %d s";
+"Not set" = "Not set";
+"Auto" = "Auto";
+"System language" = "System language";
+
+/* Вход в магазины */
+"The store did not return a sign-in code" = "The store did not return a sign-in code";
+"Sign-in cancelled" = "Sign-in cancelled";
+"Sign in to %@" = "Sign in to %@";
+"You sign in on the store’s own page. We never see your password." = "You sign in on the store’s own page. We never see your password.";
+"Cancel" = "Cancel";
+"Sign-in for this store is not ready yet" = "Sign-in for this store is not ready yet";
+"Epic, Steam, Battle.net, itch.io and Amazon are next." = "Epic, Steam, Battle.net, itch.io and Amazon are next.";
+
+/* Фильтр по магазину */
+"Show all" = "Show all";
+"Disconnect" = "Disconnect";
+"Nothing from %@ yet" = "Nothing from %@ yet";
+"Signed in. Pulling your purchased list is the next step." = "Signed in. Pulling your purchased list is the next step.";
+"Sign in to this store to see your games here." = "Sign in to this store to see your games here.";
+"Loading the store’s sign-in page…" = "Loading the store’s sign-in page…";
+"Finishing sign-in…" = "Finishing sign-in…";
+"Loading…" = "Loading…";
+"Epic, Steam, Battle.net and itch.io are next." = "Epic, Steam, Battle.net and itch.io are next.";
+"Programs" = "Programs";
+"Microsoft" = "Microsoft";
+"Development" = "Development";
+"Graphics" = "Graphics";
+"CAD & Engineering" = "CAD & Engineering";
+"Media" = "Media";
+"Office" = "Office";
+"Utilities" = "Utilities";
+"Game platforms" = "Game platforms";
+"All" = "All";
+"Mac" = "Mac";
+"Windows" = "Windows";
+"Mac App Store" = "Mac App Store";
+"Official site" = "Official site";
+"The programs catalogue did not load" = "The programs catalogue did not load";
+"Nothing in the catalogue matches this search." = "Nothing in the catalogue matches this search.";
+"%d programs · %d native for Mac" = "%d programs · %d native for Mac";
+"There is a native macOS version" = "There is a native macOS version";
+"Native builds run at full speed — no translation involved." = "Native builds run at full speed — no translation involved.";
+"Open in %@" = "Open in %@";
+"No native macOS version" = "No native macOS version";
+"This is exactly what MacRunner is for: the Windows build runs here." = "This is exactly what MacRunner is for: the Windows build runs here.";
+"Windows version (through MacRunner)" = "Windows version (through MacRunner)";
+"Windows version" = "Windows version";
+"Only worth it if you need something the Mac build lacks." = "Only worth it if you need something the Mac build lacks.";
+"Download the installer, then add it here and we will run it." = "Download the installer, then add it here and we will run it.";
+"Open the download page" = "Open the download page";
+"Not in the winget catalogue — install it from the site." = "Not in the winget catalogue — install it from the site.";
+"Close" = "Close";
+"Copy" = "Copy";
+"GOG is connected first; the rest follow." = "GOG is connected first; the rest follow.";
+"Looking up the installer…" = "Looking up the installer…";
+"Download %@ %@" = "Download %@ %@";
+"Could not add this file" = "Could not add this file";
+"OK" = "OK";
+"Choose a Windows game or program" = "Choose a Windows game or program";
+"“%@” is not a Windows .exe file." = "“%@” is not a Windows .exe file.";
+"Nothing here yet" = "Nothing here yet";
+"1 game" = "1 game";
+"%d games" = "%d games";
+"Edit" = "Edit";
+"Delete" = "Delete";
+"Stores" = "Stores";
+"Connected" = "Connected";
+"Sign in happens on the store’s own page. We keep only a token." = "Sign in happens on the store’s own page. We keep only a token.";
+"Token only — games run in our window" = "Token only — games run in our window";
+"Needs the store’s own client running" = "Needs the store’s own client running";
+"INTERFACE" = "INTERFACE";
+"The engine ships inside MacRunner and is already set up. Nothing to configure." = "The engine ships inside MacRunner and is already set up. Nothing to configure.";
+"Unlocks engine internals: bottles, D3D artifacts, perf, doctor, stores, programs. For developers and power users." = "Unlocks engine internals: bottles, D3D artifacts, perf, doctor, stores, programs. For developers and power users.";
+"Remove from library" = "Remove from library";
+"Remove “%@” from the library?" = "Remove “%@” from the library?";
+"Remove" = "Remove";
+"Site" = "Site";
+"Questions" = "Questions";
+"Questions and answers" = "Questions and answers";
+"Open the site" = "Open the site";
+"Do I need Rosetta?" = "Do I need Rosetta?";
+"How do I add a game?" = "How do I add a game?";
+"Press “Add game” and pick the .exe — the installer or the game itself. We work out which it is." = "Press “Add game” and pick the .exe — the installer or the game itself. We work out which it is.";
+"Which games work?" = "Which games work?";
+"Compatibility varies by game. The graphics support above describes this release, but does not guarantee that every game will run." = "Compatibility varies by game. The graphics support above describes this release, but does not guarantee that every game will run.";
+"Why don’t games with anti-cheat run?" = "Why don’t games with anti-cheat run?";
+"Their protection needs a Windows kernel driver, and macOS has no place to load one. This is not something we can work around." = "Their protection needs a Windows kernel driver, and macOS has no place to load one. This is not something we can work around.";
+"Where do games get installed?" = "Where do games get installed?";
+"Games can be stored in MacRunner’s folders or added from elsewhere. Deleting a game in MacRunner’s folders runs its uninstaller or moves its folder to Trash. Files elsewhere are left in place." = "Games can be stored in MacRunner’s folders or added from elsewhere. Deleting a game in MacRunner’s folders runs its uninstaller or moves its folder to Trash. Files elsewhere are left in place.";
+"A game does not start — what now?" = "A game does not start — what now?";
+"Tell us the name through the site. A failure with a name attached is what turns into a fix; a failure without one disappears." = "Tell us the name through the site. A failure with a name attached is what turns into a fix; a failure without one disappears.";
+"Do 32-bit games work?" = "Do 32-bit games work?";
+"Not in this release. The bundled engine supports 64-bit Windows programs; compatibility varies by game." = "Not in this release. The bundled engine supports 64-bit Windows programs; compatibility varies by game.";
+"Is it free?" = "Is it free?";
+"Yes. MacRunner is free during early access." = "Yes. MacRunner is free during early access.";
+"No. The bundled engine translates Intel programs without Rosetta." = "No. The bundled engine translates Intel programs without Rosetta.";
+"Installed" = "Installed";
+"Games" = "Games";
+"%d free games, direct from the authors" = "%d free games, direct from the authors";
+"%d Windows programs" = "%d Windows programs";
+"The games catalogue did not load" = "The games catalogue did not load";
+"Freeware" = "Freeware";
+"Demo" = "Demo";
+"Open source" = "Open source";
+"Remake" = "Remake";
+"Mod" = "Mod";
+"32-bit" = "32-bit";
+"Engine" = "Engine";
+"Architecture" = "Architecture";
+"Downloads from" = "Downloads from";
+"Size" = "Size";
+"This is a 32-bit build. It will not run yet — 32-bit needs a permission from Apple we do not have." = "This is a 32-bit build. It will not run yet — 32-bit needs a permission from Apple we do not have.";
+"Download from the author" = "Download from the author";
+"Mac is limited" = "Mac is limited";
+"The macOS version is not the same product" = "The macOS version is not the same product";
+"Some Windows features are missing there." = "Some Windows features are missing there.";
+"ALSO IN THE WINGET CATALOGUE" = "ALSO IN THE WINGET CATALOGUE";
+"Preparing the winget catalogue on first use — about 8 MB." = "Preparing the winget catalogue on first use — about 8 MB.";
+"No licence token on this device." = "No licence token on this device.";
+"The licence token is malformed." = "The licence token is malformed.";
+"The licence token is not valid base64url." = "The licence token is not valid base64url.";
+"The licence token is signed but its contents are unreadable." = "The licence token is signed but its contents are unreadable.";
+"The bundled licence public key is invalid; this build cannot check licences." = "The bundled licence public key is invalid; this build cannot check licences.";
+"Could not read this Mac's hardware identifier." = "Could not read this Mac's hardware identifier.";
+"Keychain refused the licence operation." = "Keychain refused the licence operation.";
+"This licence token is not signed by MacRunner." = "This licence token is not signed by MacRunner.";
+"This licence token belongs to another Mac." = "This licence token belongs to another Mac.";
+"This licence has expired." = "This licence has expired.";
+"This device's licence lease has expired; connect to the internet to renew it." = "This device's licence lease has expired; connect to the internet to renew it.";
+"Licence" = "Licence";
+"Plan, device and renewal" = "Plan, device and renewal";
+"No licence on this Mac" = "No licence on this Mac";
+"MacRunner needs a licence to start a game for the first time. Games you already run keep working." = "MacRunner needs a licence to start a game for the first time. Games you already run keep working.";
+"It was changed or came from somewhere else." = "It was changed or came from somewhere else.";
+"Issued for %@, this Mac is %@" = "Issued for %@, this Mac is %@";
+"PLANS" = "PLANS";
+"2 months" = "2 months";
+"1 year" = "1 year";
+"1 device" = "1 device";
+"Teams" = "Teams";
+"more devices" = "more devices";
+"write to us" = "write to us";
+"Buy on the site" = "Buy on the site";
+"Active" = "Active";
+"Connect to the internet once — the device lease needs renewing" = "Connect to the internet once — the device lease needs renewing";
+"Expired. Installed games keep working; new ones cannot be started." = "Expired. Installed games keep working; new ones cannot be started.";
+"This Mac" = "This Mac";
+"Devices" = "Devices";
+"Paid until" = "Paid until";
+"Unbind this Mac" = "Unbind this Mac";
+"Unbind this Mac from the licence?" = "Unbind this Mac from the licence?";
+"Unbind" = "Unbind";
+"The next unbind will only be allowed in one month." = "The next unbind will only be allowed in one month.";
+"This licence is bound to this Mac permanently and cannot be moved." = "This licence is bound to this Mac permanently and cannot be moved.";
+"Trial" = "Trial";
+"Perpetual" = "Perpetual";
+"NO FILE" = "NO FILE";
+"File is gone" = "File is gone";
+"Open the releases page" = "Open the releases page";
+"On that page take the file marked win64." = "On that page take the file marked win64.";
+"On that page take the Windows file — but this build is 32-bit and will not run yet." = "On that page take the Windows file — but this build is 32-bit and will not run yet.";
+"Yes. Both 32-bit and 64-bit Windows programs run." = "Yes. Both 32-bit and 64-bit Windows programs run.";
+"Not a GitHub download link: " = "Not a GitHub download link: ";
+"No published releases on GitHub for " = "No published releases on GitHub for ";
+"No Windows build in the latest release of " = "No Windows build in the latest release of ";
+"GitHub is rate-limiting us (60 requests per hour without a token). Try again later." = "GitHub is rate-limiting us (60 requests per hour without a token). Try again later.";
+"GitHub answered with HTTP " = "GitHub answered with HTTP ";
+"Could not reach GitHub: " = "Could not reach GitHub: ";
+"WHY WE THINK SO" = "WHY WE THINK SO";
+"certainty %d%%" = "certainty %d%%";
+"Run the installer" = "Run the installer";
+"No, this is the game itself" = "No, this is the game itself";
+"Add to library" = "Add to library";
+"No, this is an installer" = "No, this is an installer";
+"Add anyway" = "Add anyway";
+"We do not offer to run this one: uninstallers look the same from outside." = "We do not offer to run this one: uninstallers look the same from outside.";
+"This looks like an installer" = "This looks like an installer";
+"This looks like the game itself" = "This looks like the game itself";
+"This looks like a helper file" = "This looks like a helper file";
+"We can run it — it will install the game, and the installed game goes to your library." = "We can run it — it will install the game, and the installed game goes to your library.";
+"We will add it as is and run it from your library." = "We will add it as is and run it from your library.";
+"Uninstallers, runtimes and crash handlers look like this. Usually not what you want to add." = "Uninstallers, runtimes and crash handlers look like this. Usually not what you want to add.";
+"Open a licence file" = "Open a licence file";
+"Works without internet" = "Works without internet";
+"Choose a licence file" = "Choose a licence file";
+"Open" = "Open";
+"Uninstall “%@”?" = "Uninstall “%@”?";
+"Delete “%@” and its files?" = "Delete “%@” and its files?";
+"Uninstall" = "Uninstall";
+"Move to Trash" = "Move to Trash";
+"We will start the game’s own uninstaller. Follow its steps — it removes the files and the registry entries it made." = "We will start the game’s own uninstaller. Follow its steps — it removes the files and the registry entries it made.";
+"The game folder goes to the Trash, so you can put it back: %@" = "The game folder goes to the Trash, so you can put it back: %@";
+"The files stay where they are — MacRunner did not install this game, so it will not delete it." = "The files stay where they are — MacRunner did not install this game, so it will not delete it.";
+"The file is already gone from disk. Only the library entry is left to remove." = "The file is already gone from disk. Only the library entry is left to remove.";
+"Could not delete the game" = "Could not delete the game";
+
+/* Добавлено 15.09.2026: меню приложения, тарифы, причины отказа запуска,
+   перетаскивание, подробности отказов лицензии и ключи winget, которых не было. */
+" bytes" = " bytes";
+"%d parts, expected 2 (payload.signature)" = "%d parts, expected 2 (payload.signature)";
+"%d s" = "%d s";
+"1 Mac" = "1 Mac";
+"1 Mac, one-time, not transferable" = "1 Mac, one-time, not transferable";
+"10 Macs, per year" = "10 Macs, per year";
+"About MacRunner" = "About MacRunner";
+"BACKEND" = "BACKEND";
+"Business" = "Business";
+"Cannot unpack the winget catalog: no unzip tool at " = "Cannot unpack the winget catalog: no unzip tool at ";
+"Check for Updates…" = "Check for Updates…";
+"Could not reach the winget catalog: " = "Could not reach the winget catalog: ";
+"Could not read the winget manifest for " = "Could not read the winget manifest for ";
+"Could not start the game" = "Could not start the game";
+"Delete this game from the library?" = "Delete this game from the library?";
+"Drop a Windows .exe here, or browse to add one." = "Drop a Windows .exe here, or browse to add one.";
+"Drop the .exe to add it" = "Drop the .exe to add it";
+"IOPlatformExpertDevice has no IOPlatformUUID" = "IOPlatformExpertDevice has no IOPlatformUUID";
+"IOPlatformExpertDevice not found" = "IOPlatformExpertDevice not found";
+"IOPlatformUUID is not a string or is empty" = "IOPlatformUUID is not a string or is empty";
+"LAST RUN" = "LAST RUN";
+"MacRunner Help" = "MacRunner Help";
+"MacRunner engine not found. Reinstall MacRunner." = "MacRunner engine not found. Reinstall MacRunner.";
+"NOTES" = "NOTES";
+"No free trial. Refund within 14 days." = "No free trial. Refund within 14 days.";
+"No such package in the winget catalog: " = "No such package in the winget catalog: ";
+"Not a winget package ID: " = "Not a winget package ID: ";
+"STATUS" = "STATUS";
+"TIMEOUT" = "TIMEOUT";
+"The catalog answered with HTTP " = "The catalog answered with HTTP ";
+"The file is missing or is not a Windows program." = "The file is missing or is not a Windows program.";
+"The game crashed." = "The game crashed.";
+"The game exited with an error." = "The game exited with an error.";
+"The game hit its time limit and was stopped." = "The game hit its time limit and was stopped.";
+"The game needs a Windows library (DLL) that is missing." = "The game needs a Windows library (DLL) that is missing.";
+"The run ended with status %@." = "The run ended with status %@.";
+"The winget catalog answered with HTTP " = "The winget catalog answered with HTTP ";
+"The winget catalog archive has no Public/index.db entry." = "The winget catalog archive has no Public/index.db entry.";
+"The winget catalog database is unreadable: " = "The winget catalog database is unreadable: ";
+"The winget catalog database lists no packages at all." = "The winget catalog database lists no packages at all.";
+"The winget catalog download is not a ZIP archive: " = "The winget catalog download is not a ZIP archive: ";
+"The winget catalog has not been downloaded yet." = "The winget catalog has not been downloaded yet.";
+"The winget catalog lists no versions for " = "The winget catalog lists no versions for ";
+"The winget manifest is missing for " = "The winget manifest is missing for ";
+"The winget manifest lists no usable installer for " = "The winget manifest lists no usable installer for ";
+"This licence belongs to another Mac" = "This licence belongs to another Mac";
+"Unpacking the winget catalog failed with code " = "Unpacking the winget catalog failed with code ";
+"WHY IT DID NOT RUN" = "WHY IT DID NOT RUN";
+"Your library is empty" = "Your library is empty";
+"all installer entries lack a URL or a SHA256" = "all installer entries lack a URL or a SHA256";
+"empty string" = "empty string";
+"no Installers: block" = "no Installers: block";
+"one half of the token is empty" = "one half of the token is empty";
+"payload" = "payload";
+"signature" = "signature";
+"“%@” is a Windows Installer package (.msi). MacRunner cannot run .msi files yet — use the game’s .exe installer." = "“%@” is a Windows Installer package (.msi). MacRunner cannot run .msi files yet — use the game’s .exe installer.";
+
+/* Встроенный движок и установка (23.09.2026) */
+"Could not create the Windows environment (wineboot exit code %d)." = "Could not create the Windows environment (wineboot exit code %d).";
+"The graphics module %@ in the Windows environment does not match the MacRunner engine." = "The graphics module %@ in the Windows environment does not match the MacRunner engine.";
+"The MacRunner engine is incomplete: %@ is missing. Reinstall MacRunner." = "The MacRunner engine is incomplete: %@ is missing. Reinstall MacRunner.";
+"Not a Windows program or unreadable: %@" = "Not a Windows program or unreadable: %@";
+"The engine was terminated by signal %d." = "The engine was terminated by signal %d.";
+"Choose what to add to your library." = "Choose what to add to your library.";
+"Not now" = "Not now";
+"Installation finished" = "Installation finished";
+"Another installer is still running. Finish it first." = "Another installer is still running. Finish it first.";
+"The installer finished, but no new programs appeared. If the game is installed, add its .exe with “Add game”." = "The installer finished, but no new programs appeared. If the game is installed, add its .exe with “Add game”.";
+"Installing %@" = "Installing %@";
+"Finish the installation in the installer window. The installed game will be offered here." = "Finish the installation in the installer window. The installed game will be offered here.";
+
+/* Автовыбор графики (23.09.2026) */
+"64-bit" = "64-bit";
+"Verified in games" = "Verified in games";
+"Tested on test programs" = "Tested on test programs";
+"Experimental, not verified" = "Experimental, not verified";
+"Not available yet" = "Not available yet";
+"Postponed" = "Postponed";
+"Graphics API not determined" = "Graphics API not determined";
+"unknown architecture" = "unknown architecture";
+"standard configuration" = "standard configuration";
+"MacRunner cannot tell which processor this program is built for." = "MacRunner cannot tell which processor this program is built for.";
+"%@ Windows programs cannot run in this version of MacRunner yet." = "%@ Windows programs cannot run in this version of MacRunner yet.";
+"The game uses DXGI, but its Direct3D version could not be determined." = "The game uses DXGI, but its Direct3D version could not be determined.";
+"The graphics API could not be determined from the game files." = "The graphics API could not be determined from the game files.";
+"The game files mention several graphics APIs (%@); the one the game uses could not be determined." = "The game files mention several graphics APIs (%@); the one the game uses could not be determined.";
+"The game may also use %@, which is not available for %@ games. If it chooses it, it will not start." = "The game may also use %@, which is not available for %@ games. If it chooses it, it will not start.";
+"This game uses %@ (%@). This version of MacRunner has no support for it yet." = "This game uses %@ (%@). This version of MacRunner has no support for it yet.";
+"Support is postponed." = "Support is postponed.";
+"Support is not available yet." = "Support is not available yet.";
+"This game uses %@ (%@). %@" = "This game uses %@ (%@). %@";
+"%@ for %@ games is experimental in this version: it has not been verified yet." = "%@ for %@ games is experimental in this version: it has not been verified yet.";
+"This game needs the %@ graphics set, but another program is still running in the same Windows environment. Close it and try again." = "This game needs the %@ graphics set, but another program is still running in the same Windows environment. Close it and try again.";
+"Graphics support" = "Graphics support";
+"The game chooses its graphics API; MacRunner picks the matching engine parts automatically." = "The game chooses its graphics API; MacRunner picks the matching engine parts automatically.";
+"Engine: %@" = "Engine: %@";
+"The engine package is incomplete." = "The engine package is incomplete.";
+"GRAPHICS" = "GRAPHICS";
+"MacRunner cannot run this program yet." = "MacRunner cannot run this program yet.";
+
+/* Прошлые результаты игр (23.09.2026) */
+"Gameplay confirmed" = "Gameplay confirmed";
+"Reached the menu" = "Reached the menu";
+"Window opened" = "Window opened";
+"Test scene passed" = "Test scene passed";
+"Blocked" = "Blocked";
+"EARLIER RESULTS" = "EARLIER RESULTS";
+
+/* Update lifecycle */
+"Finish or cancel the update before starting a program." = "Finish or cancel the update before starting a program.";
+"Close running programs before updating MacRunner." = "Close running programs before updating MacRunner.";
+"Close running programs, then choose Restart to update." = "Close running programs, then choose Restart to update.";
+"Update %@ is ready." = "Update %@ is ready.";
+"Restart to update" = "Restart to update";
+/* Launch progress */
+"Checking game" = "Checking game";
+"Preparing environment" = "Getting ready";
+"Starting process" = "Launching";
+"Process active" = "Running";
+"Stopping" = "Stopping";
+"Stopped" = "Stopped";
+"The first launch may take longer while the environment is prepared." = "The first launch may take longer while the environment is prepared.";
+"The process is active. A game window or rendered frames have not been confirmed." = "Opening your program. Some games take longer on their first launch.";
+"If no game window appears or it stays black, stop and report this launch." = "Taking longer than expected. If the window is missing or stays black, you can stop this launch.";
+
+/* Редизайн 23.09.2026 */
+"Played %@" = "Played %@";
+"Not played yet" = "Not played yet";
+"Play" = "Play";
+"Show in Finder" = "Show in Finder";
+"Recently added" = "Recently added";
+"Continue" = "Continue";
+"Free games" = "Free games";
+"Help" = "Help";
+"Game folder" = "Game folder";
+"More" = "More";
+"File" = "File";
+"Technical details" = "Technical details";
+"Updates" = "Updates";
+"Windows environment" = "Windows environment";
+"Open drive C:" = "Open drive C:";
+"Open logs folder" = "Open logs folder";
+"About" = "About";
+
+/* Заметки к результатам прогонов (graphics-profiles.json, поле note), 23.09.2026 */
+"gameplay, sound, keyboard, return after app switching; save/reload not verified" = "gameplay, sound, keyboard, return after app switching; save/reload not verified";
+"gameplay, sound, keyboard, return to menu; mouse and save/reload not verified" = "gameplay, sound, keyboard, return to menu; mouse and save/reload not verified";
+"player-profile menu, gameplay and menus confirmed by the user; save/load not verified" = "player-profile menu, gameplay and menus confirmed by the user; save/load not verified";
+"gameplay and audio confirmed by the user; level loading investigated separately" = "gameplay and audio confirmed by the user; level loading investigated separately";
+"automated graphics scene passed 4 of 4 runs" = "automated graphics scene passed 4 of 4 runs";
+"world renders, character missing (shader cache gaps)" = "world renders, character missing (shader cache gaps)";
+"the stock launcher closes after Play; SkyrimSE.exe itself was not started" = "the stock launcher closes after Play; SkyrimSE.exe itself was not started";
+"x64 low-address compatibility boundary at startup" = "x64 low-address compatibility boundary at startup";
+"exits before start: shared .mydata section needs 4 KB page mode" = "exits before start: shared .mydata section needs 4 KB page mode";
+
+/* Витрина бесплатных игр, блок 32 бит, 23.09.2026 */
+"Not running yet" = "Not running yet";
+"These are 32-bit builds. They will not run yet — 32-bit needs a permission from Apple we do not have." = "These are 32-bit builds. They will not run yet — 32-bit needs a permission from Apple we do not have.";
+
+/* Подпись при поиске: число не меняет форму слова, 23.09.2026 */
+"Found %d of %d" = "Found %d of %d";
+
+
+/* Ссылка на исходный код, 23.09.2026 */
+"Source code on GitHub" = "Source code on GitHub";
+
+/* Поддержка проекта: ссылка на страницу сайта, 23.09.2026 */
+"Support the project" = "Support the project";
+"How to help" = "How to help";
+
+/* Счётчик FPS (Metal HUD), 23.09.2026 */
+"FPS counter" = "FPS counter";
+"Apple’s Metal HUD over the game: FPS and frame time. Takes effect the next time a game starts." = "Apple’s Metal HUD over the game: FPS and frame time. Takes effect the next time a game starts.";
+
+/* Распаковка установщиков без запуска (innoextract), 24.09.2026 */
+"The unpacking tool is missing from MacRunner." = "The unpacking tool is missing from MacRunner.";
+"Not enough free space: %@ needed, %@ free." = "Not enough free space: %@ needed, %@ free.";
+"Unpacking was stopped." = "Unpacking was stopped.";
+"This installer cannot be unpacked without running it." = "This installer cannot be unpacked without running it.";
+"Unpack" = "Unpack";
+"Checking whether it can be unpacked without running it…" = "Checking whether it can be unpacked without running it…";
+"It can be unpacked without running the installer" = "It can be unpacked without running the installer";
+"%@ · about %@" = "%@ · about %@";
+"Change…" = "Change…";
+"Choose" = "Choose";
+"Where to put unpacked games" = "Where to put unpacked games";
+"Unpacking failed: %@" = "Unpacking failed: %@";
+"Unpacked to %@, but no game was found there. Add its .exe with “Add game”." = "Unpacked to %@, but no game was found there. Add its .exe with “Add game”.";
+"Unpacking %@" = "Unpacking %@";
+"%d%% — the game will be offered here when it is done." = "%d%% — the game will be offered here when it is done.";
+
+/* Репаки: честное сообщение вместо распаковки, 24.09.2026 */
+"Run the installer anyway" = "Run the installer anyway";
+"This is a repack — not supported yet" = "This is a repack — not supported yet";
+"The game is not inside this installer: it sits next to it in compressed archives, and only the installer's own 32-bit tools can unpack them. MacRunner cannot run 32-bit programs yet, so neither unpacking nor running this installer will work for now." = "The game is not inside this installer: it sits next to it in compressed archives, and only the installer's own 32-bit tools can unpack them. MacRunner cannot run 32-bit programs yet, so neither unpacking nor running this installer will work for now.";
+"If you have a regular installer (for example, from GOG) or an already installed game folder, add that instead." = "If you have a regular installer (for example, from GOG) or an already installed game folder, add that instead.";
+"Found: %@" = "Found: %@";
+"Game page" = "Game page";
+"Could not prepare Windows image decoding (WIC registration exit code %d)." = "Could not prepare Windows image decoding (WIC registration exit code %d).";
+"Not rechecked for this release" = "Not rechecked for this release";
+"Latin keyboard during games" = "Latin keyboard during games";
+"Use a Latin layout while the game runs, then restore your previous input source." = "Use a Latin layout while the game runs, then restore your previous input source.";
+"This game needs %@ next to its executable. Add the original game data and try again." = "This game needs %@ next to its executable. Add the original game data and try again.";
+"No free drive letter is available for this game's CD data." = "No free drive letter is available for this game's CD data.";
+"The game closed immediately after launch." = "The game closed immediately after launch.";
+"Could not prepare the game's CD data (%@, exit code %d)." = "Could not prepare the game's CD data (%@, exit code %d).";
+"The game's CD data changed while it was being prepared. Try again." = "The game's CD data changed while it was being prepared. Try again.";
+"Could not mount the game's CD data as a read-only disc." = "Could not mount the game's CD data as a read-only disc.";

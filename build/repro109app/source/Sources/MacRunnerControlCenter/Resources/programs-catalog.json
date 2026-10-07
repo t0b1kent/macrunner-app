@@ -1,0 +1,3924 @@
+{
+  "version": 1,
+  "generated": "2026-09-12",
+  "programs": [
+    {
+      "id": "microsoft.microsoft365",
+      "name": "Microsoft 365",
+      "publisher": "Microsoft",
+      "category": "microsoft",
+      "summary_en": "Office suite",
+      "summary_ru": "Офисный пакет",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.microsoft.com/en-us/microsoft-365/download-office",
+        "note_en": "One App Store bundle; Apple Silicon native",
+        "note_ru": "В App Store одним пакетом, Apple Silicon"
+      },
+      "windows": {
+        "winget": "Microsoft.Office",
+        "url": "https://www.microsoft.com/en-us/microsoft-365"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "No COM/VSTO/XLL add-ins, no Power Pivot, Outlook without VBA",
+      "mac_missing_ru": "Нет надстроек COM/VSTO/XLL, нет Power Pivot, Outlook без VBA"
+    },
+    {
+      "id": "microsoft.word",
+      "name": "Microsoft Word",
+      "publisher": "Microsoft",
+      "category": "microsoft",
+      "summary_en": "Word processor",
+      "summary_ru": "Текстовый редактор",
+      "mac": {
+        "kind": "appstore",
+        "appstore_id": "462054704",
+        "url": "https://apps.apple.com/app/id462054704",
+        "note_en": "Mac App Store, Apple Silicon native",
+        "note_ru": "Mac App Store, родная для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Microsoft.Office",
+        "url": "https://www.microsoft.com/en-us/microsoft-365/word"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "No COM or VSTO add-ins; VBA sandboxed, file access limited",
+      "mac_missing_ru": "Нет надстроек COM и VSTO; VBA в песочнице"
+    },
+    {
+      "id": "microsoft.excel",
+      "name": "Microsoft Excel",
+      "publisher": "Microsoft",
+      "category": "microsoft",
+      "summary_en": "Spreadsheets",
+      "summary_ru": "Электронные таблицы",
+      "mac": {
+        "kind": "appstore",
+        "appstore_id": "462058435",
+        "url": "https://apps.apple.com/app/id462058435",
+        "note_en": "Mac App Store, Apple Silicon native",
+        "note_ru": "Mac App Store, родная для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Microsoft.Office",
+        "url": "https://www.microsoft.com/en-us/microsoft-365/excel"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "No COM/VSTO/XLL add-ins, no Power Pivot data model",
+      "mac_missing_ru": "Нет надстроек COM/VSTO/XLL, нет модели данных Power Pivot"
+    },
+    {
+      "id": "microsoft.powerpoint",
+      "name": "Microsoft PowerPoint",
+      "publisher": "Microsoft",
+      "category": "microsoft",
+      "summary_en": "Presentations",
+      "summary_ru": "Презентации",
+      "mac": {
+        "kind": "appstore",
+        "appstore_id": "462062816",
+        "url": "https://apps.apple.com/app/id462062816",
+        "note_en": "Mac App Store, Apple Silicon native",
+        "note_ru": "Mac App Store, родная для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Microsoft.Office",
+        "url": "https://www.microsoft.com/en-us/microsoft-365/powerpoint"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "No COM or VSTO add-ins; VBA sandboxed, file access limited",
+      "mac_missing_ru": "Нет надстроек COM и VSTO; VBA в песочнице"
+    },
+    {
+      "id": "microsoft.outlook",
+      "name": "Microsoft Outlook",
+      "publisher": "Microsoft",
+      "category": "microsoft",
+      "summary_en": "Mail and calendar",
+      "summary_ru": "Почта и календарь",
+      "mac": {
+        "kind": "appstore",
+        "appstore_id": "985367838",
+        "url": "https://apps.apple.com/app/id985367838",
+        "note_en": "Mac App Store, free to use",
+        "note_ru": "Mac App Store, бесплатно"
+      },
+      "windows": {
+        "winget": "Microsoft.Outlook",
+        "url": "https://www.microsoft.com/en-us/microsoft-365/outlook/outlook-for-windows"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "No VBA macros, no COM or VSTO add-ins",
+      "mac_missing_ru": "Нет макросов VBA, нет надстроек COM и VSTO"
+    },
+    {
+      "id": "microsoft.teams",
+      "name": "Microsoft Teams",
+      "publisher": "Microsoft",
+      "category": "microsoft",
+      "summary_en": "Team chat and calls",
+      "summary_ru": "Командный чат и звонки",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.microsoft.com/en-us/microsoft-teams/download-app",
+        "note_en": "Official Mac build, Apple Silicon",
+        "note_ru": "Официальная сборка, Apple Silicon"
+      },
+      "windows": {
+        "winget": "Microsoft.Teams",
+        "url": "https://www.microsoft.com/en-us/microsoft-teams/download-app"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "microsoft.onedrive",
+      "name": "OneDrive",
+      "publisher": "Microsoft",
+      "category": "microsoft",
+      "summary_en": "Cloud storage",
+      "summary_ru": "Облачное хранилище",
+      "mac": {
+        "kind": "appstore",
+        "appstore_id": "823766827",
+        "url": "https://apps.apple.com/app/id823766827",
+        "note_en": "Mac App Store, free",
+        "note_ru": "Mac App Store, бесплатно"
+      },
+      "windows": {
+        "winget": "Microsoft.OneDrive",
+        "url": "https://www.microsoft.com/en-us/microsoft-365/onedrive/download"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "microsoft.edge",
+      "name": "Microsoft Edge",
+      "publisher": "Microsoft",
+      "category": "microsoft",
+      "summary_en": "Web browser",
+      "summary_ru": "Веб-браузер",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.microsoft.com/en-us/edge/download",
+        "note_en": "Official Mac build, Apple Silicon",
+        "note_ru": "Официальная сборка, Apple Silicon"
+      },
+      "windows": {
+        "winget": "Microsoft.Edge",
+        "url": "https://www.microsoft.com/en-us/edge/download"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "No Internet Explorer mode for legacy intranet sites",
+      "mac_missing_ru": "Нет режима Internet Explorer для устаревших интранет-сайтов"
+    },
+    {
+      "id": "microsoft.visualstudiocode",
+      "name": "Visual Studio Code",
+      "publisher": "Microsoft",
+      "category": "dev",
+      "summary_en": "Code editor",
+      "summary_ru": "Редактор кода",
+      "mac": {
+        "kind": "official",
+        "url": "https://code.visualstudio.com/download",
+        "note_en": "Universal build, Apple Silicon native",
+        "note_ru": "Универсальная сборка, родная для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Microsoft.VisualStudioCode",
+        "url": "https://code.visualstudio.com/download"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "microsoft.visualstudio",
+      "name": "Visual Studio 2022",
+      "publisher": "Microsoft",
+      "category": "dev",
+      "summary_en": "IDE, Mac version retired",
+      "summary_ru": "Среда разработки, Mac закрыт",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.VisualStudio.2022.Community",
+        "url": "https://visualstudio.microsoft.com/downloads/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.powertoys",
+      "name": "PowerToys",
+      "publisher": "Microsoft",
+      "category": "utility",
+      "summary_en": "Windows power-user tools",
+      "summary_ru": "Набор утилит Windows",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.PowerToys",
+        "url": "https://learn.microsoft.com/en-us/windows/powertoys/install"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "git.git",
+      "name": "Git",
+      "publisher": "Git project",
+      "category": "dev",
+      "summary_en": "Version control",
+      "summary_ru": "Система контроля версий",
+      "mac": {
+        "kind": "official",
+        "url": "https://git-scm.com/downloads/mac",
+        "note_en": "Native build, Apple Silicon",
+        "note_ru": "Родная сборка, Apple Silicon"
+      },
+      "windows": {
+        "winget": "Git.Git",
+        "url": "https://git-scm.com/downloads"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "python.python",
+      "name": "Python",
+      "publisher": "Python Software Foundation",
+      "category": "dev",
+      "summary_en": "Programming language",
+      "summary_ru": "Язык программирования",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.python.org/downloads/macos/",
+        "note_en": "Universal2 installer, Apple Silicon",
+        "note_ru": "Universal2, родная для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Python.Python.3.13",
+        "url": "https://www.python.org/downloads/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "openjs.nodejs",
+      "name": "Node.js",
+      "publisher": "OpenJS Foundation",
+      "category": "dev",
+      "summary_en": "JavaScript runtime",
+      "summary_ru": "Среда выполнения JavaScript",
+      "mac": {
+        "kind": "official",
+        "url": "https://nodejs.org/en/download",
+        "note_en": "arm64 build, Apple Silicon native",
+        "note_ru": "Сборка arm64, родная для Apple Silicon"
+      },
+      "windows": {
+        "winget": "OpenJS.NodeJS.LTS",
+        "url": "https://nodejs.org/en/download"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "jetbrains.intellijidea",
+      "name": "IntelliJ IDEA",
+      "publisher": "JetBrains",
+      "category": "dev",
+      "summary_en": "Java IDE",
+      "summary_ru": "Среда разработки Java",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.jetbrains.com/idea/download/?platform=macOS",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "JetBrains.IntelliJIDEA.Community",
+        "url": "https://www.jetbrains.com/idea/download/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "jetbrains.pycharm",
+      "name": "PyCharm",
+      "publisher": "JetBrains",
+      "category": "dev",
+      "summary_en": "Python IDE",
+      "summary_ru": "Среда разработки Python",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.jetbrains.com/pycharm/download/?platform=macOS",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "JetBrains.PyCharm.Community",
+        "url": "https://www.jetbrains.com/pycharm/download/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "docker.dockerdesktop",
+      "name": "Docker Desktop",
+      "publisher": "Docker",
+      "category": "dev",
+      "summary_en": "Container platform",
+      "summary_ru": "Платформа контейнеров",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.docker.com/products/docker-desktop/",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Docker.DockerDesktop",
+        "url": "https://www.docker.com/products/docker-desktop/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "sublimehq.sublimetext",
+      "name": "Sublime Text",
+      "publisher": "Sublime HQ",
+      "category": "dev",
+      "summary_en": "Text editor",
+      "summary_ru": "Текстовый редактор",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.sublimetext.com/download",
+        "note_en": "Universal build, Apple Silicon",
+        "note_ru": "Универсальная сборка, Apple Silicon"
+      },
+      "windows": {
+        "winget": "SublimeHQ.SublimeText.4",
+        "url": "https://www.sublimetext.com/download"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "notepadplusplus.notepadplusplus",
+      "name": "Notepad++",
+      "publisher": "Don Ho",
+      "category": "dev",
+      "summary_en": "Windows text editor",
+      "summary_ru": "Текстовый редактор Windows",
+      "mac": null,
+      "windows": {
+        "winget": "Notepad++.Notepad++",
+        "url": "https://notepad-plus-plus.org/downloads/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "putty.putty",
+      "name": "PuTTY",
+      "publisher": "Simon Tatham",
+      "category": "dev",
+      "summary_en": "SSH client",
+      "summary_ru": "Клиент SSH",
+      "mac": null,
+      "windows": {
+        "winget": "PuTTY.PuTTY",
+        "url": "https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "winscp.winscp",
+      "name": "WinSCP",
+      "publisher": "Martin Prikryl",
+      "category": "dev",
+      "summary_en": "SFTP client",
+      "summary_ru": "Клиент SFTP",
+      "mac": null,
+      "windows": {
+        "winget": "WinSCP.WinSCP",
+        "url": "https://winscp.net/eng/download.php"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "filezilla.client",
+      "name": "FileZilla",
+      "publisher": "Tim Kosse",
+      "category": "dev",
+      "summary_en": "FTP client",
+      "summary_ru": "Клиент FTP",
+      "mac": {
+        "kind": "official",
+        "url": "https://filezilla-project.org/download.php?platform=macos-arm64",
+        "note_en": "Separate Apple Silicon build offered",
+        "note_ru": "Отдельная сборка под Apple Silicon"
+      },
+      "windows": {
+        "winget": null,
+        "url": "https://filezilla-project.org/download.php"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "blender.blender",
+      "name": "Blender",
+      "publisher": "Blender Foundation",
+      "category": "graphics",
+      "summary_en": "3D creation suite",
+      "summary_ru": "Пакет 3D-графики",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.blender.org/download/",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "BlenderFoundation.Blender",
+        "url": "https://www.blender.org/download/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "gimp.gimp",
+      "name": "GIMP",
+      "publisher": "GIMP team",
+      "category": "graphics",
+      "summary_en": "Image editor",
+      "summary_ru": "Редактор изображений",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.gimp.org/downloads/",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "GIMP.GIMP",
+        "url": "https://www.gimp.org/downloads/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "inkscape.inkscape",
+      "name": "Inkscape",
+      "publisher": "Inkscape project",
+      "category": "graphics",
+      "summary_en": "Vector editor",
+      "summary_ru": "Векторный редактор",
+      "mac": {
+        "kind": "official",
+        "url": "https://inkscape.org/release/",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Inkscape.Inkscape",
+        "url": "https://inkscape.org/release/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "kde.krita",
+      "name": "Krita",
+      "publisher": "KDE",
+      "category": "graphics",
+      "summary_en": "Digital painting",
+      "summary_ru": "Цифровая живопись",
+      "mac": {
+        "kind": "official",
+        "url": "https://krita.org/en/download/",
+        "note_en": "Free build; App Store copy is paid",
+        "note_ru": "Бесплатно с сайта, в App Store платно"
+      },
+      "windows": {
+        "winget": "KDE.Krita",
+        "url": "https://krita.org/en/download/"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "No G'MIC filter plug-in on macOS",
+      "mac_missing_ru": "Нет плагина фильтров G'MIC на macOS"
+    },
+    {
+      "id": "dotpdn.paintdotnet",
+      "name": "Paint.NET",
+      "publisher": "dotPDN",
+      "category": "graphics",
+      "summary_en": "Windows image editor",
+      "summary_ru": "Редактор изображений Windows",
+      "mac": null,
+      "windows": {
+        "winget": "dotPDN.PaintDotNet",
+        "url": "https://paint.net/download.html"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "adobe.photoshop",
+      "name": "Adobe Photoshop",
+      "publisher": "Adobe",
+      "category": "graphics",
+      "summary_en": "Image editor",
+      "summary_ru": "Редактор изображений",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.adobe.com/products/photoshop/free-trial-download.html",
+        "note_en": "Native Apple Silicon, via Creative Cloud",
+        "note_ru": "Родная для Apple Silicon, через Creative Cloud"
+      },
+      "windows": {
+        "winget": null,
+        "url": "https://www.adobe.com/products/photoshop/free-trial-download.html"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "adobe.illustrator",
+      "name": "Adobe Illustrator",
+      "publisher": "Adobe",
+      "category": "graphics",
+      "summary_en": "Vector editor",
+      "summary_ru": "Векторный редактор",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.adobe.com/products/illustrator/free-trial-download.html",
+        "note_en": "Native Apple Silicon, via Creative Cloud",
+        "note_ru": "Родная для Apple Silicon, через Creative Cloud"
+      },
+      "windows": {
+        "winget": null,
+        "url": "https://www.adobe.com/products/illustrator/free-trial-download.html"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "adobe.creativecloud",
+      "name": "Adobe Creative Cloud",
+      "publisher": "Adobe",
+      "category": "graphics",
+      "summary_en": "Adobe app manager",
+      "summary_ru": "Менеджер приложений Adobe",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.adobe.com/creativecloud/desktop-app.html",
+        "note_en": "Native Apple Silicon build",
+        "note_ru": "Родная сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Adobe.CreativeCloud",
+        "url": "https://www.adobe.com/creativecloud/desktop-app.html"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "figma.figma",
+      "name": "Figma",
+      "publisher": "Figma",
+      "category": "graphics",
+      "summary_en": "Interface design",
+      "summary_ru": "Дизайн интерфейсов",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.figma.com/downloads/",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Figma.Figma",
+        "url": "https://www.figma.com/downloads/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "canva.affinity",
+      "name": "Affinity",
+      "publisher": "Canva",
+      "category": "graphics",
+      "summary_en": "Photo, vector, layout",
+      "summary_ru": "Фото, вектор, вёрстка",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.affinity.studio/",
+        "note_en": "Single free app since 2025",
+        "note_ru": "С 2025 единое бесплатное приложение"
+      },
+      "windows": {
+        "winget": "Canva.Affinity",
+        "url": "https://www.affinity.studio/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "autodesk.autocad",
+      "name": "AutoCAD",
+      "publisher": "Autodesk",
+      "category": "cad",
+      "summary_en": "2D and 3D CAD",
+      "summary_ru": "Двумерное и трёхмерное черчение",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.autodesk.com/products/autocad/overview",
+        "note_en": "Separate Mac product, fewer features",
+        "note_ru": "Отдельный продукт, возможностей меньше"
+      },
+      "windows": {
+        "winget": null,
+        "url": "https://www.autodesk.com/products/autocad/overview"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "No industry toolsets, no .NET/VBA/ActiveX plug-ins, Express Tools partial",
+      "mac_missing_ru": "Нет отраслевых наборов, нет надстроек .NET/VBA/ActiveX, Express Tools частично"
+    },
+    {
+      "id": "autodesk.civil3d",
+      "name": "Civil 3D",
+      "publisher": "Autodesk",
+      "category": "cad",
+      "summary_en": "Civil engineering design",
+      "summary_ru": "Проектирование инфраструктуры",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.autodesk.com/products/civil-3d/overview"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "autodesk.revit",
+      "name": "Revit",
+      "publisher": "Autodesk",
+      "category": "cad",
+      "summary_en": "BIM design",
+      "summary_ru": "Проектирование BIM",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.autodesk.com/products/revit/overview"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "autodesk.fusion",
+      "name": "Autodesk Fusion",
+      "publisher": "Autodesk",
+      "category": "cad",
+      "summary_en": "CAD, CAM, CAE",
+      "summary_ru": "CAD, CAM, CAE",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.autodesk.com/products/fusion-360/overview",
+        "note_en": "Native Mac build, Apple Silicon",
+        "note_ru": "Родная сборка для Mac, Apple Silicon"
+      },
+      "windows": {
+        "winget": "Autodesk.Fusion",
+        "url": "https://www.autodesk.com/products/fusion-360/overview"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "dassault.solidworks",
+      "name": "SolidWorks",
+      "publisher": "Dassault Systemes",
+      "category": "cad",
+      "summary_en": "Mechanical CAD",
+      "summary_ru": "Машиностроительное проектирование",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.solidworks.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "trimble.teklastructures",
+      "name": "Tekla Structures",
+      "publisher": "Trimble",
+      "category": "cad",
+      "summary_en": "Structural BIM",
+      "summary_ru": "BIM для конструкций",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.tekla.com/products/tekla-structures"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "freecad.freecad",
+      "name": "FreeCAD",
+      "publisher": "FreeCAD project",
+      "category": "cad",
+      "summary_en": "Parametric 3D modeller",
+      "summary_ru": "Параметрическое 3D-моделирование",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.freecad.org/downloads.php",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "FreeCAD.FreeCAD",
+        "url": "https://www.freecad.org/downloads.php"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "kicad.kicad",
+      "name": "KiCad",
+      "publisher": "KiCad project",
+      "category": "cad",
+      "summary_en": "Electronics design",
+      "summary_ru": "Проектирование электроники",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.kicad.org/download/macos/",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "KiCad.KiCad",
+        "url": "https://www.kicad.org/download/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "trimble.sketchup",
+      "name": "SketchUp",
+      "publisher": "Trimble",
+      "category": "cad",
+      "summary_en": "3D modelling",
+      "summary_ru": "Трёхмерное моделирование",
+      "mac": {
+        "kind": "official",
+        "url": "https://sketchup.trimble.com/en/download/all",
+        "note_en": "Native Mac build available",
+        "note_ru": "Есть родная сборка для Mac"
+      },
+      "windows": {
+        "winget": "Trimble.SketchUp.2026",
+        "url": "https://sketchup.trimble.com/en/download/all"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "No Scan Essentials point clouds; fast-shadows toggle Windows-only",
+      "mac_missing_ru": "Нет Scan Essentials (облака точек); быстрые тени только Windows"
+    },
+    {
+      "id": "graphisoft.archicad",
+      "name": "Archicad",
+      "publisher": "Graphisoft",
+      "category": "cad",
+      "summary_en": "Architectural BIM",
+      "summary_ru": "BIM для архитектуры",
+      "mac": {
+        "kind": "official",
+        "url": "https://graphisoft.com/downloads/archicad",
+        "note_en": "Separate Apple Silicon build offered",
+        "note_ru": "Отдельная сборка под Apple Silicon"
+      },
+      "windows": {
+        "winget": null,
+        "url": "https://graphisoft.com/downloads/archicad"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "mcneel.rhino",
+      "name": "Rhino",
+      "publisher": "Robert McNeel & Associates",
+      "category": "cad",
+      "summary_en": "NURBS 3D modeller",
+      "summary_ru": "Моделирование NURBS",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.rhino3d.com/download/",
+        "note_en": "Rhino for Mac, Apple Silicon",
+        "note_ru": "Rhino для Mac, Apple Silicon"
+      },
+      "windows": {
+        "winget": null,
+        "url": "https://www.rhino3d.com/download/"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "Developer tools and plug-ins unavailable; some Windows commands missing",
+      "mac_missing_ru": "Нет средств разработки и плагинов; часть команд Windows отсутствует"
+    },
+    {
+      "id": "ansys.ansys",
+      "name": "Ansys",
+      "publisher": "Ansys",
+      "category": "cad",
+      "summary_en": "Engineering simulation",
+      "summary_ru": "Инженерное моделирование",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.ansys.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "mathworks.matlab",
+      "name": "MATLAB",
+      "publisher": "MathWorks",
+      "category": "cad",
+      "summary_en": "Numerical computing",
+      "summary_ru": "Численные расчёты",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.mathworks.com/downloads/",
+        "note_en": "Native Apple Silicon build",
+        "note_ru": "Родная сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": null,
+        "url": "https://www.mathworks.com/products/matlab.html"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "No Simulink Real-Time, GPU Coder, Polyspace, Data Acquisition Toolbox",
+      "mac_missing_ru": "Нет Simulink Real-Time, GPU Coder, Polyspace, Data Acquisition Toolbox"
+    },
+    {
+      "id": "videolan.vlc",
+      "name": "VLC",
+      "publisher": "VideoLAN",
+      "category": "media",
+      "summary_en": "Media player",
+      "summary_ru": "Медиаплеер",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.videolan.org/vlc/download-macosx.html",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "VideoLAN.VLC",
+        "url": "https://www.videolan.org/vlc/"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "No skins interface on macOS",
+      "mac_missing_ru": "Нет оформления (скинов) — только на Windows"
+    },
+    {
+      "id": "obsproject.obsstudio",
+      "name": "OBS Studio",
+      "publisher": "OBS Project",
+      "category": "media",
+      "summary_en": "Streaming and recording",
+      "summary_ru": "Запись и трансляция",
+      "mac": {
+        "kind": "official",
+        "url": "https://obsproject.com/download",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "OBSProject.OBSStudio",
+        "url": "https://obsproject.com/download"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "audacity.audacity",
+      "name": "Audacity",
+      "publisher": "Muse Group",
+      "category": "media",
+      "summary_en": "Audio editor",
+      "summary_ru": "Аудиоредактор",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.audacityteam.org/download/mac/",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Audacity.Audacity",
+        "url": "https://www.audacityteam.org/download/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "handbrake.handbrake",
+      "name": "HandBrake",
+      "publisher": "HandBrake team",
+      "category": "media",
+      "summary_en": "Video transcoder",
+      "summary_ru": "Перекодировщик видео",
+      "mac": {
+        "kind": "official",
+        "url": "https://handbrake.fr/downloads.php",
+        "note_en": "Universal build, Intel and arm64",
+        "note_ru": "Универсальная сборка, Intel и arm64"
+      },
+      "windows": {
+        "winget": "HandBrake.HandBrake",
+        "url": "https://handbrake.fr/downloads.php"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "peterpawlowski.foobar2000",
+      "name": "foobar2000",
+      "publisher": "Peter Pawlowski",
+      "category": "media",
+      "summary_en": "Audio player",
+      "summary_ru": "Аудиоплеер",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.foobar2000.org/mac",
+        "note_en": "Official Mac build exists",
+        "note_ru": "Официальная сборка для Mac есть"
+      },
+      "windows": {
+        "winget": "PeterPawlowski.foobar2000",
+        "url": "https://www.foobar2000.org/download"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "Third-party components barely ported: 6 for macOS, 143 Windows",
+      "mac_missing_ru": "Сторонних компонентов почти нет: 6 для macOS против 143 Windows"
+    },
+    {
+      "id": "spotify.spotify",
+      "name": "Spotify",
+      "publisher": "Spotify",
+      "category": "media",
+      "summary_en": "Music streaming",
+      "summary_ru": "Потоковая музыка",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.spotify.com/download/mac/",
+        "note_en": "Official Mac build",
+        "note_ru": "Официальная сборка для Mac"
+      },
+      "windows": {
+        "winget": "Spotify.Spotify",
+        "url": "https://www.spotify.com/download/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "blackmagic.davinciresolve",
+      "name": "DaVinci Resolve",
+      "publisher": "Blackmagic Design",
+      "category": "media",
+      "summary_en": "Video editing and grading",
+      "summary_ru": "Монтаж и цветокоррекция",
+      "mac": {
+        "kind": "appstore",
+        "appstore_id": "571213070",
+        "url": "https://apps.apple.com/app/id571213070",
+        "note_en": "Apple Silicon native, free version",
+        "note_ru": "Родная для Apple Silicon, бесплатная версия"
+      },
+      "windows": {
+        "winget": null,
+        "url": "https://www.blackmagicdesign.com/products/davinciresolve"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "adobe.premierepro",
+      "name": "Adobe Premiere Pro",
+      "publisher": "Adobe",
+      "category": "media",
+      "summary_en": "Video editor",
+      "summary_ru": "Видеоредактор",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.adobe.com/products/premiere/free-trial-download.html",
+        "note_en": "Native Apple Silicon, via Creative Cloud",
+        "note_ru": "Родная для Apple Silicon, через Creative Cloud"
+      },
+      "windows": {
+        "winget": null,
+        "url": "https://www.adobe.com/products/premiere/free-trial-download.html"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "No WMV, ASF, ICO import or PREL projects",
+      "mac_missing_ru": "Нет импорта WMV, ASF, ICO и проектов Premiere Elements"
+    },
+    {
+      "id": "thedocumentfoundation.libreoffice",
+      "name": "LibreOffice",
+      "publisher": "The Document Foundation",
+      "category": "office",
+      "summary_en": "Free office suite",
+      "summary_ru": "Свободный офисный пакет",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.libreoffice.org/download/download-libreoffice/",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "TheDocumentFoundation.LibreOffice",
+        "url": "https://www.libreoffice.org/download/download-libreoffice/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "adobe.acrobatreader",
+      "name": "Adobe Acrobat Reader",
+      "publisher": "Adobe",
+      "category": "office",
+      "summary_en": "PDF reader",
+      "summary_ru": "Просмотр PDF",
+      "mac": {
+        "kind": "official",
+        "url": "https://get.adobe.com/reader/",
+        "note_en": "Native Apple Silicon build",
+        "note_ru": "Родная сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Adobe.Acrobat.Reader.64-bit",
+        "url": "https://get.adobe.com/reader/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "notion.notion",
+      "name": "Notion",
+      "publisher": "Notion Labs",
+      "category": "office",
+      "summary_en": "Notes and wiki",
+      "summary_ru": "Заметки и база знаний",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.notion.com/desktop",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Notion.Notion",
+        "url": "https://www.notion.com/desktop"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "obsidian.obsidian",
+      "name": "Obsidian",
+      "publisher": "Obsidian",
+      "category": "office",
+      "summary_en": "Markdown knowledge base",
+      "summary_ru": "База знаний на Markdown",
+      "mac": {
+        "kind": "official",
+        "url": "https://obsidian.md/download",
+        "note_en": "Universal build, Apple Silicon",
+        "note_ru": "Универсальная сборка, Apple Silicon"
+      },
+      "windows": {
+        "winget": "Obsidian.Obsidian",
+        "url": "https://obsidian.md/download"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "sevenzip.sevenzip",
+      "name": "7-Zip",
+      "publisher": "Igor Pavlov",
+      "category": "utility",
+      "summary_en": "File archiver",
+      "summary_ru": "Архиватор файлов",
+      "mac": null,
+      "windows": {
+        "winget": "7zip.7zip",
+        "url": "https://www.7-zip.org/download.html"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "rarlab.winrar",
+      "name": "WinRAR",
+      "publisher": "RARLAB",
+      "category": "utility",
+      "summary_en": "File archiver",
+      "summary_ru": "Архиватор файлов",
+      "mac": null,
+      "windows": {
+        "winget": "RARLab.WinRAR",
+        "url": "https://www.rarlab.com/download.htm"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "zoom.zoom",
+      "name": "Zoom",
+      "publisher": "Zoom Communications",
+      "category": "utility",
+      "summary_en": "Video meetings",
+      "summary_ru": "Видеовстречи",
+      "mac": {
+        "kind": "official",
+        "url": "https://zoom.us/download",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Zoom.Zoom",
+        "url": "https://zoom.us/download"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "telegram.telegramdesktop",
+      "name": "Telegram",
+      "publisher": "Telegram",
+      "category": "utility",
+      "summary_en": "Messenger",
+      "summary_ru": "Мессенджер",
+      "mac": {
+        "kind": "appstore",
+        "appstore_id": "747648890",
+        "url": "https://apps.apple.com/app/id747648890",
+        "note_en": "Native Mac app, free",
+        "note_ru": "Родное приложение для Mac, бесплатно"
+      },
+      "windows": {
+        "winget": "Telegram.TelegramDesktop",
+        "url": "https://desktop.telegram.org/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "discord.discord",
+      "name": "Discord",
+      "publisher": "Discord",
+      "category": "utility",
+      "summary_en": "Voice and text chat",
+      "summary_ru": "Голосовой и текстовый чат",
+      "mac": {
+        "kind": "official",
+        "url": "https://discord.com/download",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Discord.Discord",
+        "url": "https://discord.com/download"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "No in-game overlay on macOS",
+      "mac_missing_ru": "Нет игрового оверлея на macOS"
+    },
+    {
+      "id": "slacktechnologies.slack",
+      "name": "Slack",
+      "publisher": "Slack Technologies",
+      "category": "utility",
+      "summary_en": "Work chat",
+      "summary_ru": "Рабочий чат",
+      "mac": {
+        "kind": "appstore",
+        "appstore_id": "803453959",
+        "url": "https://apps.apple.com/app/id803453959",
+        "note_en": "Mac App Store, free",
+        "note_ru": "Mac App Store, бесплатно"
+      },
+      "windows": {
+        "winget": "SlackTechnologies.Slack",
+        "url": "https://slack.com/downloads"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "google.chrome",
+      "name": "Google Chrome",
+      "publisher": "Google",
+      "category": "utility",
+      "summary_en": "Web browser",
+      "summary_ru": "Веб-браузер",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.google.com/chrome/",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Google.Chrome",
+        "url": "https://www.google.com/chrome/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "mozilla.firefox",
+      "name": "Mozilla Firefox",
+      "publisher": "Mozilla",
+      "category": "utility",
+      "summary_en": "Web browser",
+      "summary_ru": "Веб-браузер",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.mozilla.org/firefox/new/",
+        "note_en": "Universal build, Apple Silicon",
+        "note_ru": "Универсальная сборка, Apple Silicon"
+      },
+      "windows": {
+        "winget": "Mozilla.Firefox",
+        "url": "https://www.mozilla.org/firefox/new/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "mozilla.thunderbird",
+      "name": "Mozilla Thunderbird",
+      "publisher": "Mozilla",
+      "category": "utility",
+      "summary_en": "Mail client",
+      "summary_ru": "Почтовый клиент",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.thunderbird.net/",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "Mozilla.Thunderbird",
+        "url": "https://www.thunderbird.net/"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "qbittorrent.qbittorrent",
+      "name": "qBittorrent",
+      "publisher": "qBittorrent project",
+      "category": "utility",
+      "summary_en": "Torrent client",
+      "summary_ru": "Торрент-клиент",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.qbittorrent.org/download",
+        "note_en": "Apple Silicon build available",
+        "note_ru": "Есть сборка для Apple Silicon"
+      },
+      "windows": {
+        "winget": "qBittorrent.qBittorrent",
+        "url": "https://www.qbittorrent.org/download"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "valve.steam",
+      "name": "Steam",
+      "publisher": "Valve",
+      "category": "games",
+      "summary_en": "Game store and launcher",
+      "summary_ru": "Магазин и лаунчер игр",
+      "mac": {
+        "kind": "official",
+        "url": "https://store.steampowered.com/about/",
+        "note_en": "Mac client available",
+        "note_ru": "Есть клиент для Mac"
+      },
+      "windows": {
+        "winget": "Valve.Steam",
+        "url": "https://store.steampowered.com/about/"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "No Steam Play/Proton, no SteamVR; Windows-only games uninstallable",
+      "mac_missing_ru": "Нет Steam Play/Proton и SteamVR; игры без Mac-сборки не установить"
+    },
+    {
+      "id": "epicgames.epicgameslauncher",
+      "name": "Epic Games Launcher",
+      "publisher": "Epic Games",
+      "category": "games",
+      "summary_en": "Game store and launcher",
+      "summary_ru": "Магазин и лаунчер игр",
+      "mac": {
+        "kind": "official",
+        "url": "https://store.epicgames.com/en-US/download",
+        "note_en": "Mac client available",
+        "note_ru": "Есть клиент для Mac"
+      },
+      "windows": {
+        "winget": "EpicGames.EpicGamesLauncher",
+        "url": "https://store.epicgames.com/en-US/download"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "No Fortnite; most Epic Games Store titles lack Mac builds",
+      "mac_missing_ru": "Нет Fortnite; у большинства игр EGS нет сборки для Mac"
+    },
+    {
+      "id": "gog.galaxy",
+      "name": "GOG Galaxy",
+      "publisher": "GOG",
+      "category": "games",
+      "summary_en": "Game library client",
+      "summary_ru": "Клиент игровой библиотеки",
+      "mac": {
+        "kind": "official",
+        "url": "https://www.gog.com/galaxy",
+        "note_en": "Mac client available",
+        "note_ru": "Есть клиент для Mac"
+      },
+      "windows": {
+        "winget": "GOG.Galaxy",
+        "url": "https://www.gog.com/galaxy"
+      },
+      "mac_equivalence": "full"
+    },
+    {
+      "id": "blizzard.battlenet",
+      "name": "Battle.net",
+      "publisher": "Blizzard Entertainment",
+      "category": "games",
+      "summary_en": "Game launcher",
+      "summary_ru": "Лаунчер игр",
+      "mac": {
+        "kind": "official",
+        "url": "https://download.battle.net/",
+        "note_en": "Mac client available",
+        "note_ru": "Есть клиент для Mac"
+      },
+      "windows": {
+        "winget": "Blizzard.BattleNet",
+        "url": "https://download.battle.net/"
+      },
+      "mac_equivalence": "reduced",
+      "mac_missing_en": "Only six Blizzard titles on Mac; Diablo IV missing",
+      "mac_missing_ru": "На Mac только шесть игр Blizzard; Diablo IV нет"
+    },
+    {
+      "id": "microsoft.access",
+      "name": "Microsoft Access",
+      "publisher": "Microsoft",
+      "category": "microsoft",
+      "summary_en": "Desktop database",
+      "summary_ru": "База данных для ПК",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Office",
+        "url": "https://www.microsoft.com/en-us/microsoft-365/access"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.project",
+      "name": "Microsoft Project",
+      "publisher": "Microsoft",
+      "category": "microsoft",
+      "summary_en": "Project management",
+      "summary_ru": "Управление проектами",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Office",
+        "url": "https://www.microsoft.com/en-us/microsoft-365/project/project-management-software"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.publisher",
+      "name": "Microsoft Publisher",
+      "publisher": "Microsoft",
+      "category": "microsoft",
+      "summary_en": "Desktop publishing",
+      "summary_ru": "Вёрстка публикаций",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Office",
+        "url": "https://www.microsoft.com/en-us/microsoft-365/publisher"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.visio",
+      "name": "Microsoft Visio",
+      "publisher": "Microsoft",
+      "category": "microsoft",
+      "summary_en": "Diagrams and charts",
+      "summary_ru": "Схемы и диаграммы",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Office",
+        "url": "https://www.microsoft.com/en-us/microsoft-365/visio/flowchart-software"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.visioviewer",
+      "name": "Visio Viewer",
+      "publisher": "Microsoft",
+      "category": "microsoft",
+      "summary_en": "Free Visio viewer",
+      "summary_ru": "Просмотр схем Visio",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.VisioViewer",
+        "url": "https://www.microsoft.com/en-us/download/details.aspx?id=51188"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.powerbi",
+      "name": "Power BI Desktop",
+      "publisher": "Microsoft",
+      "category": "microsoft",
+      "summary_en": "Business analytics",
+      "summary_ru": "Бизнес-аналитика",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.PowerBI",
+        "url": "https://powerbi.microsoft.com/desktop/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.windowsterminal",
+      "name": "Windows Terminal",
+      "publisher": "Microsoft",
+      "category": "utility",
+      "summary_en": "Windows shell terminal",
+      "summary_ru": "Терминал для Windows",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.WindowsTerminal",
+        "url": "https://github.com/microsoft/terminal"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.wsl",
+      "name": "Windows Subsystem for Linux",
+      "publisher": "Microsoft",
+      "category": "utility",
+      "summary_en": "Linux inside Windows",
+      "summary_ru": "Linux внутри Windows",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.WSL",
+        "url": "https://learn.microsoft.com/windows/wsl/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.mousewithoutborders",
+      "name": "Mouse Without Borders",
+      "publisher": "Microsoft",
+      "category": "utility",
+      "summary_en": "One mouse, many PCs",
+      "summary_ru": "Одна мышь на ПК",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.MouseWithoutBorders",
+        "url": "https://learn.microsoft.com/windows/powertoys/mouse-without-borders"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.mouseandkeyboardcenter",
+      "name": "Mouse and Keyboard Center",
+      "publisher": "Microsoft",
+      "category": "utility",
+      "summary_en": "Microsoft device setup",
+      "summary_ru": "Настройка мыши Microsoft",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.MouseandKeyboardCenter",
+        "url": "https://www.microsoft.com/accessories/downloads"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.windbg",
+      "name": "WinDbg",
+      "publisher": "Microsoft",
+      "category": "dev",
+      "summary_en": "Windows kernel debugger",
+      "summary_ru": "Отладчик ядра Windows",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.WinDbg",
+        "url": "https://learn.microsoft.com/windows-hardware/drivers/debugger/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.windowssdk",
+      "name": "Windows SDK",
+      "publisher": "Microsoft",
+      "category": "dev",
+      "summary_en": "Windows app SDK",
+      "summary_ru": "Набор разработчика Windows",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.WindowsSDK",
+        "url": "https://developer.microsoft.com/windows/downloads/windows-sdk/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.windowswdk",
+      "name": "Windows Driver Kit",
+      "publisher": "Microsoft",
+      "category": "dev",
+      "summary_en": "Driver development kit",
+      "summary_ru": "Набор разработки драйверов",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.WindowsWDK",
+        "url": "https://learn.microsoft.com/windows-hardware/drivers/download-the-wdk"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.vsbuildtools",
+      "name": "Visual Studio Build Tools",
+      "publisher": "Microsoft",
+      "category": "dev",
+      "summary_en": "MSVC compilers only",
+      "summary_ru": "Только компиляторы MSVC",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.VisualStudio.2022.BuildTools",
+        "url": "https://visualstudio.microsoft.com/downloads/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.ssms",
+      "name": "SQL Server Management Studio",
+      "publisher": "Microsoft",
+      "category": "dev",
+      "summary_en": "SQL Server admin GUI",
+      "summary_ru": "Управление SQL Server",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.SQLServerManagementStudio",
+        "url": "https://learn.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.sqlserver",
+      "name": "SQL Server",
+      "publisher": "Microsoft",
+      "category": "dev",
+      "summary_en": "Database engine",
+      "summary_ru": "Сервер баз данных",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.SQLServer",
+        "url": "https://www.microsoft.com/sql-server/sql-server-downloads"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.debugdiag",
+      "name": "DebugDiag",
+      "publisher": "Microsoft",
+      "category": "dev",
+      "summary_en": "Crash dump analyzer",
+      "summary_ru": "Разбор аварийных дампов",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.DebugDiag",
+        "url": "https://www.microsoft.com/en-us/download/details.aspx?id=103453"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.sysinternals.processexplorer",
+      "name": "Process Explorer",
+      "publisher": "Microsoft",
+      "category": "utility",
+      "summary_en": "Advanced task manager",
+      "summary_ru": "Продвинутый диспетчер задач",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Sysinternals.ProcessExplorer",
+        "url": "https://learn.microsoft.com/sysinternals/downloads/process-explorer"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.sysinternals.processmonitor",
+      "name": "Process Monitor",
+      "publisher": "Microsoft",
+      "category": "utility",
+      "summary_en": "File and registry tracing",
+      "summary_ru": "Трассировка файлов и реестра",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Sysinternals.ProcessMonitor",
+        "url": "https://learn.microsoft.com/sysinternals/downloads/procmon"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.sysinternals.autoruns",
+      "name": "Autoruns",
+      "publisher": "Microsoft",
+      "category": "utility",
+      "summary_en": "Startup entry manager",
+      "summary_ru": "Управление автозапуском",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Sysinternals.Autoruns",
+        "url": "https://learn.microsoft.com/sysinternals/downloads/autoruns"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.sysinternals.tcpview",
+      "name": "TCPView",
+      "publisher": "Microsoft",
+      "category": "utility",
+      "summary_en": "Live TCP connections",
+      "summary_ru": "Активные соединения TCP",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Sysinternals.TCPView",
+        "url": "https://learn.microsoft.com/sysinternals/downloads/tcpview"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.sysinternals.zoomit",
+      "name": "ZoomIt",
+      "publisher": "Microsoft",
+      "category": "utility",
+      "summary_en": "Screen zoom for demos",
+      "summary_ru": "Увеличение экрана для показа",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Sysinternals.ZoomIt",
+        "url": "https://learn.microsoft.com/sysinternals/downloads/zoomit"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.sysinternals.rammap",
+      "name": "RAMMap",
+      "publisher": "Microsoft",
+      "category": "utility",
+      "summary_en": "Physical memory map",
+      "summary_ru": "Карта физической памяти",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Sysinternals.RAMMap",
+        "url": "https://learn.microsoft.com/sysinternals/downloads/rammap"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.sysinternals.vmmap",
+      "name": "VMMap",
+      "publisher": "Microsoft",
+      "category": "dev",
+      "summary_en": "Process memory analysis",
+      "summary_ru": "Анализ памяти процесса",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Sysinternals.VMMap",
+        "url": "https://learn.microsoft.com/sysinternals/downloads/vmmap"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.sysinternals.debugview",
+      "name": "DebugView",
+      "publisher": "Microsoft",
+      "category": "dev",
+      "summary_en": "Capture debug output",
+      "summary_ru": "Перехват отладочного вывода",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Sysinternals.DebugView",
+        "url": "https://learn.microsoft.com/sysinternals/downloads/debugview"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.sysinternals.sysmon",
+      "name": "Sysmon",
+      "publisher": "Microsoft",
+      "category": "utility",
+      "summary_en": "System activity logging",
+      "summary_ru": "Журнал системной активности",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Sysinternals.Sysmon",
+        "url": "https://learn.microsoft.com/sysinternals/downloads/sysmon"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.sysinternals.pstools",
+      "name": "PsTools",
+      "publisher": "Microsoft",
+      "category": "utility",
+      "summary_en": "Remote admin command set",
+      "summary_ru": "Набор команд администратора",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Sysinternals.PsTools",
+        "url": "https://learn.microsoft.com/sysinternals/downloads/pstools"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.sysinternals.rdcman",
+      "name": "RDCMan",
+      "publisher": "Microsoft",
+      "category": "utility",
+      "summary_en": "Remote desktop manager",
+      "summary_ru": "Менеджер удалённых столов",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Sysinternals.RDCMan",
+        "url": "https://learn.microsoft.com/sysinternals/downloads/rdcman"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "microsoft.sysinternals.suite",
+      "name": "Sysinternals Suite",
+      "publisher": "Microsoft",
+      "category": "utility",
+      "summary_en": "All Sysinternals tools",
+      "summary_ru": "Все утилиты Sysinternals",
+      "mac": null,
+      "windows": {
+        "winget": "Microsoft.Sysinternals.Suite",
+        "url": "https://learn.microsoft.com/sysinternals/downloads/sysinternals-suite"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "x64dbg.x64dbg",
+      "name": "x64dbg",
+      "publisher": "x64dbg team",
+      "category": "dev",
+      "summary_en": "Windows binary debugger",
+      "summary_ru": "Отладчик двоичных Windows",
+      "mac": null,
+      "windows": {
+        "winget": "x64dbg.x64dbg",
+        "url": "https://x64dbg.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "dnspyex.dnspy",
+      "name": "dnSpy",
+      "publisher": "dnSpyEx",
+      "category": "dev",
+      "summary_en": ".NET decompiler debugger",
+      "summary_ru": "Декомпилятор .NET",
+      "mac": null,
+      "windows": {
+        "winget": "dnSpyEx.dnSpy",
+        "url": "https://github.com/dnSpyEx/dnSpy"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "angusjohnson.resourcehacker",
+      "name": "Resource Hacker",
+      "publisher": "Angus Johnson",
+      "category": "dev",
+      "summary_en": "Edit PE resources",
+      "summary_ru": "Правка ресурсов PE",
+      "mac": null,
+      "windows": {
+        "winget": "AngusJohnson.ResourceHacker",
+        "url": "https://www.angusj.com/resourcehacker/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "jrsoftware.innosetup",
+      "name": "Inno Setup",
+      "publisher": "JRSoftware",
+      "category": "dev",
+      "summary_en": "Installer builder",
+      "summary_ru": "Сборка установщиков",
+      "mac": null,
+      "windows": {
+        "winget": "JRSoftware.InnoSetup",
+        "url": "https://jrsoftware.org/isinfo.php"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "nsis.nsis",
+      "name": "NSIS",
+      "publisher": "NSIS",
+      "category": "dev",
+      "summary_en": "Scriptable install system",
+      "summary_ru": "Скриптовые установщики",
+      "mac": null,
+      "windows": {
+        "winget": "NSIS.NSIS",
+        "url": "https://nsis.sourceforge.io/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "autohotkey.autohotkey",
+      "name": "AutoHotkey",
+      "publisher": "AutoHotkey",
+      "category": "dev",
+      "summary_en": "Windows automation scripting",
+      "summary_ru": "Автоматизация Windows",
+      "mac": null,
+      "windows": {
+        "winget": "AutoHotkey.AutoHotkey",
+        "url": "https://www.autohotkey.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "autoit.autoit",
+      "name": "AutoIt",
+      "publisher": "AutoIt",
+      "category": "dev",
+      "summary_en": "GUI automation language",
+      "summary_ru": "Язык автоматизации окон",
+      "mac": null,
+      "windows": {
+        "winget": "AutoIt.AutoIt",
+        "url": "https://www.autoitscript.com/site/autoit/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "winmerge.winmerge",
+      "name": "WinMerge",
+      "publisher": "WinMerge",
+      "category": "dev",
+      "summary_en": "Diff and merge tool",
+      "summary_ru": "Сравнение и слияние",
+      "mac": null,
+      "windows": {
+        "winget": "WinMerge.WinMerge",
+        "url": "https://winmerge.org/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "mremoteng.mremoteng",
+      "name": "mRemoteNG",
+      "publisher": "mRemoteNG",
+      "category": "utility",
+      "summary_en": "Multi-protocol remote access",
+      "summary_ru": "Многопротокольный доступ",
+      "mac": null,
+      "windows": {
+        "winget": "mRemoteNG.mRemoteNG",
+        "url": "https://mremoteng.org/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "embarcadero.devcpp",
+      "name": "Dev-C++",
+      "publisher": "Embarcadero",
+      "category": "dev",
+      "summary_en": "Classic C++ IDE",
+      "summary_ru": "Классическая среда C++",
+      "mac": null,
+      "windows": {
+        "winget": "Embarcadero.Dev-C++",
+        "url": "https://www.embarcadero.com/free-tools/dev-cpp"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "msys2.msys2",
+      "name": "MSYS2",
+      "publisher": "MSYS2",
+      "category": "dev",
+      "summary_en": "Unix toolchain for Windows",
+      "summary_ru": "Unix-окружение для Windows",
+      "mac": null,
+      "windows": {
+        "winget": "MSYS2.MSYS2",
+        "url": "https://www.msys2.org/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "cygwin.cygwin",
+      "name": "Cygwin",
+      "publisher": "Cygwin",
+      "category": "dev",
+      "summary_en": "POSIX layer for Windows",
+      "summary_ru": "POSIX-слой для Windows",
+      "mac": null,
+      "windows": {
+        "winget": "Cygwin.Cygwin",
+        "url": "https://www.cygwin.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "akelpad.akelpad",
+      "name": "AkelPad",
+      "publisher": "AkelPad",
+      "category": "dev",
+      "summary_en": "Lightweight text editor",
+      "summary_ru": "Легкий текстовый редактор",
+      "mac": null,
+      "windows": {
+        "winget": "AkelPad.AkelPad",
+        "url": "https://akelpad.sourceforge.net/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "notepad2mod.notepad2mod",
+      "name": "Notepad2-mod",
+      "publisher": "Notepad2-mod",
+      "category": "dev",
+      "summary_en": "Small code editor",
+      "summary_ru": "Маленький редактор кода",
+      "mac": null,
+      "windows": {
+        "winget": "Notepad2mod.Notepad2mod",
+        "url": "https://github.com/XhmikosR/notepad2-mod"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "mhnexus.hxd",
+      "name": "HxD",
+      "publisher": "mh-nexus",
+      "category": "dev",
+      "summary_en": "Hex and disk editor",
+      "summary_ru": "Редактор дисков и байтов",
+      "mac": null,
+      "windows": {
+        "winget": "MHNexus.HxD",
+        "url": "https://mh-nexus.de/en/hxd/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "jetbrains.resharper",
+      "name": "ReSharper",
+      "publisher": "JetBrains",
+      "category": "dev",
+      "summary_en": "Visual Studio extension",
+      "summary_ru": "Расширение для Visual Studio",
+      "mac": null,
+      "windows": {
+        "winget": "JetBrains.ReSharper",
+        "url": "https://www.jetbrains.com/resharper/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "jetbrains.dotpeek",
+      "name": "dotPeek",
+      "publisher": "JetBrains",
+      "category": "dev",
+      "summary_en": ".NET decompiler",
+      "summary_ru": "Декомпилятор .NET",
+      "mac": null,
+      "windows": {
+        "winget": "JetBrains.dotPeek",
+        "url": "https://www.jetbrains.com/decompiler/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "jetbrains.dottrace",
+      "name": "dotTrace",
+      "publisher": "JetBrains",
+      "category": "dev",
+      "summary_en": ".NET performance profiler",
+      "summary_ru": "Профилировщик .NET",
+      "mac": null,
+      "windows": {
+        "winget": "JetBrains.dotTrace",
+        "url": "https://www.jetbrains.com/profiler/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "jetbrains.dotultimate",
+      "name": "dotUltimate",
+      "publisher": "JetBrains",
+      "category": "dev",
+      "summary_en": "JetBrains .NET tool set",
+      "summary_ru": "Набор средств .NET",
+      "mac": null,
+      "windows": {
+        "winget": "JetBrains.dotUltimate",
+        "url": "https://www.jetbrains.com/dotnet/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "voidtools.everything",
+      "name": "Everything",
+      "publisher": "voidtools",
+      "category": "utility",
+      "summary_en": "Instant file search",
+      "summary_ru": "Мгновенный поиск файлов",
+      "mac": null,
+      "windows": {
+        "winget": "voidtools.Everything",
+        "url": "https://www.voidtools.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "ghisler.totalcommander",
+      "name": "Total Commander",
+      "publisher": "Ghisler",
+      "category": "utility",
+      "summary_en": "Dual-pane file manager",
+      "summary_ru": "Двухпанельный файловый менеджер",
+      "mac": null,
+      "windows": {
+        "winget": "Ghisler.TotalCommander",
+        "url": "https://www.ghisler.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "bandisoft.honeyview",
+      "name": "Honeyview",
+      "publisher": "Bandisoft",
+      "category": "utility",
+      "summary_en": "Fast image viewer",
+      "summary_ru": "Быстрый просмотр картинок",
+      "mac": null,
+      "windows": {
+        "winget": "Bandisoft.Honeyview",
+        "url": "https://en.bandisoft.com/honeyview/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "rufus.rufus",
+      "name": "Rufus",
+      "publisher": "Akeo",
+      "category": "utility",
+      "summary_en": "Bootable USB creator",
+      "summary_ru": "Создание загрузочных флешек",
+      "mac": null,
+      "windows": {
+        "winget": "Rufus.Rufus",
+        "url": "https://rufus.ie/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "ventoy.ventoy",
+      "name": "Ventoy",
+      "publisher": "Ventoy",
+      "category": "utility",
+      "summary_en": "Multi-ISO boot USB",
+      "summary_ru": "Загрузка многих ISO",
+      "mac": null,
+      "windows": {
+        "winget": "Ventoy.Ventoy",
+        "url": "https://www.ventoy.net/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "crystaldewworld.crystaldiskinfo",
+      "name": "CrystalDiskInfo",
+      "publisher": "Crystal Dew World",
+      "category": "utility",
+      "summary_en": "Drive health monitor",
+      "summary_ru": "Здоровье накопителей",
+      "mac": null,
+      "windows": {
+        "winget": "CrystalDewWorld.CrystalDiskInfo",
+        "url": "https://crystalmark.info/en/software/crystaldiskinfo/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "crystaldewworld.crystaldiskmark",
+      "name": "CrystalDiskMark",
+      "publisher": "Crystal Dew World",
+      "category": "utility",
+      "summary_en": "Disk speed benchmark",
+      "summary_ru": "Тест скорости диска",
+      "mac": null,
+      "windows": {
+        "winget": "CrystalDewWorld.CrystalDiskMark",
+        "url": "https://crystalmark.info/en/software/crystaldiskmark/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "realix.hwinfo",
+      "name": "HWiNFO",
+      "publisher": "REALiX",
+      "category": "utility",
+      "summary_en": "Hardware sensor monitor",
+      "summary_ru": "Датчики оборудования",
+      "mac": null,
+      "windows": {
+        "winget": "REALiX.HWiNFO",
+        "url": "https://www.hwinfo.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "cpuid.cpuz",
+      "name": "CPU-Z",
+      "publisher": "CPUID",
+      "category": "utility",
+      "summary_en": "CPU identification tool",
+      "summary_ru": "Сведения о процессоре",
+      "mac": null,
+      "windows": {
+        "winget": "CPUID.CPU-Z",
+        "url": "https://www.cpuid.com/softwares/cpu-z.html"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "cpuid.hwmonitor",
+      "name": "HWMonitor",
+      "publisher": "CPUID",
+      "category": "utility",
+      "summary_en": "Temperature and voltage monitor",
+      "summary_ru": "Температуры и напряжения",
+      "mac": null,
+      "windows": {
+        "winget": "CPUID.HWMonitor",
+        "url": "https://www.cpuid.com/softwares/hwmonitor.html"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "techpowerup.gpuz",
+      "name": "GPU-Z",
+      "publisher": "TechPowerUp",
+      "category": "utility",
+      "summary_en": "GPU information tool",
+      "summary_ru": "Сведения о видеокарте",
+      "mac": null,
+      "windows": {
+        "winget": "TechPowerUp.GPU-Z",
+        "url": "https://www.techpowerup.com/gpuz/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "techpowerup.nvcleanstall",
+      "name": "NVCleanstall",
+      "publisher": "TechPowerUp",
+      "category": "utility",
+      "summary_en": "Custom NVIDIA driver setup",
+      "summary_ru": "Чистая установка драйвера NVIDIA",
+      "mac": null,
+      "windows": {
+        "winget": "TechPowerUp.NVCleanstall",
+        "url": "https://www.techpowerup.com/nvcleanstall/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "techpowerup.throttlestop",
+      "name": "ThrottleStop",
+      "publisher": "TechPowerUp",
+      "category": "utility",
+      "summary_en": "CPU throttling control",
+      "summary_ru": "Управление троттлингом ЦП",
+      "mac": null,
+      "windows": {
+        "winget": "TechPowerUp.ThrottleStop",
+        "url": "https://www.techpowerup.com/download/techpowerup-throttlestop/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "guru3d.afterburner",
+      "name": "MSI Afterburner",
+      "publisher": "Guru3D",
+      "category": "utility",
+      "summary_en": "GPU overclocking tool",
+      "summary_ru": "Разгон видеокарты",
+      "mac": null,
+      "windows": {
+        "winget": "Guru3D.Afterburner",
+        "url": "https://www.guru3d.com/download/msi-afterburner-beta-download/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "guru3d.rtss",
+      "name": "RivaTuner Statistics Server",
+      "publisher": "Guru3D",
+      "category": "utility",
+      "summary_en": "Frame rate overlay",
+      "summary_ru": "Оверлей частоты кадров",
+      "mac": null,
+      "windows": {
+        "winget": "Guru3D.RTSS",
+        "url": "https://www.guru3d.com/download/rtss-rivatuner-statistics-server-download/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "finalwire.aida64",
+      "name": "AIDA64",
+      "publisher": "FinalWire",
+      "category": "utility",
+      "summary_en": "System diagnostics suite",
+      "summary_ru": "Диагностика системы",
+      "mac": null,
+      "windows": {
+        "winget": "FinalWire.AIDA64",
+        "url": "https://www.aida64.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "piriform.ccleaner",
+      "name": "CCleaner",
+      "publisher": "Piriform",
+      "category": "utility",
+      "summary_en": "System cleanup tool",
+      "summary_ru": "Очистка системы",
+      "mac": null,
+      "windows": {
+        "winget": "Piriform.CCleaner",
+        "url": "https://www.ccleaner.com/ccleaner"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "piriform.defraggler",
+      "name": "Defraggler",
+      "publisher": "Piriform",
+      "category": "utility",
+      "summary_en": "Disk defragmenter",
+      "summary_ru": "Дефрагментация диска",
+      "mac": null,
+      "windows": {
+        "winget": "Piriform.Defraggler",
+        "url": "https://www.ccleaner.com/defraggler"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "piriform.recuva",
+      "name": "Recuva",
+      "publisher": "Piriform",
+      "category": "utility",
+      "summary_en": "Deleted file recovery",
+      "summary_ru": "Восстановление удалённых файлов",
+      "mac": null,
+      "windows": {
+        "winget": "Piriform.Recuva",
+        "url": "https://www.ccleaner.com/recuva"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "piriform.speccy",
+      "name": "Speccy",
+      "publisher": "Piriform",
+      "category": "utility",
+      "summary_en": "Hardware inventory",
+      "summary_ru": "Сведения о комплектующих",
+      "mac": null,
+      "windows": {
+        "winget": "Piriform.Speccy",
+        "url": "https://www.ccleaner.com/speccy"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "windirstat.windirstat",
+      "name": "WinDirStat",
+      "publisher": "WinDirStat",
+      "category": "utility",
+      "summary_en": "Disk usage visualizer",
+      "summary_ru": "Карта занятого места",
+      "mac": null,
+      "windows": {
+        "winget": "WinDirStat.WinDirStat",
+        "url": "https://windirstat.net/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "jamsoftware.treesize",
+      "name": "TreeSize Free",
+      "publisher": "JAM Software",
+      "category": "utility",
+      "summary_en": "Folder size analyzer",
+      "summary_ru": "Размеры папок",
+      "mac": null,
+      "windows": {
+        "winget": "JAMSoftware.TreeSize",
+        "url": "https://www.jam-software.com/treesize_free"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "jamsoftware.ultrasearch",
+      "name": "UltraSearch",
+      "publisher": "JAM Software",
+      "category": "utility",
+      "summary_en": "NTFS instant search",
+      "summary_ru": "Мгновенный поиск в NTFS",
+      "mac": null,
+      "windows": {
+        "winget": "JAMSoftware.UltraSearch",
+        "url": "https://www.jam-software.com/ultrasearch"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "jamsoftware.heavyload",
+      "name": "HeavyLoad",
+      "publisher": "JAM Software",
+      "category": "utility",
+      "summary_en": "System stress test",
+      "summary_ru": "Нагрузочный тест системы",
+      "mac": null,
+      "windows": {
+        "winget": "JAMSoftware.HeavyLoad",
+        "url": "https://www.jam-software.com/heavyload"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "sharex.sharex",
+      "name": "ShareX",
+      "publisher": "ShareX Team",
+      "category": "utility",
+      "summary_en": "Screenshot and capture",
+      "summary_ru": "Снимки экрана и запись",
+      "mac": null,
+      "windows": {
+        "winget": "ShareX.ShareX",
+        "url": "https://getsharex.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "sandboxie.plus",
+      "name": "Sandboxie Plus",
+      "publisher": "Sandboxie",
+      "category": "utility",
+      "summary_en": "Application sandbox",
+      "summary_ru": "Песочница для программ",
+      "mac": null,
+      "windows": {
+        "winget": "Sandboxie.Plus",
+        "url": "https://sandboxie-plus.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "winaero.tweaker",
+      "name": "Winaero Tweaker",
+      "publisher": "Winaero",
+      "category": "utility",
+      "summary_en": "Windows settings tweaker",
+      "summary_ru": "Тонкая настройка Windows",
+      "mac": null,
+      "windows": {
+        "winget": "winaero.tweaker",
+        "url": "https://winaero.com/winaero-tweaker/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "stardock.fences",
+      "name": "Fences",
+      "publisher": "Stardock",
+      "category": "utility",
+      "summary_en": "Desktop icon organizer",
+      "summary_ru": "Порядок значков на столе",
+      "mac": null,
+      "windows": {
+        "winget": "Stardock.Fences",
+        "url": "https://www.stardock.com/products/fences/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "stardock.start11",
+      "name": "Start11",
+      "publisher": "Stardock",
+      "category": "utility",
+      "summary_en": "Start menu replacement",
+      "summary_ru": "Замена меню Пуск",
+      "mac": null,
+      "windows": {
+        "winget": "Stardock.Start11",
+        "url": "https://www.stardock.com/products/start11/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "stardock.groupy",
+      "name": "Groupy",
+      "publisher": "Stardock",
+      "category": "utility",
+      "summary_en": "Tabbed application windows",
+      "summary_ru": "Вкладки для окон",
+      "mac": null,
+      "windows": {
+        "winget": "Stardock.Groupy",
+        "url": "https://www.stardock.com/products/groupy/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "rainmeter.rainmeter",
+      "name": "Rainmeter",
+      "publisher": "Rainmeter",
+      "category": "utility",
+      "summary_en": "Desktop widgets engine",
+      "summary_ru": "Виджеты рабочего стола",
+      "mac": null,
+      "windows": {
+        "winget": "Rainmeter.Rainmeter",
+        "url": "https://www.rainmeter.net/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "aomei.backupper",
+      "name": "AOMEI Backupper",
+      "publisher": "AOMEI",
+      "category": "utility",
+      "summary_en": "Disk backup and clone",
+      "summary_ru": "Резервные копии диска",
+      "mac": null,
+      "windows": {
+        "winget": "AOMEI.Backupper",
+        "url": "https://www.ubackup.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "aomei.partitionassistant",
+      "name": "AOMEI Partition Assistant",
+      "publisher": "AOMEI",
+      "category": "utility",
+      "summary_en": "Partition manager",
+      "summary_ru": "Управление разделами",
+      "mac": null,
+      "windows": {
+        "winget": "AOMEI.PartitionAssistant",
+        "url": "https://www.diskpart.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "easeus.partitionmaster",
+      "name": "EaseUS Partition Master",
+      "publisher": "EaseUS",
+      "category": "utility",
+      "summary_en": "Partition manager",
+      "summary_ru": "Управление разделами",
+      "mac": null,
+      "windows": {
+        "winget": "EaseUS.PartitionMaster",
+        "url": "https://www.easeus.com/partition-manager/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "easeus.todobackup",
+      "name": "EaseUS Todo Backup",
+      "publisher": "EaseUS",
+      "category": "utility",
+      "summary_en": "Backup and recovery",
+      "summary_ru": "Копии и восстановление",
+      "mac": null,
+      "windows": {
+        "winget": "EaseUS.TodoBackup",
+        "url": "https://www.easeus.com/backup-software/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "minitool.partitionwizard",
+      "name": "MiniTool Partition Wizard",
+      "publisher": "MiniTool",
+      "category": "utility",
+      "summary_en": "Partition manager",
+      "summary_ru": "Управление разделами",
+      "mac": null,
+      "windows": {
+        "winget": "MiniTool.PartitionWizard",
+        "url": "https://www.partitionwizard.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "veeam.agent",
+      "name": "Veeam Agent for Windows",
+      "publisher": "Veeam",
+      "category": "utility",
+      "summary_en": "Endpoint backup agent",
+      "summary_ru": "Резервное копирование ПК",
+      "mac": null,
+      "windows": {
+        "winget": "Veeam.VeeamAgent",
+        "url": "https://www.veeam.com/windows-endpoint-server-backup-free.html"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "malwarebytes.adwcleaner",
+      "name": "AdwCleaner",
+      "publisher": "Malwarebytes",
+      "category": "utility",
+      "summary_en": "Adware remover",
+      "summary_ru": "Удаление рекламного ПО",
+      "mac": null,
+      "windows": {
+        "winget": "Malwarebytes.AdwCleaner",
+        "url": "https://www.malwarebytes.com/adwcleaner"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "eset.nod32",
+      "name": "ESET NOD32 Antivirus",
+      "publisher": "ESET",
+      "category": "utility",
+      "summary_en": "Windows antivirus",
+      "summary_ru": "Антивирус для Windows",
+      "mac": null,
+      "windows": {
+        "winget": "ESET.Nod32",
+        "url": "https://www.eset.com/int/home/antivirus/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "emsisoft.emergencykit",
+      "name": "Emsisoft Emergency Kit",
+      "publisher": "Emsisoft",
+      "category": "utility",
+      "summary_en": "Portable malware scanner",
+      "summary_ru": "Переносной сканер вредоносных",
+      "mac": null,
+      "windows": {
+        "winget": "Emsisoft.EmergencyKit",
+        "url": "https://www.emsisoft.com/en/home/emergency-kit/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "glasswire.glasswire",
+      "name": "GlassWire",
+      "publisher": "GlassWire",
+      "category": "utility",
+      "summary_en": "Network activity firewall",
+      "summary_ru": "Сетевой монитор и брандмауэр",
+      "mac": null,
+      "windows": {
+        "winget": "GlassWire.GlassWire",
+        "url": "https://www.glasswire.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "revouninstaller.revouninstaller",
+      "name": "Revo Uninstaller",
+      "publisher": "VS Revo Group",
+      "category": "utility",
+      "summary_en": "Thorough program removal",
+      "summary_ru": "Полное удаление программ",
+      "mac": null,
+      "windows": {
+        "winget": "RevoUninstaller.RevoUninstaller",
+        "url": "https://www.revouninstaller.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "iobit.advancedsystemcare",
+      "name": "Advanced SystemCare",
+      "publisher": "IObit",
+      "category": "utility",
+      "summary_en": "System tune-up suite",
+      "summary_ru": "Набор для чистки системы",
+      "mac": null,
+      "windows": {
+        "winget": "IObit.AdvancedSystemCare",
+        "url": "https://www.iobit.com/en/advancedsystemcarefree.php"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "iobit.driverbooster",
+      "name": "Driver Booster",
+      "publisher": "IObit",
+      "category": "utility",
+      "summary_en": "Driver updater",
+      "summary_ru": "Обновление драйверов",
+      "mac": null,
+      "windows": {
+        "winget": "IObit.DriverBooster",
+        "url": "https://www.iobit.com/en/driver-booster.php"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "iobit.unlocker",
+      "name": "IObit Unlocker",
+      "publisher": "IObit",
+      "category": "utility",
+      "summary_en": "Release locked files",
+      "summary_ru": "Разблокировка занятых файлов",
+      "mac": null,
+      "windows": {
+        "winget": "IObit.IObitUnlocker",
+        "url": "https://www.iobit.com/en/iobit-unlocker.php"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "auslogics.boostspeed",
+      "name": "Auslogics BoostSpeed",
+      "publisher": "Auslogics",
+      "category": "utility",
+      "summary_en": "PC optimization suite",
+      "summary_ru": "Оптимизация компьютера",
+      "mac": null,
+      "windows": {
+        "winget": "Auslogics.BoostSpeed",
+        "url": "https://www.auslogics.com/en/software/boost-speed/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "oosoftware.shutup10",
+      "name": "O&O ShutUp10++",
+      "publisher": "O&O Software",
+      "category": "utility",
+      "summary_en": "Windows privacy settings",
+      "summary_ru": "Настройки приватности Windows",
+      "mac": null,
+      "windows": {
+        "winget": "OO-Software.ShutUp10",
+        "url": "https://www.oo-software.com/en/shutup10"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "oosoftware.safeerase",
+      "name": "O&O SafeErase",
+      "publisher": "O&O Software",
+      "category": "utility",
+      "summary_en": "Secure data erasure",
+      "summary_ru": "Безвозвратное стирание данных",
+      "mac": null,
+      "windows": {
+        "winget": "OO-Software.SafeErase",
+        "url": "https://www.oo-software.com/en/oosafeerase-professional"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "elaboratebytes.virtualclonedrive",
+      "name": "Virtual CloneDrive",
+      "publisher": "Elaborate Bytes",
+      "category": "utility",
+      "summary_en": "Mount disc images",
+      "summary_ru": "Монтирование образов диска",
+      "mac": null,
+      "windows": {
+        "winget": "ElaborateBytes.VirtualCloneDrive",
+        "url": "https://www.elby.ch/products/vcd.html"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "ezbsystems.ultraiso",
+      "name": "UltraISO",
+      "publisher": "EZB Systems",
+      "category": "utility",
+      "summary_en": "ISO image editor",
+      "summary_ru": "Редактор образов ISO",
+      "mac": null,
+      "windows": {
+        "winget": "EZBSystems.UltraISO",
+        "url": "https://www.ezbsystems.com/ultraiso/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "chuyuteam.dismpp",
+      "name": "Dism++",
+      "publisher": "Chuyu Team",
+      "category": "utility",
+      "summary_en": "Windows image servicing",
+      "summary_ru": "Обслуживание образов Windows",
+      "mac": null,
+      "windows": {
+        "winget": "ChuyuTeam.DISM++",
+        "url": "https://github.com/Chuyu-Team/Dism-Multi-language"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "tixati.tixati",
+      "name": "Tixati",
+      "publisher": "Tixati",
+      "category": "utility",
+      "summary_en": "BitTorrent client",
+      "summary_ru": "Клиент BitTorrent",
+      "mac": null,
+      "windows": {
+        "winget": "Tixati.Tixati",
+        "url": "https://www.tixati.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "nirsoft.bluescreenview",
+      "name": "BlueScreenView",
+      "publisher": "NirSoft",
+      "category": "utility",
+      "summary_en": "Crash dump viewer",
+      "summary_ru": "Просмотр синих экранов",
+      "mac": null,
+      "windows": {
+        "winget": "NirSoft.BlueScreenView",
+        "url": "https://www.nirsoft.net/utils/blue_screen_view.html"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "nirsoft.usbdeview",
+      "name": "USBDeview",
+      "publisher": "NirSoft",
+      "category": "utility",
+      "summary_en": "USB device history",
+      "summary_ru": "История устройств USB",
+      "mac": null,
+      "windows": {
+        "winget": "NirSoft.USBDeview",
+        "url": "https://www.nirsoft.net/utils/usb_devices_view.html"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "nirsoft.shellexview",
+      "name": "ShellExView",
+      "publisher": "NirSoft",
+      "category": "utility",
+      "summary_en": "Shell extension manager",
+      "summary_ru": "Расширения проводника",
+      "mac": null,
+      "windows": {
+        "winget": "NirSoft.ShellExView",
+        "url": "https://www.nirsoft.net/utils/shexview.html"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "nirsoft.hashmyfiles",
+      "name": "HashMyFiles",
+      "publisher": "NirSoft",
+      "category": "utility",
+      "summary_en": "File checksum viewer",
+      "summary_ru": "Контрольные суммы файлов",
+      "mac": null,
+      "windows": {
+        "winget": "NirSoft.HashMyFiles",
+        "url": "https://www.nirsoft.net/utils/hash_my_files.html"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "nirsoft.wirelessnetworkwatcher",
+      "name": "Wireless Network Watcher",
+      "publisher": "NirSoft",
+      "category": "utility",
+      "summary_en": "Who is on Wi-Fi",
+      "summary_ru": "Кто в сети Wi-Fi",
+      "mac": null,
+      "windows": {
+        "winget": "NirSoft.WirelessNetworkWatcher",
+        "url": "https://www.nirsoft.net/utils/wireless_network_watcher.html"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "nirsoft.soundvolumeview",
+      "name": "SoundVolumeView",
+      "publisher": "NirSoft",
+      "category": "utility",
+      "summary_en": "Per-app volume control",
+      "summary_ru": "Громкость по программам",
+      "mac": null,
+      "windows": {
+        "winget": "NirSoft.SoundVolumeView",
+        "url": "https://www.nirsoft.net/utils/sound_volume_view.html"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "irfanskiljan.irfanview",
+      "name": "IrfanView",
+      "publisher": "Irfan Skiljan",
+      "category": "graphics",
+      "summary_en": "Fast image viewer",
+      "summary_ru": "Быстрый просмотр изображений",
+      "mac": null,
+      "windows": {
+        "winget": "IrfanSkiljan.IrfanView",
+        "url": "https://www.irfanview.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "xnsoft.xnview",
+      "name": "XnView Classic",
+      "publisher": "XnSoft",
+      "category": "graphics",
+      "summary_en": "Image viewer and converter",
+      "summary_ru": "Просмотр и конвертация картинок",
+      "mac": null,
+      "windows": {
+        "winget": "XnSoft.XnView",
+        "url": "https://www.xnview.com/en/xnview/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "faststone.capture",
+      "name": "FastStone Capture",
+      "publisher": "FastStone",
+      "category": "graphics",
+      "summary_en": "Screen capture tool",
+      "summary_ru": "Захват экрана",
+      "mac": null,
+      "windows": {
+        "winget": "FastStone.Capture",
+        "url": "https://www.faststone.org/FSCaptureDetail.htm"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "faststone.viewer",
+      "name": "FastStone Image Viewer",
+      "publisher": "FastStone",
+      "category": "graphics",
+      "summary_en": "Image browser and editor",
+      "summary_ru": "Просмотр и правка изображений",
+      "mac": null,
+      "windows": {
+        "winget": "FastStone.Viewer",
+        "url": "https://www.faststone.org/FSViewerDetail.htm"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "systemax.painttoolsai",
+      "name": "PaintTool SAI",
+      "publisher": "Systemax",
+      "category": "graphics",
+      "summary_en": "Digital painting app",
+      "summary_ru": "Рисование и живопись",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.systemax.jp/en/sai/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "zoner.photostudio",
+      "name": "Zoner Photo Studio X",
+      "publisher": "Zoner",
+      "category": "graphics",
+      "summary_en": "Photo editor and catalog",
+      "summary_ru": "Каталог и правка фото",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.zoner.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "xara.photographicdesigner",
+      "name": "Xara Photo & Graphic Designer",
+      "publisher": "Xara",
+      "category": "graphics",
+      "summary_en": "Vector and photo editor",
+      "summary_ru": "Вектор и фотография",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.xara.com/photo-graphic-designer/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "boriseyrich.artweaver",
+      "name": "Artweaver",
+      "publisher": "Boris Eyrich Software",
+      "category": "graphics",
+      "summary_en": "Natural media painting",
+      "summary_ru": "Рисование натуральными кистями",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.artweaver.de/en"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "corel.paintshoppro",
+      "name": "Corel PaintShop Pro",
+      "publisher": "Corel",
+      "category": "graphics",
+      "summary_en": "Photo editing suite",
+      "summary_ru": "Пакет обработки фотографий",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.paintshoppro.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "clsid2.mpchc",
+      "name": "MPC-HC",
+      "publisher": "clsid2",
+      "category": "media",
+      "summary_en": "Lightweight media player",
+      "summary_ru": "Легкий проигрыватель",
+      "mac": null,
+      "windows": {
+        "winget": "clsid2.mpc-hc",
+        "url": "https://github.com/clsid2/mpc-hc"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "mpcbe.mpcbe",
+      "name": "MPC-BE",
+      "publisher": "MPC-BE Team",
+      "category": "media",
+      "summary_en": "Media player fork",
+      "summary_ru": "Ответвление проигрывателя MPC",
+      "mac": null,
+      "windows": {
+        "winget": "MPC-BE.MPC-BE",
+        "url": "https://sourceforge.net/projects/mpcbe/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "daum.potplayer",
+      "name": "PotPlayer",
+      "publisher": "Daum",
+      "category": "media",
+      "summary_en": "Feature-rich video player",
+      "summary_ru": "Многофункциональный видеоплеер",
+      "mac": null,
+      "windows": {
+        "winget": "Daum.PotPlayer",
+        "url": "https://potplayer.daum.net/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "codecguide.klitecodecpack",
+      "name": "K-Lite Codec Pack",
+      "publisher": "Codec Guide",
+      "category": "media",
+      "summary_en": "Codec and player bundle",
+      "summary_ru": "Набор кодеков и плеер",
+      "mac": null,
+      "windows": {
+        "winget": "CodecGuide.K-LiteCodecPack",
+        "url": "https://codecguide.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "xmediarecode.xmediarecode",
+      "name": "XMedia Recode",
+      "publisher": "XMedia Recode",
+      "category": "media",
+      "summary_en": "Video and audio converter",
+      "summary_ru": "Конвертер видео и звука",
+      "mac": null,
+      "windows": {
+        "winget": "XMediaRecode.XMediaRecode",
+        "url": "https://www.xmedia-recode.de/en/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "avisynth.avisynthplus",
+      "name": "AviSynth+",
+      "publisher": "AviSynth+ Team",
+      "category": "media",
+      "summary_en": "Frameserver scripting engine",
+      "summary_ru": "Скриптовый кадровый сервер",
+      "mac": null,
+      "windows": {
+        "winget": "AviSynth.AviSynthPlus",
+        "url": "https://avs-plus.net/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "nero.burningrom",
+      "name": "Nero Burning ROM",
+      "publisher": "Nero",
+      "category": "media",
+      "summary_en": "Disc burning suite",
+      "summary_ru": "Запись оптических дисков",
+      "mac": null,
+      "windows": {
+        "winget": "Nero.NeroBurningROM",
+        "url": "https://www.nero.com/enu/products/nero-burning-rom/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "bandicam.bandicam",
+      "name": "Bandicam",
+      "publisher": "Bandicam Company",
+      "category": "media",
+      "summary_en": "Game and screen recorder",
+      "summary_ru": "Запись игр и экрана",
+      "mac": null,
+      "windows": {
+        "winget": "BandicamCompany.Bandicam",
+        "url": "https://www.bandicam.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "aimp.aimp",
+      "name": "AIMP",
+      "publisher": "AIMP DevTeam",
+      "category": "media",
+      "summary_en": "Audio player",
+      "summary_ru": "Аудиоплеер",
+      "mac": null,
+      "windows": {
+        "winget": "AIMP.AIMP",
+        "url": "https://www.aimp.ru/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "winamp.winamp",
+      "name": "Winamp",
+      "publisher": "Winamp",
+      "category": "media",
+      "summary_en": "Classic audio player",
+      "summary_ru": "Классический аудиоплеер",
+      "mac": null,
+      "windows": {
+        "winget": "Winamp.Winamp",
+        "url": "https://www.winamp.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "magix.vegaspro",
+      "name": "VEGAS Pro",
+      "publisher": "MAGIX",
+      "category": "media",
+      "summary_en": "Video editing suite",
+      "summary_ru": "Монтаж видео",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.vegascreativesoftware.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "pcfreetime.formatfactory",
+      "name": "Format Factory",
+      "publisher": "Free Time",
+      "category": "media",
+      "summary_en": "Multi-format converter",
+      "summary_ru": "Универсальный конвертер",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "http://www.pcfreetime.com/formatfactory/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "virtualdub.virtualdub",
+      "name": "VirtualDub2",
+      "publisher": "VirtualDub Team",
+      "category": "media",
+      "summary_en": "Video capture and filtering",
+      "summary_ru": "Захват и фильтрация видео",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://sourceforge.net/projects/vdfiltermod/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "lightninguk.imgburn",
+      "name": "ImgBurn",
+      "publisher": "LIGHTNING UK!",
+      "category": "media",
+      "summary_en": "Disc image burner",
+      "summary_ru": "Запись образов дисков",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.imgburn.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "canneverbe.cdburnerxp",
+      "name": "CDBurnerXP",
+      "publisher": "Canneverbe Limited",
+      "category": "media",
+      "summary_en": "Free disc burner",
+      "summary_ru": "Бесплатная запись дисков",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://cdburnerxp.se/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "trackersoftware.pdfxchangeeditor",
+      "name": "PDF-XChange Editor",
+      "publisher": "Tracker Software",
+      "category": "office",
+      "summary_en": "PDF editor and viewer",
+      "summary_ru": "Редактор и просмотр PDF",
+      "mac": null,
+      "windows": {
+        "winget": "TrackerSoftware.PDF-XChangeEditor",
+        "url": "https://www.tracker-software.com/product/pdf-xchange-editor"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "trackersoftware.pdfxchangelite",
+      "name": "PDF-XChange Lite",
+      "publisher": "Tracker Software",
+      "category": "office",
+      "summary_en": "PDF virtual printer",
+      "summary_ru": "Виртуальный принтер PDF",
+      "mac": null,
+      "windows": {
+        "winget": "TrackerSoftware.PDF-XChangeLite",
+        "url": "https://www.tracker-software.com/product/pdf-xchange-lite-printer"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "trackersoftware.pdftools",
+      "name": "PDF-Tools",
+      "publisher": "Tracker Software",
+      "category": "office",
+      "summary_en": "PDF batch processing",
+      "summary_ru": "Пакетная обработка PDF",
+      "mac": null,
+      "windows": {
+        "winget": "TrackerSoftware.PDF-Tools",
+        "url": "https://www.tracker-software.com/product/pdf-tools"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "sumatrapdf.sumatrapdf",
+      "name": "SumatraPDF",
+      "publisher": "Krzysztof Kowalczyk",
+      "category": "office",
+      "summary_en": "Minimal PDF reader",
+      "summary_ru": "Минималистичный просмотр PDF",
+      "mac": null,
+      "windows": {
+        "winget": "SumatraPDF.SumatraPDF",
+        "url": "https://www.sumatrapdfreader.org/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "gpsoftware.directoryopus",
+      "name": "Directory Opus",
+      "publisher": "GP Software",
+      "category": "office",
+      "summary_en": "Advanced file manager",
+      "summary_ru": "Продвинутый файловый менеджер",
+      "mac": null,
+      "windows": {
+        "winget": "GPSoftware.DirectoryOpus",
+        "url": "https://www.gpsoft.com.au/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "softmaker.flexipdf",
+      "name": "FlexiPDF",
+      "publisher": "SoftMaker",
+      "category": "office",
+      "summary_en": "Edit PDF like text",
+      "summary_ru": "Правка PDF как текста",
+      "mac": null,
+      "windows": {
+        "winget": "SoftMaker.FlexiPDF",
+        "url": "https://www.softmaker.com/en/flexipdf-pdf-editor"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "bullzip.pdfprinter",
+      "name": "Bullzip PDF Printer",
+      "publisher": "Bullzip",
+      "category": "office",
+      "summary_en": "PDF virtual printer",
+      "summary_ru": "Виртуальный принтер PDF",
+      "mac": null,
+      "windows": {
+        "winget": "Bullzip.PDFPrinter",
+        "url": "https://www.bullzip.com/products/pdf/info.php"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "softland.dopdf",
+      "name": "doPDF",
+      "publisher": "Softland",
+      "category": "office",
+      "summary_en": "Free PDF converter",
+      "summary_ru": "Бесплатный конвертер PDF",
+      "mac": null,
+      "windows": {
+        "winget": "Softland.doPDF",
+        "url": "https://www.dopdf.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "pdfforge.pdfcreator",
+      "name": "PDFCreator",
+      "publisher": "pdfforge",
+      "category": "office",
+      "summary_en": "PDF printer and merge",
+      "summary_ru": "Принтер и слияние PDF",
+      "mac": null,
+      "windows": {
+        "winget": "Avanquestpdfforge.PDFCreator-Free",
+        "url": "https://www.pdfforge.org/pdfcreator"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "angusjohnson.pdftkbuilder",
+      "name": "PDFTK Builder",
+      "publisher": "Angus Johnson",
+      "category": "office",
+      "summary_en": "PDF page assembly",
+      "summary_ru": "Сборка страниц PDF",
+      "mac": null,
+      "windows": {
+        "winget": "AngusJohnson.PDFTKBuilder",
+        "url": "https://www.angusj.com/pdftkb/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "zwsoft.zwcad",
+      "name": "ZWCAD",
+      "publisher": "ZWSOFT",
+      "category": "cad",
+      "summary_en": "DWG-compatible CAD",
+      "summary_ru": "САПР с поддержкой DWG",
+      "mac": null,
+      "windows": {
+        "winget": "ZWSOFT.ZWCAD",
+        "url": "https://www.zwsoft.com/product/zwcad"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "zwsoft.zwcadviewer",
+      "name": "ZWCAD Viewer",
+      "publisher": "ZWSOFT",
+      "category": "cad",
+      "summary_en": "Free DWG viewer",
+      "summary_ru": "Бесплатный просмотр DWG",
+      "mac": null,
+      "windows": {
+        "winget": "ZWSOFT.ZWCADViewer",
+        "url": "https://www.zwsoft.com/product/zwcad-viewer"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "autodesk.dwgtrueview",
+      "name": "DWG TrueView",
+      "publisher": "Autodesk",
+      "category": "cad",
+      "summary_en": "Free DWG viewer",
+      "summary_ru": "Бесплатный просмотр DWG",
+      "mac": null,
+      "windows": {
+        "winget": "Autodesk.DWGTrueView",
+        "url": "https://www.autodesk.com/viewers"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "autodesk.navisworksfreedom",
+      "name": "Navisworks Freedom",
+      "publisher": "Autodesk",
+      "category": "cad",
+      "summary_en": "Free NWD model viewer",
+      "summary_ru": "Просмотр моделей NWD",
+      "mac": null,
+      "windows": {
+        "winget": "Autodesk.NavisworksFreedom",
+        "url": "https://www.autodesk.com/products/navisworks/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "autodesk.designreview",
+      "name": "Autodesk Design Review",
+      "publisher": "Autodesk",
+      "category": "cad",
+      "summary_en": "DWF markup viewer",
+      "summary_ru": "Просмотр и разметка DWF",
+      "mac": null,
+      "windows": {
+        "winget": "Autodesk.DesignReview",
+        "url": "https://www.autodesk.com/products/design-review/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "autodesk.eagle",
+      "name": "Autodesk EAGLE",
+      "publisher": "Autodesk",
+      "category": "cad",
+      "summary_en": "PCB design tool",
+      "summary_ru": "Проектирование печатных плат",
+      "mac": null,
+      "windows": {
+        "winget": "Autodesk.EAGLE",
+        "url": "https://www.autodesk.com/products/eagle/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "siemens.jt2go",
+      "name": "JT2Go",
+      "publisher": "Siemens",
+      "category": "cad",
+      "summary_en": "JT model viewer",
+      "summary_ru": "Просмотр моделей JT",
+      "mac": null,
+      "windows": {
+        "winget": "Siemens.JT2Go",
+        "url": "https://plm.sw.siemens.com/en-US/plm-components/jt2go/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "ptc.creoview",
+      "name": "Creo View",
+      "publisher": "PTC",
+      "category": "cad",
+      "summary_en": "CAD visualization viewer",
+      "summary_ru": "Визуализация моделей САПР",
+      "mac": null,
+      "windows": {
+        "winget": "PTC.CreoView",
+        "url": "https://www.ptc.com/en/products/creo/view"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "geoslope.geostudio",
+      "name": "GeoStudio",
+      "publisher": "GEOSLOPE",
+      "category": "cad",
+      "summary_en": "Geotechnical analysis",
+      "summary_ru": "Геотехнические расчёты",
+      "mac": null,
+      "windows": {
+        "winget": "GEOSLOPE.GeoStudio",
+        "url": "https://www.geoslope.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "scia.sciaengineer",
+      "name": "SCIA Engineer",
+      "publisher": "SCIA",
+      "category": "cad",
+      "summary_en": "Structural analysis software",
+      "summary_ru": "Расчёт строительных конструкций",
+      "mac": null,
+      "windows": {
+        "winget": "SCIA.SCIAEngineer",
+        "url": "https://www.scia.net/en/software/scia-engineer"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "midas.civilnx",
+      "name": "midas Civil NX",
+      "publisher": "MIDAS",
+      "category": "cad",
+      "summary_en": "Bridge analysis software",
+      "summary_ru": "Расчёт мостов",
+      "mac": null,
+      "windows": {
+        "winget": "MIDAS.CIVILNX",
+        "url": "https://www.midasoft.com/bridge-library/civil"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "midas.mdesk",
+      "name": "midas MeshFree",
+      "publisher": "MIDAS",
+      "category": "cad",
+      "summary_en": "Meshless CAE analysis",
+      "summary_ru": "Расчёт без сетки",
+      "mac": null,
+      "windows": {
+        "winget": "MIDAS.MDesk",
+        "url": "https://www.midasoft.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "autodesk.inventor",
+      "name": "Autodesk Inventor",
+      "publisher": "Autodesk",
+      "category": "cad",
+      "summary_en": "Mechanical 3D CAD",
+      "summary_ru": "Механическая трёхмерная САПР",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.autodesk.com/products/inventor/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "autodesk.3dsmax",
+      "name": "Autodesk 3ds Max",
+      "publisher": "Autodesk",
+      "category": "cad",
+      "summary_en": "3D modeling and rendering",
+      "summary_ru": "Моделирование и визуализация",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.autodesk.com/products/3ds-max/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "autodesk.autocadlt",
+      "name": "AutoCAD LT",
+      "publisher": "Autodesk",
+      "category": "cad",
+      "summary_en": "2D drafting software",
+      "summary_ru": "Двумерное черчение",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.autodesk.com/products/autocad-lt/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "autodesk.navisworksmanage",
+      "name": "Navisworks Manage",
+      "publisher": "Autodesk",
+      "category": "cad",
+      "summary_en": "BIM coordination and clash",
+      "summary_ru": "Сведение и коллизии BIM",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.autodesk.com/products/navisworks/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "autodesk.advancesteel",
+      "name": "Advance Steel",
+      "publisher": "Autodesk",
+      "category": "cad",
+      "summary_en": "Steel detailing software",
+      "summary_ru": "Проектирование металлоконструкций",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.autodesk.com/products/advance-steel/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "autodesk.robotstructural",
+      "name": "Robot Structural Analysis",
+      "publisher": "Autodesk",
+      "category": "cad",
+      "summary_en": "Structural analysis software",
+      "summary_ru": "Расчёт конструкций",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.autodesk.com/products/robot-structural-analysis/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "altium.designer",
+      "name": "Altium Designer",
+      "publisher": "Altium",
+      "category": "cad",
+      "summary_en": "PCB design suite",
+      "summary_ru": "Пакет проектирования плат",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.altium.com/altium-designer"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "siemens.nx",
+      "name": "Siemens NX",
+      "publisher": "Siemens",
+      "category": "cad",
+      "summary_en": "Integrated CAD CAM CAE",
+      "summary_ru": "Среда CAD CAM CAE",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://plm.sw.siemens.com/en-US/nx/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "siemens.solidedge",
+      "name": "Solid Edge",
+      "publisher": "Siemens",
+      "category": "cad",
+      "summary_en": "Mechanical design software",
+      "summary_ru": "Машиностроительное проектирование",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://plm.sw.siemens.com/en-US/solid-edge/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "bentley.microstation",
+      "name": "MicroStation",
+      "publisher": "Bentley Systems",
+      "category": "cad",
+      "summary_en": "Infrastructure design platform",
+      "summary_ru": "Проектирование инфраструктуры",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.bentley.com/software/microstation/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "bentley.staadpro",
+      "name": "STAAD.Pro",
+      "publisher": "Bentley Systems",
+      "category": "cad",
+      "summary_en": "Structural analysis software",
+      "summary_ru": "Расчёт конструкций",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.bentley.com/software/staad-pro/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "bentley.plaxis",
+      "name": "PLAXIS",
+      "publisher": "Bentley Systems",
+      "category": "cad",
+      "summary_en": "Geotechnical finite elements",
+      "summary_ru": "Геотехнический расчёт",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.bentley.com/software/plaxis-2d/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "csi.etabs",
+      "name": "ETABS",
+      "publisher": "Computers and Structures",
+      "category": "cad",
+      "summary_en": "Building analysis and design",
+      "summary_ru": "Расчёт зданий",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.csiamerica.com/products/etabs"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "csi.sap2000",
+      "name": "SAP2000",
+      "publisher": "Computers and Structures",
+      "category": "cad",
+      "summary_en": "General structural analysis",
+      "summary_ru": "Универсальный расчёт конструкций",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.csiamerica.com/products/sap2000"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "dlubal.rfem",
+      "name": "Dlubal RFEM",
+      "publisher": "Dlubal Software",
+      "category": "cad",
+      "summary_en": "Finite element analysis",
+      "summary_ru": "Расчёт методом конечных элементов",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.dlubal.com/en/products/rfem-fea-software/what-is-rfem"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "ideastatica.ideastatica",
+      "name": "IDEA StatiCa",
+      "publisher": "IDEA StatiCa",
+      "category": "cad",
+      "summary_en": "Steel connection design",
+      "summary_ru": "Расчёт узлов металлоконструкций",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.ideastatica.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "nanosoft.nanocad",
+      "name": "nanoCAD",
+      "publisher": "Nanosoft",
+      "category": "cad",
+      "summary_en": "DWG-compatible CAD",
+      "summary_ru": "САПР с поддержкой DWG",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://nanocad.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "ascon.kompas3d",
+      "name": "KOMPAS-3D",
+      "publisher": "ASCON",
+      "category": "cad",
+      "summary_en": "Russian mechanical CAD",
+      "summary_ru": "Отечественная машиностроительная САПР",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://kompas.ru/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "topsystems.tflexcad",
+      "name": "T-FLEX CAD",
+      "publisher": "Top Systems",
+      "category": "cad",
+      "summary_en": "Parametric Russian CAD",
+      "summary_ru": "Параметрическая отечественная САПР",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.tflex.ru/products/konstruirovanie/tf-cad/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "renga.renga",
+      "name": "Renga",
+      "publisher": "Renga Software",
+      "category": "cad",
+      "summary_en": "Russian BIM system",
+      "summary_ru": "Отечественная система BIM",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://rengabim.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "simulia.abaqus",
+      "name": "Abaqus",
+      "publisher": "Dassault Systemes",
+      "category": "cad",
+      "summary_en": "Nonlinear FEA solver",
+      "summary_ru": "Нелинейный расчёт конструкций",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.3ds.com/products/simulia/abaqus"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "cnc.mastercam",
+      "name": "Mastercam",
+      "publisher": "CNC Software",
+      "category": "cad",
+      "summary_en": "CAM machining software",
+      "summary_ru": "Программирование станков ЧПУ",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.mastercam.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "lumion.lumion",
+      "name": "Lumion",
+      "publisher": "Act-3D",
+      "category": "cad",
+      "summary_en": "Architectural visualization",
+      "summary_ru": "Архитектурная визуализация",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://lumion.com/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "playnite.playnite",
+      "name": "Playnite",
+      "publisher": "Playnite",
+      "category": "games",
+      "summary_en": "Unified game library",
+      "summary_ru": "Единая библиотека игр",
+      "mac": null,
+      "windows": {
+        "winget": "Playnite.Playnite",
+        "url": "https://playnite.link/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "rockstargames.launcher",
+      "name": "Rockstar Games Launcher",
+      "publisher": "Rockstar Games",
+      "category": "games",
+      "summary_en": "Rockstar game launcher",
+      "summary_ru": "Лаунчер игр Rockstar",
+      "mac": null,
+      "windows": {
+        "winget": "RockstarGames.Launcher",
+        "url": "https://socialclub.rockstargames.com/rockstar-games-launcher"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "nexusmods.vortex",
+      "name": "Vortex",
+      "publisher": "Nexus Mods",
+      "category": "games",
+      "summary_en": "Mod manager",
+      "summary_ru": "Менеджер модификаций",
+      "mac": null,
+      "windows": {
+        "winget": "NexusMods.Vortex",
+        "url": "https://www.nexusmods.com/about/vortex/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "modorganizer2.modorganizer",
+      "name": "Mod Organizer 2",
+      "publisher": "Mod Organizer 2 Team",
+      "category": "games",
+      "summary_en": "Virtual mod manager",
+      "summary_ru": "Виртуальный менеджер модов",
+      "mac": null,
+      "windows": {
+        "winget": "ModOrganizer2.modorganizer",
+        "url": "https://github.com/ModOrganizer2/modorganizer"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "wabbajack.wabbajack",
+      "name": "Wabbajack",
+      "publisher": "Wabbajack Tools",
+      "category": "games",
+      "summary_en": "Automated modlist installer",
+      "summary_ru": "Автоустановка сборок модов",
+      "mac": null,
+      "windows": {
+        "winget": "WabbajackTools.Wabbajack",
+        "url": "https://www.wabbajack.org/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "xenia.xenia",
+      "name": "Xenia",
+      "publisher": "Xenia Team",
+      "category": "games",
+      "summary_en": "Xbox 360 emulator",
+      "summary_ru": "Эмулятор Xbox 360",
+      "mac": null,
+      "windows": {
+        "winget": "Xenia.Xenia",
+        "url": "https://xenia.jp/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "specialk.specialk",
+      "name": "Special K",
+      "publisher": "Special K",
+      "category": "games",
+      "summary_en": "Game rendering tweaks",
+      "summary_ru": "Тонкая настройка отрисовки игр",
+      "mac": null,
+      "windows": {
+        "winget": "SpecialK.SpecialK",
+        "url": "https://www.special-k.info/"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "blinue.magpie",
+      "name": "Magpie",
+      "publisher": "Blinue",
+      "category": "games",
+      "summary_en": "Window upscaling tool",
+      "summary_ru": "Масштабирование окна игры",
+      "mac": null,
+      "windows": {
+        "winget": "Blinue.Magpie",
+        "url": "https://github.com/Blinue/Magpie"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "ryochan7.ds4windows",
+      "name": "DS4Windows",
+      "publisher": "Ryochan7",
+      "category": "games",
+      "summary_en": "DualShock controller driver",
+      "summary_ru": "Драйвер геймпада DualShock",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://github.com/Ryochan7/DS4Windows"
+      },
+      "mac_equivalence": "none"
+    },
+    {
+      "id": "unbroken.launchbox",
+      "name": "LaunchBox",
+      "publisher": "Unbroken Software",
+      "category": "games",
+      "summary_en": "Retro game front end",
+      "summary_ru": "Оболочка для ретроигр",
+      "mac": null,
+      "windows": {
+        "winget": null,
+        "url": "https://www.launchbox-app.com/"
+      },
+      "mac_equivalence": "none"
+    }
+  ]
+}

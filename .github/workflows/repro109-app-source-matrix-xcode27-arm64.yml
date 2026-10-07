@@ -1,0 +1,58 @@
+name: REPRO109 app source stages Xcode27 ARM64
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  stage:
+    runs-on: macos-26
+    timeout-minutes: 130
+    strategy:
+      fail-fast: false
+      matrix:
+        stage: [offline-normal, offline-optimized, sparkle, plcrashreporter, native-fullmode]
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_27.0.app/Contents/Developer
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Offline recipe tests
+        if: startsWith(matrix.stage, 'offline-')
+        shell: bash
+        run: |
+          set -euo pipefail
+          export REPRO109_TEST_TMP="$RUNNER_TEMP/repro109-app-tests"
+          mkdir -p "$REPRO109_TEST_TMP"
+          flags=(-I -B)
+          if [ '${{ matrix.stage }}' = offline-optimized ]; then flags+=(-O); fi
+          for module in test_source test_frameworks test_compile test_package test_public_app; do
+            /usr/bin/python3 "${flags[@]}" -m unittest discover -s build/repro109app -p "$module.py"
+          done
+          /usr/bin/python3 -I -B build/repro109app/build_source.py --plan
+      - name: Source component or full producer
+        if: ${{ !startsWith(matrix.stage, 'offline-') }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          results="$RUNNER_TEMP/repro109-app-results"
+          mkdir -p "$results"
+          if [ '${{ matrix.stage }}' = native-fullmode ]; then
+            /usr/bin/python3 -I -B build/repro109app/build_source.py --build \
+              --work "$RUNNER_TEMP/repro109-app-source" --publish-dir "$results" --jobs 4 --minutes 100
+          else
+            /usr/bin/python3 -I -B build/repro109app/build_app_frameworks.py --build \
+              --only '${{ matrix.stage }}' --work "$RUNNER_TEMP/repro109-app-source" \
+              --publish-dir "$results" --jobs 4 --minutes 90
+          fi
+      - name: Preserve raw reports and produced prefix on failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: repro109-app-source-${{ matrix.stage }}
+          path: |
+            ${{ runner.temp }}/repro109-app-results
+            ${{ runner.temp }}/repro109-app-source/reports
+            ${{ runner.temp }}/repro109-app-source/frameworks/reports
+            ${{ runner.temp }}/repro109-app-source/prefix
+          if-no-files-found: warn
+          retention-days: 7
