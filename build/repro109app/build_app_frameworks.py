@@ -59,6 +59,8 @@ def read_lock(path=HERE / 'frameworks.lock.json'):
         for key in ['project', 'product', 'target']:
             if not re.fullmatch('[A-Za-z0-9_.-]+', row[key]):
                 raise ValueError('Unsafe Xcode input')
+        if row.get('target_selection', 'pinned') not in ('pinned', 'unique-macos-dynamic-framework'):
+            raise ValueError('Unknown Xcode target selection')
         for name in row['required_binaries'] + row['license_candidates']:
             if Path(name).is_absolute() or '..' in Path(name).parts:
                 raise ValueError('Unsafe framework path')
@@ -101,6 +103,8 @@ def source_settings(raw, source, products, row):
     if not isinstance(data, list) or not data:
         raise ValueError('Xcode build settings EMPTY')
     selected = []
+    by_product = row.get('target_selection', 'pinned') == 'unique-macos-dynamic-framework'
+    observed = []
     for entry in data:
         if not isinstance(entry, dict):
             raise ValueError('Xcode build settings entry type differs')
@@ -110,19 +114,31 @@ def source_settings(raw, source, products, row):
         for key in ['SRCROOT', 'PROJECT_DIR']:
             if Path(settings.get(key, '')).resolve() != source.resolve():
                 raise ValueError('Foreign Xcode ' + key)
-        if Path(settings.get('BUILT_PRODUCTS_DIR', '')).resolve() != products.resolve():
+        candidate = entry.get('target') == row['target']
+        if by_product:
+            candidate = (settings.get('FULL_PRODUCT_NAME') == row['product']
+                         and settings.get('MACH_O_TYPE') == 'mh_dylib'
+                         and settings.get('PRODUCT_TYPE') == 'com.apple.product-type.framework'
+                         and 'macosx' in settings.get('SUPPORTED_PLATFORMS', '').split())
+        observed.append({key: settings.get(key) for key in
+                         ['FULL_PRODUCT_NAME', 'MACH_O_TYPE', 'PRODUCT_TYPE', 'SUPPORTED_PLATFORMS']}
+                        | {'target': entry.get('target')})
+        if (not by_product or candidate) and Path(settings.get('BUILT_PRODUCTS_DIR', '')).resolve() != products.resolve():
             raise ValueError('Foreign Xcode product directory')
         if settings.get('CODE_SIGNING_ALLOWED') != 'NO':
             raise ValueError('Xcode signing is enabled')
         if settings.get('ARCHS', '').split() != ['arm64']:
             raise ValueError('Xcode architecture differs')
-        if entry.get('target') == row['target']:
+        if candidate:
             if settings.get('FULL_PRODUCT_NAME') != row['product'] or settings.get('MACH_O_TYPE') != 'mh_dylib':
                 raise ValueError('Framework product/type differs')
+            if not isinstance(entry.get('target'), str) or not re.fullmatch(r'[A-Za-z0-9_][A-Za-z0-9_. -]*', entry['target']):
+                raise ValueError('Unsafe resolved Xcode target')
             selected.append(entry['target'])
-    if selected != [row['target']]:
-        raise ValueError('Xcode target missing/ambiguous')
+    if (by_product and len(selected) != 1) or (not by_product and selected != [row['target']]):
+        raise ValueError('Xcode target missing/ambiguous: ' + json.dumps(observed, sort_keys=True))
     return dict(status='PRESENT', targets=len(data), selected=selected,
+                selection=row.get('target_selection', 'pinned'), observed=observed,
                 srcroot=str(source), products=str(products))
 
 
@@ -161,8 +177,9 @@ def validate_architectures(value):
         raise ValueError('Framework Mach-O architecture differs')
 
 
-def xcode_args(source, build, row, jobs):
-    return ['xcodebuild', '-project', str(source / row['project']), '-target', row['target'],
+def xcode_args(source, build, row, jobs, *, settings=False):
+    selection = ['-alltargets'] if settings and row.get('target_selection') == 'unique-macos-dynamic-framework' else ['-target', row['target']]
+    return ['xcodebuild', '-project', str(source / row['project']), *selection,
             '-configuration', 'Release', '-sdk', 'macosx', '-jobs', str(jobs),
             'ARCHS=arm64', 'ONLY_ACTIVE_ARCH=NO', 'MACOSX_DEPLOYMENT_TARGET=14.0',
             'CODE_SIGNING_ALLOWED=NO', 'CODE_SIGNING_REQUIRED=NO', 'CODE_SIGN_IDENTITY=', 'DEVELOPMENT_TEAM=',
@@ -263,10 +280,14 @@ def build(args, lock):
                 item['source_archive'] = dict(sha256=sha(archive), bytes=archive.stat().st_size)
                 write_json(reports / (name + '-source-manifest.json'), item)
                 build_dir = args.work / (name + '-build')
-                argv = xcode_args(source, build_dir, row, args.jobs)
-                settings = output(argv + ['-showBuildSettings', '-json'], source, name + '-settings')
+                settings = output(xcode_args(source, build_dir, row, args.jobs, settings=True)
+                                  + ['-showBuildSettings', '-json'], source, name + '-settings')
                 own = source_settings(settings, source, build_dir / 'products/Release', row)
                 write_json(reports / (name + '-source-ownership.json'), own)
+                resolved = dict(row, target=own['selected'][0])
+                item['resolved_target'] = resolved['target']
+                item['target_selection'] = own['selection']
+                argv = xcode_args(source, build_dir, resolved, args.jobs)
                 checkpoint(name, 'BUILD_START')
                 command(argv + ['build'], source, name + '-build')
                 product = build_dir / 'products/Release' / row['product']

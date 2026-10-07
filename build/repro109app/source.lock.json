@@ -19,8 +19,8 @@
   "excluded_inventory_sha256": "e396cc61fb9014e00c09aeb00b8892529fffc94a9ea1857b014fa94e362f7e86",
   "frameworks_input": "REQUIRE_SOURCE_BUILT_SAME_CLOUD_PREFIX",
   "frameworks_recipe": {
-    "driver_sha256": "acf7b375c504a6ca370aea010d577e93d282e1b83b734ddcd70c551b3bb44952",
-    "lock_sha256": "bb4d478aa12a2ab0b9d11101eb0a4587b48688081ed9e92b96817f9c0d6094fb"
+    "driver_sha256": "e174b98d08020999e0b00f91ec7b0230c1d49300f675d049c03c1c4337423c2b",
+    "lock_sha256": "2ad5093806ce5ebe1c280dfe943d5bfad00a1460697aa9d637c4b9874628c85f"
   },
   "generated_fixture": {
     "bytes": 512,

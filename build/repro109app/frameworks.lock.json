@@ -52,6 +52,7 @@
       "documentation": "https://github.com/microsoft/plcrashreporter/tree/1.11.2",
       "project": "CrashReporter.xcodeproj",
       "target": "CrashReporter",
+      "target_selection": "unique-macos-dynamic-framework",
       "product": "CrashReporter.framework",
       "required_binaries": ["Versions/A/CrashReporter"],
       "license_candidates": ["LICENSE", "LICENSE.txt", "LICENSE.md"]

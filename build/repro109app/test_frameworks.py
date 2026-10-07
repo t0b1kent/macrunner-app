@@ -107,6 +107,88 @@ class FrameworkBoundaryTests(unittest.TestCase):
         for bad in [data*2, [dict(data[0], target='Other')]]:
             with self.assertRaises(ValueError): b.source_settings(json.dumps(bad), source, products, row)
 
+    def product_settings(self):
+        row, source, products, data = self.settings()
+        row = copy.deepcopy(self.lock['components'][1])
+        aggregate = copy.deepcopy(data[0])
+        aggregate['target'] = 'CrashReporter'
+        for key in ['FULL_PRODUCT_NAME', 'MACH_O_TYPE']:
+            aggregate['buildSettings'].pop(key)
+        native = copy.deepcopy(data[0])
+        native['target'] = 'OWN PLC macOS Framework'
+        native['buildSettings'].update(FULL_PRODUCT_NAME=row['product'], MACH_O_TYPE='mh_dylib',
+                                       PRODUCT_TYPE='com.apple.product-type.framework', SUPPORTED_PLATFORMS='macosx')
+        static = copy.deepcopy(native)
+        static['target'] = 'OWN PLC Static'
+        static['buildSettings']['MACH_O_TYPE'] = 'staticlib'
+        ios = copy.deepcopy(native)
+        ios['target'] = 'OWN PLC iOS Framework'
+        ios['buildSettings']['SUPPORTED_PLATFORMS'] = 'iphoneos iphonesimulator'
+        return row, source, products, [aggregate, native, static, ios]
+
+    def test_product_selects_unique_macos_dynamic_framework(self):
+        row, source, products, data = self.product_settings()
+        result = b.source_settings(json.dumps(data), source, products, row)
+        self.assertEqual(result['selected'], ['OWN PLC macOS Framework'])
+        self.assertEqual(result['targets'], 4)
+        self.assertEqual(result['selection'], 'unique-macos-dynamic-framework')
+        self.assertEqual(len(result['observed']), 4)
+
+    def test_product_aggregate_static_ios_and_wrong_product_refused(self):
+        row, source, products, data = self.product_settings()
+        wrong = copy.deepcopy(data[1])
+        wrong['buildSettings']['FULL_PRODUCT_NAME'] = 'OTHER.framework'
+        for bad in [[data[0]], [data[2]], [data[3]], [wrong]]:
+            with self.subTest(target=bad[0]['target']), self.assertRaisesRegex(ValueError, 'missing/ambiguous'):
+                b.source_settings(json.dumps(bad), source, products, row)
+
+    def test_product_multiple_matching_targets_refused(self):
+        row, source, products, data = self.product_settings()
+        duplicate = copy.deepcopy(data[1])
+        duplicate['target'] = 'OWN Second macOS Framework'
+        with self.assertRaisesRegex(ValueError, 'missing/ambiguous'):
+            b.source_settings(json.dumps(data + [duplicate]), source, products, row)
+
+    def test_product_wrong_type_platform_and_resolved_target_refused(self):
+        row, source, products, data = self.product_settings()
+        for key, value in [('PRODUCT_TYPE', 'com.apple.product-type.library.static'),
+                           ('SUPPORTED_PLATFORMS', ''), ('FULL_PRODUCT_NAME', 'CrashReporter.a')]:
+            changed = copy.deepcopy(data)
+            changed[1]['buildSettings'][key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                b.source_settings(json.dumps(changed), source, products, row)
+        for target in ['-OTHER_OPTION', 'OWN\nOTHER', 'OWN/FOREIGN']:
+            changed = copy.deepcopy(data)
+            changed[1]['target'] = target
+            with self.subTest(target=target), self.assertRaisesRegex(ValueError, 'Unsafe resolved'):
+                b.source_settings(json.dumps(changed), source, products, row)
+
+    def test_product_keeps_source_signing_arch_and_selected_output_guards(self):
+        row, source, products, data = self.product_settings()
+        for index, key, value in [(0, 'SRCROOT', str(self.root / 'foreign')),
+                                  (1, 'PROJECT_DIR', str(self.root / 'foreign')),
+                                  (1, 'BUILT_PRODUCTS_DIR', str(self.root / 'foreign')),
+                                  (1, 'CODE_SIGNING_ALLOWED', 'YES'), (1, 'ARCHS', 'arm64 x86_64')]:
+            changed = copy.deepcopy(data)
+            changed[index]['buildSettings'][key] = value
+            with self.subTest(index=index, key=key), self.assertRaises(ValueError):
+                b.source_settings(json.dumps(changed), source, products, row)
+        data[3]['buildSettings']['BUILT_PRODUCTS_DIR'] = str(self.root / 'OWN_UNSELECTED_IOS_DIR')
+        self.assertEqual(b.source_settings(json.dumps(data), source, products, row)['selected'], ['OWN PLC macOS Framework'])
+
+    def test_product_alltargets_is_settings_only_and_build_uses_resolved_target(self):
+        row, source, products, data = self.product_settings()
+        settings = b.xcode_args(source, products, row, 4, settings=True)
+        self.assertIn('-alltargets', settings)
+        self.assertNotIn('-target', settings)
+        selected = b.source_settings(json.dumps(data), source, products, row)['selected'][0]
+        argv = b.xcode_args(source, products, dict(row, target=selected), 4)
+        self.assertNotIn('-alltargets', argv)
+        self.assertEqual(argv[argv.index('-target') + 1], selected)
+        self.assertIn('CODE_SIGNING_ALLOWED=NO', argv)
+        sparkle = self.row()
+        self.assertNotIn('-alltargets', b.xcode_args(source, products, sparkle, 4, settings=True))
+
     def test_product_full_sparkle_helper_family(self):
         self.assertEqual(len(b.product_paths(self.framework(), self.row())), 5)
 
