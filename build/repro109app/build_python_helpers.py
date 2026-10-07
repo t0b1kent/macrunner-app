@@ -71,6 +71,18 @@ def portable_cli(prefix, product, command):
         hidden.rename(prefix)
 
 
+def install_argv(python, wheel, name):
+    """Bootstrap pip from its source-built wheel in the selected pip-free interpreter."""
+    argv = [str(python), '-B', '-I']
+    if name == 'pip':
+        argv += ['-c', 'import runpy,sys; sys.path.insert(0,sys.argv.pop(1)); '
+                 'runpy.run_module("pip",run_name="__main__")', str(wheel)]
+    else:
+        argv += ['-m', 'pip']
+    return argv + ['install', '--no-index', '--no-deps',
+                   '--disable-pip-version-check', str(wheel)]
+
+
 def selection(lock, only_package=None, only_step=None):
     order = lock['build_order']
     if only_package is not None and only_step is not None:
@@ -138,8 +150,9 @@ def build(args, lock):
                        stderr_log=reports / (name + '-wheel.stderr.log'))
         built = json.loads(receipt.read_text())
         if not bootstrap:
-            command([str(python), '-B', '-I', '-m', 'pip', 'install', '--no-index', '--no-deps',
-                     '--disable-pip-version-check', str(wheels / built['wheel'])], source, name + '-install', 300)
+            command(install_argv(python, wheels / built['wheel'], name), source, name + '-install', 300)
+            if name == 'pip':
+                command([str(python), '-B', '-I', '-m', 'pip', '--version'], source, 'pip-bootstrap-smoke', 60)
         built['licenses'] = runner.licenses(source, prefix, name)
         result['packages'].append(built); save()
         return built

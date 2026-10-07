@@ -190,6 +190,37 @@ class HelperBuildTests(unittest.TestCase):
                          ['flit-core', 'setuptools', 'packaging', 'pip', 'wheel'])
         self.assertEqual(builder.selection(lock, only_step=23)['build_order'], lock['build_order'])
 
+    def test_pip_bootstrap_runs_owned_wheel_without_installed_pip(self):
+        prefix = self.root / 'pip-free'
+        run = subprocess.run([sys.executable, '-I', '-B', '-m', 'venv', '--without-pip', str(prefix)],
+                             capture_output=True, timeout=30)
+        self.assertEqual(run.returncode, 0, run.stderr.decode())
+        python = prefix / 'bin/python3'
+        absent = subprocess.run([str(python), '-I', '-B', '-m', 'pip', '--version'],
+                                capture_output=True, timeout=15)
+        self.assertNotEqual(absent.returncode, 0)
+        self.assertIn(b'No module named pip', absent.stderr)
+        wheel = self.root / 'pip-0.0-py3-none-any.whl'
+        with zipfile.ZipFile(wheel, 'w') as archive:
+            archive.writestr('pip/__init__.py', '# Own inert fixture; never a vendor wheel.\n')
+            archive.writestr('pip/__main__.py',
+                'import json,sys\nprint(json.dumps(dict(argv=sys.argv[1:],executable=sys.executable,origin=__file__)))\n')
+        argv = builder.install_argv(python, wheel, 'pip')
+        child = subprocess.run(argv, capture_output=True, timeout=15)
+        self.assertEqual(child.returncode, 0, child.stderr.decode())
+        receipt = json.loads(child.stdout)
+        self.assertEqual(receipt['argv'], ['install', '--no-index', '--no-deps',
+                                          '--disable-pip-version-check', str(wheel)])
+        self.assertEqual(receipt['executable'], str(python))
+        self.assertTrue(receipt['origin'].startswith(str(wheel) + '/pip/'))
+
+    def test_other_package_install_requires_the_bootstrapped_pip(self):
+        wheel = self.root / 'owned.whl'
+        self.assertEqual(builder.install_argv('/OWN_PYTHON', wheel, 'wheel'),
+                         ['/OWN_PYTHON', '-B', '-I', '-m', 'pip', 'install', '--no-index', '--no-deps',
+                          '--disable-pip-version-check', str(wheel)])
+        self.assertEqual(builder.selection(builder.read_lock(), only_step=4)['package'], 'pip')
+
     def test_scope_rejects_conflicting_unknown_and_out_of_range_inputs(self):
         lock = builder.read_lock()
         for values in [dict(only_step=0), dict(only_step=24), dict(only_step=True),
@@ -198,9 +229,15 @@ class HelperBuildTests(unittest.TestCase):
                 builder.selection(lock, **values)
 
     def test_scoped_actual_driver_skips_native_and_stops_after_first_package(self):
+        self.scoped_pipeline('flit-core')
+
+    def test_scoped_actual_pip_driver_bootstraps_then_checks_installed_pip(self):
+        self.scoped_pipeline('pip')
+
+    def scoped_pipeline(self, selected_package):
         lock = builder.read_lock()
         args = types.SimpleNamespace(work=self.root / 'scoped', minutes=3, jobs=3,
-                                     only_package='flit-core', only_step=None)
+                                     only_package=selected_package, only_step=None)
         actual_runner = builder.native.framework.load_runner()
         calls, sources = [], []
         def preflight(tool, out):
@@ -215,9 +252,9 @@ class HelperBuildTests(unittest.TestCase):
             if component == 'scoped-bootstrap-venv':
                 prefix = Path(argv[-1]); (prefix / 'bin').mkdir(parents=True)
                 (prefix / 'bin/python3').write_bytes(b'OWN_INTERPRETER_FIXTURE')
-            if component == 'flit-core-wheel':
+            if component.endswith('-wheel'):
                 receipt = Path(argv[argv.index('--receipt') + 1])
-                receipt.write_text(json.dumps(dict(name='flit-core', wheel='own.whl',
+                receipt.write_text(json.dumps(dict(name=component[:-6], wheel='own.whl',
                                                   status='OWN_SOURCE_FIXTURE')))
         def download(row, archive, reports, transfer):
             sources.append(row['name']); archive.write_bytes(b'OWN_ARCHIVE_FIXTURE')
@@ -233,8 +270,17 @@ class HelperBuildTests(unittest.TestCase):
                 mock.patch.object(builder.native.public_archive, 'download', side_effect=download), \
                 mock.patch.object(builder.sys, 'version_info', (3, 14, 7)):
             builder.build(args, lock)
-        self.assertEqual(sources, ['flit-core'])
-        self.assertEqual([name for name, _, _ in calls], ['scoped-bootstrap-venv', 'flit-core-wheel'])
+        order = builder.selection(lock, only_package=selected_package)['build_order']
+        self.assertEqual(sources, order)
+        expected = ['scoped-bootstrap-venv'] + [name + '-wheel' for name in order]
+        if selected_package == 'pip':
+            expected += ['pip-install', 'pip-bootstrap-smoke']
+            install = next(argv for name, argv, _ in calls if name == 'pip-install')
+            self.assertEqual(install[3], '-c')
+            self.assertIn('runpy.run_module', install[4])
+            smoke = next(argv for name, argv, _ in calls if name == 'pip-bootstrap-smoke')
+            self.assertEqual(smoke[3:], ['-m', 'pip', '--version'])
+        self.assertEqual([name for name, _, _ in calls], expected)
         result = json.loads((args.work / 'reports/RESULT.json').read_text())
         self.assertEqual(result['status'], 'SCOPED_SOURCE_PACKAGE_BUILT_DIAGNOSTIC_ONLY')
         self.assertEqual(result['source_python_acceptance'], 'NOT_ENABLED')
