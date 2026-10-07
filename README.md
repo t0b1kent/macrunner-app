@@ -132,7 +132,7 @@ HyperBridge handles **CPU translation**; Wine and the graphics components perfor
 
 MacRunner is intended for **Macs with Apple Silicon**. MacRunner 1.0.9 declares **macOS 26.5** as its minimum; our checks ran on **macOS 27.0**, and a broader macOS range has not been validated. The app is notarized, so it opens on Macs with standard security settings.
 
-**HyperBridge's source is public under MIT** at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). This repository contains the project presentation, [engine license information](HYPERBRIDGE_LICENSE.md), progress reports and the app's [releases](https://github.com/t0b1kent/macrunner-app/releases); the application source is not published here. MacRunner 1.0.8 is a development preview: Developer ID-signed and notarized, automatic updates off.
+**HyperBridge's source is public under MIT** at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). This repository contains the project presentation, [engine license information](HYPERBRIDGE_LICENSE.md), progress reports and the app's [releases](https://github.com/t0b1kent/macrunner-app/releases); the application source is not published here. MacRunner 1.0.9 is a development preview: Developer ID-signed and notarized, automatic updates off.
 
 Next: engine speed (calls and returns, ordinary arithmetic, a persistent translation cache), shorter startup, then title-by-title work and real update delivery. [HyperBridge →](https://github.com/t0b1kent/hyperbridge) · [App release status →](RELEASE_STATUS.md)
 
