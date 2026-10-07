@@ -4,11 +4,11 @@
 
 This page records what has actually been observed while developing MacRunner. A title in the library or launch-profile catalog is not automatically a tested game. Results apply to the configurations used for those sessions.
 
-**Current ordinary release: MacRunner 1.0.8 (October 5).** The September 29 FPS section below was measured on 1.0.3 with engine 0015; those figures have not been re-measured on 1.0.8. Other entries keep their original configurations. The separate Indiana preview is identified explicitly. [HyperBridge status →](HYPERBRIDGE.md)
+**Current ordinary release: MacRunner 1.0.9 (October 7).** It changes only the 64-bit CPU translator and was accepted on test stands; no games were replayed on it, so the newest game observations below are the 1.0.8 checks of October 5. The September 29 FPS section was measured on 1.0.3 with engine 0015; those figures have not been re-measured since. Other entries keep their original configurations. The separate Indiana preview is identified explicitly. [HyperBridge status →](HYPERBRIDGE.md)
 
 ## MacRunner 1.0.8 · October 5 checks
 
-[MacRunner 1.0.8 is available as a pre-release](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.8). These are unattended startup checks without any input: each game was stopped a few seconds after the screen in the table appeared. They do not establish gameplay, input, saving or long-session results.
+These checks were made on [MacRunner 1.0.8](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.8), the previous pre-release. They are unattended startup checks without any input: each game was stopped a few seconds after the screen in the table appeared. They do not establish gameplay, input, saving or long-session results.
 
 | Game | Reached in the check | Build | FPS from one screenshot |
 | --- | --- | --- | --- |
@@ -32,7 +32,7 @@ The FPS readings come from individual Metal HUD screenshots on an M1 Pro running
 
 **Speed.** Compared with 1.0.7, the game used 23% less CPU time per frame in Hollow Knight's menu (alternating runs, run-to-run spread 0.9%); the frame rate was already at the display's 120 Hz limit. With the new startup defaults, Hollow Knight reached its menu in 25.4 s instead of 31.1 s, and ABZU's time changed by −1.5%; both were measured on this engine code before final packaging.
 
-Elden Ring, the Indiana Jones preview, DirectX 12 and ray tracing are outside the 1.0.8 package.
+Elden Ring, the Indiana Jones preview, DirectX 12 and ray tracing are outside the 1.0.8 and 1.0.9 packages.
 
 ## MacRunner 1.0.7 · October 3 checks
 
@@ -155,6 +155,7 @@ These checks retain the scope recorded in the release notes; they do not promote
 | 1.0.6, October 1 | Hollow Knight reaches its main menu on this engine; Hedon's added OpenGL profile produces presented frames | Hollow Knight gameplay and FPS were not re-verified. Hedon's menu and gameplay were not visually verified; no new FPS figure. |
 | 1.0.7, October 3 | Hollow Knight, Divinity and Hedon reach their menus; Stardew Valley (.NET 6) reaches its menu; Heroes III reaches its menu without working sound | Startup and menus only; see the 1.0.7 table above. |
 | 1.0.8, October 5 | Five titles reach their main menus on the final build; see the 1.0.8 table above | Unattended startup checks only; gameplay and FPS were not re-verified. |
+| 1.0.9, October 7 | No game checks: the release was accepted on CPU, hardware-mode, recorded-translation and 32-bit application stands | Only the 64-bit CPU translator changed; games were not replayed. |
 
 ## Heroes III — signed-loader development
 

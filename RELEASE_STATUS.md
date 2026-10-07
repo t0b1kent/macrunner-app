@@ -1,12 +1,12 @@
 # Release status
 
-**MacRunner 1.0.8 development preview · Updated October 5, 2026**
+**MacRunner 1.0.9 development preview · Updated October 7, 2026**
 
 MacRunner is a standalone native Mac application. Its CPU engine is **HyperBridge**: FEX-Emu with MacRunner's patch series, public under MIT at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). The ordinary 1.0.8 preview, the separate 1.0.6-indiana experimental preview and DirectX 12 graphics research are distinct configurations.
 
-## MacRunner 1.0.8 development preview
+## MacRunner 1.0.9 development preview
 
-**[Download from the release page](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.8).** Released October 5, 2026; Apple Silicon; declares macOS 26.5 as its minimum, checked on macOS 27.0.
+**[Download from the release page](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.9).** Released October 7, 2026; Apple Silicon; declares macOS 26.5 as its minimum, checked on macOS 27.0.
 
 | Release | What changed since the previous preview |
 | --- | --- |
@@ -16,12 +16,13 @@ MacRunner is a standalone native Mac application. Its CPU engine is **HyperBridg
 | **1.0.6 · Hedon profile** | Adds a forward-compatible OpenGL context profile; frames are presented, but menu and gameplay were not visually verified. |
 | **1.0.7 · October 3** | First release signed with a Developer ID and notarized by Apple. Ships one Wine runtime and one signed loader for 64-bit and 32-bit programs. Completes thread suspension between Wine and its server and enables .NET's W^X mode, so Stardew Valley (.NET 6) reaches its menu. Corrects the carry flag of 16-bit SHLD/SHRD. |
 | **1.0.8 · October 5** | Hardware x86 memory ordering by default. Four translator startup defaults that avoid translating the same code again. Three x87 state fixes for sound (Heroes III music, Hedon's mix); 32-bit programs see an audio device. The app can start 32-bit programs, with fixes for dropped window messages, viewport geometry, thread start and thread suspension in 32-bit code. Wine no longer resolves the Mac's own host name through the network at session start. AVX self-modifying code, the BLSR/BLSMSK carry flag and DAZ/FTZ handling are corrected; the code-buffer guard accounts for 16 KB host pages. The app selects a Latin keyboard layout while a game runs. Private build paths were removed from the packaged files. |
+| **1.0.9 · October 7** | Speed release of the 64-bit translator: shorter translated code for integer division, read-modify-write instructions and scalar SSE arithmetic; exact unaligned `lock` operations (a two-thread stress test that failed in 5–8 runs of 10 on 1.0.8 passes 10 of 10); no redundant floating-point control write on calls into the system. Wine, graphics and the 32-bit translator are unchanged. |
 
 **CPU validation:** the packaged x64 DIV/IDIV probe matches all 88 Windows-on-ARM reference cases, including fault registers. EFLAGS restoration matches the retained reference within ARM64EC's context limits. These probes do not establish whole-game correctness. On the final 1.0.8 build the CPU stand checked 500,595 saved states with zero new mismatches, and the 32-bit application-path gate passed 21 of 21 cases. The regression comparison still records floating-point status-flag, alias/W^X and shared-section failures.
 
-**Game measurements:** the September 29 Hollow Knight FPS results remain on 1.0.3/engine 0015. For 1.0.8 we measured 23% less game CPU time per frame in Hollow Knight's menu than under 1.0.7 (run-to-run spread 0.9%; the frame rate was already at the 120 Hz limit) and, with the new startup defaults, 25.4 s instead of 31.1 s to Hollow Knight's menu on this engine code before final packaging. Long sessions, save/reload and clean exit still require title-specific checks. [Dated observations →](TESTED_GAMES.md)
+**Game measurements:** the September 29 Hollow Knight FPS results remain on 1.0.3/engine 0015. For 1.0.8 we measured 23% less game CPU time per frame in Hollow Knight's menu than under 1.0.7 (run-to-run spread 0.9%; the frame rate was already at the 120 Hz limit) and, with the new startup defaults, 25.4 s instead of 31.1 s to Hollow Knight's menu on this engine code before final packaging. 1.0.9 was measured in micro-loops only: against 1.0.8, `div` takes 0.92 ns instead of 2.09 ns, `idiv` 0.81 ns instead of 1.96 ns and an `addss` chain 0.94 ns instead of 1.57 ns (alternating runs of both packages, fastest of five); its effect on game frame times has not been measured. Long sessions, save/reload and clean exit still require title-specific checks. [Dated observations →](TESTED_GAMES.md)
 
-**Distribution status of 1.0.8:** signed with a Developer ID and **notarized by Apple** (as 1.0.7 was); automatic updates off. The release includes the corresponding source of its bundled LGPL/GPL components. Our Developer ID provisioning profile carries Apple's cross-architecture-support entitlement, which the Wine loader uses. Notarization is not proof of operation on other Macs or macOS versions.
+**Distribution status of 1.0.9:** signed with a Developer ID and **notarized by Apple** (as 1.0.7 and 1.0.8 were); automatic updates off. The release includes the corresponding source of its bundled LGPL/GPL components. Our Developer ID provisioning profile carries Apple's cross-architecture-support entitlement, which the Wine loader uses. Notarization is not proof of operation on other Macs or macOS versions.
 
 ### Separate Indiana preview
 
@@ -29,7 +30,7 @@ MacRunner is a standalone native Mac application. Its CPU engine is **HyperBridg
 
 ## Engine
 
-MacRunner 1.0.8 uses FEX-Emu `fd141ed6d` with MacRunner's patch series; the patches are in the release's source archive. Both translator modules were rebuilt from those sources on a clean cloud Mac and matched the shipped files byte for byte. The [comparison with Prism, CrossOver Preview and native code](https://github.com/t0b1kent/hyperbridge/blob/main/COMPARISON.md) retains its September 29 numbers: engine 0015, with the explicitly marked 1.0.2 floating-point snapshot. It is not a benchmark of 1.0.8. [Engine versions →](HYPERBRIDGE.md)
+MacRunner 1.0.9 uses FEX-Emu `fd141ed6d` with MacRunner's patch series; the patches are public in the [HyperBridge repository](https://github.com/t0b1kent/hyperbridge/tree/main/fex) and in the release's source archive. This build was compiled on our own Mac; a rebuild from the public repositories on a clean cloud machine is in progress and not finished (for 1.0.8 both translator modules were rebuilt there and matched the shipped files byte for byte). The [comparison with Prism, CrossOver Preview and native code](https://github.com/t0b1kent/hyperbridge/blob/main/COMPARISON.md) has a section measured on the 1.0.9 package; its Prism and CrossOver columns are from October 5. [Engine versions →](HYPERBRIDGE.md)
 
 ## How we test
 
@@ -42,6 +43,8 @@ Three stands replay bounded inputs without starting a game. These are diagnostic
 | **Graphics · October 2** | Native Direct3D 11 trace replay without Wine: 300 Hollow Knight, 191 Divinity and 248 ABZU frames, three repeats per series. Two full series on macOS 27.0.1 give 4,434 exact frame comparisons against truth recorded on 27.0. Ten identity controls and six negative controls behave as expected. | Selected recorded frames, not whole games, gameplay FPS, DirectX 12, Vulkan or ray tracing. One earlier Divinity frame had four RGB samples differ by ±1 (0.00027%, PSNR 109.8 dB); six later repeats did not reproduce it and the cause is open. Historical device capabilities were not fully recorded. |
 
 **October 5, final 1.0.8 build:** the CPU stand checked 500,595 states with zero new mismatches (651 known states, 19 without a reference). The 32-bit application-path gate passed 21 of 21 cases, including a Direct3D 7 frame with a negative control and a Miles Sound System decoder output byte-identical to Windows.
+
+**October 7, final 1.0.9 build:** the CPU stand checked 500,595 states with zero new mismatches. On the signed build the hardware-mode stands checked 812,402 flag states with zero new mismatches and 919,405 SIMD states (pass; 18,968 already-known differences from the hardware reference remain listed). The recorded translations of eight games compile without errors (278,047 records). The 32-bit application-path gate passed 21 of 21 cases, including a Miles Sound System decoder output byte-identical to Windows. No games were replayed for this build.
 
 The processor stand revealed both engine defects and gaps in Unicorn; independent VEX and MXCSR rules keep those distinct. The graphics stand exposed a replay pipeline-state reset that skipped draws. Its A/A timing check reported 6.64% spread and 2.37% CV with frame readback included; this is measurement noise, not a product speed claim. The CPU and 32-bit stand sources are published in [hyperbridge/stands](https://github.com/t0b1kent/hyperbridge/tree/main/stands), without game recordings or binaries; the graphics stand source is published in [the DXMT fork](https://github.com/t0b1kent/dxmt/tree/macrunner-trace-stand/docs/trace-stand).
 
@@ -73,7 +76,7 @@ An earlier session left the game process running after the user exited, requirin
 
 ## Graphics
 
-The ordinary MacRunner 1.0.8 preview runs **64-bit Direct3D 10/11** software through **DXMT**, which translates the graphics calls to Metal; since 1.0.8, 32-bit DirectDraw and Direct3D 7 programs can start through Wine's software renderer (experimental; our checks cover a DirectDraw window and one Direct3D 7 frame); Wine provides Windows API compatibility and HyperBridge translates the CPU instructions. Earlier game results in the [game tests](TESTED_GAMES.md) retain their recorded runtime. A listed launch profile is not a compatibility certification.
+The ordinary MacRunner 1.0.9 preview runs **64-bit Direct3D 10/11** software through **DXMT**, which translates the graphics calls to Metal; since 1.0.8, 32-bit DirectDraw and Direct3D 7 programs can start through Wine's software renderer (experimental; our checks cover a DirectDraw window and one Direct3D 7 frame); Wine provides Windows API compatibility and HyperBridge translates the CPU instructions. Earlier game results in the [game tests](TESTED_GAMES.md) retain their recorded runtime. A listed launch profile is not a compatibility certification.
 
 Support for every DirectX version, every Windows game, or 32-bit Windows software is not claimed.
 
