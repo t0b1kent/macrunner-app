@@ -129,7 +129,8 @@ def build(args):
     reports.mkdir()
     published.mkdir(parents=True, exist_ok=True)
     live = framework.LiveResults(reports, REPO, profile, publish_dir=published,
-                                 job='repro109-app-source')
+                                 job='repro109-app-source',
+                                 publication_mode='github-artifact' if profile == 'github' else 'remote')
     result = dict(schema=1, status='STARTED', classification='DIAGNOSTIC_ONLY_NOT_GOLDEN', profile=profile,
                   source=source, driver_sha256=prepared.sha(__file__),
                   source_lock_sha256=prepared.sha(HERE / 'source.lock.json'),

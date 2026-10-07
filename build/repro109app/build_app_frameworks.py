@@ -196,7 +196,8 @@ def build(args, lock):
     runner = load_runner()
     env = build_env()
     live = LiveResults(reports, REPO, profile, publish_dir=args.publish_dir,
-                       job='repro109-app-frameworks')
+                       job='repro109-app-frameworks',
+                       publication_mode='github-artifact' if profile == 'github' else 'remote')
     result = dict(schema=1, status='STARTED', classification=lock['classification'], profile=profile,
                   selection=[row['name'] for row in selected],
                   lock_sha256=sha(HERE / 'frameworks.lock.json'), driver_sha256=sha(__file__),

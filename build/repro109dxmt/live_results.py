@@ -1,4 +1,4 @@
-"""Small durable stage receipts; publication requires an explicit destination."""
+"""Stage receipts: explicit remote publication or GitHub artifact staging."""
 from datetime import datetime, timezone
 import json
 import os
@@ -17,11 +17,16 @@ CLEANUP_SECONDS = 10
 
 
 class LiveResults:
-    def __init__(self, reports, repo, profile, *, publish_dir=None, publisher=None, clock=time.monotonic, job='repro109-llvm15', initial_publish_required=True):
+    def __init__(self, reports, repo, profile, *, publish_dir=None, publisher=None, clock=time.monotonic, job='repro109-llvm15', initial_publish_required=True, publication_mode='remote'):
         self.reports, self.repo, self.profile = Path(reports), Path(repo), profile
         self.clock, self.started, self.sequence = clock, clock(), 0
         self.job = job
         self.publish_dir = Path(publish_dir) if publish_dir else None
+        if publication_mode not in ('remote', 'github-artifact'):
+            raise ValueError('Unknown checkpoint publication mode')
+        if publication_mode == 'github-artifact' and (profile != 'github' or not self.publish_dir):
+            raise ValueError('GitHub artifact checkpoints require github profile and publish_dir')
+        self.publication_mode = publication_mode
         self.publisher = publisher or self._publish
         self.initial_publish_required = initial_publish_required
         self.reports.mkdir(parents=True, exist_ok=True)
@@ -40,6 +45,10 @@ class LiveResults:
                     raise
 
     def _publish_once(self, path):
+        if self.publication_mode == 'github-artifact':
+            # record() already wrote both destinations. The workflow's always()
+            # upload step preserves these files; no remote upload has happened yet.
+            return
         # Only the tiny checkpoint folder is pushed, never prefix/archive/raw logs.
         remote = os.environ.get('RESULTS_REMOTE', '')
         if not remote:
@@ -87,7 +96,9 @@ class LiveResults:
                    utc=datetime.now(timezone.utc).isoformat(), elapsed_seconds=self.clock() - self.started,
                    source_revision=os.environ.get('GITHUB_SHA', os.environ.get('CI_COMMIT', 'UNAVAILABLE')),
                    build=os.environ.get('GITHUB_RUN_ID', os.environ.get('CI_BUILD_NUMBER', 'UNAVAILABLE')),
-                    failure=failure, publish='ENABLED' if self.publish_dir else 'NOT_ENABLED')
+                    failure=failure, publish=(
+                        'STAGED_FOR_ARTIFACT' if self.publication_mode == 'github-artifact'
+                        else 'ENABLED') if self.publish_dir else 'NOT_ENABLED')
         if status == 'FAILED' or state in ('FAILED', 'COMMAND_FAILED'):
             component = (failure.get('component') or failure.get('phase') or phase) if isinstance(failure, dict) else phase
             row['command_evidence'] = failure_evidence.latest(self.reports, since=self.started, component=component)
