@@ -32,6 +32,10 @@ class FrameworkBoundaryTests(unittest.TestCase):
         source, products = self.root / 'source', self.root / 'products'
         data = [dict(target=row['target'], buildSettings=dict(
             SRCROOT=str(source), PROJECT_DIR=str(source), BUILT_PRODUCTS_DIR=str(products),
+            CONFIGURATION_BUILD_DIR=str(products), SYMROOT=str(products), CONFIGURATION='Release',
+            PRODUCT_NAME=Path(row['product']).stem, EXECUTABLE_NAME=Path(row['product']).stem,
+            WRAPPER_EXTENSION='framework', PRODUCT_TYPE='com.apple.product-type.framework',
+            PLATFORM_NAME='macosx', SUPPORTED_PLATFORMS='macosx', CODE_SIGNING_REQUIRED='NO',
             CODE_SIGNING_ALLOWED='NO', ARCHS='arm64', FULL_PRODUCT_NAME=row['product'], MACH_O_TYPE='mh_dylib'))]
         return row, source, products, data
 
@@ -110,6 +114,7 @@ class FrameworkBoundaryTests(unittest.TestCase):
     def product_settings(self):
         row, source, products, data = self.settings()
         row = copy.deepcopy(self.lock['components'][1])
+        row['resolved_target_pin'] = 'OWN PLC macOS Framework'
         aggregate = copy.deepcopy(data[0])
         aggregate['target'] = 'CrashReporter'
         for key in ['FULL_PRODUCT_NAME', 'MACH_O_TYPE']:
@@ -117,6 +122,7 @@ class FrameworkBoundaryTests(unittest.TestCase):
         native = copy.deepcopy(data[0])
         native['target'] = 'OWN PLC macOS Framework'
         native['buildSettings'].update(FULL_PRODUCT_NAME=row['product'], MACH_O_TYPE='mh_dylib',
+                                       PRODUCT_NAME='CrashReporter', EXECUTABLE_NAME='CrashReporter',
                                        PRODUCT_TYPE='com.apple.product-type.framework', SUPPORTED_PLATFORMS='macosx')
         static = copy.deepcopy(native)
         static['target'] = 'OWN PLC Static'
@@ -188,6 +194,97 @@ class FrameworkBoundaryTests(unittest.TestCase):
         self.assertIn('CODE_SIGNING_ALLOWED=NO', argv)
         sparkle = self.row()
         self.assertNotIn('-alltargets', b.xcode_args(source, products, sparkle, 4, settings=True))
+
+    def test_nested_release_macosx_owned_product_selected(self):
+        row, source, products, data = self.product_settings()
+        selected = data[1]['buildSettings']
+        selected['BUILT_PRODUCTS_DIR'] = str(products / 'Release-macosx')
+        selected['CONFIGURATION_BUILD_DIR'] = selected['BUILT_PRODUCTS_DIR']
+        report = b.source_settings(json.dumps(data), source, products, row)
+        self.assertEqual(report['products'], str(products / 'Release-macosx'))
+        self.assertEqual(report['violations'], [])
+
+    def test_every_selected_axis_reported_in_one_rejection(self):
+        row, source, products, data = self.settings()
+        settings = data[0]['buildSettings']
+        settings.update(SRCROOT=str(self.root / 'foreign-source'),
+                        BUILT_PRODUCTS_DIR=str(self.root / 'foreign-product'),
+                        CONFIGURATION_BUILD_DIR=str(self.root / 'other-product'),
+                        SYMROOT=str(self.root / 'foreign-symroot'),
+                        FULL_PRODUCT_NAME='OTHER.framework', PRODUCT_NAME='OTHER',
+                        EXECUTABLE_NAME='OTHER', MACH_O_TYPE='staticlib', WRAPPER_EXTENSION='a',
+                        PRODUCT_TYPE='com.apple.product-type.library.static',
+                        ARCHS='arm64 x86_64', PLATFORM_NAME='iphoneos',
+                        SUPPORTED_PLATFORMS='iphoneos', CODE_SIGNING_ALLOWED='YES',
+                        CODE_SIGNING_REQUIRED='YES', EXTRA_OWN_SETTING='preserved-own-fixture')
+        with self.assertRaises(b.SettingsMismatch) as caught:
+            b.source_settings(json.dumps(data), source, products, row)
+        report = caught.exception.report
+        fields = {v['field'] for v in report['violations']}
+        required = {'SRCROOT', 'BUILT_PRODUCTS_DIR', 'CONFIGURATION_BUILD_DIR', 'SYMROOT',
+                    'FULL_PRODUCT_NAME', 'PRODUCT_NAME', 'EXECUTABLE_NAME', 'MACH_O_TYPE',
+                    'WRAPPER_EXTENSION', 'PRODUCT_TYPE', 'ARCHS', 'PLATFORM_NAME',
+                    'SUPPORTED_PLATFORMS', 'CODE_SIGNING_ALLOWED', 'CODE_SIGNING_REQUIRED'}
+        self.assertTrue(required.issubset(fields), fields)
+        self.assertEqual(report['selected_settings'][0]['buildSettings']['EXTRA_OWN_SETTING'],
+                         'preserved-own-fixture')
+
+    def test_product_all_owned_path_fields_wrong_types_rejected_together(self):
+        row, source, products, data = self.settings()
+        keys = ['SRCROOT', 'PROJECT_DIR', 'BUILT_PRODUCTS_DIR', 'CONFIGURATION_BUILD_DIR', 'SYMROOT']
+        for key in keys:
+            data[0]['buildSettings'][key] = None
+        with self.assertRaises(b.SettingsMismatch) as caught:
+            b.source_settings(json.dumps(data), source, products, row)
+        self.assertTrue(set(keys).issubset({v['field'] for v in caught.exception.report['violations']}))
+
+    def test_product_sibling_prefix_is_not_owned(self):
+        row, source, products, data = self.settings()
+        data[0]['buildSettings']['BUILT_PRODUCTS_DIR'] = str(products.parent / (products.name + '-foreign'))
+        data[0]['buildSettings']['CONFIGURATION_BUILD_DIR'] = data[0]['buildSettings']['BUILT_PRODUCTS_DIR']
+        with self.assertRaises(b.SettingsMismatch):
+            b.source_settings(json.dumps(data), source, products, row)
+
+    def test_product_owned_directory_symlink_escape_rejected(self):
+        row, source, products, data = self.settings()
+        products.mkdir(parents=True, exist_ok=True)
+        outside = self.root / uuid.uuid4().hex
+        outside.mkdir()
+        link = products / uuid.uuid4().hex
+        link.symlink_to(outside, target_is_directory=True)
+        data[0]['buildSettings']['BUILT_PRODUCTS_DIR'] = str(link)
+        data[0]['buildSettings']['CONFIGURATION_BUILD_DIR'] = str(link)
+        with self.assertRaises(b.SettingsMismatch):
+            b.source_settings(json.dumps(data), source, products, row)
+
+    def test_selected_signing_identity_not_written_to_report(self):
+        row, source, products, data = self.settings()
+        data[0]['buildSettings']['CODE_SIGN_IDENTITY'] = 'OWN_FIXTURE_IDENTITY'
+        data[0]['buildSettings']['DEVELOPMENT_TEAM'] = 'OWN_FIXTURE_TEAM'
+        with self.assertRaises(b.SettingsMismatch) as caught:
+            b.source_settings(json.dumps(data), source, products, row)
+        encoded = json.dumps(caught.exception.report)
+        self.assertNotIn('OWN_FIXTURE_IDENTITY', encoded)
+        self.assertNotIn('OWN_FIXTURE_TEAM', encoded)
+        self.assertIn('<REDACTED_IDENTITY_VALUE>', encoded)
+
+    def test_product_pinned_target_all_errors_even_if_qualification_fails(self):
+        row, source, products, data = self.product_settings()
+        settings = data[1]['buildSettings']
+        settings.update(FULL_PRODUCT_NAME='OTHER.framework', MACH_O_TYPE='staticlib',
+                        PRODUCT_TYPE='com.apple.product-type.library.static', ARCHS='x86_64',
+                        PLATFORM_NAME='iphoneos', SUPPORTED_PLATFORMS='iphoneos',
+                        CODE_SIGNING_ALLOWED='YES', BUILT_PRODUCTS_DIR=str(self.root / 'foreign'))
+        with self.assertRaises(b.SettingsMismatch) as caught:
+            b.source_settings(json.dumps(data), source, products, row)
+        report = caught.exception.report
+        required = {'FULL_PRODUCT_NAME', 'MACH_O_TYPE', 'PRODUCT_TYPE', 'ARCHS',
+                    'PLATFORM_NAME', 'SUPPORTED_PLATFORMS', 'CODE_SIGNING_ALLOWED', 'BUILT_PRODUCTS_DIR'}
+        self.assertTrue(required.issubset({v['field'] for v in report['violations']}))
+        self.assertEqual(report['selected_settings'][0]['target'], row['resolved_target_pin'])
+
+    def test_lock_pins_observed_plc_target(self):
+        self.assertEqual(self.lock['components'][1]['resolved_target_pin'], 'CrashReporter macOS Framework')
 
     def test_product_full_sparkle_helper_family(self):
         self.assertEqual(len(b.product_paths(self.framework(), self.row())), 5)

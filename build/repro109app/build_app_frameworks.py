@@ -61,6 +61,9 @@ def read_lock(path=HERE / 'frameworks.lock.json'):
                 raise ValueError('Unsafe Xcode input')
         if row.get('target_selection', 'pinned') not in ('pinned', 'unique-macos-dynamic-framework'):
             raise ValueError('Unknown Xcode target selection')
+        pin = row.get('resolved_target_pin')
+        if pin is not None and (not isinstance(pin, str) or not re.fullmatch(r'[A-Za-z0-9_][A-Za-z0-9_. -]*', pin)):
+            raise ValueError('Unsafe pinned resolved Xcode target')
         for name in row['required_binaries'] + row['license_candidates']:
             if Path(name).is_absolute() or '..' in Path(name).parts:
                 raise ValueError('Unsafe framework path')
@@ -98,48 +101,104 @@ def validate_git(row, head, object_type, origin, status, staged):
         raise ValueError('Submodule source closure NOT_ENABLED: ' + str(len(gitlinks)) + ' gitlinks')
 
 
+class SettingsMismatch(ValueError):
+    def __init__(self, report):
+        self.report = report
+        super().__init__('Xcode selected target settings differ: ' + json.dumps(report['violations'], sort_keys=True))
+
+
 def source_settings(raw, source, products, row):
+    """Select once; audit all properties together, before any source build."""
     data = json.loads(raw)
     if not isinstance(data, list) or not data:
         raise ValueError('Xcode build settings EMPTY')
     selected = []
     by_product = row.get('target_selection', 'pinned') == 'unique-macos-dynamic-framework'
     observed = []
+    violations = []
+    selected_settings = []
+    qualified = []
+    target_pin = row.get('resolved_target_pin')
+    def fail(message, key, target=None):
+        violations.append(dict(error=message, field=key, target=target))
+    def absolute(value):
+        if not isinstance(value, str) or not value or not Path(value).is_absolute():
+            return None
+        return Path(value).resolve()
+    products = products.resolve()
     for entry in data:
         if not isinstance(entry, dict):
-            raise ValueError('Xcode build settings entry type differs')
+            fail('Xcode build settings entry type differs', 'entry')
+            continue
         settings = entry.get('buildSettings')
         if not isinstance(settings, dict):
-            raise ValueError('Xcode build settings type differs')
+            fail('Xcode build settings type differs', 'buildSettings', entry.get('target'))
+            continue
         for key in ['SRCROOT', 'PROJECT_DIR']:
-            if Path(settings.get(key, '')).resolve() != source.resolve():
-                raise ValueError('Foreign Xcode ' + key)
+            if absolute(settings.get(key)) != source.resolve():
+                fail('Foreign Xcode ' + key, key, entry.get('target'))
         candidate = entry.get('target') == row['target']
         if by_product:
             candidate = (settings.get('FULL_PRODUCT_NAME') == row['product']
                          and settings.get('MACH_O_TYPE') == 'mh_dylib'
                          and settings.get('PRODUCT_TYPE') == 'com.apple.product-type.framework'
-                         and 'macosx' in settings.get('SUPPORTED_PLATFORMS', '').split())
+                         and 'macosx' in str(settings.get('SUPPORTED_PLATFORMS', '')).split())
+            if candidate:
+                qualified.append(entry.get('target'))
+                if not isinstance(entry.get('target'), str) or not re.fullmatch(r'[A-Za-z0-9_][A-Za-z0-9_. -]*', entry['target']):
+                    fail('Unsafe resolved Xcode target', 'target', entry.get('target'))
+            if target_pin is not None:
+                candidate = entry.get('target') == target_pin
         observed.append({key: settings.get(key) for key in
                          ['FULL_PRODUCT_NAME', 'MACH_O_TYPE', 'PRODUCT_TYPE', 'SUPPORTED_PLATFORMS']}
                         | {'target': entry.get('target')})
-        if (not by_product or candidate) and Path(settings.get('BUILT_PRODUCTS_DIR', '')).resolve() != products.resolve():
-            raise ValueError('Foreign Xcode product directory')
-        if settings.get('CODE_SIGNING_ALLOWED') != 'NO':
-            raise ValueError('Xcode signing is enabled')
-        if settings.get('ARCHS', '').split() != ['arm64']:
-            raise ValueError('Xcode architecture differs')
         if candidate:
-            if settings.get('FULL_PRODUCT_NAME') != row['product'] or settings.get('MACH_O_TYPE') != 'mh_dylib':
-                raise ValueError('Framework product/type differs')
-            if not isinstance(entry.get('target'), str) or not re.fullmatch(r'[A-Za-z0-9_][A-Za-z0-9_. -]*', entry['target']):
-                raise ValueError('Unsafe resolved Xcode target')
-            selected.append(entry['target'])
+            target = entry.get('target')
+            # Preserve every selected setting while excluding signing identities.
+            safe = dict(settings)
+            for key in list(safe):
+                if any(word in key for word in ['IDENTITY', 'DEVELOPMENT_TEAM', 'PROVISIONING_PROFILE']):
+                    safe[key] = None if not safe[key] else '<REDACTED_IDENTITY_VALUE>'
+            selected_settings.append(dict(target=target, buildSettings=safe))
+            selected.append(target)
+            built = absolute(settings.get('BUILT_PRODUCTS_DIR'))
+            if built is None or (built != products and products not in built.parents):
+                fail('Foreign Xcode product directory', 'BUILT_PRODUCTS_DIR', target)
+            if absolute(settings.get('CONFIGURATION_BUILD_DIR')) != built or built is None:
+                fail('Xcode configuration/product directory differs', 'CONFIGURATION_BUILD_DIR', target)
+            if absolute(settings.get('SYMROOT')) != products:
+                fail('Foreign Xcode SYMROOT', 'SYMROOT', target)
+            required = dict(FULL_PRODUCT_NAME=row['product'], PRODUCT_NAME=Path(row['product']).stem,
+                            EXECUTABLE_NAME=Path(row['product']).stem, WRAPPER_EXTENSION='framework',
+                            MACH_O_TYPE='mh_dylib', PRODUCT_TYPE='com.apple.product-type.framework',
+                            CONFIGURATION='Release', PLATFORM_NAME='macosx',
+                            CODE_SIGNING_ALLOWED='NO', CODE_SIGNING_REQUIRED='NO')
+            for key, value in required.items():
+                if settings.get(key) != value:
+                    fail('Xcode selected property differs', key, target)
+            if str(settings.get('ARCHS', '')).split() != ['arm64']:
+                fail('Xcode architecture differs', 'ARCHS', target)
+            if 'macosx' not in str(settings.get('SUPPORTED_PLATFORMS', '')).split():
+                fail('Xcode supported platform differs', 'SUPPORTED_PLATFORMS', target)
+            for key in ['CODE_SIGN_IDENTITY', 'DEVELOPMENT_TEAM']:
+                if settings.get(key):
+                    fail('Xcode signing identity must be empty', key, target)
+            if not isinstance(target, str) or not re.fullmatch(r'[A-Za-z0-9_][A-Za-z0-9_. -]*', target):
+                fail('Unsafe resolved Xcode target', 'target', target)
     if (by_product and len(selected) != 1) or (not by_product and selected != [row['target']]):
-        raise ValueError('Xcode target missing/ambiguous: ' + json.dumps(observed, sort_keys=True))
-    return dict(status='PRESENT', targets=len(data), selected=selected,
-                selection=row.get('target_selection', 'pinned'), observed=observed,
-                srcroot=str(source), products=str(products))
+        fail('Xcode target missing/ambiguous', 'target_selection')
+    if by_product and target_pin is not None and qualified != [target_pin]:
+        fail('Xcode target missing/ambiguous', 'qualified_target_selection')
+    report = dict(status='FAILED' if violations else 'PRESENT', targets=len(data), selected=selected,
+                  selection=row.get('target_selection', 'pinned'), observed=observed,
+                  srcroot=str(source), products_root=str(products),
+                  products=selected_settings[0]['buildSettings'].get('BUILT_PRODUCTS_DIR')
+                  if len(selected_settings) == 1 else None,
+                  selected_settings=selected_settings, violations=violations)
+    report['qualified_targets'] = qualified
+    if violations:
+        raise SettingsMismatch(report)
+    return report
 
 
 def product_paths(framework, row):
@@ -282,7 +341,12 @@ def build(args, lock):
                 build_dir = args.work / (name + '-build')
                 settings = output(xcode_args(source, build_dir, row, args.jobs, settings=True)
                                   + ['-showBuildSettings', '-json'], source, name + '-settings')
-                own = source_settings(settings, source, build_dir / 'products/Release', row)
+                try:
+                    own = source_settings(settings, source, build_dir / 'products', row)
+                except SettingsMismatch as exc:
+                    write_json(reports / (name + '-source-ownership.json'), exc.report)
+                    item['settings_validation'] = exc.report
+                    raise
                 write_json(reports / (name + '-source-ownership.json'), own)
                 resolved = dict(row, target=own['selected'][0])
                 item['resolved_target'] = resolved['target']
@@ -290,7 +354,7 @@ def build(args, lock):
                 argv = xcode_args(source, build_dir, resolved, args.jobs)
                 checkpoint(name, 'BUILD_START')
                 command(argv + ['build'], source, name + '-build')
-                product = build_dir / 'products/Release' / row['product']
+                product = Path(own['products']) / row['product']
                 binaries = product_paths(product, row)
                 item['binaries'] = []
                 for number, p in enumerate(binaries):

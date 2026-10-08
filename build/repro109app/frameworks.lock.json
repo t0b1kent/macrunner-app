@@ -53,6 +53,7 @@
       "project": "CrashReporter.xcodeproj",
       "target": "CrashReporter",
       "target_selection": "unique-macos-dynamic-framework",
+      "resolved_target_pin": "CrashReporter macOS Framework",
       "product": "CrashReporter.framework",
       "required_binaries": ["Versions/A/CrashReporter"],
       "license_candidates": ["LICENSE", "LICENSE.txt", "LICENSE.md"]
