@@ -62,6 +62,11 @@ def read_lock(path=HERE / 'frameworks.lock.json'):
                 raise ValueError('Unsafe Xcode input')
         if row.get('target_selection', 'pinned') not in ('pinned', 'unique-macos-dynamic-framework'):
             raise ValueError('Unknown Xcode target selection')
+        edit = row.get('project_edit')
+        if edit is not None and (row['name'] != 'plcrashreporter' or set(edit) != {'name', 'module_sha256'}
+                                 or edit['name'] != 'static-library-without-protobuf-source'
+                                 or not re.fullmatch('[0-9a-f]{64}', edit['module_sha256'])):
+            raise ValueError('Unknown or unpinned project edit')
         pin = row.get('resolved_target_pin')
         if pin is not None and (not isinstance(pin, str) or not re.fullmatch(r'[A-Za-z0-9_][A-Za-z0-9_. -]*', pin)):
             raise ValueError('Unsafe pinned resolved Xcode target')
@@ -77,6 +82,21 @@ def load_runner():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def apply_project_edit(path, edit):
+    """Apply the one pinned, byte-checked edit to the project file of this fresh work directory."""
+    module_path = HERE / 'plc_project_edit.py'
+    if sha(module_path) != edit['module_sha256']:
+        raise ValueError('Project edit module differs from the lock')
+    spec = importlib.util.spec_from_file_location('plc_project_edit', module_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    if module.NAME != edit['name']:
+        raise ValueError('Project edit name differs from the lock')
+    edited, report = module.apply(Path(path).read_bytes())
+    Path(path).write_bytes(edited)
+    return report
 
 
 def build_env():
@@ -446,6 +466,13 @@ def build(args, lock):
                 if name == 'plcrashreporter':
                     write_json(reports / (name + '-project-graph.json'),
                                capture_project_graph(source, row, resolved['target']))
+                expected_status = ''
+                if row.get('project_edit'):
+                    # The unedited project crashes the Xcode build service (runs 38498482213, 38501023892).
+                    edit_report = apply_project_edit(source / row['project'] / 'project.pbxproj', row['project_edit'])
+                    item['project_edit'] = edit_report
+                    write_json(reports / (name + '-project-edit.json'), edit_report)
+                    expected_status = ' M ' + row['project'] + '/project.pbxproj'
                 argv = xcode_args(source, build_dir, resolved, args.jobs)
                 checkpoint(name, 'BUILD_START')
                 command(argv + ['build'], source, name + '-build')
@@ -460,7 +487,7 @@ def build(args, lock):
                                                  bytes=p.stat().st_size, architecture='arm64'))
                 # Input changes are evidence of an unrecorded generation path, never silently accepted.
                 after = output(git + ['status', '--porcelain'], source, name + '-post-status')
-                if after.strip():
+                if after.rstrip('\n') != expected_status:
                     raise ValueError('Framework source changed during build; inspect raw post-status')
                 destination = prefix / row['product']
                 shutil.copytree(product, destination, symlinks=True)

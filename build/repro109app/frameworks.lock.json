@@ -54,6 +54,7 @@
       "target": "CrashReporter",
       "target_selection": "unique-macos-dynamic-framework",
       "resolved_target_pin": "CrashReporter macOS Framework",
+      "project_edit": {"name": "static-library-without-protobuf-source", "module_sha256": "a866605edea5f1a1fc7077144e07758349d66de61b7e93e188e47ccbf84e9060"},
       "product": "CrashReporter.framework",
       "required_binaries": ["Versions/A/CrashReporter"],
       "license_candidates": ["LICENSE", "LICENSE.txt", "LICENSE.md"]
