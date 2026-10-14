@@ -1,0 +1,159 @@
+name: REPRO-110 PLCrashReporter project bisect
+
+# Result of the first diagnosis (run 38498482213): the Xcode build service dies with rc 65 on the pinned PLCrashReporter
+# project on Xcode 26.6 AND Xcode 27.0, for the framework target AND the static library target, with -jobs 4 AND -jobs 1,
+# while Sparkle builds on the same image. So the cause is inside the project. This job removes one suspected feature of a
+# COPY of the project at a time (custom build rule, protobuf source, MIG source, all other targets) and builds the
+# static library target the same way as the producer. The pinned source is never modified in place.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bisect:
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {variant: control,         runner: macos-26, developer_dir: /Applications/Xcode_26.6.app/Contents/Developer}
+          - {variant: list-only,       runner: macos-26, developer_dir: /Applications/Xcode_26.6.app/Contents/Developer}
+          - {variant: settings-only,   runner: macos-26, developer_dir: /Applications/Xcode_26.6.app/Contents/Developer}
+          - {variant: drop-rule,       runner: macos-26, developer_dir: /Applications/Xcode_26.6.app/Contents/Developer}
+          - {variant: drop-proto,      runner: macos-26, developer_dir: /Applications/Xcode_26.6.app/Contents/Developer}
+          - {variant: drop-mig,        runner: macos-26, developer_dir: /Applications/Xcode_26.6.app/Contents/Developer}
+          - {variant: drop-all-three,  runner: macos-26, developer_dir: /Applications/Xcode_26.6.app/Contents/Developer}
+          - {variant: only-needed-targets, runner: macos-26, developer_dir: /Applications/Xcode_26.6.app/Contents/Developer}
+          - {variant: minimal,         runner: macos-26, developer_dir: /Applications/Xcode_26.6.app/Contents/Developer}
+          - {variant: control,         runner: xcode-27, developer_dir: /Applications/Xcode_27.app/Contents/Developer}
+          - {variant: minimal,         runner: xcode-27, developer_dir: /Applications/Xcode_27.app/Contents/Developer}
+    env:
+      DEVELOPER_DIR: ${{ matrix.developer_dir }}
+      PLC_REVISION: 6752f71de206f6a53fa6a758c3660fd9a7fe7527
+      VARIANT: ${{ matrix.variant }}
+    steps:
+      - name: Record the machine, the SDK and the MIG source the project names
+        shell: bash
+        run: |
+          set -uo pipefail
+          out="$RUNNER_TEMP/bisect/${VARIANT}"
+          mkdir -p "$out"
+          {
+            sw_vers; uname -m; xcodebuild -version
+            sdk="$(xcrun --show-sdk-path)"
+            printf 'sdk=%s\n' "$sdk"
+            ls -la "$sdk/usr/include/mach/mach_exc.defs" 2>&1
+          } > "$out/machine.txt" 2>&1
+          cat "$out/machine.txt"
+      - name: Fetch the pinned PLCrashReporter revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          src="$RUNNER_TEMP/plc-source"
+          git init -q "$src"
+          git -C "$src" fetch -q --depth 1 https://github.com/microsoft/plcrashreporter.git "$PLC_REVISION"
+          git -C "$src" checkout -q --detach FETCH_HEAD
+          [ "$(git -C "$src" rev-parse HEAD)" = "$PLC_REVISION" ] || { printf 'Revision differs\n'; exit 1; }
+      - name: Edit a copy of the project for this variant
+        id: edit
+        shell: bash
+        run: |
+          set -uo pipefail
+          out="$RUNNER_TEMP/bisect/${VARIANT}"
+          export SRC="$RUNNER_TEMP/plc-source"
+          python3 - <<'PY' > "$out/edit.txt" 2>&1
+          import os, re, sys
+          variant = os.environ['VARIANT']
+          proj = os.path.join(os.environ['SRC'], 'CrashReporter.xcodeproj', 'project.pbxproj')
+          text = open(proj, encoding='utf-8').read()
+          RULE = 'C2B72B1A24534DD200D03ABD'      # custom build rule of "CrashReporter macOS"
+          PROTO = 'C2B72B2124534E5200D03ABD'     # PLCrashReport.proto in that target's Sources phase
+          MIG = 'C2DCD88124658A63007322C5'       # usr/include/mach/mach_exc.defs in that target's Sources phase
+          LIB = '05E731F20EFA1AAB005EDFB7'       # target "CrashReporter macOS" (static library)
+          def drop(text, ident, ends):
+              pattern = re.compile(r'^[ \t]*' + ident + r'\b[^\n]*[' + ends + r'][ \t]*\n', re.M)
+              found = len(pattern.findall(text))
+              if not found:
+                  raise SystemExit('EDIT_FAILED: id %s not found' % ident)
+              return pattern.sub('', text), found
+          log = []
+          if variant in ('drop-rule', 'drop-all-three', 'minimal'):
+              text, n = drop(text, RULE, ','); log.append('rule list lines removed=%d' % n)
+          if variant in ('drop-proto', 'drop-all-three', 'minimal'):
+              text, n = drop(text, PROTO, ',;'); log.append('proto lines removed=%d' % n)
+          if variant in ('drop-mig', 'drop-all-three', 'minimal'):
+              text, n = drop(text, MIG, ',;'); log.append('mig lines removed=%d' % n)
+          if variant in ('only-needed-targets', 'minimal'):
+              match = re.search(r'(isa = PBXProject;.*?targets = \()(.*?)(\n[ \t]*\);)', text, re.S)
+              if not match:
+                  raise SystemExit('EDIT_FAILED: project target list not found')
+              before = len(re.findall(r'[0-9A-F]{24}', match.group(2)))
+              text = text[:match.start(2)] + '\n\t\t\t\t' + LIB + ' /* CrashReporter macOS */,' + text[match.end(2):]
+              log.append('targets %d -> 1' % before)
+          open(proj, 'w', encoding='utf-8').write(text)
+          print('EDIT_OK variant=%s; %s' % (variant, '; '.join(log) or 'no edit'))
+          PY
+          rc=$?
+          cat "$out/edit.txt"
+          if [ "$rc" -eq 0 ] && [ "$VARIANT" != control ] && [ "$VARIANT" != list-only ] && [ "$VARIANT" != settings-only ]; then
+            plutil -lint "$SRC/CrashReporter.xcodeproj/project.pbxproj" >> "$out/edit.txt" 2>&1 || rc=$?
+            tail -n 1 "$out/edit.txt"
+          fi
+          printf '%s\n' "$rc" > "$out/edit-result.txt"
+          exit 0
+      - name: Run the xcodebuild command for this variant
+        id: build
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -uo pipefail
+          out="$RUNNER_TEMP/bisect/${VARIANT}"
+          proj="$RUNNER_TEMP/plc-source/CrashReporter.xcodeproj"
+          if [ "$(cat "$out/edit-result.txt")" != 0 ]; then
+            printf 'EDIT_INVALID\n' > "$out/result.txt"; exit 0
+          fi
+          case "$VARIANT" in
+            list-only)
+              xcodebuild -list -project "$proj" > "$out/xcodebuild.log" 2>&1 ;;
+            settings-only)
+              xcodebuild -showBuildSettings -project "$proj" -target "CrashReporter macOS" -configuration Release -sdk macosx \
+                ARCHS=arm64 MACOSX_DEPLOYMENT_TARGET=14.0 > "$out/xcodebuild.log" 2>&1 ;;
+            *)
+              xcodebuild -project "$proj" -target "CrashReporter macOS" -configuration Release -sdk macosx -jobs 4 \
+                ARCHS=arm64 ONLY_ACTIVE_ARCH=NO MACOSX_DEPLOYMENT_TARGET=14.0 \
+                CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= DEVELOPMENT_TEAM= \
+                SYMROOT="$RUNNER_TEMP/plc-build/products" OBJROOT="$RUNNER_TEMP/plc-build/objects" build \
+                > "$out/xcodebuild.log" 2>&1 ;;
+          esac
+          rc=$?
+          first_error="$(grep -m1 -E 'error:|BUILD (SUCCEEDED|FAILED)' "$out/xcodebuild.log" | head -c 200)"
+          printf 'rc=%s\n%s\n' "$rc" "$first_error" > "$out/result.txt"
+          printf '| %s | %s | rc %s | %s |\n' "$VARIANT" "${{ matrix.runner }}" "$rc" "$first_error" >> "$GITHUB_STEP_SUMMARY"
+          exit 0
+      - name: Keep the build service evidence
+        if: always()
+        shell: bash
+        run: |
+          set -uo pipefail
+          out="$RUNNER_TEMP/bisect/${VARIANT}/crash-reports"
+          mkdir -p "$out"
+          ls -la "$HOME/Library/Logs/DiagnosticReports" > "$out/listing-user.txt" 2>&1
+          ls -la /Library/Logs/DiagnosticReports > "$out/listing-system.txt" 2>&1
+          find "$HOME/Library/Logs/DiagnosticReports" /Library/Logs/DiagnosticReports -maxdepth 2 -type f -mmin -60 -size -8000k \
+            \( -iname '*BuildService*' -o -iname '*xcodebuild*' -o -iname '*Xcode*' -o -iname '*swift*' \) -exec cp {} "$out/" \; 2>/dev/null
+          log show --last 20m --style compact \
+            --predicate 'process CONTAINS "SWBBuildService" OR process CONTAINS "XCBBuildService" OR process CONTAINS "xcodebuild"' \
+            2>&1 | head -c 1500000 > "$RUNNER_TEMP/bisect/${VARIANT}/unified-log.txt" || true
+          ls -la "$out" | head -30
+      - name: Preserve the variant result
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: repro110-plc-bisect-${{ matrix.variant }}-${{ matrix.runner }}
+          path: ${{ runner.temp }}/bisect/${{ matrix.variant }}/
+          if-no-files-found: error
+          retention-days: 30
