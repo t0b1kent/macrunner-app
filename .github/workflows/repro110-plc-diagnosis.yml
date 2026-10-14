@@ -1,0 +1,118 @@
+name: REPRO-110 PLCrashReporter build service diagnosis
+
+# Why: the app matrix fails twice in a row on the PLCrashReporter framework with
+# "The Xcode build system has crashed" (xcodebuild rc 65, CreateBuildDescription, before any
+# compile), while the Sparkle framework builds with the same Xcode 27 image. This job separates
+# the possible causes in one pass: Xcode version, which of the two targets, and parallelism.
+# It builds only the pinned open-source revision and keeps the system crash reports.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  plc:
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: xcode27-framework
+            runner: xcode-27
+            developer_dir: /Applications/Xcode_27.app/Contents/Developer
+            target: CrashReporter macOS Framework
+            jobs: '4'
+          - id: xcode27-framework-jobs1
+            runner: xcode-27
+            developer_dir: /Applications/Xcode_27.app/Contents/Developer
+            target: CrashReporter macOS Framework
+            jobs: '1'
+          - id: xcode27-staticlib
+            runner: xcode-27
+            developer_dir: /Applications/Xcode_27.app/Contents/Developer
+            target: CrashReporter macOS
+            jobs: '4'
+          - id: xcode266-framework
+            runner: macos-26
+            developer_dir: /Applications/Xcode_26.6.app/Contents/Developer
+            target: CrashReporter macOS Framework
+            jobs: '4'
+          - id: xcode266-staticlib
+            runner: macos-26
+            developer_dir: /Applications/Xcode_26.6.app/Contents/Developer
+            target: CrashReporter macOS
+            jobs: '4'
+    env:
+      DEVELOPER_DIR: ${{ matrix.developer_dir }}
+      PLC_REVISION: 6752f71de206f6a53fa6a758c3660fd9a7fe7527
+    steps:
+      - name: Record the machine and the selected Xcode
+        shell: bash
+        run: |
+          set -uo pipefail
+          mkdir -p "$RUNNER_TEMP/plc-diagnosis"
+          {
+            sw_vers
+            uname -m
+            xcodebuild -version
+            xcrun --show-sdk-version
+            xcrun --find clang
+          } > "$RUNNER_TEMP/plc-diagnosis/machine.txt" 2>&1
+          cat "$RUNNER_TEMP/plc-diagnosis/machine.txt"
+      - name: Fetch the pinned PLCrashReporter revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          src="$RUNNER_TEMP/plc-source"
+          git init -q "$src"
+          git -C "$src" fetch -q --depth 1 https://github.com/microsoft/plcrashreporter.git "$PLC_REVISION"
+          git -C "$src" checkout -q --detach FETCH_HEAD
+          [ "$(git -C "$src" rev-parse HEAD)" = "$PLC_REVISION" ] || { printf 'Revision differs\n'; exit 1; }
+      - name: Build the selected target with the exact producer arguments
+        id: build
+        continue-on-error: true
+        shell: bash
+        env:
+          PLC_TARGET: ${{ matrix.target }}
+          PLC_JOBS: ${{ matrix.jobs }}
+        run: |
+          set -uo pipefail
+          out="$RUNNER_TEMP/plc-diagnosis"
+          xcodebuild -project "$RUNNER_TEMP/plc-source/CrashReporter.xcodeproj" \
+            -target "$PLC_TARGET" -configuration Release -sdk macosx -jobs "$PLC_JOBS" \
+            ARCHS=arm64 ONLY_ACTIVE_ARCH=NO MACOSX_DEPLOYMENT_TARGET=14.0 \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= DEVELOPMENT_TEAM= \
+            SYMROOT="$RUNNER_TEMP/plc-build/products" OBJROOT="$RUNNER_TEMP/plc-build/objects" build \
+            > "$out/xcodebuild.log" 2>&1
+          rc=$?
+          printf '%s\n' "$rc" > "$out/xcodebuild.rc"
+          tail -n 25 "$out/xcodebuild.log"
+          exit "$rc"
+      - name: Keep the system crash reports of the Xcode build service
+        if: always()
+        shell: bash
+        run: |
+          set -uo pipefail
+          out="$RUNNER_TEMP/plc-diagnosis/crash-reports"
+          mkdir -p "$out"
+          for dir in "$HOME/Library/Logs/DiagnosticReports" /Library/Logs/DiagnosticReports; do
+            [ -d "$dir" ] || continue
+            ls -la "$dir" > "$out/listing-$(basename "$(dirname "$dir")")-$(basename "$dir").txt" 2>&1
+            find "$dir" -maxdepth 1 -type f -mmin -60 -size -8000k \( -iname '*XCBBuildService*' -o -iname '*SWBBuildService*' -o -iname '*xcodebuild*' -o -iname '*Xcode*' \) \
+              -exec cp {} "$out/" \; 2>/dev/null
+          done
+          log show --last 30m --style compact \
+            --predicate 'process CONTAINS "XCBBuildService" OR process CONTAINS "SWBBuildService" OR process CONTAINS "xcodebuild"' \
+            2>&1 | head -c 2000000 > "$RUNNER_TEMP/plc-diagnosis/unified-log.txt" || true
+          ls -la "$out" | head -40
+      - name: Preserve the diagnosis
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: repro110-plc-${{ matrix.id }}
+          path: ${{ runner.temp }}/plc-diagnosis/
+          if-no-files-found: error
+          retention-days: 30
