@@ -15,6 +15,7 @@ import platform
 import plistlib
 import re
 import shutil
+import subprocess
 import sys
 import time
 
@@ -201,6 +202,97 @@ def source_settings(raw, source, products, row):
     return report
 
 
+def project_graph(data, target):
+    """Project membership/flags only; never export scripts or signing settings."""
+    objects = data.get('objects') if isinstance(data, dict) else None
+    if not isinstance(objects, dict) or not objects or len(objects) > 20000:
+        raise ValueError('Invalid/capped PBX object dictionary')
+    candidates = [key for key, obj in objects.items() if isinstance(obj, dict)
+                  and obj.get('isa') == 'PBXNativeTarget' and obj.get('name') == target]
+    if len(candidates) != 1:
+        raise ValueError('Selected PBX target missing/ambiguous')
+    reached, pending, unresolved = set(), candidates[:], []
+    while pending:
+        key = pending.pop()
+        if key in reached:
+            continue
+        reached.add(key)
+        for dep in objects[key].get('dependencies', []):
+            ref = objects.get(dep, {}).get('target')
+            if ref not in objects or objects[ref].get('isa') != 'PBXNativeTarget':
+                unresolved.append(dep)
+            else:
+                pending.append(ref)
+    fields = {'isa', 'name', 'path', 'sourceTree', 'lastKnownFileType', 'explicitFileType',
+              'children', 'mainGroup', 'projectDirPath', 'projectRoot', 'targets',
+              'fileRef', 'files', 'buildPhases', 'buildRules', 'dependencies', 'target',
+              'targetProxy', 'remoteGlobalIDString', 'productReference', 'productType',
+              'buildConfigurationList', 'buildConfigurations', 'defaultConfigurationName',
+              'baseConfigurationReference', 'inputPaths', 'outputPaths',
+              'inputFileListPaths', 'outputFileListPaths', 'shellPath', 'runOnlyForDeploymentPostprocessing'}
+    settings = {'ARCHS', 'MACOSX_DEPLOYMENT_TARGET', 'SDKROOT', 'CONFIGURATION',
+                'GCC_PREPROCESSOR_DEFINITIONS', 'GCC_PREFIX_HEADER', 'GCC_PRECOMPILE_PREFIX_HEADER',
+                'GCC_C_LANGUAGE_STANDARD', 'GCC_ENABLE_CPP_EXCEPTIONS', 'GCC_INLINES_ARE_PRIVATE_EXTERN',
+                'CLANG_CXX_LANGUAGE_STANDARD', 'CLANG_CXX_LIBRARY', 'CLANG_ENABLE_OBJC_ARC',
+                'CLANG_ENABLE_MODULES', 'CLANG_ENABLE_EXPLICIT_MODULES', 'HEADER_SEARCH_PATHS',
+                'USER_HEADER_SEARCH_PATHS', 'SYSTEM_HEADER_SEARCH_PATHS', 'FRAMEWORK_SEARCH_PATHS',
+                'LIBRARY_SEARCH_PATHS', 'OTHER_CFLAGS', 'OTHER_CPLUSPLUSFLAGS', 'OTHER_LDFLAGS',
+                'OTHER_LIBTOOLFLAGS', 'PRELINK_LIBS', 'GENERATE_MASTER_OBJECT_FILE',
+                'GENERATE_PRELINK_OBJECT_FILE', 'EXPORTED_SYMBOLS_FILE', 'INFOPLIST_FILE',
+                'MODULEMAP_FILE', 'PRODUCT_NAME', 'EXECUTABLE_PREFIX', 'MACH_O_TYPE',
+                'DYLIB_CURRENT_VERSION', 'DYLIB_COMPATIBILITY_VERSION', 'DYLIB_INSTALL_NAME_BASE',
+                'LD_DYLIB_INSTALL_NAME', 'CURRENT_PROJECT_VERSION', 'FRAMEWORK_VERSION'}
+    projected = {}
+    for key, obj in sorted(objects.items()):
+        if not isinstance(key, str) or not isinstance(obj, dict):
+            raise ValueError('Invalid PBX object')
+        out = {name: value for name, value in obj.items() if name in fields}
+        for name, allowed in [('buildSettings', settings), ('settings', {'ATTRIBUTES', 'COMPILER_FLAGS'})]:
+            values = obj.get(name, {})
+            if not isinstance(values, dict):
+                raise ValueError('Invalid PBX settings')
+            if values:
+                out[name] = {k: v for k, v in values.items() if k in allowed}
+                out[name + '_omitted_keys'] = sorted(set(values) - allowed)
+        script = obj.get('shellScript')
+        if script is not None:
+            if not isinstance(script, str):
+                raise ValueError('Invalid PBX script')
+            raw = script.encode()
+            out['shellScript'] = dict(status='BODY_NOT_EXPORTED', bytes=len(raw),
+                                      sha256=hashlib.sha256(raw).hexdigest())
+        out['omitted_keys'] = sorted(set(obj) - fields - {'buildSettings', 'settings', 'shellScript'})
+        projected[key] = out
+    return dict(status='PRESENT', coverage='STRUCTURE_AND_ALLOWLISTED_FLAGS_ONLY',
+                objects=projected, objects_count=len(objects), selected_target=candidates[0],
+                dependency_targets=sorted(reached), unresolved_dependencies=sorted(set(unresolved)),
+                root_object=data.get('rootObject'))
+
+
+def capture_project_graph(source, row, target):
+    """Read-only system plutil; raw third-party project stays on the cloud worker."""
+    path = source / row['project'] / 'project.pbxproj'
+    try:
+        if not path.is_file() or path.is_symlink() or source.resolve() not in path.resolve().parents:
+            raise ValueError('Project missing/foreign/symlink')
+        if path.stat().st_size > 8 * 1024 * 1024:
+            return dict(status='DROPPED', reason='PROJECT_EXCEEDS_8_MIB')
+        fingerprint = dict(bytes=path.stat().st_size, sha256=sha(path))
+        result = subprocess.run(['/usr/bin/plutil', '-convert', 'json', '-o', '-', str(path)],
+                                stdin=subprocess.DEVNULL, capture_output=True, timeout=30)
+        if result.returncode:
+            return dict(status='FAILED', reason='PLUTIL_FAILED', returncode=result.returncode,
+                        project=fingerprint)
+        report = project_graph(json.loads(result.stdout), target)
+        report['project'] = fingerprint
+        if len(json.dumps(report).encode()) > 4 * 1024 * 1024:
+            return dict(status='DROPPED', reason='GRAPH_EXCEEDS_4_MIB', project=fingerprint)
+        return report
+    except Exception as exc:
+        # Probe failure must not replace the existing product build outcome.
+        return dict(status='FAILED', reason=type(exc).__name__)
+
+
 def product_paths(framework, row):
     if not framework.is_dir() or framework.is_symlink():
         raise ValueError('Framework output missing/symlink')
@@ -351,6 +443,9 @@ def build(args, lock):
                 resolved = dict(row, target=own['selected'][0])
                 item['resolved_target'] = resolved['target']
                 item['target_selection'] = own['selection']
+                if name == 'plcrashreporter':
+                    write_json(reports / (name + '-project-graph.json'),
+                               capture_project_graph(source, row, resolved['target']))
                 argv = xcode_args(source, build_dir, resolved, args.jobs)
                 checkpoint(name, 'BUILD_START')
                 command(argv + ['build'], source, name + '-build')
