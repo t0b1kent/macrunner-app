@@ -1,0 +1,100 @@
+name: REPRO110 app c12 source stages Xcode27 ARM64
+# The 1.1.0 candidate (c12) application source recipe. It is the 1.0.9 stage matrix pointed at build/repro110app; the
+# 1.0.9 recipe in build/repro109app is not touched. Dispatch it on the branch repro110/app-c12-20261014.
+on:
+  workflow_dispatch:
+    inputs:
+      group:
+        description: sources = the five stages of the application source; steps = engine tools and bottle catalogues
+        type: choice
+        options: [sources, steps]
+        default: sources
+permissions:
+  contents: read
+jobs:
+  stage:
+    if: ${{ inputs.group != 'steps' }}
+    runs-on: xcode-27
+    timeout-minutes: 130
+    strategy:
+      fail-fast: false
+      matrix:
+        stage: [offline-normal, offline-optimized, sparkle, plcrashreporter, native-fullmode]
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_27.app/Contents/Developer
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Offline recipe tests
+        if: startsWith(matrix.stage, 'offline-')
+        shell: bash
+        run: |
+          set -euo pipefail
+          export REPRO109_TEST_TMP="$RUNNER_TEMP/repro110-app-tests"
+          mkdir -p "$REPRO109_TEST_TMP"
+          flags=(-I -B)
+          if [ '${{ matrix.stage }}' = offline-optimized ]; then flags+=(-O); fi
+          for module in test_source test_c12_source_delta test_frameworks test_plc_project_edit test_compile test_package test_public_app test_engine_tools test_bottle_catalogues test_assemble_engine; do
+            /usr/bin/python3 "${flags[@]}" -m unittest discover -s build/repro110app -p "$module.py"
+          done
+          /usr/bin/python3 -I -B build/repro110app/build_source.py --plan
+          /usr/bin/python3 -I -B build/repro110app/build_engine_tools.py --plan
+          /usr/bin/python3 -I -B build/repro110app/bottle_catalogues.py --plan
+      - name: Source component or full producer
+        if: ${{ !startsWith(matrix.stage, 'offline-') }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          results="$RUNNER_TEMP/repro110-app-results"
+          mkdir -p "$results"
+          if [ '${{ matrix.stage }}' = native-fullmode ]; then
+            /usr/bin/python3 -I -B build/repro110app/build_source.py --build \
+              --work "$RUNNER_TEMP/repro110-app-source" --publish-dir "$results" --jobs 4 --minutes 100
+          else
+            /usr/bin/python3 -I -B build/repro110app/build_app_frameworks.py --build \
+              --only '${{ matrix.stage }}' --work "$RUNNER_TEMP/repro110-app-source" \
+              --publish-dir "$results" --jobs 4 --minutes 90
+          fi
+      - name: Preserve raw reports and produced prefix on failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: repro110-app-source-${{ matrix.stage }}
+          path: |
+            ${{ runner.temp }}/repro110-app-results
+            ${{ runner.temp }}/repro110-app-source/reports
+            ${{ runner.temp }}/repro110-app-source/frameworks/reports
+            ${{ runner.temp }}/repro110-app-source/prefix
+          if-no-files-found: warn
+          retention-days: 30
+  steps:
+    if: ${{ inputs.group == 'steps' }}
+    runs-on: xcode-27
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        step: [engine-tools, bottle-catalogues]
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_27.app/Contents/Developer
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Run the recipe step
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/repro110-step-${{ matrix.step }}"
+          if [ '${{ matrix.step }}' = engine-tools ]; then
+            /usr/bin/python3 -I -B build/repro110app/build_engine_tools.py --build --work "$work"
+          else
+            /usr/bin/python3 -I -B build/repro110app/bottle_catalogues.py --check --work "$work"
+          fi
+      - name: Preserve the step results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: repro110-app-step-${{ matrix.step }}
+          path: ${{ runner.temp }}/repro110-step-${{ matrix.step }}
+          if-no-files-found: warn
+          retention-days: 30
