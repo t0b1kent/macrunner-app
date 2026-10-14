@@ -180,8 +180,11 @@ print('install skipped')
         rc, result = self.exercise(env={'OWN_TEST_RC':'4'})
         self.assertEqual(rc, 1)
         self.assertEqual(result['first_failure']['phase'], 'SWIFT_TEST')
-        self.assertEqual([x['status'] for x in result['phases']], ['PASSED','FAILED'])
-        self.assertFalse((self.args.work / 'prefix').exists())
+        self.assertEqual([x['status'] for x in result['phases']][:2], ['PASSED','FAILED'])
+        # c12 recipe: red unit tests are reported in full and do not stop the products and the package, but the receipt is
+        # never the green one.
+        self.assertEqual(result['status'], 'APP_SOURCE_COMPILED_TESTS_FAILED_NOT_WHOLE_BUNDLE')
+        self.assertTrue((self.args.work / 'prefix').exists())
 
     def test_wrong_product_architecture_refused(self):
         rc, result = self.exercise(architecture='x86_64')

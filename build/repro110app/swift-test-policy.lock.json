@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "purpose": "How the unit tests of the application source are run and judged in the recipe. Measured 14.10.2026: run 38507641495 (cloud) and the accepted c12 app source on a Mac.",
+  "layout_links": [
+    {"path": "app/macr-control-center/Fixtures", "target": "../../Fixtures", "reason": "JSONDecodeTests and D3DArtifactViewerTests open ./app/macr-control-center/Fixtures/*.json, the layout of the full MacRunner checkout; the snapshot keeps Fixtures at its root. Six tests failed with 'no such file' only because of that."},
+    {"path": "app/macr-control-center/scripts", "target": "../../scripts", "reason": "ControlCenterWorldsTests names app/macr-control-center/scripts/package-control-center.sh in the same layout."}
+  ],
+  "recheck": "Failed tests are run once more, alone, with --filter; a test that passes the second time is reported as PASSED_ON_RECHECK (CommandRunnerTests.echoTest/stderrCapture and AppLibraryTests.runAppViewModelOnCompleteCalled passed on a Mac and failed in the cloud: fixed waits on a loaded machine).",
+  "allow": [
+    {"test": "pe32ImportDynamicAndProfileUsePackagedRoute", "suite": "APP32RoutingTests",
+     "reason": "Needs APP32_ENGINE_ROOT, a packaged engine that can run 32-bit programs; the engine is assembled by a later recipe step, not by the source stage.",
+     "evidence": "fails with a nil environment value on the Mac (c12 app-source) and in run 38507641495"},
+    {"test": "checkRealRoot", "suite": "CoreStatusTests",
+     "reason": "Needs a complete MacRunner checkout (scripts/run-windows-app.sh); the source snapshot is only the application.",
+     "evidence": "status.isRootValid == false on the Mac (c12 app-source) and in run 38507641495"},
+    {"test": "toolIsFound", "suite": "InstallerUnpackerTests",
+     "reason": "Needs the innoextract binary (Vendor input), which is a separate recipe input and is excluded from the source snapshot.",
+     "evidence": "passes on the Mac where Vendor/innoextract is present, fails in run 38507641495 where it is not"},
+    {"test": "rootRequiresAbsoluteExplicitPathAndRejectsOwnerLibrary", "suite": "BottleTemplateTests",
+     "reason": "Builds its scratch directory below EnginePaths.base, which is the owner's library unless MACRUNNER_APP_DATA_ROOT is set; with the variable set three other BottleTemplateTests fail with invalidTemplate on the Mac (14.10.2026), so the recipe does not set it. Cause of that second effect not established.",
+     "evidence": "unsafeRoot on the Mac and in run 38507641495 without the variable"}
+  ],
+  "never_allowed": "LocalizationTests.everyLanguageHasExactlyTheEnglishKeys and everyProfileNoteIsTranslatable fail on the accepted source on a Mac too (10 English keys without translation in eleven languages, one untranslated profile note): a defect of the application source, to be fixed there, not allowed here."
+}

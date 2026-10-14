@@ -34,7 +34,7 @@ jobs:
           mkdir -p "$REPRO109_TEST_TMP"
           flags=(-I -B)
           if [ '${{ matrix.stage }}' = offline-optimized ]; then flags+=(-O); fi
-          for module in test_source test_c12_source_delta test_frameworks test_plc_project_edit test_compile test_package test_public_app test_engine_tools test_bottle_catalogues test_assemble_engine; do
+          for module in test_source test_c12_source_delta test_frameworks test_plc_project_edit test_compile test_package test_public_app test_engine_tools test_bottle_catalogues test_assemble_engine test_swift_test_report; do
             /usr/bin/python3 "${flags[@]}" -m unittest discover -s build/repro110app -p "$module.py"
           done
           /usr/bin/python3 -I -B build/repro110app/build_source.py --plan

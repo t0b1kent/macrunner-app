@@ -34,6 +34,22 @@ def module(name, path):
     return result
 
 
+def test_argv(swift, work, reports, jobs):
+    return [sys.executable, '-I', '-B', str(HERE / 'swift_test_report.py'), '--tree', str(work / 'app'),
+            '--reports', str(reports), '--', *swift_argv(swift, 'test', work, jobs)]
+
+
+def load_test_report(reports):
+    path = Path(reports) / 'swift_test_failures.json'
+    if not path.is_file():
+        return dict(state='NOT_PRODUCED')
+    data = json.loads(path.read_bytes())
+    verdict = dict(list(data.get('verdict', {}).items())[:100])
+    return dict(status=data.get('status'), first_run=data.get('first_run'), recheck=data.get('recheck'),
+                unexplained_failures=data.get('unexplained_failures', [])[:100],
+                verdict={k: dict(outcome=v['outcome'], suite=v.get('suite')) for k, v in verdict.items()})
+
+
 def install_bottle_catalogues(app_tree, archives):
     """Fetch the previous releases' engine manifests into the prepared app tree; nothing happens without the lock."""
     if not (HERE / 'bottle-catalogues.lock.json').is_file():
@@ -196,14 +212,24 @@ def build(args):
         if not re.search(r'Apple Swift version 6\.', version):
             raise ValueError('Expected Xcode Apple Swift 6.x')
         result['swift'] = dict(path=swift, sha256=runner.file_sha(Path(swift)), version=version.strip())
+        tests_failed = None
         for phase, action in [('SWIFT_BUILD', 'build'), ('SWIFT_TEST', 'test')]:
             result['phases'].append(dict(name=phase, status='STARTED'))
             checkpoint('START')
-            log = command(swift_argv(swift, action, app_work, args.jobs), phase.lower(), cwd=app_work / 'app')
-            if action == 'test':
-                result['swift_tests_passed'] = test_count(log.read_text())
-            result['phases'][-1]['status'] = 'PASSED'
-            checkpoint('PASSED')
+            if action == 'build':
+                command(swift_argv(swift, action, app_work, args.jobs), phase.lower(), cwd=app_work / 'app')
+            else:
+                # The unit tests run under an explicit rule (swift_test_report.py): the whole output is kept, failures are
+                # listed by name, failed tests are rechecked once, only named allowances may stay red. A red test does
+                # not stop the products and the package: the run reports everything and ends red.
+                try:
+                    log = command(test_argv(swift, app_work, reports, args.jobs), phase.lower(), cwd=app_work / 'app')
+                    result['swift_tests_passed'] = test_count(log.read_text())
+                except (AssertionError, ValueError) as exc:
+                    tests_failed = str(exc)[:600]
+                result['swift_tests'] = load_test_report(reports)
+            result['phases'][-1]['status'] = 'FAILED' if action == 'test' and tests_failed else 'PASSED'
+            checkpoint('FAILED' if action == 'test' and tests_failed else 'PASSED')
         phase = 'PRODUCTS'
         checkpoint('START')
         selected = output(swift_argv(swift, 'build', app_work, args.jobs) + ['--show-bin-path'],
@@ -224,9 +250,13 @@ def build(args):
         # Preparation transformations must not mutate the locked source snapshot.
         if prepared.verify_source(HERE / 'source', lock) != source:
             raise ValueError('Source snapshot changed during compilation')
-        result['status'] = 'APP_SOURCE_COMPILED_TESTED_NOT_WHOLE_BUNDLE'
+        if tests_failed:
+            result['status'] = 'APP_SOURCE_COMPILED_TESTS_FAILED_NOT_WHOLE_BUNDLE'
+            result['first_failure'] = dict(phase='SWIFT_TEST', error=tests_failed)
+        else:
+            result['status'] = 'APP_SOURCE_COMPILED_TESTED_NOT_WHOLE_BUNDLE'
         phase = 'FINAL'
-        checkpoint('PASSED')
+        checkpoint('FAILED' if tests_failed else 'PASSED')
     except Exception as exc:
         result['status'] = 'FAILED'
         result['first_failure'] = dict(phase=phase, error=str(exc))
