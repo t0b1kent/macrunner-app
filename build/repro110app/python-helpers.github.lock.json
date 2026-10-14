@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "profile": "github-macos15-arm64",
+  "runner_label": "macos-15",
+  "bootstrap_python": "3.14.7",
+  "xcode": "16.4",
+  "xcode_build": "16F6",
+  "sdk": "15.5",
+  "apple_clang": "Apple clang version 17.0.0",
+  "deployment_target": "14.0",
+  "jobs": 3,
+  "source_policy": "UNCHANGED_CP3145_OPENSSL364_SDISTS23_HELPERS_PINNED",
+  "image_reference": "https://github.com/actions/runner-images/blob/main/images/macos/macos-15-arm64-Readme.md"
+}

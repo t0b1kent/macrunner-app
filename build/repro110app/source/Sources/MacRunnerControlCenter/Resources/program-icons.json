@@ -1,0 +1,237 @@
+{
+  "version": 1,
+  "generated": "2026-09-12",
+  "source": "Simple Icons (CC0), https://github.com/simple-icons/simple-icons",
+  "dark_threshold_hex": "202020",
+  "icons": {
+    "ansys.ansys": {
+      "slug": "ansys",
+      "hex": "FFB71B"
+    },
+    "audacity.audacity": {
+      "slug": "audacity",
+      "hex": "0000CC"
+    },
+    "autodesk.autocad": {
+      "slug": "autocad",
+      "hex": "E51050"
+    },
+    "autodesk.autocadlt": {
+      "slug": "autocad",
+      "hex": "E51050"
+    },
+    "autodesk.revit": {
+      "slug": "autodeskrevit",
+      "hex": "186BFF"
+    },
+    "autohotkey.autohotkey": {
+      "slug": "autohotkey",
+      "hex": "334455"
+    },
+    "autoit.autoit": {
+      "slug": "autoit",
+      "hex": "5D83AC"
+    },
+    "bentley.microstation": {
+      "slug": "microstation",
+      "hex": "62BB47"
+    },
+    "blackmagic.davinciresolve": {
+      "slug": "davinciresolve",
+      "hex": "233A51"
+    },
+    "blender.blender": {
+      "slug": "blender",
+      "hex": "E87D0D"
+    },
+    "blizzard.battlenet": {
+      "slug": "battledotnet",
+      "hex": "4381C3"
+    },
+    "discord.discord": {
+      "slug": "discord",
+      "hex": "5865F2"
+    },
+    "docker.dockerdesktop": {
+      "slug": "docker",
+      "hex": "2496ED"
+    },
+    "epicgames.epicgameslauncher": {
+      "slug": "epicgames",
+      "hex": "313131"
+    },
+    "figma.figma": {
+      "slug": "figma",
+      "hex": "F24E1E"
+    },
+    "filezilla.client": {
+      "slug": "filezilla",
+      "hex": "BF0000"
+    },
+    "freecad.freecad": {
+      "slug": "freecad",
+      "hex": "418FDE"
+    },
+    "gimp.gimp": {
+      "slug": "gimp",
+      "hex": "8C8073"
+    },
+    "git.git": {
+      "slug": "git",
+      "hex": "F03C2E"
+    },
+    "gog.galaxy": {
+      "slug": "gogdotcom",
+      "hex": "86328A"
+    },
+    "google.chrome": {
+      "slug": "googlechrome",
+      "hex": "4285F4"
+    },
+    "graphisoft.archicad": {
+      "slug": "archicad",
+      "hex": "2D50A5"
+    },
+    "inkscape.inkscape": {
+      "slug": "inkscape",
+      "hex": "000000",
+      "dark": true
+    },
+    "jetbrains.intellijidea": {
+      "slug": "intellijidea",
+      "hex": "000000",
+      "dark": true
+    },
+    "jetbrains.pycharm": {
+      "slug": "pycharm",
+      "hex": "000000",
+      "dark": true
+    },
+    "jetbrains.resharper": {
+      "slug": "resharper",
+      "hex": "000000",
+      "dark": true
+    },
+    "kde.krita": {
+      "slug": "krita",
+      "hex": "3BABFF"
+    },
+    "kicad.kicad": {
+      "slug": "kicad",
+      "hex": "314CB0"
+    },
+    "magix.vegaspro": {
+      "slug": "vegas",
+      "hex": "1A1A1A",
+      "dark": true
+    },
+    "mcneel.rhino": {
+      "slug": "rhinoceros",
+      "hex": "801010"
+    },
+    "mozilla.firefox": {
+      "slug": "firefox",
+      "hex": "FF7139"
+    },
+    "mozilla.thunderbird": {
+      "slug": "thunderbird",
+      "hex": "0A84FF"
+    },
+    "notepadplusplus.notepadplusplus": {
+      "slug": "notepadplusplus",
+      "hex": "90E59A"
+    },
+    "notion.notion": {
+      "slug": "notion",
+      "hex": "000000",
+      "dark": true
+    },
+    "nsis.nsis": {
+      "slug": "nsis",
+      "hex": "01B0F0"
+    },
+    "obsidian.obsidian": {
+      "slug": "obsidian",
+      "hex": "7C3AED"
+    },
+    "obsproject.obsstudio": {
+      "slug": "obsstudio",
+      "hex": "302E31"
+    },
+    "openjs.nodejs": {
+      "slug": "nodedotjs",
+      "hex": "5FA04E"
+    },
+    "peterpawlowski.foobar2000": {
+      "slug": "foobar2000",
+      "hex": "000000",
+      "dark": true
+    },
+    "piriform.ccleaner": {
+      "slug": "ccleaner",
+      "hex": "CB2D29"
+    },
+    "python.python": {
+      "slug": "python",
+      "hex": "3776AB"
+    },
+    "qbittorrent.qbittorrent": {
+      "slug": "qbittorrent",
+      "hex": "2F67BA"
+    },
+    "rainmeter.rainmeter": {
+      "slug": "rainmeter",
+      "hex": "19519B"
+    },
+    "rockstargames.launcher": {
+      "slug": "rockstargames",
+      "hex": "FCAF17"
+    },
+    "sevenzip.sevenzip": {
+      "slug": "7zip",
+      "hex": "000000",
+      "dark": true
+    },
+    "sharex.sharex": {
+      "slug": "sharex",
+      "hex": "2885F1"
+    },
+    "spotify.spotify": {
+      "slug": "spotify",
+      "hex": "1ED760"
+    },
+    "sublimehq.sublimetext": {
+      "slug": "sublimetext",
+      "hex": "FF9800"
+    },
+    "telegram.telegramdesktop": {
+      "slug": "telegram",
+      "hex": "26A5E4"
+    },
+    "thedocumentfoundation.libreoffice": {
+      "slug": "libreoffice",
+      "hex": "18A303"
+    },
+    "trimble.sketchup": {
+      "slug": "sketchup",
+      "hex": "005F9E"
+    },
+    "valve.steam": {
+      "slug": "steam",
+      "hex": "000000",
+      "dark": true
+    },
+    "videolan.vlc": {
+      "slug": "vlcmediaplayer",
+      "hex": "FF8800"
+    },
+    "winamp.winamp": {
+      "slug": "winamp",
+      "hex": "F93821"
+    },
+    "zoom.zoom": {
+      "slug": "zoom",
+      "hex": "0B5CFF"
+    }
+  }
+}

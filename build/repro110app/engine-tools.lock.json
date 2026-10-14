@@ -1,0 +1,63 @@
+{
+  "install": "The tools are copied into engine/tools of the assembled engine by assemble_engine.py (field tools of engine-inputs.json).",
+  "output_dir": "tools",
+  "purpose": "Two small engine tools of the 1.1.0 candidate (c12), built from the snapshot sources: the program-job launcher (a Windows x86_64 PE) and the session supervisor (a macOS arm64 tool).",
+  "schema": 1,
+  "tools": [
+    {
+      "argv": [
+        "-O2",
+        "-municode",
+        "-Wl,--subsystem,windows",
+        "-Wl,-e,WinMainCRTStartup",
+        "-Wl,--Xlink=/timestamp:1791424979"
+      ],
+      "compiler": {
+        "archive_sha256": "050379de888f0c843787819dadf183df3693330a5724643919e9121f16355295",
+        "clang": "22.1.5",
+        "name": "llvm-mingw",
+        "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/20260505/llvm-mingw-20260505-ucrt-macos-universal.tar.xz",
+        "version": "20260505"
+      },
+      "driver": "x86_64-w64-mingw32-clang",
+      "expected": "EXACT_ACCEPTED_BYTES",
+      "kind": "pe-x86_64-mingw",
+      "name": "macrunner-job.exe",
+      "note": "Measured 14.10.2026 with the same llvm-mingw archive on a Mac: 0 differing bytes; the link timestamp is fixed to the value of the accepted file",
+      "reference": {
+        "bytes": 91136,
+        "path": "MacRunner.app/Contents/Resources/engine/tools/macrunner-job.exe",
+        "sha256": "b4f6c879b51e9fa5c0b8d9e6ca90d4f109cfac3323cabfb51e380efd111dbe3f"
+      },
+      "source": "engine-tools/macrunner-job.c",
+      "source_sha256": "4d9b04974593fadc09db1d11d986d71479c7089498dca240fde515d4cc4b2c22"
+    },
+    {
+      "argv": [
+        "-O2",
+        "-arch",
+        "arm64",
+        "-mmacosx-version-min=27.0"
+      ],
+      "driver": "clang",
+      "expected": "EQUAL_EXCEPT_LC_UUID",
+      "kind": "macho-arm64-apple-clang",
+      "name": "macrunner-session",
+      "note": "Measured 14.10.2026 with Xcode 27A266a on a Mac: after codesign --remove-signature on both files the only differing bytes are the 16 bytes of LC_UUID, which the linker derives from the build; the accepted file carries the linker ad-hoc signature",
+      "reference": {
+        "bytes": 34912,
+        "normalized_sha256": "48a92ccb301bc2258ecbc4bb3ad2b01474ad8601f8ef8b0103340fd8539b9f97",
+        "path": "MacRunner.app/Contents/Resources/engine/tools/macrunner-session",
+        "sha256": "4e2fabc3d0e722b8717428756bb2248c55e994419e5ef854953d498102e9da9f"
+      },
+      "source": "engine-tools/macrunner-session.c",
+      "source_sha256": "c7defd4d63d73fbd2ed35f410a1c1f549a285b23d8defc12cc5d25f8b425b863",
+      "toolchain": {
+        "apple_clang": "21.0.0 (clang-2100.3.34.2)",
+        "minos": "27.0",
+        "xcode": "27.0",
+        "xcode_build": "27A266a"
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "catalogues": [
+    {
+      "asset": "MacRunner-1.0.9-arm64.zip",
+      "asset_bytes": 338747832,
+      "asset_sha256": "04f1ad4c6ee39538ce67b7137e47c20ae4a7eb72b261b86be5e9fd6f241e95b7",
+      "catalogue_bytes": 434019,
+      "catalogue_sha256": "09fe4a424175cae511f5a11afad5b6299040b2587d0b70b32411b456ab8c5cb5",
+      "engine_name": "MacRunner 1.0.9 r1 local candidate",
+      "member_suffix": "Contents/Resources/engine/ENGINE.json",
+      "schema": 2,
+      "tag": "v1.0.9",
+      "url": "https://github.com/t0b1kent/macrunner-app/releases/download/v1.0.9/MacRunner-1.0.9-arm64.zip"
+    },
+    {
+      "asset": "MacRunner-1.0.8-arm64.zip",
+      "asset_bytes": 338685308,
+      "asset_sha256": "b97c5b1d38e0756301098037af7db8bab07e5e67ea7384c134e86e6264de5fc5",
+      "catalogue_bytes": 433623,
+      "catalogue_sha256": "b4a31678b633f9ae057aca5e130d35fc0037552076320924b65f71b345c7b760",
+      "engine_name": "HyperBridge1.0.8 +0065+0075 / S2 Wine unsigned outputs",
+      "member_suffix": "Contents/Resources/engine/ENGINE.json",
+      "schema": 2,
+      "tag": "v1.0.8",
+      "url": "https://github.com/t0b1kent/macrunner-app/releases/download/v1.0.8/MacRunner-1.0.8-arm64.zip"
+    }
+  ],
+  "destination": "Sources/MacRunnerControlCenter/Resources/BottleCatalogues",
+  "purpose": "Engine manifests of the previous releases. The app finds the file bottle-inputs-<SHA-256 of that manifest>.json in its resources to update a bottle prepared by that release by difference. The accepted composition carries them as ready files; the recipe takes them from the published release archives and checks every digest.",
+  "schema": 1,
+  "unverified": "Whether the published archives contain exactly these manifests was not checked on a machine that may download them (14.10.2026); the step refuses with the found name and digest when they differ."
+}
