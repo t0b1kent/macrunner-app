@@ -154,7 +154,7 @@ def package(prefix, icon, framework_lock, inventory, command, output):
     info = dict(CFBundleDevelopmentRegion='en', CFBundleExecutable=EXECUTABLE,
                 CFBundleIdentifier='com.macrunner.controlcenter', CFBundleInfoDictionaryVersion='6.0',
                 CFBundleName='MacRunner', CFBundleDisplayName='MacRunner', CFBundleIconFile='AppIcon',
-                CFBundlePackageType='APPL', CFBundleShortVersionString='1.0.9', CFBundleVersion='109',
+                CFBundlePackageType='APPL', CFBundleShortVersionString='1.1.0', CFBundleVersion='119',
                 LSMinimumSystemVersion='26.5', LSApplicationCategoryType='public.app-category.utilities',
                 LSBackgroundOnly=False)
     with (contents / 'Info.plist').open('xb') as stream:
