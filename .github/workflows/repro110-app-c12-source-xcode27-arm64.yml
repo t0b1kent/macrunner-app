@@ -55,6 +55,13 @@ jobs:
               --only '${{ matrix.stage }}' --work "$RUNNER_TEMP/repro110-app-source" \
               --publish-dir "$results" --jobs 2 --minutes 90
           fi
+      - name: Preserve executable modes and framework symlinks in the source application
+        if: matrix.stage == 'native-fullmode'
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar -czf "$RUNNER_TEMP/app-prefix.tar.gz" -C "$RUNNER_TEMP/repro110-app-source/prefix" .
+          shasum -a 256 "$RUNNER_TEMP/app-prefix.tar.gz" > "$RUNNER_TEMP/app-prefix.tar.gz.sha256"
       - name: Preserve raw reports and produced prefix on failure
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -65,6 +72,7 @@ jobs:
             ${{ runner.temp }}/repro110-app-source/reports
             ${{ runner.temp }}/repro110-app-source/frameworks/reports
             ${{ runner.temp }}/repro110-app-source/prefix
+            ${{ runner.temp }}/app-prefix.tar.gz*
           if-no-files-found: warn
           retention-days: 30
   steps:
