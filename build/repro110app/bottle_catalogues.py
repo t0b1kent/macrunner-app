@@ -95,15 +95,22 @@ def install(destination_root, work, lock=None, download=curl_download):
     report = []
     for row in lock['catalogues']:
         out = target / ('bottle-inputs-' + row['catalogue_sha256'] + '.json')
-        require(not out.exists(), 'Catalogue already present: ' + out.name)
-        archive = work / row['asset']
-        require(not archive.exists(), 'Fresh archive path required')
-        download(row, archive)
-        data = extract_manifest(archive, row)
-        out.write_bytes(data)
+        if out.exists() or out.is_symlink():
+            require(out.is_file() and not out.is_symlink(), 'Catalogue already present as a nonregular node: ' + out.name)
+            data = out.read_bytes()
+            require(sha_bytes(data) == row['catalogue_sha256'], 'Catalogue already present with different bytes: ' + out.name)
+            origin = 'SEALED_SOURCE_SNAPSHOT'
+        else:
+            archive = work / row['asset']
+            require(not archive.exists(), 'Fresh archive path required')
+            download(row, archive)
+            data = extract_manifest(archive, row)
+            out.write_bytes(data)
+            archive.unlink()
+            origin = 'PUBLISHED_RELEASE_ARCHIVE'
         report.append(dict(tag=row['tag'], asset=row['asset'], asset_sha256=row['asset_sha256'], engine_name=row['engine_name'],
-                           catalogue=out.name, catalogue_bytes=len(data), catalogue_sha256=sha_bytes(data)))
-        archive.unlink()
+                           catalogue=out.name, catalogue_bytes=len(data), catalogue_sha256=sha_bytes(data),
+                           catalogue_source=origin))
     return report
 
 
