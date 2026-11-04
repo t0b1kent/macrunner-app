@@ -106,14 +106,27 @@ def require_tools():
             raise ValueError('Required release composition tool missing: ' + name)
 
 
+def source_inputs(args):
+    selected = [args.transport, args.wine / 'build/repro110wine/build_wine.py',
+                args.wine / 'build/repro110wine/full.lock.json',
+                args.dxmt / 'build/repro109dxmt/repro109_dxmt_after_wine27.py',
+                args.hyperbridge / 'build/repro110fex/c32/ENGINE.json']
+    missing = [str(path) for path in selected if not path.is_file()]
+    if missing:
+        raise ValueError('Required source recipe inputs missing: ' + ', '.join(missing))
+    return [dict(path=str(path), sha256=sha(path)) for path in selected]
+
+
 def build(args):
     if os.environ.get('GITHUB_ACTIONS') != 'true' or platform.system() != 'Darwin' or platform.machine() != 'arm64':
         raise ValueError('Whole release composition requires the native ARM64 GitHub builder')
     require_tools()
+    source_receipts = source_inputs(args)
     args.work.mkdir(parents=True, exist_ok=False)
     reports = args.work / 'reports'; reports.mkdir()
     result = dict(status='STARTED', first_failure=None, install_skipped=0, inputs={}, commands=[],
-                  games='NOT_ENABLED', signing='DEFERRED_FOR_OWNER', release_gates='NOT_RUN')
+                  games='NOT_ENABLED', signing='DEFERRED_FOR_OWNER', release_gates='NOT_RUN',
+                  source_recipes=source_receipts)
     def run(name, argv):
         path = reports / (name + '.log')
         started = time.monotonic()
@@ -129,7 +142,7 @@ def build(args):
         names = ['app', 'helpers', 'inno', 'fex64', 'fex32', 'graphics_x64', 'graphics_ec', 'graphics_native']
         if set(pins) != set(names):
             raise ValueError('Exactly the selected release source components are required')
-        transport = load_module('release_source_transport', args.wine / 'build/release110/graphics_inputs.py')
+        transport = load_module('release_source_transport', args.transport)
         # The existing receiver restores source Wine/deps/MoltenVK/LLVM and the pinned compiler.
         restored = args.work / 'source-runtime'
         if transport.restore(argparse.Namespace(work=restored, wine=args.wine, dxmt=args.dxmt)) != 0:
@@ -271,6 +284,6 @@ def build(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    for name in ['pins', 'wine', 'dxmt', 'hyperbridge', 'work']:
+    for name in ['pins', 'transport', 'wine', 'dxmt', 'hyperbridge', 'work']:
         parser.add_argument('--' + name, type=Path, required=True)
     raise SystemExit(build(parser.parse_args()))
