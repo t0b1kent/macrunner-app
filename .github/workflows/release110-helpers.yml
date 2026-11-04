@@ -1,0 +1,36 @@
+name: MacRunner 1.1.0 source helpers
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  helpers:
+    runs-on: macos-15
+    timeout-minutes: 150
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      REPRO109_HELPER_PROFILE: github-macos15-arm64
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Build the unchanged previously accepted helper source recipe
+        shell: bash
+        run: |
+          set -euo pipefail
+          nice -n 20 python3 -I -B build/repro109app/build_python_helpers.py --build \
+            --work "$RUNNER_TEMP/release110-helpers" \
+            --publish-dir "$RUNNER_TEMP/release110-helper-products" --minutes 120 --jobs 2
+      - name: Preserve source-built helpers and complete reports
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: release110-helpers-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/release110-helper-products
+            ${{ runner.temp }}/release110-helpers/helpers.tar.gz
+            ${{ runner.temp }}/release110-helpers/reports
+            !${{ runner.temp }}/release110-helpers/reports/**/*.body
+          if-no-files-found: error
+          retention-days: 90
