@@ -51,6 +51,30 @@ class Fixture(unittest.TestCase):
 
 
 class CatalogueStep(Fixture):
+    def test_exact_embedded_catalogue_is_verified_without_a_download(self):
+        lock, row, data, archive = self.release()
+        target = self.root / 'embedded' / step.RESOURCES
+        target.mkdir(parents=True)
+        out = target / ('bottle-inputs-' + sha(data) + '.json')
+        out.write_bytes(data)
+        def forbidden_download(*args):
+            self.fail('A byte-exact embedded catalogue must not be downloaded again')
+        report = step.install(self.root / 'embedded', self.root / 'unused-downloads', lock, forbidden_download)
+        self.assertEqual(report[0]['catalogue_source'], 'SEALED_SOURCE_SNAPSHOT')
+        self.assertEqual(out.read_bytes(), data)
+
+    def test_linked_catalogue_is_refused_even_when_the_bytes_match(self):
+        lock, row, data, archive = self.release()
+        target = self.root / 'linked' / step.RESOURCES
+        target.mkdir(parents=True)
+        external = self.root / 'external.json'
+        external.write_bytes(data)
+        out = target / ('bottle-inputs-' + sha(data) + '.json')
+        out.symlink_to(external)
+        with self.assertRaisesRegex(ValueError, 'nonregular'):
+            step.install(self.root / 'linked', self.root / 'unused-downloads', lock, self.fake_download(archive))
+        self.assertEqual(external.read_bytes(), data)
+
     def test_the_manifest_is_written_under_its_content_address(self):
         lock, row, data, archive = self.release()
         report = step.install(self.root / 'tree', self.root / 'work', lock, self.fake_download(archive))
