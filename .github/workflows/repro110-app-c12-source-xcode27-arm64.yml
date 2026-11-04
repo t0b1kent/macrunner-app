@@ -7,13 +7,14 @@ on:
       group:
         description: sources = the five stages of the application source; steps = engine tools and bottle catalogues
         type: choice
-        options: [sources, steps]
+        options: [sources, steps, assemble]
         default: sources
 permissions:
   contents: read
+  actions: read
 jobs:
   stage:
-    if: ${{ inputs.group != 'steps' }}
+    if: ${{ inputs.group == 'sources' }}
     runs-on: xcode-27
     timeout-minutes: 130
     strategy:
@@ -106,3 +107,59 @@ jobs:
           path: ${{ runner.temp }}/repro110-step-${{ matrix.step }}
           if-no-files-found: warn
           retention-days: 30
+  assemble:
+    if: ${{ inputs.group == 'assemble' }}
+    runs-on: xcode-27
+    timeout-minutes: 90
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_27.app/Contents/Developer
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: t0b1kent/macrunner-wine
+          ref: 1f20e2a934c8644f01c2af8f9f95172febb49a48
+          path: wine
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: t0b1kent/dxmt
+          ref: 0b3220b0595bec75332dd3340c0d4bec68d6e935
+          path: dxmt
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: t0b1kent/hyperbridge
+          ref: a95201ab3de3c8f02388372cc7831d7c610010d4
+          path: hyperbridge
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.13.7'
+          architecture: arm64
+      - name: Source-output and absent-tool checks
+        run: REPRO109_TEST_TMP="$RUNNER_TEMP" python3 -I -B -m unittest discover -s build/repro110app -p test_assemble_release.py
+      - name: Compose the whole application from successful source outputs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          nice -n 20 python3 -I -B build/repro110app/assemble_release.py \
+            --pins build/repro110app/release-inputs.lock.json \
+            --wine "$GITHUB_WORKSPACE/wine" --dxmt "$GITHUB_WORKSPACE/dxmt" \
+            --hyperbridge "$GITHUB_WORKSPACE/hyperbridge" --work "$RUNNER_TEMP/release110-package"
+      - name: Preserve the complete source package and raw assembly evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: release110-whole-app-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/release110-package/reports
+            ${{ runner.temp }}/release110-package/source-runtime/reports
+            ${{ runner.temp }}/release110-package/engine-inputs.json
+            ${{ runner.temp }}/release110-package/diagnostic-tools
+            ${{ runner.temp }}/release110-package/MacRunner-1.1.0-unsigned-source-built.tar.gz
+          if-no-files-found: error
+          retention-days: 90

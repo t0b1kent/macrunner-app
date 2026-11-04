@@ -1,0 +1,70 @@
+{
+  "app": {
+    "repo": "t0b1kent/macrunner-app",
+    "run": 41928207741,
+    "revision": "eaacef820cb4d13ac03a2bc46ef2ce474fa1e308",
+    "artifact": 13370543417,
+    "sha256": "5c2e6202e370b4b3dad7fc21ffc7da67d3151ce4467a9691a8de31b896376e59",
+    "artifact_name": "repro110-app-source-native-fullmode"
+  },
+  "helpers": {
+    "repo": "t0b1kent/macrunner-app",
+    "run": 41925968355,
+    "revision": "1d6c8e0cb9e91604597f8912eaa277429efcfbed",
+    "artifact": 13368884352,
+    "sha256": "6b47c0d7c81658da53a7060b15bfd8ee30b43c908e3e4bc40a8e8aaa09e68bd3",
+    "artifact_name": "release110-helpers-1d6c8e0cb9e91604597f8912eaa277429efcfbed"
+  },
+  "inno": {
+    "repo": "t0b1kent/macrunner-app",
+    "run": 41929243830,
+    "revision": "7e45ca9daa9424a0170992a1b670083ce2812c8b",
+    "artifact": 13370434761,
+    "sha256": "90933e6f48978f0dea4d63dd175f3b390818458dd1d1a90b2da0ed2caf483e21",
+    "artifact_name": "release110-inno-7e45ca9daa9424a0170992a1b670083ce2812c8b"
+  },
+  "fex64": {
+    "repo": "t0b1kent/hyperbridge",
+    "run": 41882085883,
+    "revision": "be81a7acd447f4e64f4edbc17644abf4cd54dd1b",
+    "artifact": 13352595636,
+    "sha256": "6464129d557a9aa7b29d41b0355910ea48a86b0f7472c208cdcf377a5e2ab3ce",
+    "artifact_name": "repro109-fex64-compile-be81a7acd447f4e64f4edbc17644abf4cd54dd1b",
+    "job": "FEX fex64-compile"
+  },
+  "fex32": {
+    "repo": "t0b1kent/hyperbridge",
+    "run": 41882085883,
+    "revision": "be81a7acd447f4e64f4edbc17644abf4cd54dd1b",
+    "artifact": 13352532288,
+    "sha256": "fe839d0b66ccc6d9f5916873d92d48816554395dcd6becd5aa792b665b691663",
+    "artifact_name": "repro109-fex32-full-be81a7acd447f4e64f4edbc17644abf4cd54dd1b",
+    "job": "FEX fex32-full"
+  },
+  "graphics_x64": {
+    "repo": "t0b1kent/macrunner-wine",
+    "run": 41927027574,
+    "revision": "ec3c8047c27f4bff87850abbd1972659a4ac2ca4",
+    "artifact": 13370491744,
+    "sha256": "152835a6e240371205c8dc2ada491521f8800cd5e816488ae3524b73f742037f",
+    "artifact_name": "release110-graphics-x64-ec3c8047c27f4bff87850abbd1972659a4ac2ca4",
+    "job": "graphics (x64)"
+  },
+  "graphics_native": {
+    "repo": "t0b1kent/macrunner-wine",
+    "run": 41927027574,
+    "revision": "ec3c8047c27f4bff87850abbd1972659a4ac2ca4",
+    "artifact": 13370321346,
+    "sha256": "dee1e3f71653a33877e04dd92df45e09d3460160e10ed772b049d7f56323e67b",
+    "artifact_name": "release110-graphics-native-ec3c8047c27f4bff87850abbd1972659a4ac2ca4",
+    "job": "graphics (native)"
+  },
+  "graphics_ec": {
+    "repo": "t0b1kent/macrunner-wine",
+    "run": 41929450456,
+    "revision": "1f20e2a934c8644f01c2af8f9f95172febb49a48",
+    "artifact": 13370134955,
+    "sha256": "01aff4bb97458386a84f609ea351a990fbc226601e98bc155b28478814e56a6c",
+    "artifact_name": "release110-graphics-ec-1f20e2a934c8644f01c2af8f9f95172febb49a48"
+  }
+}
