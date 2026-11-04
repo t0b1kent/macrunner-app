@@ -1,0 +1,64 @@
+name: MacRunner 1.1.0 installer tool from locked sources
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inputs:
+    runs-on: xcode-27
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        component: [xz, icu, boost, innoextract]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Own source and absent-tool tests
+        run: REPRO109_TEST_TMP="$RUNNER_TEMP" python3 -I -B -m unittest discover -s build/repro110app -p test_innoextract.py
+      - name: Verify one complete source input
+        run: |
+          nice -n 20 python3 -I -B build/repro110app/build_innoextract.py --stage inputs \
+            --only '${{ matrix.component }}' --work "$RUNNER_TEMP/inno-input-${{ matrix.component }}"
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: release110-inno-input-${{ matrix.component }}-${{ github.sha }}
+          path: ${{ runner.temp }}/inno-input-${{ matrix.component }}/reports
+          retention-days: 90
+  build:
+    needs: inputs
+    runs-on: xcode-27
+    timeout-minutes: 100
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_27.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: t0b1kent/macrunner-wine
+          ref: 3006c116e663c9595b98fa10fb10c1840790cd7c
+          path: wine
+          persist-credentials: false
+      - name: Build the locked installer tool and package its source-built runtime
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          nice -n 20 python3 -I -B build/repro110app/build_innoextract.py --stage build \
+            --wine "$GITHUB_WORKSPACE/wine" --work "$RUNNER_TEMP/release110-inno"
+      - name: Archive source-built installer output
+        run: |
+          tar -czf "$RUNNER_TEMP/innoextract.tar.gz" -C "$RUNNER_TEMP/release110-inno/outputs" .
+          shasum -a 256 "$RUNNER_TEMP/innoextract.tar.gz" > "$RUNNER_TEMP/innoextract.tar.gz.sha256"
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: release110-inno-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/release110-inno/reports
+            ${{ runner.temp }}/innoextract.tar.gz*
+          retention-days: 90
