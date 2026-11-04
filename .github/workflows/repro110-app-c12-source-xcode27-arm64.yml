@@ -86,7 +86,7 @@ jobs:
           set -euo pipefail
           work="$RUNNER_TEMP/repro110-step-${{ matrix.step }}"
           if [ '${{ matrix.step }}' = engine-tools ]; then
-            /usr/bin/python3 -I -B build/repro110app/build_engine_tools.py --build --work "$work"
+            nice -n 20 /usr/bin/python3 -I -B build/repro110app/build_engine_tools.py --build --work "$work"
           else
             /usr/bin/python3 -I -B build/repro110app/bottle_catalogues.py --check --work "$work"
           fi
