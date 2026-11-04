@@ -115,7 +115,7 @@ def main(argv=None):
     args.reports.mkdir(parents=True, exist_ok=True)
     result = dict(schema=1, policy='LAYOUT_LINKS_RECHECK_ONCE_NAMED_ALLOWANCES', layout_links=ensure_layout(args.tree, policy))
     env = dict(os.environ)
-    isolated = args.reports.resolve() / 'app-test-data'
+    isolated = args.reports.resolve().parent / 'app-test-data'
     isolated.mkdir(exist_ok=True)
     env['MACRUNNER_APP_DATA_ROOT'] = str(isolated)
     result['app_data_root'] = 'EXPLICIT_ISOLATED_TEST_DIRECTORY'
@@ -146,7 +146,7 @@ def main(argv=None):
     result['status'] = ('SWIFT_TESTS_PASSED' if not rc else 'SWIFT_TESTS_PASSED_WITH_RECHECK_OR_ALLOWANCE' if not bad else 'SWIFT_TESTS_FAILED')
     result['unexplained_failures'] = bad
     (args.reports / 'swift_test_failures.json').write_text(json.dumps(result, indent=2, sort_keys=True) + '\n')
-    print(json.dumps({k: result[k] for k in ('status', 'unexplained_failures')}))
+    print(json.dumps({k: result[k] for k in ('status', 'unexplained_failures', 'first_run', 'verdict')}), flush=True)
     return 1 if bad else 0
 
 
