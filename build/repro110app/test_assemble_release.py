@@ -6,6 +6,7 @@ from pathlib import Path
 import tarfile
 import tempfile
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 
 spec = importlib.util.spec_from_file_location('release_composer', Path(__file__).with_name('assemble_release.py'))
@@ -51,6 +52,13 @@ class ReleaseCompositionTests(unittest.TestCase):
                     side_effect=lambda value: None if value == name else '/own/tool'):
                 with self.assertRaisesRegex(ValueError, 'tool missing'):
                     producer.require_tools()
+
+    def test_receiver_checkout_cannot_silently_replace_the_selected_source_recipe(self):
+        args = SimpleNamespace(transport=self.root / 'receiver.py', wine=self.root / 'host',
+                               dxmt=self.root / 'dxmt', hyperbridge=self.root / 'fex')
+        args.transport.write_text('# own artifact receiver fixture\n')
+        with self.assertRaisesRegex(ValueError, 'build/repro110wine/build_wine.py'):
+            producer.source_inputs(args)
 
 
 if __name__ == '__main__':

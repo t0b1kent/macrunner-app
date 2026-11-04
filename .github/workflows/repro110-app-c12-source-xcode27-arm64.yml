@@ -122,6 +122,14 @@ jobs:
         with:
           repository: t0b1kent/macrunner-wine
           ref: 1f20e2a934c8644f01c2af8f9f95172febb49a48
+          path: wine-host
+          sparse-checkout: build/release110/graphics_inputs.py
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: t0b1kent/macrunner-wine
+          ref: 0db5d3a80e302315a1dc37e8f6e1bba551310430
           path: wine
           persist-credentials: false
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -148,6 +156,7 @@ jobs:
         run: |
           nice -n 20 python3 -I -B build/repro110app/assemble_release.py \
             --pins build/repro110app/release-inputs.lock.json \
+            --transport "$GITHUB_WORKSPACE/wine-host/build/release110/graphics_inputs.py" \
             --wine "$GITHUB_WORKSPACE/wine" --dxmt "$GITHUB_WORKSPACE/dxmt" \
             --hyperbridge "$GITHUB_WORKSPACE/hyperbridge" --work "$RUNNER_TEMP/release110-package"
       - name: Preserve the complete source package and raw assembly evidence
