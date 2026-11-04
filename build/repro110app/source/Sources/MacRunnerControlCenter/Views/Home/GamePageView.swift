@@ -18,6 +18,8 @@ struct GamePageView: View {
     let onEdit: () -> Void
     let onDelete: () -> Void
     let onBack: () -> Void
+    /// Переключатель «Высокое разрешение (Retina)»; nil — не показывать.
+    var onSetHighResolution: ((Bool) -> Void)? = nil
 
     @State private var showDetails = false
 
@@ -165,6 +167,7 @@ struct GamePageView: View {
                 if let graphics = GraphicsLine.short(app, loc: loc) { fact(L("GRAPHICS"), graphics) }
                 if let ms = app.lastDurationMs { fact(L("LAST RUN"), GameTechnicalDetails.durationText(ms)) }
             }
+            highResolutionToggle
             Button { showDetails.toggle() } label: {
                 HStack(spacing: 6) {
                     Image(systemName: "info.circle").font(.system(size: 12))
@@ -181,6 +184,27 @@ struct GamePageView: View {
         .padding(.horizontal, 22)
         .frame(maxWidth: .infinity, alignment: .leading)
         .glass(cornerRadius: 18)
+    }
+
+    /// ★ Как «High Resolution Mode» у CrossOver: игра получает экран в пикселях Retina, а не
+    ///   в точках macOS. Действует со следующего запуска, поэтому во время игры не переключается.
+    @ViewBuilder
+    private var highResolutionToggle: some View {
+        if let onSetHighResolution, BundledEngine.current != nil {
+            Toggle(isOn: Binding(get: { app.highResolution ?? RetinaDefault.automatic }, set: { onSetHighResolution($0) })) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(L("High resolution (Retina)"))
+                        .font(.system(size: 14.5, weight: .medium))
+                        .foregroundColor(Theme.Palette.textPrimary(scheme))
+                    Text(L("The game sees the full list of this Mac's resolutions in real Retina pixels, including 1920×1080 and 2560×1440. Applies from the next launch; on a regular external monitor leave it off."))
+                        .font(Theme.Font.caption)
+                        .foregroundColor(Theme.Palette.textSecondary(scheme))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .toggleStyle(.switch)
+            .disabled(isRunning)
+        }
     }
 
     private func fact(_ label: String, _ value: String) -> some View {

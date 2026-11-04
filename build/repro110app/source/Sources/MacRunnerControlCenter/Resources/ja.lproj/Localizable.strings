@@ -4,8 +4,6 @@
 "Settings" = "設定";
 "AI Troubleshoot" = "AI 診断";
 "Steam API Key" = "Steam API キー";
-"Buy License" = "ライセンスを購入";
-"Trial Mode" = "体験モード";
 "Add App" = "アプリを追加";
 "Run" = "実行";
 "Library" = "ライブラリ";
@@ -142,7 +140,7 @@
 "Do 32-bit games work?" = "32 ビットのゲームは動きますか？";
 "Not in this release. The bundled engine supports 64-bit Windows programs; compatibility varies by game." = "このバージョンでは対応していません。同梱エンジンは 64 ビットの Windows プログラムに対応していますが、互換性はゲームによって異なります。";
 "Is it free?" = "無料ですか？";
-"Yes. MacRunner is free during early access." = "はい。早期アクセス期間中、MacRunner は無料です。";
+"Yes. MacRunner is free, and its source code is open." = "はい。MacRunner は無料で、ソースコードも公開されています。";
 "No. The bundled engine translates Intel programs without Rosetta." = "いいえ。同梱エンジンは Rosetta を使わずに Intel 向けプログラムを変換します。";
 "Installed" = "インストール済み";
 "Games" = "ゲーム";
@@ -166,44 +164,6 @@
 "Some Windows features are missing there." = "Windows 版の一部機能がありません。";
 "ALSO IN THE WINGET CATALOGUE" = "winget カタログにもあり";
 "Preparing the winget catalogue on first use — about 8 MB." = "初回利用のため winget カタログを準備中（約 8 MB）。";
-"No licence token on this device." = "このデバイスにはライセンストークンがありません。";
-"The licence token is malformed." = "ライセンストークンの形式が正しくありません。";
-"The licence token is not valid base64url." = "ライセンストークンが有効な base64url ではありません。";
-"The licence token is signed but its contents are unreadable." = "ライセンストークンの署名は有効ですが、内容を読み取れません。";
-"The bundled licence public key is invalid; this build cannot check licences." = "同梱のライセンス公開鍵が無効なため、このビルドではライセンスを確認できません。";
-"Could not read this Mac's hardware identifier." = "この Mac のハードウェア識別子を読み取れませんでした。";
-"Keychain refused the licence operation." = "キーチェーンがライセンス操作を拒否しました。";
-"This licence token is not signed by MacRunner." = "このライセンストークンは MacRunner によって署名されていません。";
-"This licence token belongs to another Mac." = "このライセンストークンは別の Mac 用です。";
-"This licence has expired." = "このライセンスは期限切れです。";
-"This device's licence lease has expired; connect to the internet to renew it." = "このデバイスのライセンス認証の期限が切れました。インターネットに接続して更新してください。";
-"Licence" = "ライセンス";
-"Plan, device and renewal" = "プラン、デバイス、更新";
-"No licence on this Mac" = "この Mac にはライセンスがありません";
-"MacRunner needs a licence to start a game for the first time. Games you already run keep working." = "MacRunner でゲームを初めて起動するにはライセンスが必要です。起動したことのあるゲームは引き続き使えます。";
-"It was changed or came from somewhere else." = "改ざんされたか、提供元が異なります。";
-"Issued for %@, this Mac is %@" = "%1$@ 用に発行されていますが、この Mac は %2$@ です";
-"PLANS" = "プラン";
-"2 months" = "2 か月";
-"1 year" = "1 年";
-"1 device" = "1 台";
-"Teams" = "チーム";
-"more devices" = "さらに多くのデバイス";
-"write to us" = "お問い合わせ";
-"Buy on the site" = "サイトで購入";
-"Active" = "有効";
-"Connect to the internet once — the device lease needs renewing" = "一度インターネットに接続してください（デバイス認証の更新が必要です）";
-"Expired. Installed games keep working; new ones cannot be started." = "期限切れです。インストール済みのゲームは引き続き動作しますが、新しいゲームは起動できません。";
-"This Mac" = "この Mac";
-"Devices" = "デバイス";
-"Paid until" = "利用期限";
-"Unbind this Mac" = "この Mac の登録を解除";
-"Unbind this Mac from the licence?" = "この Mac をライセンスから登録解除しますか？";
-"Unbind" = "登録解除";
-"The next unbind will only be allowed in one month." = "次回の登録解除は 1 か月後まで行えません。";
-"This licence is bound to this Mac permanently and cannot be moved." = "このライセンスはこの Mac に永久に紐付けられており、移行できません。";
-"Trial" = "体験";
-"Perpetual" = "永久";
 "NO FILE" = "ファイルなし";
 "File is gone" = "ファイルが見つかりません";
 "Open the releases page" = "リリースページを開く";
@@ -230,9 +190,6 @@
 "We can run it — it will install the game, and the installed game goes to your library." = "実行するとゲームがインストールされ、インストールしたゲームがライブラリに追加されます。";
 "We will add it as is and run it from your library." = "そのまま追加し、ライブラリから起動します。";
 "Uninstallers, runtimes and crash handlers look like this. Usually not what you want to add." = "アンインストーラ、ランタイム、クラッシュハンドラはこのように見えます。通常は追加する必要はありません。";
-"Open a licence file" = "ライセンスファイルを開く";
-"Works without internet" = "インターネット不要";
-"Choose a licence file" = "ライセンスファイルを選択";
 "Open" = "開く";
 "Uninstall “%@”?" = "「%@」をアンインストールしますか？";
 "Delete “%@” and its files?" = "「%@」とそのファイルを削除しますか？";
@@ -244,14 +201,9 @@
 "The file is already gone from disk. Only the library entry is left to remove." = "ファイルはすでにディスクにありません。ライブラリの項目だけを削除します。";
 "Could not delete the game" = "ゲームを削除できませんでした";
 " bytes" = " バイト";
-"%d parts, expected 2 (payload.signature)" = "パーツが %d 個あります（必要なのは 2 個: payload.signature）";
 "%d s" = "%d 秒";
-"1 Mac" = "Mac 1 台";
-"1 Mac, one-time, not transferable" = "Mac 1 台、買い切り、移行不可";
-"10 Macs, per year" = "Mac 10 台、年額";
 "About MacRunner" = "MacRunner について";
 "BACKEND" = "バックエンド";
-"Business" = "ビジネス";
 "Cannot unpack the winget catalog: no unzip tool at " = "winget カタログを展開できません。unzip ツールが見つかりません: ";
 "Check for Updates…" = "アップデートを確認…";
 "Could not reach the winget catalog: " = "winget カタログに接続できませんでした: ";
@@ -260,14 +212,10 @@
 "Delete this game from the library?" = "このゲームをライブラリから削除しますか？";
 "Drop a Windows .exe here, or browse to add one." = "Windows の .exe をここにドロップするか、ファイルを選択して追加してください。";
 "Drop the .exe to add it" = "ドロップして .exe を追加";
-"IOPlatformExpertDevice has no IOPlatformUUID" = "IOPlatformExpertDevice に IOPlatformUUID がありません";
-"IOPlatformExpertDevice not found" = "IOPlatformExpertDevice が見つかりません";
-"IOPlatformUUID is not a string or is empty" = "IOPlatformUUID が文字列でないか空です";
 "LAST RUN" = "前回の実行";
 "MacRunner Help" = "MacRunner ヘルプ";
 "MacRunner engine not found. Reinstall MacRunner." = "MacRunner のエンジンが見つかりません。MacRunner を再インストールしてください。";
 "NOTES" = "メモ";
-"No free trial. Refund within 14 days." = "無料体験はありません。14 日以内なら返金できます。";
 "No such package in the winget catalog: " = "winget カタログにこのパッケージはありません: ";
 "Not a winget package ID: " = "winget のパッケージ ID ではありません: ";
 "STATUS" = "状態";
@@ -288,16 +236,11 @@
 "The winget catalog lists no versions for " = "winget カタログにバージョンがありません: ";
 "The winget manifest is missing for " = "winget マニフェストがありません: ";
 "The winget manifest lists no usable installer for " = "winget マニフェストに使用できるインストーラがありません: ";
-"This licence belongs to another Mac" = "このライセンスは別の Mac 用です";
 "Unpacking the winget catalog failed with code " = "winget カタログの展開に失敗しました。コード: ";
 "WHY IT DID NOT RUN" = "起動しなかった理由";
 "Your library is empty" = "ライブラリは空です";
 "all installer entries lack a URL or a SHA256" = "すべてのインストーラ項目に URL または SHA256 がありません";
-"empty string" = "空の文字列";
 "no Installers: block" = "Installers: ブロックがありません";
-"one half of the token is empty" = "トークンの片方が空です";
-"payload" = "ペイロード";
-"signature" = "署名";
 "“%@” is a Windows Installer package (.msi). MacRunner cannot run .msi files yet — use the game’s .exe installer." = "「%@」は Windows Installer パッケージ（.msi）です。MacRunner はまだ .msi ファイルを実行できません。ゲームの .exe インストーラを使ってください。";
 
 /* Встроенный движок и установка (23.09.2026) */
@@ -441,3 +384,42 @@
 "If you have a regular installer (for example, from GOG) or an already installed game folder, add that instead." = "通常のインストーラー（GOG のものなど）や、インストール済みのゲームフォルダーがあれば、そちらを追加してください。";
 "Found: %@" = "検出: %@";
 "Game page" = "ゲームページ";
+
+/* Строки состава 1.1.0 (APP-L10N, 14.10.2026): ключи были только в en и ru */
+"Could not prepare Windows image decoding (WIC registration exit code %d)." = "Windows の画像デコードを準備できませんでした（WIC 登録の終了コード %d）。";
+"Not rechecked for this release" = "このバージョンでは再確認していません";
+"Latin keyboard during games" = "ゲーム中のラテン文字キーボード";
+"Use a Latin layout while the game runs, then restore your previous input source." = "ゲームの実行中はラテン文字の配列を使い、終了後は元の入力ソースに戻します。";
+"This game needs %@ next to its executable. Add the original game data and try again." = "このゲームには、実行ファイルと同じ場所に %@ が必要です。ゲームの元データを追加してから、もう一度お試しください。";
+"No free drive letter is available for this game's CD data." = "このゲームの CD データに割り当てられる空きドライブ文字がありません。";
+"The game closed immediately after launch." = "ゲームが起動直後に終了しました。";
+
+/* Заметки профилей графики (graphics-profiles.json, known[].note), 14.10.2026. Ключ — английский текст заметки дословно; добавил заметку в JSON — добавь её сюда на всех языках */
+"User-confirmed gameplay, keyboard/mouse, audio, saving and reload at the saved position. Menu exit was also confirmed without an error in 1.0.7. Limits: Broader scene coverage and long-session performance were not established. FPS: Not measured." = "ユーザーが確認した内容：ゲームプレイ、キーボード/マウス、サウンド、セーブと保存位置からの再ロード。1.0.7 ではメニューからの終了もエラーなく確認されました。制限事項：より広いシーンでの確認と、長時間セッションでの性能は確認できていません。FPS：未計測。";
+"Main menu displayed; closing the window and quitting through the game menu both completed without an error. Still to check: Gameplay and long sessions in this pass. FPS from one screenshot: Not measured." = "メインメニューが表示され、ウィンドウを閉じる操作とゲームのメニューからの終了のどちらもエラーなく完了しました。今後の確認事項：ゲームプレイと長時間セッション（今回は未確認）。スクリーンショット1枚から読み取った FPS：未計測。";
+"The tester confirmed gameplay and subsequently a successful launch, game entry and normal exit in the installed app. FPS reported on September 24. Limits: Repeated-run reliability, long sessions, save/reload, complete cinematic playback and a timed benchmark with recorded settings. FPS: 60." = "テスターがゲームプレイを確認し、その後、インストール済みアプリで正常な起動、ゲームへの突入、通常終了を確認しました。FPS は9月24日に報告されたものです。制限事項：繰り返し実行時の信頼性、長時間セッション、セーブ/ロード、ムービーの完全な再生、設定を記録した計時ベンチマーク。FPS：60。";
+"Language selection displayed on first launch; an earlier check reached the main menu. Still to check: Gameplay in this pass. FPS from one screenshot: 115.66 at language selection." = "初回起動時に言語選択画面が表示されました。以前の確認ではメインメニューに到達しています。今後の確認事項：ゲームプレイ（今回は未確認）。スクリーンショット1枚から読み取った FPS：言語選択画面で 115.66。";
+"Hollow Knight, ABZU and Divinity reach their menus; crypto known-answer tests pass 12/12 Limits: No new FPS measurement. Indiana stops at its Vulkan requirement. Automated Hedon and Stardew runs omit app profiles and do not replace the historical gameplay checks." = "Hollow Knight、ABZU、Divinity はそれぞれのメニューまで到達します。暗号の既知解テストは 12/12 に合格しました。制限事項：FPS の新たな計測はありません。Indiana は Vulkan の要件で止まります。Hedon と Stardew の自動実行ではアプリのプロファイルを使っておらず、過去のゲームプレイ確認の代わりにはなりません。";
+"Not listed among the October 3 release checks; the earlier menu result remains historical." = "10月3日のリリース確認には含まれていません。以前のメニューの結果は過去のものとして残っています。";
+"User-confirmed gameplay and menu navigation. The maintainer reported 100 FPS on September 24; the FPS observation is separate from the earlier development check. Limits: Save/reload, voluntary exit, long sessions and complete automated graphics-path verification. The earlier run ended through a test timer. FPS: 100." = "ユーザーがゲームプレイとメニュー操作を確認しました。メンテナーは9月24日に 100 FPS と報告しましたが、この FPS の観測は以前の開発中の確認とは別のものです。制限事項：セーブ/ロード、プレイヤー自身による終了、長時間セッション、グラフィックス経路の完全な自動検証。以前の実行はテスト用タイマーで終了しました。FPS：100。";
+"Main menu and player profiles displayed. Still to check: Gameplay, saving and normal exit in this pass. FPS from one screenshot: 120, at the display's 120 Hz limit." = "メインメニューとプレイヤープロフィールが表示されました。今後の確認事項：ゲームプレイ、セーブ、通常終了（今回は未確認）。スクリーンショット1枚から読み取った FPS：120（ディスプレイの 120 Hz 上限）。";
+"User-confirmed gameplay, audio and loading. Limits: The run ended through a test timer. Manual save/reload, voluntary exit and long sessions were not verified. FPS: Not measured." = "ユーザーがゲームプレイ、サウンド、ロードを確認しました。制限事項：実行はテスト用タイマーで終了しました。手動のセーブ/ロード、プレイヤー自身による終了、長時間セッションは確認していません。FPS：未計測。";
+"Loading screen displayed; the game opened its data files and selected Apple M1 Pro graphics. Still to check: Startup remains under investigation. FPS from one screenshot: Not measured." = "ロード画面が表示され、ゲームはデータファイルを開いて Apple M1 Pro のグラフィックスを選択しました。今後の確認事項：起動については引き続き調査中です。スクリーンショット1枚から読み取った FPS：未計測。";
+"User-confirmed gameplay, save/load and voluntary exit. Limits: Accelerated OpenGL remained unresolved. This was not a GPU-accelerated rendering result. FPS: Not measured." = "ユーザーがゲームプレイ、セーブ/ロード、プレイヤー自身による終了を確認しました。制限事項：アクセラレーション対応の OpenGL は未解決のままです。これは GPU アクセラレーションによる描画の結果ではありません。FPS：未計測。";
+"Start opened the Voidpoint intro, where the game remained for the rest of the check. Still to check: Reaching the main menu; startup remains under investigation. FPS from one screenshot: Not measured." = "「Start」で Voidpoint のイントロが開き、ゲームは確認の最後までそこに留まりました。今後の確認事項：メインメニューへの到達。起動については引き続き調査中です。スクリーンショット1枚から読み取った FPS：未計測。";
+"User-confirmed tutorial gameplay, saving, returning to the menu and reloading. Limits: Long sessions and measured performance were not established. FPS: Not measured." = "ユーザーがチュートリアルのゲームプレイ、セーブ、メニューへの復帰、再ロードを確認しました。制限事項：長時間セッションと計測した性能は確認できていません。FPS：未計測。";
+"Not rechecked for this release. Still to check: Its earlier gameplay and save/load results are listed below. FPS from one screenshot: Not measured." = "このバージョンでは再確認していません。今後の確認事項：以前のゲームプレイとセーブ/ロードの結果は下に記載しています。スクリーンショット1枚から読み取った FPS：未計測。";
+"Status: Tested & working — DirectX 12.\n\nFPS: Not measured.\n\nPath: FEX + Wine + MacRunner's DXMT-based DirectX 12 → Metal development path, separate from the current preview app's Direct3D 10/11 bundle.\n\nThe maintainer confirmed on September 23, 2026 that the game had already been launched successfully with DirectX 12 and was working in gameplay. This newer confirmation supersedes the earlier September 16 menu-only status. The status describes the tested configuration.\n\nCurrent focus: further optimization, including rendering quality and performance. Ray tracing is experimental, not released. Detailed graphics progress →" = "ステータス：テスト済み・動作確認済み — DirectX 12。\n\nFPS：未計測。\n\n経路：FEX + Wine + MacRunner の DXMT ベースの DirectX 12 → Metal 開発経路。現行プレビュー版アプリの Direct3D 10/11 バンドルとは別です。\n\nメンテナーは2026年9月23日、このゲームがすでに DirectX 12 で正常に起動し、ゲームプレイで動作していることを確認しました。この新しい確認は、メニューのみだった9月16日の以前のステータスに代わるものです。このステータスはテストした構成について述べています。\n\n現在の重点：レンダリング品質と性能を含む、さらなる最適化。レイトレーシングは実験段階で、リリースされていません。グラフィックスの詳細な進捗 →";
+"Heroes III also reached its main menu. Sound does not work correctly yet (silent or distorted, depending on the setup); gameplay, saving and wider 32-bit compatibility have not been accepted." = "Heroes III もメインメニューまで到達しました。サウンドはまだ正しく動作しません（環境によって無音または音割れ）。ゲームプレイ、セーブ、より広い 32 ビット互換性は承認されていません。";
+"User-confirmed gameplay, movement, audio and voluntary exit, with a gameplay screenshot. Limits: Long-session stability and measured performance were not established. FPS: Not measured." = "ユーザーがゲームプレイ、移動、サウンド、プレイヤー自身による終了を確認し、ゲームプレイのスクリーンショットも添えられています。制限事項：長時間セッションでの安定性と計測した性能は確認できていません。FPS：未計測。";
+"Not rechecked for this release. Still to check: Its earlier gameplay and audio results are listed below. FPS from one screenshot: Not measured." = "このバージョンでは再確認していません。今後の確認事項：以前のゲームプレイとサウンドの結果は下に記載しています。スクリーンショット1枚から読み取った FPS：未計測。";
+"In-level rendering, mouse, audio and save/load; a subsequent English-keyboard-layout check confirmed keyboard operation. Intro/attract sequence and voluntary exit were also accepted. Limits: Other keyboard layouts and long sessions need further testing. FPS: Not measured." = "レベル内の描画、マウス、サウンド、セーブ/ロード。その後の英語キーボード配列での確認で、キーボード操作も確認されました。イントロ/アトラクトシーケンスとプレイヤー自身による終了も承認されています。制限事項：他のキーボード配列と長時間セッションは追加のテストが必要です。FPS：未計測。";
+"Not rechecked for this release. Still to check: Its earlier gameplay and save/load results are listed below. FPS from one screenshot: Not measured." = "このバージョンでは再確認していません。今後の確認事項：以前のゲームプレイとセーブ/ロードの結果は下に記載しています。スクリーンショット1枚から読み取った FPS：未計測。";
+"Movement, audio, return to menu and continuation of saved state; a repeated mining-scene run with voluntary exit. Limits: Shutdown resource warnings remained; longer sessions need verification. FPS: Not measured." = "移動、サウンド、メニューへの復帰、保存状態からの続行。採掘シーンの再実行とプレイヤー自身による終了。制限事項：終了時のリソース警告が残っています。より長いセッションの検証が必要です。FPS：未計測。";
+"Not rechecked for this release. Still to check: Its earlier gameplay and saved-state results are listed below. FPS from one screenshot: Not measured." = "このバージョンでは再確認していません。今後の確認事項：以前のゲームプレイと保存状態の結果は下に記載しています。スクリーンショット1枚から読み取った FPS：未計測。";
+"October 1, 2026: Indiana Jones and the Great Circle, Windows GOG version, uses HyperBridge inside ARM64EC Wine 11 and a separate MoltenVK Vulkan → Metal build. On a 2021 MacBook Pro M1 Pro with 32 GB and macOS 27.0, the release notes report about 10–12 FPS at minimum settings. These are the preview's observations, not new measurements for this page.\n\nKnown issues: firing a weapon hung the GPU and restarted the macOS session on M1 Pro; save all your work before playing. Split frames, stutter and sky artifacts remain. The preview replaces four shared engine files and can affect other titles. Ray tracing is experimental, not released.\n\nAdd `TheGreatCircle.exe` to MacRunner and press Play. If the game asks “Run In Safe Mode?” after an interrupted session, the preview notes say to choose No. This preview is separate from the ordinary 1.0.6 bundle and does not certify other Macs or games. Preview notes" = "2026年10月1日：Windows 版 GOG の Indiana Jones and the Great Circle は、ARM64EC Wine 11 内の HyperBridge と、別の MoltenVK（Vulkan → Metal）ビルドを使います。2021年の MacBook Pro M1 Pro（32 GB、macOS 27.0）では、リリースノートによると最低設定で約 10～12 FPS です。これはプレビュー版での観測であり、このページ用の新しい計測ではありません。\n\n既知の問題：M1 Pro では武器を発射すると GPU がハングし、macOS のセッションが再起動しました。プレイ前に作業内容をすべて保存してください。フレームの分断、カクつき、空のアーティファクトが残っています。プレビュー版は共有エンジンファイルを 4 つ置き換えるため、他のタイトルに影響する可能性があります。レイトレーシングは実験段階で、リリースされていません。\n\n`TheGreatCircle.exe` を MacRunner に追加して「プレイ」を押してください。中断したセッションの後にゲームが「Run In Safe Mode?」と尋ねてきた場合、プレビュー版のノートでは「No」を選ぶよう案内しています。このプレビュー版は通常の 1.0.6 バンドルとは別で、他の Mac やゲームを保証するものではありません。プレビュー版のノート";
+
+/* Высокое разрешение (Retina): переключатель на странице игры (лейн RETINA, 03.11.2026). */
+"High resolution (Retina)" = "高解像度 (Retina)";
+"The game sees the full list of this Mac's resolutions in real Retina pixels, including 1920×1080 and 2560×1440. Applies from the next launch; on a regular external monitor leave it off." = "ゲームがこの Mac のすべての解像度を Retina の実ピクセルで使えるようになります（1920×1080 や 2560×1440 を含む）。次回の起動から有効です。通常の外部モニタではオフのままにしてください。";
+"Another program is still running in the same Windows environment with different settings. Close it and try again." = "同じ Windows 環境で、別の設定の別のプログラムが動いています。閉じてからやり直してください。";

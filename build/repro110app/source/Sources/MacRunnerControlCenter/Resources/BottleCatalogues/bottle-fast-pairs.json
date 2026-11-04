@@ -1,0 +1,67 @@
+{
+ "pairs": [
+  {
+   "digest": "84f02b042f488743911ec1d5e6164b967faeca767593bc9d6134f4809656b258",
+   "from": "09fe4a424175cae511f5a11afad5b6299040b2587d0b70b32411b456ab8c5cb5",
+   "modes": {
+    "drive_c/windows/system32/kernelbase.dll": "0644",
+    "drive_c/windows/system32/msvcrt.dll": "0644",
+    "drive_c/windows/system32/sechost.dll": "0644",
+    "drive_c/windows/system32/ucrtbase.dll": "0644",
+    "drive_c/windows/system32/wow64.dll": "0644",
+    "drive_c/windows/system32/wow64win.dll": "0644",
+    "drive_c/windows/system32/xtajit.dll": "0644",
+    "drive_c/windows/system32/xtajit64.dll": "0644",
+    "drive_c/windows/syswow64/kernelbase.dll": "0644"
+   },
+   "to": "70f97a84d06612ead406598204593dd98daa5220673b72c7bfb182d3aab59081"
+  },
+  {
+   "digest": "57bfc9c31111572f3db38f788e8fafd1111663bfef47e31e863eb20399e84613",
+   "from": "b4a31678b633f9ae057aca5e130d35fc0037552076320924b65f71b345c7b760",
+   "fromActual": {
+    "wine/lib/wine/aarch64-windows/xtajit64.dll": "aafcff649bf72d86b86a6df2b30abfc7a3ec8b296a7856e21eb0cad2e52c5545"
+   },
+   "modes": {
+    "drive_c/windows/system32/kernelbase.dll": "0644",
+    "drive_c/windows/system32/msvcrt.dll": "0644",
+    "drive_c/windows/system32/sechost.dll": "0644",
+    "drive_c/windows/system32/ucrtbase.dll": "0644",
+    "drive_c/windows/system32/wow64.dll": "0644",
+    "drive_c/windows/system32/wow64win.dll": "0644",
+    "drive_c/windows/system32/xtajit.dll": "0644",
+    "drive_c/windows/system32/xtajit64.dll": "0644",
+    "drive_c/windows/syswow64/kernelbase.dll": "0644"
+   },
+   "to": "70f97a84d06612ead406598204593dd98daa5220673b72c7bfb182d3aab59081"
+  },
+  {
+   "digest": "6caecc608e106ea60faf2ba932a8cc79e305d69ee398f1e7a214d646d3cb3232",
+   "from": "b4a31678b633f9ae057aca5e130d35fc0037552076320924b65f71b345c7b760",
+   "fromActual": {
+    "wine/lib/wine/aarch64-windows/xtajit64.dll": "aafcff649bf72d86b86a6df2b30abfc7a3ec8b296a7856e21eb0cad2e52c5545"
+   },
+   "modes": {},
+   "to": "4850e7e0da39cb03abceb0acec88ba13b68c121706def1c01dd153efbf065634"
+  },
+  {
+   "digest": "e7a6245889a119b845fc5cf589ce66600fc62feb2e33ea2511bec1d78092da8c",
+   "from": "b4a31678b633f9ae057aca5e130d35fc0037552076320924b65f71b345c7b760",
+   "fromActual": {
+    "wine/lib/wine/aarch64-windows/xtajit64.dll": "aafcff649bf72d86b86a6df2b30abfc7a3ec8b296a7856e21eb0cad2e52c5545"
+   },
+   "modes": {},
+   "to": "8f1b4ba59e4631cc23adead163785e6611f0aa91d03ca6e2fe1c8d206938c71b"
+  },
+  {
+   "digest": "f811c3113119791095c63e203faf30fbccc9adf665488ce501f50400ffa82aa9",
+   "from": "8f1b4ba59e4631cc23adead163785e6611f0aa91d03ca6e2fe1c8d206938c71b",
+   "modes": {
+    "drive_c/windows/system32/xtajit.dll": "0644",
+    "drive_c/windows/system32/xtajit64.dll": "0644"
+   },
+   "to": "3822526cb032a759402a25ee77b7d53afba2018e4f96f17b1e8c968fe8857fd6"
+  }
+ ],
+ "schema": 1
+}

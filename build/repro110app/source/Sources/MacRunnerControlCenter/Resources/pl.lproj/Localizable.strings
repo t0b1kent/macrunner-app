@@ -4,8 +4,6 @@
 "Settings" = "Ustawienia";
 "AI Troubleshoot" = "Diagnostyka AI";
 "Steam API Key" = "Klucz API Steam";
-"Buy License" = "Kup licencję";
-"Trial Mode" = "Tryb próbny";
 "Add App" = "Dodaj aplikację";
 "Run" = "Uruchom";
 "Library" = "Biblioteka";
@@ -142,7 +140,7 @@
 "Do 32-bit games work?" = "Czy działają gry 32-bitowe?";
 "Not in this release. The bundled engine supports 64-bit Windows programs; compatibility varies by game." = "Nie w tej wersji. Dołączony silnik obsługuje 64-bitowe programy Windows; zgodność zależy od gry.";
 "Is it free?" = "Czy to jest darmowe?";
-"Yes. MacRunner is free during early access." = "Tak. W okresie wczesnego dostępu MacRunner jest bezpłatny.";
+"Yes. MacRunner is free, and its source code is open." = "Tak. MacRunner jest bezpłatny, a jego kod źródłowy jest otwarty.";
 "No. The bundled engine translates Intel programs without Rosetta." = "Nie. Dołączony silnik tłumaczy programy dla procesorów Intel bez Rosetty.";
 "Installed" = "Zainstalowane";
 "Games" = "Gry";
@@ -166,44 +164,6 @@
 "Some Windows features are missing there." = "Brakuje w niej części funkcji z wersji na Windows.";
 "ALSO IN THE WINGET CATALOGUE" = "TAKŻE W KATALOGU WINGET";
 "Preparing the winget catalogue on first use — about 8 MB." = "Przygotowuję katalog winget przy pierwszym użyciu — około 8 MB.";
-"No licence token on this device." = "Brak tokenu licencji na tym urządzeniu.";
-"The licence token is malformed." = "Token licencji ma nieprawidłowy format.";
-"The licence token is not valid base64url." = "Token licencji nie jest poprawnym base64url.";
-"The licence token is signed but its contents are unreadable." = "Token licencji jest podpisany, ale jego zawartości nie da się odczytać.";
-"The bundled licence public key is invalid; this build cannot check licences." = "Wbudowany klucz publiczny licencji jest nieprawidłowy; ta wersja nie może sprawdzać licencji.";
-"Could not read this Mac's hardware identifier." = "Nie udało się odczytać identyfikatora sprzętowego tego Maca.";
-"Keychain refused the licence operation." = "Pęk kluczy odmówił operacji na licencji.";
-"This licence token is not signed by MacRunner." = "Ten token licencji nie jest podpisany przez MacRunner.";
-"This licence token belongs to another Mac." = "Ten token licencji należy do innego Maca.";
-"This licence has expired." = "Ta licencja wygasła.";
-"This device's licence lease has expired; connect to the internet to renew it." = "Okresowe potwierdzenie licencji na tym urządzeniu wygasło; połącz się z internetem, aby je odnowić.";
-"Licence" = "Licencja";
-"Plan, device and renewal" = "Plan, urządzenie i odnowienie";
-"No licence on this Mac" = "Brak licencji na tym Macu";
-"MacRunner needs a licence to start a game for the first time. Games you already run keep working." = "MacRunner potrzebuje licencji, aby po raz pierwszy uruchomić grę. Gry, które już uruchamiasz, nadal działają.";
-"It was changed or came from somewhere else." = "Została zmieniona lub pochodzi z innego źródła.";
-"Issued for %@, this Mac is %@" = "Wydana dla %@, a ten Mac to %@";
-"PLANS" = "PLANY";
-"2 months" = "2 miesiące";
-"1 year" = "1 rok";
-"1 device" = "1 urządzenie";
-"Teams" = "Dla zespołów";
-"more devices" = "więcej urządzeń";
-"write to us" = "napisz do nas";
-"Buy on the site" = "Kup na stronie";
-"Active" = "Aktywna";
-"Connect to the internet once — the device lease needs renewing" = "Połącz się raz z internetem — trzeba odnowić potwierdzenie urządzenia";
-"Expired. Installed games keep working; new ones cannot be started." = "Wygasła. Zainstalowane gry nadal działają; nowych nie można uruchomić.";
-"This Mac" = "Ten Mac";
-"Devices" = "Urządzenia";
-"Paid until" = "Opłacono do";
-"Unbind this Mac" = "Odłącz tego Maca";
-"Unbind this Mac from the licence?" = "Odłączyć tego Maca od licencji?";
-"Unbind" = "Odłącz";
-"The next unbind will only be allowed in one month." = "Kolejne odłączenie będzie możliwe dopiero za miesiąc.";
-"This licence is bound to this Mac permanently and cannot be moved." = "Ta licencja jest na stałe przypisana do tego Maca i nie można jej przenieść.";
-"Trial" = "Próbna";
-"Perpetual" = "Bezterminowa";
 "NO FILE" = "BRAK PLIKU";
 "File is gone" = "Plik zniknął";
 "Open the releases page" = "Otwórz stronę wydań";
@@ -230,9 +190,6 @@
 "We can run it — it will install the game, and the installed game goes to your library." = "Możemy go uruchomić — zainstaluje grę, a zainstalowana gra trafi do biblioteki.";
 "We will add it as is and run it from your library." = "Dodamy go bez zmian i będziemy uruchamiać z biblioteki.";
 "Uninstallers, runtimes and crash handlers look like this. Usually not what you want to add." = "Tak wyglądają deinstalatory, środowiska uruchomieniowe i programy obsługi awarii. Zwykle nie to chcesz dodać.";
-"Open a licence file" = "Otwórz plik licencji";
-"Works without internet" = "Działa bez internetu";
-"Choose a licence file" = "Wybierz plik licencji";
 "Open" = "Otwórz";
 "Uninstall “%@”?" = "Odinstalować „%@”?";
 "Delete “%@” and its files?" = "Usunąć „%@” wraz z plikami?";
@@ -244,14 +201,9 @@
 "The file is already gone from disk. Only the library entry is left to remove." = "Pliku już nie ma na dysku. Pozostało tylko usunąć wpis z biblioteki.";
 "Could not delete the game" = "Nie udało się usunąć gry";
 " bytes" = " bajtów";
-"%d parts, expected 2 (payload.signature)" = "części: %d, oczekiwano 2 (payload.signature)";
 "%d s" = "%d s";
-"1 Mac" = "1 Mac";
-"1 Mac, one-time, not transferable" = "1 Mac, jednorazowo, bez przenoszenia";
-"10 Macs, per year" = "10 Maców, rocznie";
 "About MacRunner" = "O MacRunner";
 "BACKEND" = "BACKEND";
-"Business" = "Biznes";
 "Cannot unpack the winget catalog: no unzip tool at " = "Nie można rozpakować katalogu winget: brak narzędzia do rozpakowywania w ";
 "Check for Updates…" = "Sprawdź uaktualnienia…";
 "Could not reach the winget catalog: " = "Nie można połączyć się z katalogiem winget: ";
@@ -260,14 +212,10 @@
 "Delete this game from the library?" = "Usunąć tę grę z biblioteki?";
 "Drop a Windows .exe here, or browse to add one." = "Upuść tu plik .exe dla Windows albo wybierz go z dysku.";
 "Drop the .exe to add it" = "Upuść plik .exe, aby go dodać";
-"IOPlatformExpertDevice has no IOPlatformUUID" = "IOPlatformExpertDevice nie ma IOPlatformUUID";
-"IOPlatformExpertDevice not found" = "Nie znaleziono IOPlatformExpertDevice";
-"IOPlatformUUID is not a string or is empty" = "IOPlatformUUID nie jest ciągiem znaków lub jest pusty";
 "LAST RUN" = "OSTATNIE URUCHOMIENIE";
 "MacRunner Help" = "Pomoc MacRunner";
 "MacRunner engine not found. Reinstall MacRunner." = "Nie znaleziono silnika MacRunner. Zainstaluj MacRunner ponownie.";
 "NOTES" = "NOTATKI";
-"No free trial. Refund within 14 days." = "Bez darmowego okresu próbnego. Zwrot pieniędzy w ciągu 14 dni.";
 "No such package in the winget catalog: " = "Brak takiego pakietu w katalogu winget: ";
 "Not a winget package ID: " = "To nie jest identyfikator pakietu winget: ";
 "STATUS" = "STATUS";
@@ -288,16 +236,11 @@
 "The winget catalog lists no versions for " = "Katalog winget nie zawiera wersji dla ";
 "The winget manifest is missing for " = "Brak manifestu winget dla ";
 "The winget manifest lists no usable installer for " = "Manifest winget nie zawiera odpowiedniego instalatora dla ";
-"This licence belongs to another Mac" = "Ta licencja należy do innego Maca";
 "Unpacking the winget catalog failed with code " = "Rozpakowywanie katalogu winget nie powiodło się, kod ";
 "WHY IT DID NOT RUN" = "DLACZEGO SIĘ NIE URUCHOMIŁO";
 "Your library is empty" = "Twoja biblioteka jest pusta";
 "all installer entries lack a URL or a SHA256" = "żaden instalator nie ma URL ani SHA256";
-"empty string" = "pusty ciąg";
 "no Installers: block" = "brak bloku Installers:";
-"one half of the token is empty" = "jedna połowa tokenu jest pusta";
-"payload" = "ładunek";
-"signature" = "podpis";
 "“%@” is a Windows Installer package (.msi). MacRunner cannot run .msi files yet — use the game’s .exe installer." = "„%@” to pakiet Windows Installer (.msi). MacRunner nie uruchamia jeszcze plików .msi — użyj instalatora gry w formacie .exe.";
 
 /* Встроенный движок и установка (23.09.2026) */
@@ -441,3 +384,42 @@
 "If you have a regular installer (for example, from GOG) or an already installed game folder, add that instead." = "Jeśli masz zwykły instalator (na przykład z GOG) albo folder z już zainstalowaną grą, dodaj go zamiast tego.";
 "Found: %@" = "Znaleziono: %@";
 "Game page" = "Strona gry";
+
+/* Строки состава 1.1.0 (APP-L10N, 14.10.2026): ключи были только в en и ru */
+"Could not prepare Windows image decoding (WIC registration exit code %d)." = "Nie udało się przygotować dekodowania obrazów w systemie Windows (rejestracja WIC zakończyła się kodem %d).";
+"Not rechecked for this release" = "Nie sprawdzono ponownie w tej wersji";
+"Latin keyboard during games" = "Klawiatura łacińska podczas gier";
+"Use a Latin layout while the game runs, then restore your previous input source." = "Na czas działania gry używaj układu łacińskiego, a potem przywróć poprzednie źródło wprowadzania.";
+"This game needs %@ next to its executable. Add the original game data and try again." = "Ta gra potrzebuje pliku %@ obok swojego pliku wykonywalnego. Dodaj oryginalne dane gry i spróbuj ponownie.";
+"No free drive letter is available for this game's CD data." = "Dla danych CD tej gry nie ma wolnej litery dysku.";
+"The game closed immediately after launch." = "Gra zamknęła się zaraz po uruchomieniu.";
+
+/* Заметки профилей графики (graphics-profiles.json, known[].note), 14.10.2026. Ключ — английский текст заметки дословно; добавил заметку в JSON — добавь её сюда на всех языках */
+"User-confirmed gameplay, keyboard/mouse, audio, saving and reload at the saved position. Menu exit was also confirmed without an error in 1.0.7. Limits: Broader scene coverage and long-session performance were not established. FPS: Not measured." = "Potwierdzone przez użytkownika: rozgrywka, klawiatura i mysz, dźwięk, zapis oraz ponowne wczytanie w miejscu zapisu. Wyjście przez menu zostało też potwierdzone bez błędu w wersji 1.0.7. Ograniczenia: nie ustalono szerszego pokrycia scen ani wydajności podczas długich sesji. FPS: nie zmierzono.";
+"Main menu displayed; closing the window and quitting through the game menu both completed without an error. Still to check: Gameplay and long sessions in this pass. FPS from one screenshot: Not measured." = "Wyświetlono menu główne; zamknięcie okna i wyjście przez menu gry zakończyły się bez błędu. Do sprawdzenia: rozgrywka i długie sesje w tym przejściu. FPS z jednego zrzutu ekranu: nie zmierzono.";
+"The tester confirmed gameplay and subsequently a successful launch, game entry and normal exit in the installed app. FPS reported on September 24. Limits: Repeated-run reliability, long sessions, save/reload, complete cinematic playback and a timed benchmark with recorded settings. FPS: 60." = "Tester potwierdził rozgrywkę, a następnie udane uruchomienie, wejście do gry i normalne wyjście w zainstalowanej aplikacji. FPS zgłoszono 24 września. Ograniczenia: niezawodność przy powtarzanych uruchomieniach, długie sesje, zapis/wczytywanie, pełne odtworzenie przerywników filmowych oraz pomiar czasu (benchmark) z zapisanymi ustawieniami. FPS: 60.";
+"Language selection displayed on first launch; an earlier check reached the main menu. Still to check: Gameplay in this pass. FPS from one screenshot: 115.66 at language selection." = "Przy pierwszym uruchomieniu wyświetlono wybór języka; wcześniejsza kontrola dotarła do menu głównego. Do sprawdzenia: rozgrywka w tym przejściu. FPS z jednego zrzutu ekranu: 115,66 przy wyborze języka.";
+"Hollow Knight, ABZU and Divinity reach their menus; crypto known-answer tests pass 12/12 Limits: No new FPS measurement. Indiana stops at its Vulkan requirement. Automated Hedon and Stardew runs omit app profiles and do not replace the historical gameplay checks." = "Hollow Knight, ABZU i Divinity docierają do swoich menu; kryptograficzne testy ze znanymi odpowiedziami przechodzą 12/12. Ograniczenia: brak nowego pomiaru FPS. Indiana zatrzymuje się na wymaganiu Vulkan. Automatyczne uruchomienia Hedon i Stardew pomijają profile aplikacji i nie zastępują dawnych kontroli rozgrywki.";
+"Not listed among the October 3 release checks; the earlier menu result remains historical." = "Brak na liście kontroli wydania z 3 października; wcześniejszy wynik dotyczący menu pozostaje historyczny.";
+"User-confirmed gameplay and menu navigation. The maintainer reported 100 FPS on September 24; the FPS observation is separate from the earlier development check. Limits: Save/reload, voluntary exit, long sessions and complete automated graphics-path verification. The earlier run ended through a test timer. FPS: 100." = "Użytkownik potwierdził rozgrywkę i nawigację po menu. Opiekun projektu zgłosił 100 FPS 24 września; ta obserwacja FPS jest odrębna od wcześniejszej kontroli podczas prac rozwojowych. Ograniczenia: zapis/wczytywanie, dobrowolne zakończenie gry, długie sesje i pełna automatyczna weryfikacja ścieżki graficznej. Wcześniejsze uruchomienie zakończyło się przez timer testu. FPS: 100.";
+"Main menu and player profiles displayed. Still to check: Gameplay, saving and normal exit in this pass. FPS from one screenshot: 120, at the display's 120 Hz limit." = "Wyświetlono menu główne i profile graczy. Do sprawdzenia: rozgrywka, zapis i normalne wyjście w tym przejściu. FPS z jednego zrzutu ekranu: 120, czyli limit 120 Hz wyświetlacza.";
+"User-confirmed gameplay, audio and loading. Limits: The run ended through a test timer. Manual save/reload, voluntary exit and long sessions were not verified. FPS: Not measured." = "Użytkownik potwierdził rozgrywkę, dźwięk i wczytywanie. Ograniczenia: uruchomienie zakończyło się przez timer testu. Ręczny zapis/wczytywanie, dobrowolne zakończenie gry i długie sesje nie zostały sprawdzone. FPS: nie zmierzono.";
+"Loading screen displayed; the game opened its data files and selected Apple M1 Pro graphics. Still to check: Startup remains under investigation. FPS from one screenshot: Not measured." = "Wyświetlono ekran ładowania; gra otworzyła pliki danych i wybrała grafikę Apple M1 Pro. Do sprawdzenia: start gry nadal jest badany. FPS z jednego zrzutu ekranu: nie zmierzono.";
+"User-confirmed gameplay, save/load and voluntary exit. Limits: Accelerated OpenGL remained unresolved. This was not a GPU-accelerated rendering result. FPS: Not measured." = "Użytkownik potwierdził rozgrywkę, zapis/wczytywanie i dobrowolne zakończenie gry. Ograniczenia: przyspieszony OpenGL pozostał nierozwiązany. To nie był wynik renderowania przyspieszanego przez GPU. FPS: nie zmierzono.";
+"Start opened the Voidpoint intro, where the game remained for the rest of the check. Still to check: Reaching the main menu; startup remains under investigation. FPS from one screenshot: Not measured." = "Po wybraniu „Start” otworzyło się intro Voidpoint, na którym gra została do końca kontroli. Do sprawdzenia: dotarcie do menu głównego; start gry nadal jest badany. FPS z jednego zrzutu ekranu: nie zmierzono.";
+"User-confirmed tutorial gameplay, saving, returning to the menu and reloading. Limits: Long sessions and measured performance were not established. FPS: Not measured." = "Użytkownik potwierdził rozgrywkę w samouczku, zapis, powrót do menu i ponowne wczytanie. Ograniczenia: nie ustalono zachowania w długich sesjach ani zmierzonej wydajności. FPS: nie zmierzono.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and save/load results are listed below. FPS from one screenshot: Not measured." = "Nie sprawdzono ponownie w tej wersji. Do sprawdzenia: wcześniejsze wyniki rozgrywki i zapisu/wczytywania są wymienione poniżej. FPS z jednego zrzutu ekranu: nie zmierzono.";
+"Status: Tested & working — DirectX 12.\n\nFPS: Not measured.\n\nPath: FEX + Wine + MacRunner's DXMT-based DirectX 12 → Metal development path, separate from the current preview app's Direct3D 10/11 bundle.\n\nThe maintainer confirmed on September 23, 2026 that the game had already been launched successfully with DirectX 12 and was working in gameplay. This newer confirmation supersedes the earlier September 16 menu-only status. The status describes the tested configuration.\n\nCurrent focus: further optimization, including rendering quality and performance. Ray tracing is experimental, not released. Detailed graphics progress →" = "Stan: przetestowane i działa — DirectX 12.\n\nFPS: nie zmierzono.\n\nŚcieżka: FEX + Wine + rozwijana w MacRunner ścieżka DirectX 12 → Metal oparta na DXMT, odrębna od pakietu Direct3D 10/11 w bieżącej wersji zapoznawczej aplikacji.\n\nOpiekun projektu potwierdził 23 września 2026 r., że gra została już pomyślnie uruchomiona z DirectX 12 i działała w rozgrywce. To nowsze potwierdzenie zastępuje wcześniejszy stan z 16 września, obejmujący tylko menu. Stan opisuje przetestowaną konfigurację.\n\nObecny cel: dalsza optymalizacja, w tym jakość renderowania i wydajność. Ray tracing jest eksperymentalny i niewydany. Szczegółowy postęp prac nad grafiką →";
+"Heroes III also reached its main menu. Sound does not work correctly yet (silent or distorted, depending on the setup); gameplay, saving and wider 32-bit compatibility have not been accepted." = "Gra Heroes III również dotarła do menu głównego. Dźwięk nie działa jeszcze poprawnie (brak dźwięku lub zniekształcenia, zależnie od konfiguracji); rozgrywka, zapis i szersza zgodność z 32 bitami nie zostały zaakceptowane.";
+"User-confirmed gameplay, movement, audio and voluntary exit, with a gameplay screenshot. Limits: Long-session stability and measured performance were not established. FPS: Not measured." = "Użytkownik potwierdził rozgrywkę, ruch, dźwięk i dobrowolne zakończenie gry, wraz ze zrzutem ekranu z rozgrywki. Ograniczenia: nie ustalono stabilności w długich sesjach ani zmierzonej wydajności. FPS: nie zmierzono.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and audio results are listed below. FPS from one screenshot: Not measured." = "Nie sprawdzono ponownie w tej wersji. Do sprawdzenia: wcześniejsze wyniki rozgrywki i dźwięku są wymienione poniżej. FPS z jednego zrzutu ekranu: nie zmierzono.";
+"In-level rendering, mouse, audio and save/load; a subsequent English-keyboard-layout check confirmed keyboard operation. Intro/attract sequence and voluntary exit were also accepted. Limits: Other keyboard layouts and long sessions need further testing. FPS: Not measured." = "Renderowanie na poziomie, mysz, dźwięk i zapis/wczytywanie; późniejsza kontrola z angielskim układem klawiatury potwierdziła obsługę klawiatury. Sekwencja intro/attract i dobrowolne zakończenie gry również zostały zaakceptowane. Ograniczenia: inne układy klawiatury i długie sesje wymagają dalszych testów. FPS: nie zmierzono.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and save/load results are listed below. FPS from one screenshot: Not measured." = "Nie sprawdzono ponownie w tej wersji. Do sprawdzenia: wcześniejsze wyniki rozgrywki i zapisu/wczytywania są wymienione poniżej. FPS z jednego zrzutu ekranu: nie zmierzono.";
+"Movement, audio, return to menu and continuation of saved state; a repeated mining-scene run with voluntary exit. Limits: Shutdown resource warnings remained; longer sessions need verification. FPS: Not measured." = "Ruch, dźwięk, powrót do menu i kontynuacja zapisanego stanu; powtórne uruchomienie sceny wydobycia z dobrowolnym zakończeniem gry. Ograniczenia: ostrzeżenia o zasobach przy zamykaniu nadal występowały; dłuższe sesje wymagają weryfikacji. FPS: nie zmierzono.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and saved-state results are listed below. FPS from one screenshot: Not measured." = "Nie sprawdzono ponownie w tej wersji. Do sprawdzenia: wcześniejsze wyniki rozgrywki i zapisanego stanu są wymienione poniżej. FPS z jednego zrzutu ekranu: nie zmierzono.";
+"October 1, 2026: Indiana Jones and the Great Circle, Windows GOG version, uses HyperBridge inside ARM64EC Wine 11 and a separate MoltenVK Vulkan → Metal build. On a 2021 MacBook Pro M1 Pro with 32 GB and macOS 27.0, the release notes report about 10–12 FPS at minimum settings. These are the preview's observations, not new measurements for this page.\n\nKnown issues: firing a weapon hung the GPU and restarted the macOS session on M1 Pro; save all your work before playing. Split frames, stutter and sky artifacts remain. The preview replaces four shared engine files and can affect other titles. Ray tracing is experimental, not released.\n\nAdd `TheGreatCircle.exe` to MacRunner and press Play. If the game asks “Run In Safe Mode?” after an interrupted session, the preview notes say to choose No. This preview is separate from the ordinary 1.0.6 bundle and does not certify other Macs or games. Preview notes" = "1 października 2026 r.: Indiana Jones and the Great Circle, wersja Windows z GOG, używa HyperBridge wewnątrz ARM64EC Wine 11 oraz osobnej kompilacji MoltenVK (Vulkan → Metal). Na MacBooku Pro z M1 Pro z 2021 roku, z 32 GB i macOS 27.0, informacje o wydaniu podają około 10–12 FPS przy minimalnych ustawieniach. To obserwacje wersji zapoznawczej, a nie nowe pomiary dla tej strony.\n\nZnane problemy: strzał z broni zawieszał GPU i restartował sesję macOS na M1 Pro; zapisz całą swoją pracę przed grą. Nadal występują podzielone klatki, przycinanie i artefakty na niebie. Wersja zapoznawcza zastępuje cztery współdzielone pliki silnika i może wpływać na inne tytuły. Ray tracing jest eksperymentalny i niewydany.\n\nDodaj `TheGreatCircle.exe` do MacRunner i naciśnij „Graj”. Jeśli po przerwanej sesji gra zapyta „Run In Safe Mode?”, uwagi do wersji zapoznawczej każą wybrać No. Ta wersja zapoznawcza jest odrębna od zwykłego pakietu 1.0.6 i nie poświadcza działania na innych komputerach Mac ani w innych grach. Uwagi do wersji zapoznawczej";
+
+/* Высокое разрешение (Retina): переключатель на странице игры (лейн RETINA, 03.11.2026). */
+"High resolution (Retina)" = "Wysoka rozdzielczość (Retina)";
+"The game sees the full list of this Mac's resolutions in real Retina pixels, including 1920×1080 and 2560×1440. Applies from the next launch; on a regular external monitor leave it off." = "Gra widzi pełną listę rozdzielczości tego Maca w prawdziwych pikselach Retina, także 1920×1080 i 2560×1440. Działa od następnego uruchomienia; na zwykłym monitorze zewnętrznym zostaw wyłączone.";
+"Another program is still running in the same Windows environment with different settings. Close it and try again." = "W tym samym środowisku Windows działa jeszcze inny program z innymi ustawieniami. Zamknij go i spróbuj ponownie.";

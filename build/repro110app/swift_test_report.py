@@ -115,6 +115,10 @@ def main(argv=None):
     args.reports.mkdir(parents=True, exist_ok=True)
     result = dict(schema=1, policy='LAYOUT_LINKS_RECHECK_ONCE_NAMED_ALLOWANCES', layout_links=ensure_layout(args.tree, policy))
     env = dict(os.environ)
+    isolated = args.reports.resolve() / 'app-test-data'
+    isolated.mkdir(exist_ok=True)
+    env['MACRUNNER_APP_DATA_ROOT'] = str(isolated)
+    result['app_data_root'] = 'EXPLICIT_ISOLATED_TEST_DIRECTORY'
     rc, text, seconds = run(command, args.tree, env, args.reports / 'swift_test_full.log', 'first')
     failed, issues, summary, _ = parse(text)
     result.update(first_run=dict(rc=rc, seconds=round(seconds, 1), summary=summary), failed_first=failed)

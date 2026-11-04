@@ -73,18 +73,26 @@ final class EngineLauncher: @unchecked Sendable {
         }
         defer { updateGate.endActivity(activity) }
         let started = Date()
+        // Bottle services register the whole Wine installation. Game routes may
+        // disable Wine modules (for example winevulkan); those overrides belong
+        // only to the program, never to wineboot, registration or its server.
+        let preparationEnvironment = makeEnvironment(extra: [:])
         // Окружение: движок → маршрут графики → поправки записи игры (они главнее: это
         // ручная настройка). Нативные библиотечные пути остаются за ENGINE.json.
         // В журнал — загрузки модулей, чтобы видеть, ЧЬЯ графика пришла.
         var env = makeEnvironment(extra: plan.environment.merging(extraEnvironment) { _, own in own })
         // Журналы DXMT — в каталог запуска, а не в папку игры: `dxmt-instr.log` по умолчанию
         // пишется в текущий каталог (engine/dxmt/src/util/instr.cpp), то есть рядом с игрой.
-        if env["DXMT_INSTR_LOG"] == nil {
+        let isolatedAppEntry = CommandLine.arguments.dropFirst().first == "--run-app-entry"
+        if !isolatedAppEntry, env["DXMT_INSTR_LOG"] == nil {
             env["DXMT_INSTR_LOG"] = "Z:" + runDirectory.appendingPathComponent("dxmt-instr.log").path
                 .replacingOccurrences(of: "/", with: "\\")
         }
-        if env["DXMT_LOG_PATH"] == nil { env["DXMT_LOG_PATH"] = runDirectory.path }
-        if let debug = env["WINEDEBUG"], !debug.contains("loaddll") {
+        if !isolatedAppEntry, env["DXMT_LOG_PATH"] == nil { env["DXMT_LOG_PATH"] = runDirectory.path }
+        // The isolated CLI entry observes the exact requested ENGINE/profile mask.
+        // Keep the ordinary application's existing module provenance behavior.
+        if !isolatedAppEntry,
+           let debug = env["WINEDEBUG"], !debug.contains("loaddll") {
             env["WINEDEBUG"] = debug.isEmpty ? "+loaddll" : debug + ",+loaddll"
         }
         lock.lock(); environment = env; lock.unlock()
@@ -179,7 +187,8 @@ final class EngineLauncher: @unchecked Sendable {
             "engineManifestSHA256": BottleSetup.engineStamp(engine),
             "selectedBinaries": binaries,
             "exe": exe.path, "arguments": arguments + plan.extraArguments,
-            "prefix": prefix.path, "graphicsRoute": result.graphicsRoute ?? "unknown"
+            "prefix": prefix.path, "graphicsRoute": result.graphicsRoute ?? "unknown",
+            "highResolution": plan.highResolution.map { $0 ? "on" : "off" } ?? "unchanged"
         ]
         if let bytes = try? JSONSerialization.data(withJSONObject: receipt, options: [.prettyPrinted, .sortedKeys]) {
             try? bytes.write(to: runDirectory.appendingPathComponent("launch-receipt.json"), options: .atomic)
@@ -189,17 +198,20 @@ final class EngineLauncher: @unchecked Sendable {
         do {
             if isStopRequested { return finish("STOPPED", log: log) }
             onProgress(.preparing)
-            log.note("graphics: \(result.graphicsRoute ?? "-") engine=\(engine.name) overridden=\(plan.overridden)")
+            log.note("graphics: \(result.graphicsRoute ?? "-") engine=\(engine.name) overridden=\(plan.overridden) highResolution=\(plan.highResolution.map { $0 ? "on" : "off" } ?? "unchanged")")
             for line in plan.evidence { log.note("graphics evidence: \(line)") }
             if WarmBottleSessions.enabled(engine: engine) {
                 let session = try WarmBottleSessions.beginProgram(engine: engine, prefix: prefix, environment: env,
+                    preparationEnvironment: preparationEnvironment,
                     layer: plan.layer, log: log, emulateModeset: plan.emulateModeset,
+                    retinaMode: plan.highResolution,
                     cdromDataFilename: plan.cdromDataFilename, gameDirectory: exe.deletingLastPathComponent())
                 warmSession = session
                 log.mark("warmProgramAdmitted")
             } else {
-                try BottleSetup(engine: engine, prefix: prefix, environment: env, log: log)
+                try BottleSetup(engine: engine, prefix: prefix, environment: preparationEnvironment, log: log)
                     .prepareIfNeeded(requiredLayer: plan.layer, emulateModeset: plan.emulateModeset,
+                                     retinaMode: plan.highResolution,
                                      cdromDataFilename: plan.cdromDataFilename,
                                      gameDirectory: exe.deletingLastPathComponent())
             }
@@ -215,6 +227,9 @@ final class EngineLauncher: @unchecked Sendable {
             return finish("STOPPED", log: log)
         }
 
+        if plan.api == .d3d12 {
+            log.note("PSO cache migration: " + PSOCacheTransplant.prepare(engine: engine, executable: exe, environment: env))
+        }
         let target = Self.windowsPath(for: exe, prefix: prefix)
         let directory = workdir ?? exe.deletingLastPathComponent()
         let fullArguments = arguments + plan.extraArguments
@@ -328,12 +343,17 @@ extension EngineLauncher {
                 let launcher = EngineLauncher(engine: engine, prefix: prefix, gate: gate)
                 let layer = engine.graphics.layers.first { $0.id.hasPrefix("dxmt-") }
                 let extra = PerformanceHUD.launchEnvironment(appEnvironment: layer?.environment ?? [:])
+                let preparationEnvironment = launcher.makeEnvironment(extra: [:])
                 let env = launcher.makeEnvironment(extra: extra)
                 let directory = EnginePaths.newRunDirectory().appendingPathExtension("warm-session")
                 guard (try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)) != nil,
                       let log = try? EngineLog(url: directory.appendingPathComponent("engine.log")) else { return }
                 do {
-                    let session = try WarmBottleSessions.session(engine: engine, prefix: prefix, environment: env, layer: layer, log: log)
+                    // RetinaMode — как его оставил последний запуск: иначе фоновая сессия гасилась бы
+                    // при первом же «Играть» у игры с включённым высоким разрешением.
+                    let session = try WarmBottleSessions.session(engine: engine, prefix: prefix, environment: env,
+                        preparationEnvironment: preparationEnvironment, layer: layer, log: log,
+                        retinaMode: BottleSetup.retinaModeInRegistry(prefix: prefix))
                     try session.ensureReady()
                 } catch { log.note("background warm session failed: \(error.localizedDescription)") }
                 // The session owns its log until shutdown; closeAll releases it on app quit.

@@ -25,24 +25,14 @@ enum HomeSection: String, CaseIterable, Identifiable {
     case library
     case discover
     case programs
-    /// ★ Раздел с постоянным состоянием, в отличие от убранных: у лицензии есть
-    ///   что показывать всегда — тариф, привязанное устройство, срок.
-    case licence
 
     var id: String { rawValue }
-
-    /// Разделы, которые игрок ВИДИТ. `allCases` не годится: «Лицензия» живёт в коде,
-    /// но пока лицензирование выключено (`ReleaseFlags`), показывать её нечего.
-    static var visible: [HomeSection] {
-        allCases.filter { $0 != .licence || ReleaseFlags.licensingEnabled }
-    }
 
     var title: String {
         switch self {
         case .library: return L("Library")
         case .discover: return L("Free games")
         case .programs: return L("Programs")
-        case .licence: return L("Licence")
         }
     }
 
@@ -51,7 +41,6 @@ enum HomeSection: String, CaseIterable, Identifiable {
         case .library: return "square.grid.2x2"
         case .discover: return "sparkles"
         case .programs: return "macwindow"
-        case .licence: return "key"
         }
     }
 }
@@ -91,7 +80,7 @@ struct HomeSidebar: View {
             .padding(.top, 50)
 
             VStack(spacing: 4) {
-                ForEach(HomeSection.visible) { item in
+                ForEach(HomeSection.allCases) { item in
                     sectionRow(item)
                 }
             }
@@ -148,7 +137,6 @@ struct HomeSidebar: View {
         case .library: return libraryCount
         case .discover: return freeCount
         case .programs: return programCount
-        case .licence: return 0
         }
     }
 

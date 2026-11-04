@@ -18,16 +18,6 @@ enum ControlCenterCLI {
                 fputs("hud synthetic failed: \(error.localizedDescription)\n", stderr)
                 exit(1)
             }
-        case "--verify-license":
-            let license = arguments.dropFirst(2).joined(separator: " ")
-            do {
-                let result = try LicenseVerifier().verifyLicenseString(license)
-                print("OK, valid until \(result.expiresPrefix)")
-                exit(0)
-            } catch {
-                fputs("license verification failed: \(licenseErrorMessage(error))\n", stderr)
-                exit(1)
-            }
         case "--dump-steam-library":
             do {
                 let root = try SteamLibraryService.ensureFixtureIfNeeded()
@@ -179,15 +169,5 @@ enum ControlCenterCLI {
         let url = settingsURLForCLI()
         try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
         try JSONEncoder.pretty.encode(settings).write(to: url)
-    }
-
-    private static func licenseErrorMessage(_ error: Error) -> String {
-        guard let licenseError = error as? LicenseError else { return error.localizedDescription }
-        switch licenseError {
-        case .invalidFormat, .invalidSignature:
-            return "signature mismatch"
-        case .expired, .invalidPublicKey:
-            return licenseError.localizedDescription
-        }
     }
 }

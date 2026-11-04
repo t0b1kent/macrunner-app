@@ -4,8 +4,6 @@
 "Settings" = "설정";
 "AI Troubleshoot" = "AI 진단";
 "Steam API Key" = "Steam API 키";
-"Buy License" = "라이선스 구매";
-"Trial Mode" = "체험 모드";
 "Add App" = "앱 추가";
 "Run" = "실행";
 "Library" = "라이브러리";
@@ -142,7 +140,7 @@
 "Do 32-bit games work?" = "32비트 게임도 실행되나요?";
 "Not in this release. The bundled engine supports 64-bit Windows programs; compatibility varies by game." = "이 버전에서는 지원하지 않습니다. 내장 엔진은 64비트 Windows 프로그램을 지원하며, 호환성은 게임마다 다릅니다.";
 "Is it free?" = "무료인가요?";
-"Yes. MacRunner is free during early access." = "네. 앞서 해보기 기간에는 MacRunner를 무료로 사용할 수 있습니다.";
+"Yes. MacRunner is free, and its source code is open." = "네. MacRunner는 무료이며 소스 코드가 공개되어 있습니다.";
 "No. The bundled engine translates Intel programs without Rosetta." = "아니요. 내장 엔진이 Rosetta 없이 Intel 프로그램을 변환합니다.";
 "Installed" = "설치됨";
 "Games" = "게임";
@@ -166,44 +164,6 @@
 "Some Windows features are missing there." = "Windows 버전의 일부 기능이 빠져 있습니다.";
 "ALSO IN THE WINGET CATALOGUE" = "winget 카탈로그에도 있음";
 "Preparing the winget catalogue on first use — about 8 MB." = "처음 사용하므로 winget 카탈로그를 준비하는 중입니다(약 8MB).";
-"No licence token on this device." = "이 기기에 라이선스 토큰이 없습니다.";
-"The licence token is malformed." = "라이선스 토큰 형식이 올바르지 않습니다.";
-"The licence token is not valid base64url." = "라이선스 토큰이 올바른 base64url이 아닙니다.";
-"The licence token is signed but its contents are unreadable." = "라이선스 토큰의 서명은 유효하지만 내용을 읽을 수 없습니다.";
-"The bundled licence public key is invalid; this build cannot check licences." = "포함된 라이선스 공개 키가 유효하지 않아 이 빌드는 라이선스를 확인할 수 없습니다.";
-"Could not read this Mac's hardware identifier." = "이 Mac의 하드웨어 식별자를 읽을 수 없습니다.";
-"Keychain refused the licence operation." = "키체인이 라이선스 작업을 거부했습니다.";
-"This licence token is not signed by MacRunner." = "이 라이선스 토큰은 MacRunner가 서명한 것이 아닙니다.";
-"This licence token belongs to another Mac." = "이 라이선스 토큰은 다른 Mac용입니다.";
-"This licence has expired." = "이 라이선스는 만료되었습니다.";
-"This device's licence lease has expired; connect to the internet to renew it." = "이 기기의 라이선스 인증 기간이 만료되었습니다. 인터넷에 연결해 갱신하세요.";
-"Licence" = "라이선스";
-"Plan, device and renewal" = "요금제, 기기, 갱신";
-"No licence on this Mac" = "이 Mac에 라이선스가 없습니다";
-"MacRunner needs a licence to start a game for the first time. Games you already run keep working." = "MacRunner에서 게임을 처음 실행하려면 라이선스가 필요합니다. 이미 실행한 게임은 계속 사용할 수 있습니다.";
-"It was changed or came from somewhere else." = "변경되었거나 다른 곳에서 받은 파일입니다.";
-"Issued for %@, this Mac is %@" = "%1$@용으로 발급되었지만 이 Mac은 %2$@입니다";
-"PLANS" = "요금제";
-"2 months" = "2개월";
-"1 year" = "1년";
-"1 device" = "기기 1대";
-"Teams" = "팀";
-"more devices" = "더 많은 기기";
-"write to us" = "문의하기";
-"Buy on the site" = "사이트에서 구매";
-"Active" = "활성";
-"Connect to the internet once — the device lease needs renewing" = "인터넷에 한 번 연결하세요 — 기기 인증을 갱신해야 합니다";
-"Expired. Installed games keep working; new ones cannot be started." = "만료되었습니다. 설치된 게임은 계속 실행되지만 새 게임은 실행할 수 없습니다.";
-"This Mac" = "이 Mac";
-"Devices" = "기기";
-"Paid until" = "이용 기한";
-"Unbind this Mac" = "이 Mac 연결 해제";
-"Unbind this Mac from the licence?" = "이 Mac을 라이선스에서 연결 해제할까요?";
-"Unbind" = "연결 해제";
-"The next unbind will only be allowed in one month." = "다음 연결 해제는 한 달 후에만 가능합니다.";
-"This licence is bound to this Mac permanently and cannot be moved." = "이 라이선스는 이 Mac에 영구적으로 연결되어 있어 옮길 수 없습니다.";
-"Trial" = "체험";
-"Perpetual" = "영구";
 "NO FILE" = "파일 없음";
 "File is gone" = "파일을 찾을 수 없음";
 "Open the releases page" = "릴리스 페이지 열기";
@@ -230,9 +190,6 @@
 "We can run it — it will install the game, and the installed game goes to your library." = "실행하면 게임이 설치되고, 설치된 게임이 라이브러리에 추가됩니다.";
 "We will add it as is and run it from your library." = "그대로 추가해 라이브러리에서 실행합니다.";
 "Uninstallers, runtimes and crash handlers look like this. Usually not what you want to add." = "제거 프로그램, 런타임, 충돌 처리기가 이렇게 보입니다. 보통은 추가할 대상이 아닙니다.";
-"Open a licence file" = "라이선스 파일 열기";
-"Works without internet" = "인터넷 없이 작동";
-"Choose a licence file" = "라이선스 파일 선택";
 "Open" = "열기";
 "Uninstall “%@”?" = "“%@”을(를) 설치 제거할까요?";
 "Delete “%@” and its files?" = "“%@”와(과) 관련 파일을 삭제할까요?";
@@ -244,14 +201,9 @@
 "The file is already gone from disk. Only the library entry is left to remove." = "파일이 이미 디스크에 없습니다. 라이브러리 항목만 삭제하면 됩니다.";
 "Could not delete the game" = "게임을 삭제할 수 없습니다";
 " bytes" = " 바이트";
-"%d parts, expected 2 (payload.signature)" = "부분이 %d개입니다(2개 필요: payload.signature)";
 "%d s" = "%d초";
-"1 Mac" = "Mac 1대";
-"1 Mac, one-time, not transferable" = "Mac 1대, 일회 결제, 이전 불가";
-"10 Macs, per year" = "Mac 10대, 연간";
 "About MacRunner" = "MacRunner 정보";
 "BACKEND" = "백엔드";
-"Business" = "비즈니스";
 "Cannot unpack the winget catalog: no unzip tool at " = "winget 카탈로그의 압축을 풀 수 없습니다. 압축 해제 도구가 없습니다: ";
 "Check for Updates…" = "업데이트 확인…";
 "Could not reach the winget catalog: " = "winget 카탈로그에 연결할 수 없습니다: ";
@@ -260,14 +212,10 @@
 "Delete this game from the library?" = "이 게임을 라이브러리에서 삭제할까요?";
 "Drop a Windows .exe here, or browse to add one." = "Windows .exe를 여기에 끌어다 놓거나 파일을 찾아 추가하세요.";
 "Drop the .exe to add it" = "놓아서 .exe 추가";
-"IOPlatformExpertDevice has no IOPlatformUUID" = "IOPlatformExpertDevice에 IOPlatformUUID가 없습니다";
-"IOPlatformExpertDevice not found" = "IOPlatformExpertDevice를 찾을 수 없습니다";
-"IOPlatformUUID is not a string or is empty" = "IOPlatformUUID가 문자열이 아니거나 비어 있습니다";
 "LAST RUN" = "마지막 실행";
 "MacRunner Help" = "MacRunner 도움말";
 "MacRunner engine not found. Reinstall MacRunner." = "MacRunner 엔진을 찾을 수 없습니다. MacRunner를 다시 설치하세요.";
 "NOTES" = "메모";
-"No free trial. Refund within 14 days." = "무료 체험은 없습니다. 14일 이내에 환불해 드립니다.";
 "No such package in the winget catalog: " = "winget 카탈로그에 해당 패키지가 없습니다: ";
 "Not a winget package ID: " = "winget 패키지 ID가 아닙니다: ";
 "STATUS" = "상태";
@@ -288,16 +236,11 @@
 "The winget catalog lists no versions for " = "winget 카탈로그에 버전이 없습니다: ";
 "The winget manifest is missing for " = "winget 매니페스트가 없습니다: ";
 "The winget manifest lists no usable installer for " = "winget 매니페스트에 사용할 수 있는 설치 프로그램이 없습니다: ";
-"This licence belongs to another Mac" = "이 라이선스는 다른 Mac용입니다";
 "Unpacking the winget catalog failed with code " = "winget 카탈로그 압축 해제에 실패했습니다. 코드: ";
 "WHY IT DID NOT RUN" = "실행되지 않은 이유";
 "Your library is empty" = "라이브러리가 비어 있습니다";
 "all installer entries lack a URL or a SHA256" = "모든 설치 프로그램 항목에 URL 또는 SHA256이 없습니다";
-"empty string" = "빈 문자열";
 "no Installers: block" = "Installers: 블록이 없습니다";
-"one half of the token is empty" = "토큰의 한쪽 절반이 비어 있습니다";
-"payload" = "페이로드";
-"signature" = "서명";
 "“%@” is a Windows Installer package (.msi). MacRunner cannot run .msi files yet — use the game’s .exe installer." = "“%@”은(는) Windows Installer 패키지(.msi)입니다. MacRunner는 아직 .msi 파일을 실행할 수 없습니다. 게임의 .exe 설치 프로그램을 사용하세요.";
 
 /* Встроенный движок и установка (23.09.2026) */
@@ -441,3 +384,42 @@
 "If you have a regular installer (for example, from GOG) or an already installed game folder, add that instead." = "일반 설치 프로그램(예: GOG)이나 이미 설치된 게임 폴더가 있다면 그것을 추가하세요.";
 "Found: %@" = "발견됨: %@";
 "Game page" = "게임 페이지";
+
+/* Строки состава 1.1.0 (APP-L10N, 14.10.2026): ключи были только в en и ru */
+"Could not prepare Windows image decoding (WIC registration exit code %d)." = "Windows 이미지 디코딩을 준비하지 못했습니다(WIC 등록 종료 코드 %d).";
+"Not rechecked for this release" = "이 버전에서는 다시 확인하지 않음";
+"Latin keyboard during games" = "게임 중 라틴 문자 키보드";
+"Use a Latin layout while the game runs, then restore your previous input source." = "게임이 실행되는 동안 라틴 문자 자판 배열을 사용하고, 끝나면 이전 입력 소스로 되돌립니다.";
+"This game needs %@ next to its executable. Add the original game data and try again." = "이 게임은 실행 파일 옆에 %@이(가) 필요합니다. 게임 원본 데이터를 추가한 뒤 다시 시도하세요.";
+"No free drive letter is available for this game's CD data." = "이 게임의 CD 데이터에 사용할 수 있는 빈 드라이브 문자가 없습니다.";
+"The game closed immediately after launch." = "게임이 실행 직후 바로 종료되었습니다.";
+
+/* Заметки профилей графики (graphics-profiles.json, known[].note), 14.10.2026. Ключ — английский текст заметки дословно; добавил заметку в JSON — добавь её сюда на всех языках */
+"User-confirmed gameplay, keyboard/mouse, audio, saving and reload at the saved position. Menu exit was also confirmed without an error in 1.0.7. Limits: Broader scene coverage and long-session performance were not established. FPS: Not measured." = "사용자가 확인한 항목: 게임플레이, 키보드/마우스, 오디오, 저장 및 저장 위치에서 다시 불러오기. 1.0.7에서는 메뉴를 통한 종료도 오류 없이 확인되었습니다. 한계: 더 넓은 장면 범위와 장시간 세션 성능은 확인되지 않았습니다. FPS: 측정하지 않음.";
+"Main menu displayed; closing the window and quitting through the game menu both completed without an error. Still to check: Gameplay and long sessions in this pass. FPS from one screenshot: Not measured." = "메인 메뉴가 표시되었고, 창 닫기와 게임 메뉴를 통한 종료 모두 오류 없이 완료되었습니다. 추가 확인 필요: 이번 점검에서 게임플레이와 장시간 세션. 스크린샷 한 장에서 읽은 FPS: 측정하지 않음.";
+"The tester confirmed gameplay and subsequently a successful launch, game entry and normal exit in the installed app. FPS reported on September 24. Limits: Repeated-run reliability, long sessions, save/reload, complete cinematic playback and a timed benchmark with recorded settings. FPS: 60." = "테스터가 게임플레이를 확인했고, 이어서 설치된 앱에서 정상적인 실행, 게임 진입, 정상 종료를 확인했습니다. FPS는 9월 24일에 보고되었습니다. 한계: 반복 실행 안정성, 장시간 세션, 저장/불러오기, 컷신 전체 재생, 설정을 기록한 시간 측정 벤치마크. FPS: 60.";
+"Language selection displayed on first launch; an earlier check reached the main menu. Still to check: Gameplay in this pass. FPS from one screenshot: 115.66 at language selection." = "첫 실행 시 언어 선택 화면이 표시되었고, 이전 점검에서는 메인 메뉴까지 도달했습니다. 추가 확인 필요: 이번 점검에서 게임플레이. 스크린샷 한 장에서 읽은 FPS: 언어 선택 화면에서 115.66.";
+"Hollow Knight, ABZU and Divinity reach their menus; crypto known-answer tests pass 12/12 Limits: No new FPS measurement. Indiana stops at its Vulkan requirement. Automated Hedon and Stardew runs omit app profiles and do not replace the historical gameplay checks." = "Hollow Knight, ABZU, Divinity는 각각의 메뉴까지 도달합니다. 암호 기능의 Known-Answer 테스트는 12/12를 통과했습니다. 한계: 새로 측정한 FPS는 없습니다. Indiana는 Vulkan 요구 사항에서 멈춥니다. Hedon과 Stardew의 자동 실행은 앱 프로파일을 사용하지 않으며, 이전의 게임플레이 확인을 대체하지 않습니다.";
+"Not listed among the October 3 release checks; the earlier menu result remains historical." = "10월 3일 릴리스 점검 목록에는 없습니다. 이전의 메뉴 결과는 과거 기록으로 남아 있습니다.";
+"User-confirmed gameplay and menu navigation. The maintainer reported 100 FPS on September 24; the FPS observation is separate from the earlier development check. Limits: Save/reload, voluntary exit, long sessions and complete automated graphics-path verification. The earlier run ended through a test timer. FPS: 100." = "사용자가 게임플레이와 메뉴 탐색을 확인했습니다. 메인테이너는 9월 24일에 100 FPS를 보고했으며, 이 FPS 관찰은 이전의 개발 중 점검과는 별개입니다. 한계: 저장/불러오기, 플레이어의 직접 종료, 장시간 세션, 그래픽 경로 전체의 자동 검증. 이전 실행은 테스트 타이머로 종료되었습니다. FPS: 100.";
+"Main menu and player profiles displayed. Still to check: Gameplay, saving and normal exit in this pass. FPS from one screenshot: 120, at the display's 120 Hz limit." = "메인 메뉴와 플레이어 프로필이 표시되었습니다. 추가 확인 필요: 이번 점검에서 게임플레이, 저장, 정상 종료. 스크린샷 한 장에서 읽은 FPS: 120, 디스플레이의 120Hz 한계.";
+"User-confirmed gameplay, audio and loading. Limits: The run ended through a test timer. Manual save/reload, voluntary exit and long sessions were not verified. FPS: Not measured." = "사용자가 게임플레이, 오디오, 로딩을 확인했습니다. 한계: 실행이 테스트 타이머로 종료되었습니다. 수동 저장/불러오기, 플레이어의 직접 종료, 장시간 세션은 확인하지 않았습니다. FPS: 측정하지 않음.";
+"Loading screen displayed; the game opened its data files and selected Apple M1 Pro graphics. Still to check: Startup remains under investigation. FPS from one screenshot: Not measured." = "로딩 화면이 표시되었고, 게임이 데이터 파일을 열어 Apple M1 Pro 그래픽을 선택했습니다. 추가 확인 필요: 시작 과정은 계속 조사 중입니다. 스크린샷 한 장에서 읽은 FPS: 측정하지 않음.";
+"User-confirmed gameplay, save/load and voluntary exit. Limits: Accelerated OpenGL remained unresolved. This was not a GPU-accelerated rendering result. FPS: Not measured." = "사용자가 게임플레이, 저장/불러오기, 플레이어의 직접 종료를 확인했습니다. 한계: 가속 OpenGL은 해결되지 않은 상태로 남았습니다. GPU 가속 렌더링 결과가 아닙니다. FPS: 측정하지 않음.";
+"Start opened the Voidpoint intro, where the game remained for the rest of the check. Still to check: Reaching the main menu; startup remains under investigation. FPS from one screenshot: Not measured." = "‘Start’를 누르자 Voidpoint 인트로가 열렸고, 게임은 점검이 끝날 때까지 그 화면에 머물렀습니다. 추가 확인 필요: 메인 메뉴 도달. 시작 과정은 계속 조사 중입니다. 스크린샷 한 장에서 읽은 FPS: 측정하지 않음.";
+"User-confirmed tutorial gameplay, saving, returning to the menu and reloading. Limits: Long sessions and measured performance were not established. FPS: Not measured." = "사용자가 튜토리얼 게임플레이, 저장, 메뉴로 돌아가기, 다시 불러오기를 확인했습니다. 한계: 장시간 세션과 측정된 성능은 확인되지 않았습니다. FPS: 측정하지 않음.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and save/load results are listed below. FPS from one screenshot: Not measured." = "이 버전에서는 다시 확인하지 않았습니다. 추가 확인 필요: 이전의 게임플레이와 저장/불러오기 결과는 아래에 나열되어 있습니다. 스크린샷 한 장에서 읽은 FPS: 측정하지 않음.";
+"Status: Tested & working — DirectX 12.\n\nFPS: Not measured.\n\nPath: FEX + Wine + MacRunner's DXMT-based DirectX 12 → Metal development path, separate from the current preview app's Direct3D 10/11 bundle.\n\nThe maintainer confirmed on September 23, 2026 that the game had already been launched successfully with DirectX 12 and was working in gameplay. This newer confirmation supersedes the earlier September 16 menu-only status. The status describes the tested configuration.\n\nCurrent focus: further optimization, including rendering quality and performance. Ray tracing is experimental, not released. Detailed graphics progress →" = "상태: 테스트 완료 및 정상 작동 — DirectX 12.\n\nFPS: 측정하지 않음.\n\n경로: FEX + Wine + MacRunner의 DXMT 기반 DirectX 12 → Metal 개발 경로. 현재 프리뷰 버전 앱의 Direct3D 10/11 번들과는 별개입니다.\n\n메인테이너는 2026년 9월 23일에 이 게임이 이미 DirectX 12로 성공적으로 실행되었고 게임플레이에서도 작동했음을 확인했습니다. 이 최신 확인은 메뉴만 확인했던 9월 16일의 이전 상태를 대체합니다. 이 상태는 테스트한 구성을 설명합니다.\n\n현재 중점: 렌더링 품질과 성능을 포함한 추가 최적화. 레이 트레이싱은 실험적이며 출시되지 않았습니다. 그래픽 진행 상황 자세히 보기 →";
+"Heroes III also reached its main menu. Sound does not work correctly yet (silent or distorted, depending on the setup); gameplay, saving and wider 32-bit compatibility have not been accepted." = "Heroes III도 메인 메뉴까지 도달했습니다. 사운드는 아직 올바르게 작동하지 않습니다(설정에 따라 소리가 나지 않거나 왜곡됨). 게임플레이, 저장, 더 폭넓은 32비트 호환성은 아직 승인되지 않았습니다.";
+"User-confirmed gameplay, movement, audio and voluntary exit, with a gameplay screenshot. Limits: Long-session stability and measured performance were not established. FPS: Not measured." = "사용자가 게임플레이, 이동, 오디오, 플레이어의 직접 종료를 확인했으며 게임플레이 스크린샷도 있습니다. 한계: 장시간 세션 안정성과 측정된 성능은 확인되지 않았습니다. FPS: 측정하지 않음.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and audio results are listed below. FPS from one screenshot: Not measured." = "이 버전에서는 다시 확인하지 않았습니다. 추가 확인 필요: 이전의 게임플레이와 오디오 결과는 아래에 나열되어 있습니다. 스크린샷 한 장에서 읽은 FPS: 측정하지 않음.";
+"In-level rendering, mouse, audio and save/load; a subsequent English-keyboard-layout check confirmed keyboard operation. Intro/attract sequence and voluntary exit were also accepted. Limits: Other keyboard layouts and long sessions need further testing. FPS: Not measured." = "레벨 내 렌더링, 마우스, 오디오, 저장/불러오기. 이후 영어 키보드 배열로 다시 점검해 키보드 작동도 확인했습니다. 인트로/어트랙트 시퀀스와 플레이어의 직접 종료도 승인되었습니다. 한계: 다른 키보드 배열과 장시간 세션은 추가 테스트가 필요합니다. FPS: 측정하지 않음.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and save/load results are listed below. FPS from one screenshot: Not measured." = "이 버전에서는 다시 확인하지 않았습니다. 추가 확인 필요: 이전의 게임플레이와 저장/불러오기 결과는 아래에 나열되어 있습니다. 스크린샷 한 장에서 읽은 FPS: 측정하지 않음.";
+"Movement, audio, return to menu and continuation of saved state; a repeated mining-scene run with voluntary exit. Limits: Shutdown resource warnings remained; longer sessions need verification. FPS: Not measured." = "이동, 오디오, 메뉴로 돌아가기, 저장된 상태에서 이어하기. 채굴 장면을 반복 실행했으며 플레이어의 직접 종료도 확인했습니다. 한계: 종료 시 리소스 경고가 남아 있으며, 더 긴 세션은 검증이 필요합니다. FPS: 측정하지 않음.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and saved-state results are listed below. FPS from one screenshot: Not measured." = "이 버전에서는 다시 확인하지 않았습니다. 추가 확인 필요: 이전의 게임플레이와 저장된 상태 결과는 아래에 나열되어 있습니다. 스크린샷 한 장에서 읽은 FPS: 측정하지 않음.";
+"October 1, 2026: Indiana Jones and the Great Circle, Windows GOG version, uses HyperBridge inside ARM64EC Wine 11 and a separate MoltenVK Vulkan → Metal build. On a 2021 MacBook Pro M1 Pro with 32 GB and macOS 27.0, the release notes report about 10–12 FPS at minimum settings. These are the preview's observations, not new measurements for this page.\n\nKnown issues: firing a weapon hung the GPU and restarted the macOS session on M1 Pro; save all your work before playing. Split frames, stutter and sky artifacts remain. The preview replaces four shared engine files and can affect other titles. Ray tracing is experimental, not released.\n\nAdd `TheGreatCircle.exe` to MacRunner and press Play. If the game asks “Run In Safe Mode?” after an interrupted session, the preview notes say to choose No. This preview is separate from the ordinary 1.0.6 bundle and does not certify other Macs or games. Preview notes" = "2026년 10월 1일: Windows GOG 버전 Indiana Jones and the Great Circle은 ARM64EC Wine 11 안의 HyperBridge와 별도의 MoltenVK(Vulkan → Metal) 빌드를 사용합니다. 2021년형 MacBook Pro M1 Pro(32GB, macOS 27.0)에서 릴리스 노트는 최저 설정 기준 약 10–12 FPS라고 보고합니다. 이는 프리뷰 버전의 관찰 결과이며, 이 페이지를 위한 새 측정값이 아닙니다.\n\n알려진 문제: M1 Pro에서 무기를 발사하면 GPU가 멈추고 macOS 세션이 다시 시작되었습니다. 플레이하기 전에 모든 작업을 저장하세요. 분할된 프레임, 끊김, 하늘 아티팩트가 남아 있습니다. 프리뷰 버전은 공유 엔진 파일 4개를 교체하므로 다른 타이틀에 영향을 줄 수 있습니다. 레이 트레이싱은 실험적이며 출시되지 않았습니다.\n\n`TheGreatCircle.exe`를 MacRunner에 추가하고 ‘플레이’를 누르세요. 중단된 세션 뒤에 게임이 ‘Run In Safe Mode?’라고 묻는다면, 프리뷰 노트는 No를 선택하라고 안내합니다. 이 프리뷰 버전은 일반 1.0.6 번들과 별개이며 다른 Mac이나 게임을 보증하지 않습니다. 프리뷰 노트";
+
+/* Высокое разрешение (Retina): переключатель на странице игры (лейн RETINA, 03.11.2026). */
+"High resolution (Retina)" = "고해상도 (Retina)";
+"The game sees the full list of this Mac's resolutions in real Retina pixels, including 1920×1080 and 2560×1440. Applies from the next launch; on a regular external monitor leave it off." = "게임이 이 Mac의 모든 해상도를 실제 Retina 픽셀로 사용합니다(1920×1080, 2560×1440 포함). 다음 실행부터 적용됩니다. 일반 외장 모니터에서는 끈 채로 두세요.";
+"Another program is still running in the same Windows environment with different settings. Close it and try again." = "같은 Windows 환경에서 다른 설정의 프로그램이 아직 실행 중입니다. 종료한 뒤 다시 시도하세요.";

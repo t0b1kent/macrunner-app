@@ -1,4 +1,4 @@
-name: REPRO110 app c12 source stages Xcode27 ARM64
+name: MacRunner 1.1.0 Retina PSO source stages Xcode27 ARM64
 # The 1.1.0 candidate (c12) application source recipe. It is the 1.0.9 stage matrix pointed at build/repro110app; the
 # 1.0.9 recipe in build/repro109app is not touched. Dispatch it on the branch repro110/app-c12-20261014.
 on:
@@ -48,12 +48,12 @@ jobs:
           results="$RUNNER_TEMP/repro110-app-results"
           mkdir -p "$results"
           if [ '${{ matrix.stage }}' = native-fullmode ]; then
-            /usr/bin/python3 -I -B build/repro110app/build_source.py --build \
-              --work "$RUNNER_TEMP/repro110-app-source" --publish-dir "$results" --jobs 4 --minutes 100
+            nice -n 20 /usr/bin/python3 -I -B build/repro110app/build_source.py --build \
+              --work "$RUNNER_TEMP/repro110-app-source" --publish-dir "$results" --jobs 2 --minutes 100
           else
-            /usr/bin/python3 -I -B build/repro110app/build_app_frameworks.py --build \
+            nice -n 20 /usr/bin/python3 -I -B build/repro110app/build_app_frameworks.py --build \
               --only '${{ matrix.stage }}' --work "$RUNNER_TEMP/repro110-app-source" \
-              --publish-dir "$results" --jobs 4 --minutes 90
+              --publish-dir "$results" --jobs 2 --minutes 90
           fi
       - name: Preserve raw reports and produced prefix on failure
         if: always()

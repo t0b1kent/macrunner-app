@@ -237,13 +237,7 @@
           "note": "Status: Tested & working — DirectX 12.\n\nFPS: Not measured.\n\nPath: FEX + Wine + MacRunner's DXMT-based DirectX 12 → Metal development path, separate from the current preview app's Direct3D 10/11 bundle.\n\nThe maintainer confirmed on September 23, 2026 that the game had already been launched successfully with DirectX 12 and was working in gameplay. This newer confirmation supersedes the earlier September 16 menu-only status. The status describes the tested configuration.\n\nCurrent focus: further optimization, including rendering quality and performance. Ray tracing is experimental, not released. Detailed graphics progress →",
           "evidence": "TESTED_GAMES.md#Elden Ring — tested & working"
         }
-      ],
-      "environment": {
-        "MACRUNNER_FEX_WRITABLE_VALIDATION": "1",
-        "MACRUNNER_FEX_RANGE_CACHE": "0",
-        "MACRUNNER_FEX_CODEBUF_MAX": "0",
-        "MACRUNNER_FEX_MONO_BP_PRECISE": "0"
-      }
+      ]
     },
     {
       "id": "skyrim-se",
@@ -290,8 +284,7 @@
       "emulateModeset": true,
       "environment": {
         "WINE_D3D_CONFIG": "renderer=gdi,csmt=disabled",
-        "WINEDLLOVERRIDES": "winedbg.exe=d;ddraw=b;d3d8=b;d3d9=b;wined3d=b;d3d11,dxgi,d3d10core,winemetal=n,b",
-        "MACRUNNER_PE32_USD_ALIAS": "0"
+        "WINEDLLOVERRIDES": "winedbg.exe=d;ddraw=b;d3d8=b;d3d9=b;wined3d=b;d3d11,dxgi,d3d10core,winemetal=n,b"
       },
       "evidence": "artifacts/pe32-av-20261002/run-heroes3.py and artifacts/release-108-20261004/run-field.py: builtin DirectDraw, GDI renderer, csmt disabled. Developer runs reached the menu; app-path acceptance is recorded separately in artifacts/app32-20261004/HANDOFF-APP32.md.",
       "known": [
@@ -435,15 +428,7 @@
         "MVK_CONFIG_ENABLE_EXPERIMENTAL_RAY_TRACING": "1",
         "MACRUNNER_HB_MAPSCAN_SKIP": "1",
         "FEX_HOSTFEATURES": "enablecrypto",
-        "MACRUNNER_FEX_RA_NO_X16": "1",
-        "MACRUNNER_MVK_NULL_DESCRIPTOR": "1",
-        "MACRUNNER_MVK_SUBGROUP_STAGES": "1",
-        "MACRUNNER_MVK_FAKE_SAMPLER_MINMAX": "1",
-        "MACRUNNER_MVK_SPARSE_BUFFERS": "1",
-        "MACRUNNER_MVK_DROP_UNSUPPORTED_FEATURES": "1",
-        "MACRUNNER_MVK_SUBGROUP_REQUIRED": "1",
-        "MACRUNNER_MVK_SPARSE_FULL_BACKING": "1",
-        "MACRUNNER_MVK_DYNSTRIDE_TRIM": "1"
+        "MACRUNNER_FEX_RA_NO_X16": "1"
       },
       "known": [
         {

@@ -44,6 +44,41 @@ struct BottleUpdateCatalogueTests {
             next: .init(schema: 1, engine: "new", engineRoot: package.path, layers: [], inputs: inputs, files: next))
     }
 
+    @Test func setupRepairRestoresOnlyWineMutations() throws {
+        let f = try fixture(twoChanges: true); defer { f.remove() }
+        let targets = f.next.files.keys.sorted()
+        let delta = targets.filter { f.old.files[$0] != f.next.files[$0] }
+        try f.next.apply(delta, from: f.old, prefix: f.prefix, package: f.package)
+        let before = try f.next.recordingInstallation(prefix: f.prefix)
+        let keep = f.prefix.appendingPathComponent(targets[0])
+        let identity = try Catalogue.Identity.read(keep)
+        try FileManager.default.removeItem(at: f.prefix.appendingPathComponent(targets[1]))
+        try Data("Wine placeholder".utf8).write(to: f.prefix.appendingPathComponent(targets[2]))
+        let repaired = try f.next.repairSetupChanges(from: before, prefix: f.prefix, package: f.package)
+        #expect(repaired == Array(targets.dropFirst()))
+        #expect(try Catalogue.Identity.read(keep) == identity)
+        for target in targets {
+            #expect(try Catalogue.digest(f.prefix.appendingPathComponent(target)) == f.next.files[target]!.sha256)
+        }
+    }
+
+    @Test func setupRepairRejectsUnverifiedPackageAndReceipt() throws {
+        let f = try fixture(); defer { f.remove() }
+        #expect(throws: (any Error).self) {
+            try f.next.repairSetupChanges(from: f.next, prefix: f.prefix, package: f.package)
+        }
+        let changed = f.next.files.keys.filter { f.old.files[$0] != f.next.files[$0] }
+        try f.next.apply(changed, from: f.old, prefix: f.prefix, package: f.package)
+        let before = try f.next.recordingInstallation(prefix: f.prefix)
+        let target = changed[0]
+        try Data("Wine placeholder".utf8).write(to: f.prefix.appendingPathComponent(target))
+        try Data("bad package".utf8).write(to: f.package.appendingPathComponent(f.next.files[target]!.source))
+        #expect(throws: (any Error).self) {
+            try f.next.repairSetupChanges(from: before, prefix: f.prefix, package: f.package)
+        }
+        #expect(try String(contentsOf: f.prefix.appendingPathComponent(target), encoding: .utf8) == "Wine placeholder")
+    }
+
     private func copy(_ value: Catalogue, root: String? = nil, inputs: [String: String]? = nil,
                        files: [String: Catalogue.File]? = nil) -> Catalogue {
         .init(schema: value.schema, engine: value.engine, engineRoot: root ?? value.engineRoot,

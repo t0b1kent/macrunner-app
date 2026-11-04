@@ -61,6 +61,8 @@ struct BottleSetup {
         case busy(String)
         case gameDataMissing(String)
         case noFreeMediaDrive
+        /// Настройка на всю бутылку (RetinaMode) не совпадает с той, под которой в ней уже идёт программа.
+        case settingsConflict
 
         var errorDescription: String? {
             switch self {
@@ -80,6 +82,8 @@ struct BottleSetup {
                 return String(format: L("This game needs %@ next to its executable. Add the original game data and try again."), filename)
             case .noFreeMediaDrive:
                 return L("No free drive letter is available for this game's CD data.")
+            case .settingsConflict:
+                return L("Another program is still running in the same Windows environment with different settings. Close it and try again.")
             }
         }
     }
@@ -111,13 +115,18 @@ struct BottleSetup {
     }
 
     private func writeMarker(layers: [String], wicRegistration: [String: String]? = nil,
-                              updateInputs: BottleUpdateCatalogue? = nil, stamp: String? = nil) throws {
+                              updateInputs: BottleUpdateCatalogue? = nil,
+                              registrationInputs: BottleUpdateCatalogue.RegistrationReceipt? = nil,
+                              stamp: String? = nil) throws {
         var marker: [String: Any] = ["engine": stamp ?? engineStamp, "engineRoot": engineRootPath,
                                      "engineName": engine.name, "layers": layers,
                                      "prepared": ISO8601DateFormatter().string(from: Date())]
         if let wicRegistration { marker["wicRegistration"] = wicRegistration }
         if let updateInputs {
             marker["updateInputs"] = try JSONSerialization.jsonObject(with: JSONEncoder().encode(updateInputs))
+        }
+        if let registrationInputs {
+            marker["registrationInputs"] = try JSONSerialization.jsonObject(with: JSONEncoder().encode(registrationInputs))
         }
         let data = try JSONSerialization.data(withJSONObject: marker, options: [.prettyPrinted, .sortedKeys])
         try data.write(to: markerURL, options: .atomic)
@@ -141,6 +150,7 @@ struct BottleSetup {
     /// Создаёт бутылку или обновляет её под новый движок. Блокирует поток —
     /// вызывать не с главного.
     func prepareIfNeeded(requiredLayer: GraphicsLayer? = nil, emulateModeset: Bool? = nil,
+                          retinaMode: Bool? = nil,
                           cdromDataFilename: String? = nil, gameDirectory: URL? = nil,
                           allowTemplate: Bool = true,
                           checkCancellation: () throws -> Void = {},
@@ -164,6 +174,7 @@ struct BottleSetup {
         }
         var ownedServerStarted = false
         var installedFromPackage = false
+        var registrationAfterStaging = false
         if readMarker()?["bootstrapPending"] as? Bool == true {
             guard !isBusy() else { throw SetupError.busy(engine.name) }
             try quarantine(prefix)
@@ -171,14 +182,18 @@ struct BottleSetup {
         if allowTemplate, !isReady, templatesRequested,
            !FileManager.default.fileExists(atPath: prefix.path) {
             ownedServerStarted = try prepareFromTemplate(requiredLayer: requiredLayer,
-                emulateModeset: emulateModeset, cdromDataFilename: cdromDataFilename, gameDirectory: gameDirectory,
+                emulateModeset: emulateModeset, retinaMode: retinaMode,
+                cdromDataFilename: cdromDataFilename, gameDirectory: gameDirectory,
                 checkCancellation: checkCancellation, beforeRegistration: beforeRegistration)
             // Successful template return means clone or ordinary package creation;
             // ownedServerStarted only describes the warm callback, not installation.
             installedFromPackage = true
         }
         try checkCancellation()
-        if !ownedServerStarted { try applyModeset(emulateModeset) }
+        if !ownedServerStarted {
+            try applyModeset(emulateModeset)
+            try applyRetina(retinaMode, profileModeset: emulateModeset)
+        }
         // Read the current inventory once for this preparation. This is scoped
         // to one update, so later updates still see a replaced ENGINE.json.
         let manifest = try Data(contentsOf: engine.root.appendingPathComponent("ENGINE.json"))
@@ -193,6 +208,7 @@ struct BottleSetup {
             if !(try updateByDifference(manifest: manifest)) {
                 try create(checkCancellation: checkCancellation)
                 installedFromPackage = true
+                registrationAfterStaging = true
             }
         }
         if let filename = cdromDataFilename, let directory = gameDirectory {
@@ -232,7 +248,9 @@ struct BottleSetup {
         if installedFromPackage,
            let catalogue = try? currentCatalogue(layers: installedLayers, manifest: manifest) {
             let installed = try catalogue.recordingInstallation(prefix: prefix)
-            try writeMarker(layers: installedLayers, wicRegistration: registration, updateInputs: installed, stamp: stamp)
+            let inputs = registrationAfterStaging ? try catalogue.registrationReceipt(package: engine.root) : nil
+            try writeMarker(layers: installedLayers, wicRegistration: registration, updateInputs: installed,
+                            registrationInputs: inputs, stamp: stamp)
         }
         if updating { try FileManager.default.removeItem(at: prefix.appendingPathComponent(Self.updatingName)) }
         launchPhase("wicEnd")
@@ -253,54 +271,273 @@ struct BottleSetup {
 
     /// A changed release/translator stamp does not imply changed Wine setup.
     /// Missing history, relocation, registration/layer changes or foreign DLLs
-    /// keep the established full route. No Wine command is used on the fast route.
+    /// keep the established full route. File copies are incremental; registration
+    /// and host device refresh still use Wine's own setup transaction.
     private func updateByDifference(manifest: Data) throws -> Bool {
         guard !isBusy(), !WineServerProbe.mayBeAlive(prefix: prefix, environment: environment) else {
             throw SetupError.busy(engine.name)
         }
-        guard crashDialogIsDisabled(), let marker = readMarker(), let previousStamp = marker["engine"] as? String,
-              marker["engineRoot"] as? String == engineRootPath,
-              marker["layers"] as? [String] == defaultLayerIDs,
-              let registration = marker["wicRegistration"] as? [String: String],
+        // Every refusal names its reason in the log: in the field "no history" and
+        // "a receipt identity moved" must be distinguishable (r9 answered silently).
+        func refuse(_ reason: String) -> Bool {
+            log.note("bottle: fast update refused: \(reason); using full preparation")
+            return false
+        }
+        guard BottleUpdateCatalogue.classRuleEnabled else {
+            return refuse("switched off by MACRUNNER_BOTTLE_FAST_CLASSES=0")
+        }
+        guard crashDialogIsDisabled() else { return refuse("ShowCrashDialog is not disabled in user.reg") }
+        guard let marker = readMarker(), let previousStamp = marker["engine"] as? String else { return refuse("no bottle marker") }
+        guard marker["engineRoot"] as? String == engineRootPath else { return refuse("engine root differs from the marker") }
+        guard marker["layers"] as? [String] == defaultLayerIDs else { return refuse("default graphics layers differ from the marker") }
+        guard let registration = marker["wicRegistration"] as? [String: String],
               registration["engine"] == previousStamp, registration["engineRoot"] == engineRootPath
-        else { return false }
+        else { return refuse("WIC registration record missing or from another engine") }
         do {
             let previous: BottleUpdateCatalogue
+            var trustedLegacy = false
             if let object = marker["updateInputs"] {
                 let stored = try JSONDecoder().decode(BottleUpdateCatalogue.self,
                     from: JSONSerialization.data(withJSONObject: object))
                 guard stored.engine == previousStamp,
-                      let verified = try stored.restored(prefix: prefix, package: engine.root) else { return false }
+                      let verified = try stored.restored(prefix: prefix, package: engine.root) else {
+                    return refuse("stored catalogue does not restore")
+                }
                 previous = verified
             } else {
                 let name = "bottle-inputs-" + previousStamp
                 guard let url = Bundle.module.url(forResource: name, withExtension: "json", subdirectory: "BottleCatalogues")
-                    ?? Bundle.module.url(forResource: name, withExtension: "json") else { return false }
+                    ?? Bundle.module.url(forResource: name, withExtension: "json") else {
+                    return refuse("no bundled catalogue for the previous engine")
+                }
                 let data = try Data(contentsOf: url)
                 guard BottleUpdateCatalogue.digest(data) == previousStamp,
                       let object = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                       object["graphics"] != nil,
                       let value = try BottleUpdateCatalogue.make(manifest: data, engineRoot: engineRootPath, prefix: prefix,
                         graphics: GraphicsCatalog.load(manifest: object, engineRoot: engine.root), layers: defaultLayerIDs)
-                else { return false }
+                else { return refuse("bundled catalogue unusable") }
                 previous = value
+                trustedLegacy = true
             }
-            guard registration["codec"] == previous.files["drive_c/windows/system32/windowscodecs.dll"]?.sha256,
-                  let current = try currentCatalogue(layers: defaultLayerIDs, manifest: manifest),
-                  let delta = try current.delta(from: previous, prefix: prefix) else { return false }
-            try current.apply(delta, from: previous, prefix: prefix, package: engine.root)
+            guard registration["codec"] == previous.files["drive_c/windows/system32/windowscodecs.dll"]?.sha256 else {
+                return refuse("registered codec differs from the previous catalogue")
+            }
+            guard let current = try currentCatalogue(layers: defaultLayerIDs, manifest: manifest) else {
+                return refuse("current catalogue unavailable")
+            }
+            // Closed by default. The route is allowed only for an engine pair that the release gate
+            // approved (a record in the pair file shipped with this release); anything else takes the full route.
+            var pairModes: [String: mode_t]? = nil
+            var previousActual: [String: String] = [:]
+            if !BottleUpdateCatalogue.pairGateMode {
+                switch BottleUpdateCatalogue.pairLookup(file: Self.pairFileData(), from: previousStamp, to: current.engine) {
+                case .refused(let reason): return refuse(reason)
+                case .approved(let record): pairModes = record.modes; previousActual = record.fromActual
+                }
+            } else {
+                previousActual = BottleUpdateCatalogue.pairGateActual
+            }
+            // A legacy bottle was written by the OLD app from the OLD package's real bytes. If that package's
+            // inventory misdescribes some file, the signed record carries the real digest (see PairRecord.fromActual).
+            let effective = trustedLegacy ? previous.correcting(previousActual) : previous
+            if trustedLegacy, !previousActual.isEmpty {
+                log.note("bottle: previous inventory corrected for \(previousActual.count) package file(s) by the engine-pair record")
+            }
+            let began = DispatchTime.now().uptimeNanoseconds
+            let normalisation = BottleUpdateCatalogue.Normalisation.current
+            let decision = try current.deltaDecision(from: effective, prefix: prefix, package: engine.root,
+                                                      classRule: true, trustedLegacy: trustedLegacy,
+                                                      normalisation: normalisation)
+            guard case .delta(let delta) = decision else {
+                if case .refuse(let reason) = decision { return refuse(reason) }
+                return false
+            }
+            if trustedLegacy {
+                log.note("bottle: legacy bottle adopted by SHA-256 of \(effective.files.count) targets in \((DispatchTime.now().uptimeNanoseconds - began) / 1_000_000) ms")
+            }
+            let decided = DispatchTime.now().uptimeNanoseconds
+            let registrationInputs = try current.registrationReceipt(package: engine.root)
+            var registrationCurrent = false
+            var registrationPrevious = false
+            if let expected = registrationInputs, let object = marker["registrationInputs"],
+               let data = try? JSONSerialization.data(withJSONObject: object),
+               let stored = try? JSONDecoder().decode(BottleUpdateCatalogue.RegistrationReceipt.self, from: data) {
+                registrationCurrent = stored == expected
+                registrationPrevious = stored == (try effective.registrationReceipt(package: engine.root))
+            }
+            try current.apply(delta, from: effective, prefix: prefix, package: engine.root)
+            let applied = DispatchTime.now().uptimeNanoseconds
+            // Older markers do not prove post-staging i386 registration. Enroll
+            // them once. A valid receipt permits zero registrations, but devices
+            // still need their cold initialization (plain cmd omits displays and printers).
+            let beforeSetup = try current.recordingInstallation(prefix: prefix)
+            if registrationCurrent, syncUpdateTimestamp() {
+                try refreshDevicesOnly()
+                log.note("bottle: registration inputs unchanged; registration calls=0; devices refreshed")
+            } else if registrationPrevious,
+                      let selection = try current.registrationSelection(from: effective, package: engine.root) {
+                try refreshDeltaRegistration(selection: selection)
+                log.note("bottle: selective registration calls=\(selection.values.reduce(0) { $0 + $1.count }); devices refreshed")
+            } else {
+                try refreshDeltaRegistration()
+                log.note("bottle: post-staging registration completed; receipt enrolled")
+            }
+            let repaired = try current.repairSetupChanges(from: beforeSetup, prefix: prefix, package: engine.root)
+            log.note("bottle: repaired \(repaired.count) setup-mutated files")
+            if let pairModes { try applyFullRouteModes(current, modes: pairModes) }
+            let normalised = DispatchTime.now().uptimeNanoseconds
             let codec = current.files["drive_c/windows/system32/windowscodecs.dll"]!.sha256
             let updatedRegistration = ["engine": current.engine, "engineRoot": engineRootPath, "codec": codec]
             // Commit last. Any failure leaves the old stamp and Ready=false for
             // the new engine; the existing full route repairs the prefix.
             let installed = try current.recordingInstallation(prefix: prefix)
-            try writeMarker(layers: defaultLayerIDs, wicRegistration: updatedRegistration, updateInputs: installed, stamp: current.engine)
-            log.note("bottle: delta update copied=\(delta.count) unchanged=\(current.files.count - delta.count); Wine setup inputs unchanged")
+            let receipted = DispatchTime.now().uptimeNanoseconds
+            try writeMarker(layers: defaultLayerIDs, wicRegistration: updatedRegistration, updateInputs: installed,
+                            registrationInputs: registrationInputs, stamp: current.engine)
+            let done = DispatchTime.now().uptimeNanoseconds
+            log.note("bottle: delta update copied=\(delta.count) unchanged=\(current.files.count - delta.count); registration current; devices refreshed")
+            log.note("bottle: fast update phases decision=\((decided - began) / 1_000) us apply=\((applied - decided) / 1_000) us fixups=\((normalised - applied) / 1_000) us receipt=\((receipted - normalised) / 1_000) us marker=\((done - receipted) / 1_000) us")
             return true
+        } catch let failure as BottleUpdateCatalogue.NormalisationFailure {
+            // after the files are in place: the next full route repairs the prefix (marker not committed)
+            log.note("bottle: fast update stopped after the copy: \(failure.reason); using full preparation")
+            return false
         } catch {
             log.note("bottle: delta update refused; using full preparation (\(type(of: error)))")
             return false
         }
+    }
+
+    /// Enroll both registration views with observed results. Wineboot does not
+    /// propagate failed DLL registrations or an EXE's exit code. A small INF
+    /// section runs only registrations; the helper checks every callback and
+    /// runs each EXE itself. Device discovery remains a separate operation.
+    private func refreshDeltaRegistration(selection: [String: [String]]? = nil) throws {
+        guard syncUpdateTimestamp() else { throw SetupError.missing("Wine update timestamp") }
+        func resource(_ name: String, _ ext: String) throws -> URL {
+            guard let url = Bundle.module.url(forResource: name, withExtension: ext, subdirectory: "BottleTools")
+                    ?? Bundle.module.url(forResource: name, withExtension: ext) else {
+                throw SetupError.missing("bottle registration helper")
+            }
+            return url
+        }
+        func windowsPath(_ url: URL) -> String { "Z:" + url.path.replacingOccurrences(of: "/", with: "\\") }
+        let wrapper = try resource("checked-registration", "inf")
+        let inf = engine.root.appendingPathComponent("wine/share/wine/wine.inf")
+        let temporary = prefix.appendingPathComponent(".macrunner-registration-\(UUID().uuidString)")
+        if selection != nil { try FileManager.default.createDirectory(at: temporary, withIntermediateDirectories: false) }
+        defer { if selection != nil { try? FileManager.default.removeItem(at: temporary) } }
+        for view in ["native", "32"] {
+            var selectedINF = inf
+            if let selection {
+                let rows = selection[view] ?? []
+                if rows.isEmpty { continue }
+                selectedINF = temporary.appendingPathComponent(view + ".inf")
+                try ("[Version]\nSignature=\"$Windows NT$\"\n[RegisterDllsSection]\n" + rows.joined(separator: "\n") + "\n")
+                    .write(to: selectedINF, atomically: true, encoding: .utf8)
+            }
+            let helper = try resource("macrunner-bottle-register-" + view, "exe")
+            try startSetupServer()
+            let outcome = try EngineProcess.run(engine.wine, [helper.path, windowsPath(selectedINF), windowsPath(wrapper)],
+                                                environment: environment, log: log)
+            EngineProcess.waitForServer(engine: engine, environment: environment, log: log)
+            guard outcome.status == 0, !outcome.signaled else { throw SetupError.bootFailed(outcome.status) }
+        }
+        try refreshDevicesOnly()
+    }
+
+    /// regsvr32's OLE/display initialization updates devices BEFORE loading WIC.
+    /// Use that initialization directly, plus Wine's printer discovery, without
+    /// calling any DLL registration entrypoint or forcing the INF to run again.
+    private func refreshDevicesOnly() throws {
+        guard let helper = Bundle.module.url(forResource: "macrunner-bottle-devices", withExtension: "exe", subdirectory: "BottleTools")
+                ?? Bundle.module.url(forResource: "macrunner-bottle-devices", withExtension: "exe") else {
+            throw SetupError.missing("bottle device preparation helper")
+        }
+        try startSetupServer()
+        let outcome = try EngineProcess.run(engine.wine, [helper.path, "spool"], environment: environment, log: log)
+        EngineProcess.waitForServer(engine: engine, environment: environment, log: log)
+        guard outcome.status == 0, !outcome.signaled else { throw SetupError.bootFailed(outcome.status) }
+        try finishSetupRefresh()
+    }
+
+    private func finishSetupRefresh() throws {
+        guard !WineServerProbe.mayBeAlive(prefix: prefix, environment: environment) else {
+            throw SetupError.busy(engine.name)
+        }
+        // syncModules deliberately excludes ntdll; Wine's INF puts it back.
+        for arch in ["system32", "syswow64"] {
+            let file = windows.appendingPathComponent("\(arch)/ntdll.dll")
+            if FileManager.default.fileExists(atPath: file.path) { try FileManager.default.removeItem(at: file) }
+        }
+    }
+
+    /// The pair file shipped with the release (`BottleCatalogues/bottle-fast-pairs.json`, written by the release gate).
+    private static func pairFileData() -> Data? {
+        if let override = BottleUpdateCatalogue.pairFileOverride { return try? Data(contentsOf: override) }
+        let name = "bottle-fast-pairs"
+        guard let url = Bundle.module.url(forResource: name, withExtension: "json", subdirectory: "BottleCatalogues")
+                ?? Bundle.module.url(forResource: name, withExtension: "json") else { return nil }
+        return try? Data(contentsOf: url)
+    }
+
+    /// Permission bits of the modules `wineboot -u` re-creates, as the gate measured them for this engine pair.
+    private func applyFullRouteModes(_ current: BottleUpdateCatalogue, modes: [String: mode_t]) throws {
+        let changed = try current.applyModes(modes, prefix: prefix)
+        if !changed.isEmpty { log.note("bottle: permission bits aligned to the full route on \(changed.count) modules") }
+    }
+
+    /// Repairs the one registry group that only `wineboot -u` would have rewritten. The bottle is stopped
+    /// (checked at the start of the route). `text`: rewrite system.reg through a new file and a rename;
+    /// `regsvr32`: reference arm, one Wine process; `refuse`: the decision already stopped the route.
+    private func normaliseShell32(strategy: BottleUpdateCatalogue.Normalisation) throws {
+        guard BottleUpdateCatalogue.unnormalisedRegistration(prefix: prefix, engineRoot: engineRootPath) != nil else { return }
+        guard !isBusy(), !WineServerProbe.mayBeAlive(prefix: prefix, environment: environment) else {
+            throw SetupError.busy(engine.name)
+        }
+        switch strategy {
+        case .refuse:
+            throw BottleUpdateCatalogue.NormalisationFailure(reason: "registry normalisation refused")
+        case .text:
+            let replaced = try BottleUpdateCatalogue.normaliseRegistry(prefix: prefix, engineRoot: engineRootPath)
+            log.note("bottle: shell32 registration normalised in system.reg (\(replaced) values, no Wine)")
+        case .regsvr32:
+            try startSetupServer()
+            let outcome = try EngineProcess.run(engine.wine, ["C:\\windows\\system32\\regsvr32.exe", "/s", "C:\\windows\\system32\\shell32.dll"],
+                                               environment: environment, log: log)
+            EngineProcess.waitForServer(engine: engine, environment: environment, log: log)
+            guard outcome.status == 0, !outcome.signaled else { throw SetupError.wicRegistrationFailed(outcome.status) }
+            log.note("bottle: shell32 registered with Wine (reference arm)")
+        }
+        guard BottleUpdateCatalogue.unnormalisedRegistration(prefix: prefix, engineRoot: engineRootPath) == nil else {
+            throw BottleUpdateCatalogue.NormalisationFailure(reason: "shell32 registration still names the package")
+        }
+    }
+
+    /// wineboot compares `.update-timestamp` with the mtime of wine.inf at every cold server start and
+    /// re-runs the whole INF when they differ (wineboot.c update_timestamp). The full route leaves the
+    /// current mtime there; the fast route must leave the same number, or the first program start pays
+    /// for the INF.
+    @discardableResult private func syncUpdateTimestamp() -> Bool {
+        let file = prefix.appendingPathComponent(".update-timestamp")
+        var info = stat()
+        let inf = engine.root.appendingPathComponent("wine/share/wine/wine.inf").path
+        guard stat(inf, &info) == 0, let old = try? String(contentsOf: file, encoding: .utf8) else { return false }
+        if let text = Self.alignedTimestamp(existing: old, infMtime: UInt64(info.st_mtimespec.tv_sec)) {
+            do { try Data(text.utf8).write(to: file, options: .atomic) } catch { return false }
+            log.note("bottle: .update-timestamp aligned to wine.inf mtime")
+        }
+        return true
+    }
+
+    /// nil = already the number wineboot would write. wineboot (a PE program, text-mode file) writes
+    /// "<mtime>\r\n" and compares with strtoul, so equality is by NUMBER and a rewrite keeps CRLF
+    /// (a bare LF would be a byte difference against the full route).
+    static func alignedTimestamp(existing: String, infMtime: UInt64) -> String? {
+        let first = existing.prefix { $0.isNumber }
+        if let value = UInt64(first), value == infMtime { return nil }
+        return "\(infMtime)\r\n"
     }
 
     private func crashDialogIsDisabled() -> Bool {
@@ -338,6 +575,165 @@ struct BottleSetup {
 
     static func cdromRegistry(_ previous: String, drive: String) -> String {
         registrySetting(previous, section: "[Software\\\\Wine\\\\Drives]", name: drive, value: "cdrom")
+    }
+
+    // MARK: - Высокое разрешение (Retina)
+
+    /// ★ RetinaMode winemac читает ТОЛЬКО из HKCU\Software\Wine\Mac Driver, без AppDefaults
+    ///   (`macdrv_main.c`, setup_options: «DPI и размеры мониторов должны совпадать у всех процессов
+    ///   префикса»), и один раз — при старте процесса. Значит, настройка общая на бутылку и
+    ///   меняется только при остановленном Wine: бегущий wineserver держит реестр в памяти и
+    ///   при выходе перезапишет файл. Поэтому — как EmulateModeset: правка user.reg до Wine,
+    ///   а тёплая сессия с другим значением сначала гасится (`WarmBottleSessions.signature`).
+    static let macDriverSection = "[Software\\\\Wine\\\\Mac Driver]"
+    static let desktopSection = "[Control Panel\\\\Desktop]"
+    /// Метка «LogPixels поставили мы» — чтобы снять только своё значение, а не чужую настройку DPI.
+    static let retinaLogPixelsMarker = ".macrunner-retina-logpixels"
+    static let retinaLogPixelsLine = "\"LogPixels\"=dword:000000c0"
+
+    /// Рука испытания, по умолчанию выключена: вместе с RetinaMode удвоить DPI (LogPixels 96 → 192),
+    /// как High Resolution Mode у CrossOver. ★ В нашем Wine 11 системный DPI 192 включает
+    ///   виртуализацию для программ без объявленной DPI-осведомлённости (win32u, monitor_get_dpi):
+    ///   такая игра снова видит 1512×982 и растягивается. В манифесте eldenring.exe dpiAware нет.
+    static var retinaLogPixelsRequested: Bool {
+        ProcessInfo.processInfo.environment["MACRUNNER_RETINA_LOGPIXELS"] == "1"
+    }
+
+    /// ★ Полный список разрешений вместе с Retina (03.11, куратор: «включено = игра видит полный список разрешений этого
+    ///   Мака»). У встроенного экрана в списке macOS нет ни одного режима 16:9 (прибор RETINA tools/modelist); их даёт только
+    ///   эмуляция смены режима Wine (EmulateModeset, win32u get_virtual_modes: 1600×900, 1920×1080, 2560×1440, 2880×1620 до
+    ///   родного). Поэтому включённый переключатель ставит и EmulateModeset=Y — если его не задаёт профиль игры (у Heroes III
+    ///   и Diablo он свой). Предыдущее значение хранится в метке и возвращается при выключении. Рука испытания
+    ///   `MACRUNNER_RETINA_EMULATE_MODESET=0` (ключ процесса приложения) — Retina без эмуляции.
+    static let retinaModesetMarker = ".macrunner-retina-modeset"
+    static var retinaModesetRequested: Bool {
+        ProcessInfo.processInfo.environment["MACRUNNER_RETINA_EMULATE_MODESET"] != "0"
+    }
+    private static let x11DriverSection = "[Software\\\\Wine\\\\X11 Driver]"
+
+    /// Включён ли RetinaMode в тексте user.reg: первая буква значения y/Y/t/T/1 (IS_OPTION_TRUE winemac).
+    static func retinaEnabled(in registry: String) -> Bool {
+        guard let value = registryValueText(registry, section: macDriverSection, name: "RetinaMode"),
+              value.hasPrefix("\""), let first = value.dropFirst().first else { return false }
+        return "yYtT1".contains(first)
+    }
+
+    /// Состояние RetinaMode бутылки сейчас (фоновой тёплой сессии — чтобы не гасить её зря).
+    static func retinaModeInRegistry(prefix: URL) -> Bool {
+        guard let text = try? String(contentsOf: prefix.appendingPathComponent("user.reg"), encoding: .utf8) else { return false }
+        return retinaEnabled(in: text)
+    }
+
+    /// true — `"RetinaMode"="y"`; false — значения нет (умолчание Wine). Уже как надо — тот же текст
+    /// побайтно: повторный запуск файл не трогает.
+    static func retinaRegistry(_ previous: String, enabled: Bool) -> String {
+        if enabled, registryValueText(previous, section: macDriverSection, name: "RetinaMode") == "\"y\"" { return previous }
+        return registryValue(previous, section: macDriverSection, name: "RetinaMode",
+                             line: enabled ? "\"RetinaMode\"=\"y\"" : nil)
+    }
+
+    /// RetinaMode, полный список режимов (EmulateModeset, если его не задал профиль) и по руке испытания LogPixels —
+    /// в user.reg, офлайн до Wine. nil — не трогать.
+    func applyRetina(_ enabled: Bool?, profileModeset: Bool? = nil) throws {
+        guard let enabled else { return }
+        let fm = FileManager.default
+        let registry = prefix.appendingPathComponent("user.reg")
+        let marker = prefix.appendingPathComponent(Self.retinaLogPixelsMarker)
+        let previous = fm.fileExists(atPath: registry.path) ? try String(contentsOf: registry, encoding: .utf8) : ""
+        let wantDPI = enabled && Self.retinaLogPixelsRequested
+        let ownDPI = fm.fileExists(atPath: marker.path)
+        var updated = Self.retinaRegistry(previous, enabled: enabled)
+        let dpi = Self.registryValueText(updated, section: Self.desktopSection, name: "LogPixels")
+        if wantDPI, dpi != "dword:000000c0" {
+            updated = Self.registryValue(updated, section: Self.desktopSection, name: "LogPixels", line: Self.retinaLogPixelsLine)
+        } else if !wantDPI, ownDPI, dpi == "dword:000000c0" {
+            updated = Self.registryValue(updated, section: Self.desktopSection, name: "LogPixels", line: nil)
+        }
+        // EmulateModeset — компаньон Retina: ставим, только если его не задаёт профиль; прежнее значение — в метке.
+        let modesetMarker = prefix.appendingPathComponent(Self.retinaModesetMarker)
+        let ownModeset = fm.fileExists(atPath: modesetMarker.path)
+        let wantModeset = enabled && Self.retinaModesetRequested && profileModeset == nil
+        let modesetBefore = Self.registryValueText(updated, section: Self.x11DriverSection, name: "EmulateModeset")
+        var modesetPrevious: String? = nil   // для метки: текст значения до нас, "" — значения не было
+        if wantModeset, !ownModeset {
+            modesetPrevious = modesetBefore ?? ""
+            if modesetBefore != "\"Y\"" {
+                updated = Self.registryValue(updated, section: Self.x11DriverSection, name: "EmulateModeset", line: "\"EmulateModeset\"=\"Y\"")
+            }
+        } else if !wantModeset, ownModeset {
+            let stored = (try? String(contentsOf: modesetMarker, encoding: .utf8)) ?? ""
+            // Профиль задал своё значение — оно главнее; иначе возвращаем прежнее (или снимаем).
+            if profileModeset == nil {
+                updated = Self.registryValue(updated, section: Self.x11DriverSection, name: "EmulateModeset",
+                                             line: stored.isEmpty ? nil : "\"EmulateModeset\"=" + stored)
+            }
+        }
+        let markerChange = (wantModeset != ownModeset)
+        let state = "RetinaMode=\(enabled ? "y" : "off") EmulateModeset=\(wantModeset ? "Y (full mode list)" : ownModeset ? "restored" : "untouched") LogPixels=\(wantDPI ? "192 (trial arm)" : ownDPI ? "restored" : "untouched")"
+        guard updated != previous || wantDPI != ownDPI || markerChange else {
+            log.note("profile: \(state) already in user.reg (HKCU Mac Driver); unchanged")
+            return
+        }
+        // Бегущий wineserver держит реестр в памяти и при выходе запишет старое значение поверх.
+        // Меняются только метки (реестр уже как надо) — Wine не мешает.
+        if updated != previous {
+            guard !isBusy(), !WineServerProbe.mayBeAlive(prefix: prefix, environment: environment) else {
+                throw SetupError.settingsConflict
+            }
+        }
+        try fm.createDirectory(at: prefix, withIntermediateDirectories: true)
+        if updated != previous { try Data(updated.utf8).write(to: registry, options: .atomic) }
+        if wantDPI, !ownDPI { try Data().write(to: marker, options: .atomic) }
+        if !wantDPI, ownDPI { try fm.removeItem(at: marker) }
+        if let modesetPrevious { try Data(modesetPrevious.utf8).write(to: modesetMarker, options: .atomic) }
+        if !wantModeset, ownModeset { try fm.removeItem(at: modesetMarker) }
+        let digest = SHA256.hash(data: Data(updated.utf8)).map { String(format: "%02x", $0) }.joined()
+        log.note("profile: \(state) (HKCU Mac Driver), offline before Wine; user.reg SHA256=\(digest)")
+    }
+
+    /// Текст значения после `=` в разделе (`"y"`, `dword:000000c0`); имя без учёта регистра, как в Wine.
+    static func registryValueText(_ text: String, section: String, name: String) -> String? {
+        let key = "\"" + name.lowercased() + "\"="
+        let lines = text.components(separatedBy: "\n")
+        guard let start = lines.firstIndex(where: { $0 == section || $0.hasPrefix(section + " ") }) else { return nil }
+        let end = ((start + 1)..<lines.count).first(where: { lines[$0].hasPrefix("[") }) ?? lines.count
+        for line in lines[(start + 1)..<end] where line.lowercased().hasPrefix(key) {
+            return String(line.dropFirst(key.count))
+        }
+        return nil
+    }
+
+    /// Ставит (`line` задан) или снимает (`nil`) одно значение раздела, остальное — побайтно.
+    /// Новое значение встаёт после заголовка и его строк `#time=`; нет раздела — он дописывается
+    /// в конец, как его записал бы Wine. Раздел, где после снятия не осталось значений,
+    /// убирается вместе с пустой строкой перед ним: «добавил — снял» возвращает исходный файл.
+    static func registryValue(_ previous: String, section: String, name: String, line: String?) -> String {
+        let key = "\"" + name.lowercased() + "\"="
+        var lines = previous.components(separatedBy: "\n")
+        guard let start = lines.firstIndex(where: { $0 == section || $0.hasPrefix(section + " ") }) else {
+            guard let line else { return previous }
+            lines = (previous.isEmpty ? "WINE REGISTRY Version 2\n\n#arch=win64\n" : previous).components(separatedBy: "\n")
+            if lines.last != "" { lines.append("") }
+            lines.insert(contentsOf: ["", section, line], at: lines.count - 1)
+            return lines.joined(separator: "\n")
+        }
+        let end = ((start + 1)..<lines.count).first(where: { lines[$0].hasPrefix("[") }) ?? lines.count
+        let existing = ((start + 1)..<end).filter { lines[$0].lowercased().hasPrefix(key) }
+        if line == nil, existing.isEmpty { return previous }
+        if let line, existing.count == 1, lines[existing[0]] == line { return previous }
+        for index in existing.reversed() { lines.remove(at: index) }
+        let sectionEnd = end - existing.count
+        if let line {
+            var insert = start + 1
+            while insert < sectionEnd, lines[insert].hasPrefix("#") { insert += 1 }
+            lines.insert(line, at: insert)
+        } else if lines[(start + 1)..<sectionEnd].allSatisfy({ $0.isEmpty || $0.hasPrefix("#") }) {
+            var stop = sectionEnd
+            while stop > start + 1, lines[stop - 1].isEmpty { stop -= 1 }
+            let from = start > 0 && lines[start - 1].isEmpty ? start - 1 : start
+            lines.removeSubrange(from..<stop)
+        }
+        return lines.joined(separator: "\n")
     }
 
     private static func registrySetting(_ previous: String, section: String, name: String, value: String) -> String {
@@ -423,7 +819,7 @@ struct BottleSetup {
         }
     }
 
-    private func prepareFromTemplate(requiredLayer: GraphicsLayer?, emulateModeset: Bool?,
+    private func prepareFromTemplate(requiredLayer: GraphicsLayer?, emulateModeset: Bool?, retinaMode: Bool?,
                                      cdromDataFilename: String?, gameDirectory: URL?, checkCancellation: () throws -> Void,
                                      beforeRegistration: (() throws -> Void)?) throws -> Bool {
         let fm = FileManager.default
@@ -470,7 +866,7 @@ struct BottleSetup {
                 log.note("template: generation failed, ordinary creation: \(error.localizedDescription)")
                 if fm.fileExists(atPath: prefix.path) { try quarantine(prefix) }
                 try checkCancellation()
-                try ordinaryFallback(emulateModeset: emulateModeset, checkCancellation: checkCancellation)
+                try ordinaryFallback(emulateModeset: emulateModeset, retinaMode: retinaMode, checkCancellation: checkCancellation)
                 return false
             }
         }
@@ -488,6 +884,7 @@ struct BottleSetup {
                 engineStamp: engineStamp, engineRoot: engineRootPath)
             let setup = BottleSetup(engine: engine, prefix: staged, environment: environment, log: log)
             try setup.applyModeset(emulateModeset)
+            try setup.applyRetina(retinaMode, profileModeset: emulateModeset)
             if let filename = cdromDataFilename, let directory = gameDirectory {
                 try setup.prepareCDROM(gameDirectory: directory, filename: filename)
             }
@@ -513,16 +910,18 @@ struct BottleSetup {
         }, fallback: {
             try checkCancellation()
             log.note("template: clone/bootstrap failed, ordinary creation")
-            try ordinaryFallback(emulateModeset: emulateModeset, checkCancellation: checkCancellation)
+            try ordinaryFallback(emulateModeset: emulateModeset, retinaMode: retinaMode, checkCancellation: checkCancellation)
         })
         launchPhase("templateCloneEnd")
         log.note("template: result=\(cloned ? "clone" : "ordinary") generation=\(generation)")
         return cloned && beforeRegistration != nil
     }
 
-    private func ordinaryFallback(emulateModeset: Bool? = nil, checkCancellation: () throws -> Void) throws {
+    private func ordinaryFallback(emulateModeset: Bool? = nil, retinaMode: Bool? = nil,
+                                  checkCancellation: () throws -> Void) throws {
         do {
             try applyModeset(emulateModeset)
+            try applyRetina(retinaMode, profileModeset: emulateModeset)
             try create(checkCancellation: checkCancellation)
         }
         catch {
@@ -563,6 +962,14 @@ struct BottleSetup {
             try fm.createDirectory(at: prefix, withIntermediateDirectories: false, attributes: [.posixPermissions: 0o700])
         }
         log.note("bottle: \(fresh ? "create" : "update") \(prefix.path) engine=\(engine.name)")
+
+        // Both architecture sets must exist BEFORE the INF registers them.
+        // In particular, the first boot's i386 placeholders cannot attest a
+        // later staged installation. The post-boot sync below restores files
+        // that Wine setup itself replaces.
+        launchPhase("preRegistrationModuleSyncBegin")
+        try syncModules()
+        launchPhase("preRegistrationModuleSyncEnd")
 
         launchPhase("setupServerBootBegin")
         try startSetupServer()
@@ -614,7 +1021,20 @@ struct BottleSetup {
         }
         launchPhase("graphicsInstallEnd")
         launchPhase("bottleMarkerBegin")
-        try writeMarker(layers: installed.map(\.id))
+        let layers = installed.map(\.id)
+        let manifest = try Data(contentsOf: engine.root.appendingPathComponent("ENGINE.json"))
+        if let catalogue = try currentCatalogue(layers: layers, manifest: manifest) {
+            let beforeSetup = try catalogue.recordingInstallation(prefix: prefix)
+            try refreshDeltaRegistration()
+            _ = try catalogue.repairSetupChanges(from: beforeSetup, prefix: prefix, package: engine.root)
+            let codec = try BottleUpdateCatalogue.digest(windows.appendingPathComponent("system32/windowscodecs.dll"))
+            let registration = ["engine": engineStamp, "engineRoot": engineRootPath, "codec": codec]
+            try writeMarker(layers: layers, wicRegistration: registration)
+        } else {
+            // Older unclassified packages keep their full path, without a
+            // checked-registration receipt to authorize later skipping.
+            try writeMarker(layers: layers)
+        }
         launchPhase("bottleMarkerEnd")
         log.note("bottle: ready layers=\(installed.map(\.id))")
     }

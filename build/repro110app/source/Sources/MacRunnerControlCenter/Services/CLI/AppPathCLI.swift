@@ -8,6 +8,8 @@ enum AppPathCLI {
         var guest: [String] = []
         var environment: [String: String] = [:]
         var probe = false
+        /// `--high-resolution`: запись игры с включённым «Высоким разрешением (Retina)».
+        var highResolution = false
     }
 
     enum ArgumentError: Error {
@@ -26,6 +28,8 @@ enum AppPathCLI {
                 break
             } else if argument == "--acceptance-probe" {
                 parsed.probe = true
+            } else if argument == "--high-resolution" {
+                parsed.highResolution = true
             } else if argument == "--acceptance-env" {
                 index += 1
                 guard index < arguments.count,
@@ -82,9 +86,9 @@ enum AppPathCLI {
                let text = String(data: data, encoding: .utf8) { print(text); exit(0) }
             exit(2)
         }
-        guard args.count >= 5, let seconds = Double(args[3]), seconds > 0, seconds <= 400,
+        guard args.count >= 5, let seconds = Double(args[3]), seconds > 0, seconds <= 2700,
               args[2].hasPrefix("/"), args[4].hasPrefix("/"), BundledEngine.current != nil else {
-            fputs("--run-app-entry <absolute-exe> <seconds:1...400> <absolute-result.json> requires a bundled engine and MACRUNNER_APP_DATA_ROOT\n", stderr)
+            fputs("--run-app-entry <absolute-exe> <seconds:1...2700> <absolute-result.json> requires a bundled engine and MACRUNNER_APP_DATA_ROOT\n", stderr)
             exit(2)
         }
         let accepted: AcceptanceArguments
@@ -103,6 +107,8 @@ enum AppPathCLI {
         if accepted.probe {
             app.tags = ["acceptance-probe"]
         }
+        // Тот же путь, что у переключателя на странице игры: запись → план → бутылка.
+        if accepted.highResolution { app.highResolution = true }
         // Timer is acceptance-only. Normal player launches remain unbounded.
         model.onComplete = { result in
             var result = result ?? LauncherResult(status: "FAIL", error: "App path completed without a result")

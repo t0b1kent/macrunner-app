@@ -27,6 +27,12 @@ struct AppEntry: Codable, Sendable, Identifiable, Hashable {
     var graphicsAPI: String? = nil
     /// Итог выбора графики последнего запуска («DirectX 11 · 64-bit · …») — для карточки.
     var lastGraphicsSummary: String? = nil
+    /// «Высокое разрешение (Retina)»: true — бутылка получает RetinaMode=y и игра видит экран
+    /// в пикселях, а не в точках macOS (3024×1964 вместо 1512×982); false — выключено; nil — «авто» по главному экрану
+    /// (`RetinaDefault`).
+    /// Настройка Wine общая на бутылку (winemac читает её без AppDefaults), поэтому пишется
+    /// при каждом запуске, до Wine, — см. `BottleSetup.applyRetina`.
+    var highResolution: Bool? = nil
 
     static func new(name: String, exePath: String) -> AppEntry {
         AppEntry(
