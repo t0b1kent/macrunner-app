@@ -41,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 5813306,
+  "source_bytes": 5813715,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -50,7 +50,7 @@
     "Tests/Fixtures/test-pe.exe"
   ],
   "source_files": 400,
-  "source_inventory_sha256": "5ca8804a8c8b47a734d3d45f9a77245db1aee97e06f12c60be0406f2d89c6cfb",
+  "source_inventory_sha256": "2e5ce4b42887eaf55d28146505b979c55939df24a1fd403c18b12563158f51e6",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,
@@ -71,7 +71,7 @@
   ],
   "release110_delta": {
     "base": "Published 1.0.9 recipe source snapshot; byte-exact preimages below",
-    "modified": 43,
+    "modified": 44,
     "new": 25,
     "files": [
       {
@@ -416,6 +416,13 @@
         "sha256": "db1f41c23e1088d92520e56e40e5f36b14ea855fb07f58686fe9da33f1f2286a",
         "executable": false,
         "base_sha256": "0850e91edef2f8356174c3e76af7eeaccf19591750070e33f853a818ae632590"
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/AppLibraryTests.swift",
+        "bytes": 2432,
+        "sha256": "3088c9373a37dc9af604aa676225687d2146d52ed7941370fff2dbf4c7d8be44",
+        "executable": false,
+        "base_sha256": "2f5e58d5c5175b8af787f5a90531f2a1bf780636025b9bd00958c39d70e2367e"
       },
       {
         "path": "Tests/MacRunnerControlCenterTests/BottleFastAcceptanceTests.swift",
