@@ -268,6 +268,14 @@ def build(args):
             result['publication_failure'] = str(publication)
     finally:
         persist()
+        failure = result.get('first_failure')
+        if failure and isinstance(failure.get('error'), str):
+            failure = dict(failure, error=failure['error'][:1200], error_truncated=len(failure['error']) > 1200)
+        tests = result.get('swift_tests', {})
+        print(json.dumps(dict(status=result.get('status'), first_failure=failure,
+                              install_skipped=result.get('install_skipped'),
+                              swift_test_report=tests.get('status', tests.get('state', 'NOT_PRODUCED')),
+                              unexplained_failures=tests.get('unexplained_failures', [])[:20])))
     return 0 if result['status'] == 'APP_SOURCE_COMPILED_TESTED_NOT_WHOLE_BUNDLE' else 1
 
 
