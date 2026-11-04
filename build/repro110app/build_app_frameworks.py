@@ -357,6 +357,14 @@ def xcode_args(source, build, row, jobs, *, settings=False):
             'SYMROOT=' + str(build / 'products'), 'OBJROOT=' + str(build / 'objects')]
 
 
+def xcode_settings(runner, argv, cwd, env, reports, label, deadline):
+    """Keep Xcode diagnostics out of its machine-readable stdout; retain both."""
+    log = reports / (label + '.log')
+    runner.command(argv, cwd, env, log, reports, label, deadline, timeout=120,
+                   stderr_log=reports / (label + '-stderr.log'))
+    return log.read_text()
+
+
 def selected_components(lock, only=''):
     if only and only not in {row['name'] for row in lock['components']}:
         raise ValueError('Unknown framework selection')
@@ -451,8 +459,10 @@ def build(args, lock):
                 item['source_archive'] = dict(sha256=sha(archive), bytes=archive.stat().st_size)
                 write_json(reports / (name + '-source-manifest.json'), item)
                 build_dir = args.work / (name + '-build')
-                settings = output(xcode_args(source, build_dir, row, args.jobs, settings=True)
-                                  + ['-showBuildSettings', '-json'], source, name + '-settings')
+                settings = xcode_settings(runner,
+                    xcode_args(source, build_dir, row, args.jobs, settings=True)
+                    + ['-showBuildSettings', '-json'], source, env, reports,
+                    name + '-settings', deadline)
                 try:
                     own = source_settings(settings, source, build_dir / 'products', row)
                 except SettingsMismatch as exc:

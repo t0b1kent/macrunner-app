@@ -7,6 +7,7 @@ from pathlib import Path
 import plistlib
 import subprocess
 import sys
+import time
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
@@ -84,6 +85,17 @@ class FrameworkBoundaryTests(unittest.TestCase):
     def test_xcode_own(self):
         row, source, products, data = self.settings()
         self.assertEqual(b.source_settings(json.dumps(data), source, products, row)['status'], 'PRESENT')
+
+    def test_xcode_json_stdout_is_separate_from_simulator_diagnostic(self):
+        reports = self.root / uuid.uuid4().hex
+        reports.mkdir()
+        raw = b.xcode_settings(b.load_runner(),
+            [sys.executable, '-c',
+             'import sys; print("[{\\"target\\": \\"Sparkle\\"}]"); '
+             'print("2026-11-04 DVTAssertions: simulator warning", file=sys.stderr)'],
+            reports, os.environ.copy(), reports, 'settings', time.monotonic() + 30)
+        self.assertEqual(json.loads(raw), [dict(target='Sparkle')])
+        self.assertIn('DVTAssertions', (reports / 'settings-stderr.log').read_text())
 
     def test_xcode_each_foreign_root_and_output(self):
         for key in ['SRCROOT', 'PROJECT_DIR', 'BUILT_PRODUCTS_DIR']:
