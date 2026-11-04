@@ -6,7 +6,6 @@ struct SettingsView: View {
     @StateObject private var coreStatusVM = CoreStatusViewModel()
     @State private var anthropicAPIKey = ""
     @State private var steamAPIKey = ""
-    @State private var licenseKey = ""
     @State private var keychainStatus = ""
 
     var body: some View {
@@ -91,20 +90,6 @@ struct SettingsView: View {
                 Toggle("Share anonymous telemetry", isOn: boolBinding(\.telemetryOptIn))
             }
 
-            Section("License") {
-                let state = LicenseStore().currentState()
-                Label(state.message + (state.isTrial ? " · \(state.daysRemaining) days remaining" : ""), systemImage: state.isLicensed ? "checkmark.seal.fill" : "clock.badge.exclamationmark")
-                TextField("License Key", text: $licenseKey)
-                HStack {
-                    Button("Activate") { activateLicense() }
-                    // Покупки нет, пока лицензирование выключено (`ReleaseFlags`).
-                    if ReleaseFlags.licensingEnabled {
-                        Button("Buy License") { PurchaseService().openLifetimePurchase() }
-                    }
-                    Spacer()
-                }
-            }
-
             Section("Backup") {
                 HStack {
                     Button("Export Settings") { vm.exportSettings() }
@@ -160,16 +145,6 @@ struct SettingsView: View {
             try SteamKeyStore().saveAPIKey(steamAPIKey)
             keychainStatus = "Steam key saved in Keychain"
             steamAPIKey = ""
-        } catch {
-            keychainStatus = error.localizedDescription
-        }
-    }
-
-    private func activateLicense() {
-        do {
-            _ = try LicenseStore().activate(key: licenseKey)
-            keychainStatus = "License activated"
-            licenseKey = ""
         } catch {
             keychainStatus = error.localizedDescription
         }

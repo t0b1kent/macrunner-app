@@ -6,8 +6,6 @@
 "Settings" = "Settings";
 "AI Troubleshoot" = "AI Troubleshoot";
 "Steam API Key" = "Steam API Key";
-"Buy License" = "Buy License";
-"Trial Mode" = "Trial Mode";
 "Add App" = "Add App";
 "Run" = "Run";
 "Library" = "Library";
@@ -158,7 +156,7 @@
 "Do 32-bit games work?" = "Do 32-bit games work?";
 "Not in this release. The bundled engine supports 64-bit Windows programs; compatibility varies by game." = "Not in this release. The bundled engine supports 64-bit Windows programs; compatibility varies by game.";
 "Is it free?" = "Is it free?";
-"Yes. MacRunner is free during early access." = "Yes. MacRunner is free during early access.";
+"Yes. MacRunner is free, and its source code is open." = "Yes. MacRunner is free, and its source code is open.";
 "No. The bundled engine translates Intel programs without Rosetta." = "No. The bundled engine translates Intel programs without Rosetta.";
 "Installed" = "Installed";
 "Games" = "Games";
@@ -182,44 +180,6 @@
 "Some Windows features are missing there." = "Some Windows features are missing there.";
 "ALSO IN THE WINGET CATALOGUE" = "ALSO IN THE WINGET CATALOGUE";
 "Preparing the winget catalogue on first use — about 8 MB." = "Preparing the winget catalogue on first use — about 8 MB.";
-"No licence token on this device." = "No licence token on this device.";
-"The licence token is malformed." = "The licence token is malformed.";
-"The licence token is not valid base64url." = "The licence token is not valid base64url.";
-"The licence token is signed but its contents are unreadable." = "The licence token is signed but its contents are unreadable.";
-"The bundled licence public key is invalid; this build cannot check licences." = "The bundled licence public key is invalid; this build cannot check licences.";
-"Could not read this Mac's hardware identifier." = "Could not read this Mac's hardware identifier.";
-"Keychain refused the licence operation." = "Keychain refused the licence operation.";
-"This licence token is not signed by MacRunner." = "This licence token is not signed by MacRunner.";
-"This licence token belongs to another Mac." = "This licence token belongs to another Mac.";
-"This licence has expired." = "This licence has expired.";
-"This device's licence lease has expired; connect to the internet to renew it." = "This device's licence lease has expired; connect to the internet to renew it.";
-"Licence" = "Licence";
-"Plan, device and renewal" = "Plan, device and renewal";
-"No licence on this Mac" = "No licence on this Mac";
-"MacRunner needs a licence to start a game for the first time. Games you already run keep working." = "MacRunner needs a licence to start a game for the first time. Games you already run keep working.";
-"It was changed or came from somewhere else." = "It was changed or came from somewhere else.";
-"Issued for %@, this Mac is %@" = "Issued for %@, this Mac is %@";
-"PLANS" = "PLANS";
-"2 months" = "2 months";
-"1 year" = "1 year";
-"1 device" = "1 device";
-"Teams" = "Teams";
-"more devices" = "more devices";
-"write to us" = "write to us";
-"Buy on the site" = "Buy on the site";
-"Active" = "Active";
-"Connect to the internet once — the device lease needs renewing" = "Connect to the internet once — the device lease needs renewing";
-"Expired. Installed games keep working; new ones cannot be started." = "Expired. Installed games keep working; new ones cannot be started.";
-"This Mac" = "This Mac";
-"Devices" = "Devices";
-"Paid until" = "Paid until";
-"Unbind this Mac" = "Unbind this Mac";
-"Unbind this Mac from the licence?" = "Unbind this Mac from the licence?";
-"Unbind" = "Unbind";
-"The next unbind will only be allowed in one month." = "The next unbind will only be allowed in one month.";
-"This licence is bound to this Mac permanently and cannot be moved." = "This licence is bound to this Mac permanently and cannot be moved.";
-"Trial" = "Trial";
-"Perpetual" = "Perpetual";
 "NO FILE" = "NO FILE";
 "File is gone" = "File is gone";
 "Open the releases page" = "Open the releases page";
@@ -246,9 +206,6 @@
 "We can run it — it will install the game, and the installed game goes to your library." = "We can run it — it will install the game, and the installed game goes to your library.";
 "We will add it as is and run it from your library." = "We will add it as is and run it from your library.";
 "Uninstallers, runtimes and crash handlers look like this. Usually not what you want to add." = "Uninstallers, runtimes and crash handlers look like this. Usually not what you want to add.";
-"Open a licence file" = "Open a licence file";
-"Works without internet" = "Works without internet";
-"Choose a licence file" = "Choose a licence file";
 "Open" = "Open";
 "Uninstall “%@”?" = "Uninstall “%@”?";
 "Delete “%@” and its files?" = "Delete “%@” and its files?";
@@ -260,17 +217,12 @@
 "The file is already gone from disk. Only the library entry is left to remove." = "The file is already gone from disk. Only the library entry is left to remove.";
 "Could not delete the game" = "Could not delete the game";
 
-/* Добавлено 15.09.2026: меню приложения, тарифы, причины отказа запуска,
-   перетаскивание, подробности отказов лицензии и ключи winget, которых не было. */
+/* Добавлено 15.09.2026: меню приложения, причины отказа запуска,
+   перетаскивание и ключи winget, которых не было. */
 " bytes" = " bytes";
-"%d parts, expected 2 (payload.signature)" = "%d parts, expected 2 (payload.signature)";
 "%d s" = "%d s";
-"1 Mac" = "1 Mac";
-"1 Mac, one-time, not transferable" = "1 Mac, one-time, not transferable";
-"10 Macs, per year" = "10 Macs, per year";
 "About MacRunner" = "About MacRunner";
 "BACKEND" = "BACKEND";
-"Business" = "Business";
 "Cannot unpack the winget catalog: no unzip tool at " = "Cannot unpack the winget catalog: no unzip tool at ";
 "Check for Updates…" = "Check for Updates…";
 "Could not reach the winget catalog: " = "Could not reach the winget catalog: ";
@@ -279,14 +231,10 @@
 "Delete this game from the library?" = "Delete this game from the library?";
 "Drop a Windows .exe here, or browse to add one." = "Drop a Windows .exe here, or browse to add one.";
 "Drop the .exe to add it" = "Drop the .exe to add it";
-"IOPlatformExpertDevice has no IOPlatformUUID" = "IOPlatformExpertDevice has no IOPlatformUUID";
-"IOPlatformExpertDevice not found" = "IOPlatformExpertDevice not found";
-"IOPlatformUUID is not a string or is empty" = "IOPlatformUUID is not a string or is empty";
 "LAST RUN" = "LAST RUN";
 "MacRunner Help" = "MacRunner Help";
 "MacRunner engine not found. Reinstall MacRunner." = "MacRunner engine not found. Reinstall MacRunner.";
 "NOTES" = "NOTES";
-"No free trial. Refund within 14 days." = "No free trial. Refund within 14 days.";
 "No such package in the winget catalog: " = "No such package in the winget catalog: ";
 "Not a winget package ID: " = "Not a winget package ID: ";
 "STATUS" = "STATUS";
@@ -307,16 +255,11 @@
 "The winget catalog lists no versions for " = "The winget catalog lists no versions for ";
 "The winget manifest is missing for " = "The winget manifest is missing for ";
 "The winget manifest lists no usable installer for " = "The winget manifest lists no usable installer for ";
-"This licence belongs to another Mac" = "This licence belongs to another Mac";
 "Unpacking the winget catalog failed with code " = "Unpacking the winget catalog failed with code ";
 "WHY IT DID NOT RUN" = "WHY IT DID NOT RUN";
 "Your library is empty" = "Your library is empty";
 "all installer entries lack a URL or a SHA256" = "all installer entries lack a URL or a SHA256";
-"empty string" = "empty string";
 "no Installers: block" = "no Installers: block";
-"one half of the token is empty" = "one half of the token is empty";
-"payload" = "payload";
-"signature" = "signature";
 "“%@” is a Windows Installer package (.msi). MacRunner cannot run .msi files yet — use the game’s .exe installer." = "“%@” is a Windows Installer package (.msi). MacRunner cannot run .msi files yet — use the game’s .exe installer.";
 
 /* Встроенный движок и установка (23.09.2026) */
@@ -467,6 +410,33 @@
 "This game needs %@ next to its executable. Add the original game data and try again." = "This game needs %@ next to its executable. Add the original game data and try again.";
 "No free drive letter is available for this game's CD data." = "No free drive letter is available for this game's CD data.";
 "The game closed immediately after launch." = "The game closed immediately after launch.";
-"Could not prepare the game's CD data (%@, exit code %d)." = "Could not prepare the game's CD data (%@, exit code %d).";
-"The game's CD data changed while it was being prepared. Try again." = "The game's CD data changed while it was being prepared. Try again.";
-"Could not mount the game's CD data as a read-only disc." = "Could not mount the game's CD data as a read-only disc.";
+
+/* Заметки профилей графики (graphics-profiles.json, known[].note), 14.10.2026. Ключ — английский текст заметки дословно; добавил заметку в JSON — добавь её сюда на всех языках */
+"User-confirmed gameplay, keyboard/mouse, audio, saving and reload at the saved position. Menu exit was also confirmed without an error in 1.0.7. Limits: Broader scene coverage and long-session performance were not established. FPS: Not measured." = "User-confirmed gameplay, keyboard/mouse, audio, saving and reload at the saved position. Menu exit was also confirmed without an error in 1.0.7. Limits: Broader scene coverage and long-session performance were not established. FPS: Not measured.";
+"Main menu displayed; closing the window and quitting through the game menu both completed without an error. Still to check: Gameplay and long sessions in this pass. FPS from one screenshot: Not measured." = "Main menu displayed; closing the window and quitting through the game menu both completed without an error. Still to check: Gameplay and long sessions in this pass. FPS from one screenshot: Not measured.";
+"The tester confirmed gameplay and subsequently a successful launch, game entry and normal exit in the installed app. FPS reported on September 24. Limits: Repeated-run reliability, long sessions, save/reload, complete cinematic playback and a timed benchmark with recorded settings. FPS: 60." = "The tester confirmed gameplay and subsequently a successful launch, game entry and normal exit in the installed app. FPS reported on September 24. Limits: Repeated-run reliability, long sessions, save/reload, complete cinematic playback and a timed benchmark with recorded settings. FPS: 60.";
+"Language selection displayed on first launch; an earlier check reached the main menu. Still to check: Gameplay in this pass. FPS from one screenshot: 115.66 at language selection." = "Language selection displayed on first launch; an earlier check reached the main menu. Still to check: Gameplay in this pass. FPS from one screenshot: 115.66 at language selection.";
+"Hollow Knight, ABZU and Divinity reach their menus; crypto known-answer tests pass 12/12 Limits: No new FPS measurement. Indiana stops at its Vulkan requirement. Automated Hedon and Stardew runs omit app profiles and do not replace the historical gameplay checks." = "Hollow Knight, ABZU and Divinity reach their menus; crypto known-answer tests pass 12/12 Limits: No new FPS measurement. Indiana stops at its Vulkan requirement. Automated Hedon and Stardew runs omit app profiles and do not replace the historical gameplay checks.";
+"Not listed among the October 3 release checks; the earlier menu result remains historical." = "Not listed among the October 3 release checks; the earlier menu result remains historical.";
+"User-confirmed gameplay and menu navigation. The maintainer reported 100 FPS on September 24; the FPS observation is separate from the earlier development check. Limits: Save/reload, voluntary exit, long sessions and complete automated graphics-path verification. The earlier run ended through a test timer. FPS: 100." = "User-confirmed gameplay and menu navigation. The maintainer reported 100 FPS on September 24; the FPS observation is separate from the earlier development check. Limits: Save/reload, voluntary exit, long sessions and complete automated graphics-path verification. The earlier run ended through a test timer. FPS: 100.";
+"Main menu and player profiles displayed. Still to check: Gameplay, saving and normal exit in this pass. FPS from one screenshot: 120, at the display's 120 Hz limit." = "Main menu and player profiles displayed. Still to check: Gameplay, saving and normal exit in this pass. FPS from one screenshot: 120, at the display's 120 Hz limit.";
+"User-confirmed gameplay, audio and loading. Limits: The run ended through a test timer. Manual save/reload, voluntary exit and long sessions were not verified. FPS: Not measured." = "User-confirmed gameplay, audio and loading. Limits: The run ended through a test timer. Manual save/reload, voluntary exit and long sessions were not verified. FPS: Not measured.";
+"Loading screen displayed; the game opened its data files and selected Apple M1 Pro graphics. Still to check: Startup remains under investigation. FPS from one screenshot: Not measured." = "Loading screen displayed; the game opened its data files and selected Apple M1 Pro graphics. Still to check: Startup remains under investigation. FPS from one screenshot: Not measured.";
+"User-confirmed gameplay, save/load and voluntary exit. Limits: Accelerated OpenGL remained unresolved. This was not a GPU-accelerated rendering result. FPS: Not measured." = "User-confirmed gameplay, save/load and voluntary exit. Limits: Accelerated OpenGL remained unresolved. This was not a GPU-accelerated rendering result. FPS: Not measured.";
+"Start opened the Voidpoint intro, where the game remained for the rest of the check. Still to check: Reaching the main menu; startup remains under investigation. FPS from one screenshot: Not measured." = "Start opened the Voidpoint intro, where the game remained for the rest of the check. Still to check: Reaching the main menu; startup remains under investigation. FPS from one screenshot: Not measured.";
+"User-confirmed tutorial gameplay, saving, returning to the menu and reloading. Limits: Long sessions and measured performance were not established. FPS: Not measured." = "User-confirmed tutorial gameplay, saving, returning to the menu and reloading. Limits: Long sessions and measured performance were not established. FPS: Not measured.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and save/load results are listed below. FPS from one screenshot: Not measured." = "Not rechecked for this release. Still to check: Its earlier gameplay and save/load results are listed below. FPS from one screenshot: Not measured.";
+"Status: Tested & working — DirectX 12.\n\nFPS: Not measured.\n\nPath: FEX + Wine + MacRunner's DXMT-based DirectX 12 → Metal development path, separate from the current preview app's Direct3D 10/11 bundle.\n\nThe maintainer confirmed on September 23, 2026 that the game had already been launched successfully with DirectX 12 and was working in gameplay. This newer confirmation supersedes the earlier September 16 menu-only status. The status describes the tested configuration.\n\nCurrent focus: further optimization, including rendering quality and performance. Ray tracing is experimental, not released. Detailed graphics progress →" = "Status: Tested & working — DirectX 12.\n\nFPS: Not measured.\n\nPath: FEX + Wine + MacRunner's DXMT-based DirectX 12 → Metal development path, separate from the current preview app's Direct3D 10/11 bundle.\n\nThe maintainer confirmed on September 23, 2026 that the game had already been launched successfully with DirectX 12 and was working in gameplay. This newer confirmation supersedes the earlier September 16 menu-only status. The status describes the tested configuration.\n\nCurrent focus: further optimization, including rendering quality and performance. Ray tracing is experimental, not released. Detailed graphics progress →";
+"Heroes III also reached its main menu. Sound does not work correctly yet (silent or distorted, depending on the setup); gameplay, saving and wider 32-bit compatibility have not been accepted." = "Heroes III also reached its main menu. Sound does not work correctly yet (silent or distorted, depending on the setup); gameplay, saving and wider 32-bit compatibility have not been accepted.";
+"User-confirmed gameplay, movement, audio and voluntary exit, with a gameplay screenshot. Limits: Long-session stability and measured performance were not established. FPS: Not measured." = "User-confirmed gameplay, movement, audio and voluntary exit, with a gameplay screenshot. Limits: Long-session stability and measured performance were not established. FPS: Not measured.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and audio results are listed below. FPS from one screenshot: Not measured." = "Not rechecked for this release. Still to check: Its earlier gameplay and audio results are listed below. FPS from one screenshot: Not measured.";
+"In-level rendering, mouse, audio and save/load; a subsequent English-keyboard-layout check confirmed keyboard operation. Intro/attract sequence and voluntary exit were also accepted. Limits: Other keyboard layouts and long sessions need further testing. FPS: Not measured." = "In-level rendering, mouse, audio and save/load; a subsequent English-keyboard-layout check confirmed keyboard operation. Intro/attract sequence and voluntary exit were also accepted. Limits: Other keyboard layouts and long sessions need further testing. FPS: Not measured.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and save/load results are listed below. FPS from one screenshot: Not measured." = "Not rechecked for this release. Still to check: Its earlier gameplay and save/load results are listed below. FPS from one screenshot: Not measured.";
+"Movement, audio, return to menu and continuation of saved state; a repeated mining-scene run with voluntary exit. Limits: Shutdown resource warnings remained; longer sessions need verification. FPS: Not measured." = "Movement, audio, return to menu and continuation of saved state; a repeated mining-scene run with voluntary exit. Limits: Shutdown resource warnings remained; longer sessions need verification. FPS: Not measured.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and saved-state results are listed below. FPS from one screenshot: Not measured." = "Not rechecked for this release. Still to check: Its earlier gameplay and saved-state results are listed below. FPS from one screenshot: Not measured.";
+"October 1, 2026: Indiana Jones and the Great Circle, Windows GOG version, uses HyperBridge inside ARM64EC Wine 11 and a separate MoltenVK Vulkan → Metal build. On a 2021 MacBook Pro M1 Pro with 32 GB and macOS 27.0, the release notes report about 10–12 FPS at minimum settings. These are the preview's observations, not new measurements for this page.\n\nKnown issues: firing a weapon hung the GPU and restarted the macOS session on M1 Pro; save all your work before playing. Split frames, stutter and sky artifacts remain. The preview replaces four shared engine files and can affect other titles. Ray tracing is experimental, not released.\n\nAdd `TheGreatCircle.exe` to MacRunner and press Play. If the game asks “Run In Safe Mode?” after an interrupted session, the preview notes say to choose No. This preview is separate from the ordinary 1.0.6 bundle and does not certify other Macs or games. Preview notes" = "October 1, 2026: Indiana Jones and the Great Circle, Windows GOG version, uses HyperBridge inside ARM64EC Wine 11 and a separate MoltenVK Vulkan → Metal build. On a 2021 MacBook Pro M1 Pro with 32 GB and macOS 27.0, the release notes report about 10–12 FPS at minimum settings. These are the preview's observations, not new measurements for this page.\n\nKnown issues: firing a weapon hung the GPU and restarted the macOS session on M1 Pro; save all your work before playing. Split frames, stutter and sky artifacts remain. The preview replaces four shared engine files and can affect other titles. Ray tracing is experimental, not released.\n\nAdd `TheGreatCircle.exe` to MacRunner and press Play. If the game asks “Run In Safe Mode?” after an interrupted session, the preview notes say to choose No. This preview is separate from the ordinary 1.0.6 bundle and does not certify other Macs or games. Preview notes";
+
+/* Высокое разрешение (Retina): переключатель на странице игры (лейн RETINA, 03.11.2026). */
+"High resolution (Retina)" = "High resolution (Retina)";
+"The game sees the full list of this Mac's resolutions in real Retina pixels, including 1920×1080 and 2560×1440. Applies from the next launch; on a regular external monitor leave it off." = "The game sees the full list of this Mac's resolutions in real Retina pixels, including 1920×1080 and 2560×1440. Applies from the next launch; on a regular external monitor leave it off.";
+"Another program is still running in the same Windows environment with different settings. Close it and try again." = "Another program is still running in the same Windows environment with different settings. Close it and try again.";

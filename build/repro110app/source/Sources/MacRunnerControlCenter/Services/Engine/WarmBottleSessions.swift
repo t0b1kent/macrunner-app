@@ -20,16 +20,16 @@ enum WarmBottleSessions {
     private final class Backend {
         let engine: BundledEngine, prefix: URL, log: EngineLog
         let environment: [String: String], layer: GraphicsLayer?
-        let emulateModeset: Bool?, cdromDataFilename: String?, gameDirectory: URL?
+        let emulateModeset: Bool?, retinaMode: Bool?, cdromDataFilename: String?, gameDirectory: URL?
         private var server: Process?
         private var lifetimeWriter: FileHandle?
         private var ownsSetup = false
         private var cancelled = false
         private let lock = NSLock()
         init(engine: BundledEngine, prefix: URL, environment: [String: String], layer: GraphicsLayer?, log: EngineLog,
-             emulateModeset: Bool?, cdromDataFilename: String?, gameDirectory: URL?) throws {
+             emulateModeset: Bool?, retinaMode: Bool?, cdromDataFilename: String?, gameDirectory: URL?) throws {
             self.engine = engine; self.prefix = prefix; self.environment = environment; self.layer = layer
-            self.emulateModeset = emulateModeset; self.cdromDataFilename = cdromDataFilename
+            self.emulateModeset = emulateModeset; self.retinaMode = retinaMode; self.cdromDataFilename = cdromDataFilename
             self.gameDirectory = gameDirectory
             // A session outlives each game's log. Keep its own bounded collector alive.
             let file = log.url.deletingLastPathComponent().appendingPathComponent("warm-session-\(UUID().uuidString).log")
@@ -45,7 +45,7 @@ enum WarmBottleSessions {
             lock.lock(); ownsSetup = true; let stopped = cancelled; lock.unlock()
             if stopped { throw WarmSessionState.Failure.closed }
             try BottleSetup(engine: engine, prefix: prefix, environment: environment, log: log)
-                .prepareIfNeeded(requiredLayer: layer, emulateModeset: emulateModeset,
+                .prepareIfNeeded(requiredLayer: layer, emulateModeset: emulateModeset, retinaMode: retinaMode,
                                  cdromDataFilename: cdromDataFilename, gameDirectory: gameDirectory, checkCancellation: {
                     self.lock.lock(); let stopped = self.cancelled; self.lock.unlock()
                     if stopped { throw WarmSessionState.Failure.closed }
@@ -171,7 +171,7 @@ enum WarmBottleSessions {
         prefix.resolvingSymlinksInPath().path + "\n" + (environment["TMPDIR"] ?? "/tmp")
     }
     static func signature(engine: BundledEngine, environment: [String: String], layer: GraphicsLayer?,
-                          emulateModeset: Bool? = nil, cdromDataFilename: String? = nil,
+                          emulateModeset: Bool? = nil, retinaMode: Bool? = nil, cdromDataFilename: String? = nil,
                           gameDirectory: URL? = nil) throws -> String {
         var identity = environment
         for key in ["WINEDEBUG", "DXMT_INSTR_LOG", "DXMT_LOG_PATH"] { identity.removeValue(forKey: key) }
@@ -181,19 +181,25 @@ enum WarmBottleSessions {
         // Profile changes require the old idle session to drain before offline
         // registry/media edits. An active program's lease prevents replacement.
         identity["emulateModeset"] = emulateModeset.map { $0 ? "Y" : "N" } ?? "unchanged"
+        // RetinaMode читается каждым процессом при старте и общий на префикс: процессы одной
+        // сессии обязаны видеть одно значение. Рука испытания LogPixels — часть того же значения.
+        identity["retinaMode"] = retinaMode.map {
+            $0 ? "y" + (BottleSetup.retinaModesetRequested ? "+modes" : "") + (BottleSetup.retinaLogPixelsRequested ? "+dpi" : "") : "n"
+        } ?? "unchanged"
         identity["cdromDataFilename"] = cdromDataFilename ?? ""
         identity["cdromDirectory"] = cdromDataFilename == nil ? "" : gameDirectory?.resolvingSymlinksInPath().path ?? ""
         let bytes = try JSONSerialization.data(withJSONObject: identity, options: [.sortedKeys])
         return SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
     }
     static func session(engine: BundledEngine, prefix: URL, environment: [String: String],
+                        preparationEnvironment: [String: String],
                         layer: GraphicsLayer?, log: EngineLog, admitProgram: Bool = false,
-                        emulateModeset: Bool? = nil, cdromDataFilename: String? = nil,
+                        emulateModeset: Bool? = nil, retinaMode: Bool? = nil, cdromDataFilename: String? = nil,
                         gameDirectory: URL? = nil) throws -> WarmSessionState {
         let key = namespace(prefix: prefix, environment: environment)
         let wanted = try signature(engine: engine, environment: environment, layer: layer,
-                                  emulateModeset: emulateModeset, cdromDataFilename: cdromDataFilename,
-                                  gameDirectory: gameDirectory)
+                                  emulateModeset: emulateModeset, retinaMode: retinaMode,
+                                  cdromDataFilename: cdromDataFilename, gameDirectory: gameDirectory)
         lock.lock(); defer { lock.unlock() }
         // Switching bottles releases other idle sessions. Active programs keep their leases.
         for (otherKey, entry) in entries where otherKey != key {
@@ -209,8 +215,8 @@ enum WarmBottleSessions {
             entries.removeValue(forKey: key)
         }
         let entry = Entry(key: key, signature: wanted, backend: try Backend(engine: engine, prefix: prefix,
-            environment: environment, layer: layer, log: log, emulateModeset: emulateModeset,
-            cdromDataFilename: cdromDataFilename, gameDirectory: gameDirectory))
+            environment: preparationEnvironment, layer: layer, log: log, emulateModeset: emulateModeset,
+            retinaMode: retinaMode, cdromDataFilename: cdromDataFilename, gameDirectory: gameDirectory))
         entries[key] = entry
         if admitProgram {
             guard try entry.state.reserveProgramLease() else { throw WarmSessionState.Failure.closed }
@@ -220,11 +226,15 @@ enum WarmBottleSessions {
     /// Admission is atomic with idle invalidation; preparation remains outside
     /// the registry lock so cancellation can still reach a preparing backend.
     static func beginProgram(engine: BundledEngine, prefix: URL, environment: [String: String],
+                             preparationEnvironment: [String: String],
                              layer: GraphicsLayer?, log: EngineLog, emulateModeset: Bool? = nil,
+                             retinaMode: Bool? = nil,
                              cdromDataFilename: String? = nil, gameDirectory: URL? = nil) throws -> WarmSessionState {
         let state = try session(engine: engine, prefix: prefix, environment: environment,
+                                preparationEnvironment: preparationEnvironment,
                                 layer: layer, log: log, admitProgram: true, emulateModeset: emulateModeset,
-                                cdromDataFilename: cdromDataFilename, gameDirectory: gameDirectory)
+                                retinaMode: retinaMode, cdromDataFilename: cdromDataFilename,
+                                gameDirectory: gameDirectory)
         do { try state.ensureReady() }
         catch { state.endProgram(); throw error }
         return state
@@ -255,4 +265,18 @@ enum WarmBottleSessions {
                 "reusable": entries.values.filter { $0.state.canReuse }.count]
     }
     #endif
+}
+
+/// Сессией бутылки владеет идущая программа, а новому запуску нужны другие настройки бутылки
+/// (слой графики, профиль экрана, «Высокое разрешение»). Без описания человек видел
+/// «WarmSessionState.Failure error 2».
+extension WarmSessionState.Failure: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .changedGeneration:
+            return L("Another program is still running in the same Windows environment with different settings. Close it and try again.")
+        case .closed, .busy:
+            return nil
+        }
+    }
 }

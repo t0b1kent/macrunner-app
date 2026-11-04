@@ -4,8 +4,6 @@
 "Settings" = "Ayarlar";
 "AI Troubleshoot" = "YZ tanılama";
 "Steam API Key" = "Steam API anahtarı";
-"Buy License" = "Lisans satın al";
-"Trial Mode" = "Deneme modu";
 "Add App" = "Uygulama ekle";
 "Run" = "Çalıştır";
 "Library" = "Kitaplık";
@@ -142,7 +140,7 @@
 "Do 32-bit games work?" = "32 bit oyunlar çalışıyor mu?";
 "Not in this release. The bundled engine supports 64-bit Windows programs; compatibility varies by game." = "Bu sürümde desteklenmiyor. Birlikte gelen motor 64 bit Windows programlarını destekler; uyumluluk oyuna göre değişir.";
 "Is it free?" = "Ücretsiz mi?";
-"Yes. MacRunner is free during early access." = "Evet. MacRunner erken erişim süresince ücretsiz.";
+"Yes. MacRunner is free, and its source code is open." = "Evet. MacRunner ücretsiz ve kaynak kodu açık.";
 "No. The bundled engine translates Intel programs without Rosetta." = "Hayır. Birlikte gelen motor, Intel programlarını Rosetta olmadan çevirir.";
 "Installed" = "Yüklü";
 "Games" = "Oyunlar";
@@ -166,44 +164,6 @@
 "Some Windows features are missing there." = "Orada bazı Windows özellikleri eksik.";
 "ALSO IN THE WINGET CATALOGUE" = "WINGET KATALOĞUNDA DA VAR";
 "Preparing the winget catalogue on first use — about 8 MB." = "winget kataloğu ilk kullanım için hazırlanıyor — yaklaşık 8 MB.";
-"No licence token on this device." = "Bu cihazda lisans belirteci yok.";
-"The licence token is malformed." = "Lisans belirteci bozuk.";
-"The licence token is not valid base64url." = "Lisans belirteci geçerli bir base64url değil.";
-"The licence token is signed but its contents are unreadable." = "Lisans belirteci imzalı, ancak içeriği okunamıyor.";
-"The bundled licence public key is invalid; this build cannot check licences." = "Pakete dahil lisans ortak anahtarı geçersiz; bu derleme lisansları denetleyemez.";
-"Could not read this Mac's hardware identifier." = "Bu Mac’in donanım kimliği okunamadı.";
-"Keychain refused the licence operation." = "Anahtar Zinciri lisans işlemini reddetti.";
-"This licence token is not signed by MacRunner." = "Bu lisans belirteci MacRunner tarafından imzalanmamış.";
-"This licence token belongs to another Mac." = "Bu lisans belirteci başka bir Mac’e ait.";
-"This licence has expired." = "Bu lisansın süresi doldu.";
-"This device's licence lease has expired; connect to the internet to renew it." = "Bu cihazın lisans izninin süresi doldu; yenilemek için internete bağlanın.";
-"Licence" = "Lisans";
-"Plan, device and renewal" = "Plan, cihaz ve yenileme";
-"No licence on this Mac" = "Bu Mac’te lisans yok";
-"MacRunner needs a licence to start a game for the first time. Games you already run keep working." = "MacRunner’ın bir oyunu ilk kez başlatması için lisans gerekir. Daha önce çalıştırdığınız oyunlar çalışmaya devam eder.";
-"It was changed or came from somewhere else." = "Değiştirilmiş ya da başka bir yerden gelmiş.";
-"Issued for %@, this Mac is %@" = "Verildiği cihaz: %@; bu Mac: %@";
-"PLANS" = "PLANLAR";
-"2 months" = "2 ay";
-"1 year" = "1 yıl";
-"1 device" = "1 cihaz";
-"Teams" = "Ekipler";
-"more devices" = "daha fazla cihaz";
-"write to us" = "bize yazın";
-"Buy on the site" = "Sitede satın al";
-"Active" = "Etkin";
-"Connect to the internet once — the device lease needs renewing" = "Bir kez internete bağlanın — cihaz izninin yenilenmesi gerekiyor";
-"Expired. Installed games keep working; new ones cannot be started." = "Süresi doldu. Yüklü oyunlar çalışmaya devam eder; yenileri başlatılamaz.";
-"This Mac" = "Bu Mac";
-"Devices" = "Cihazlar";
-"Paid until" = "Ödeme bitişi";
-"Unbind this Mac" = "Bu Mac’i ayır";
-"Unbind this Mac from the licence?" = "Bu Mac lisanstan ayrılsın mı?";
-"Unbind" = "Ayır";
-"The next unbind will only be allowed in one month." = "Bir sonraki ayırmaya ancak bir ay sonra izin verilecek.";
-"This licence is bound to this Mac permanently and cannot be moved." = "Bu lisans bu Mac’e kalıcı olarak bağlıdır ve taşınamaz.";
-"Trial" = "Deneme";
-"Perpetual" = "Süresiz";
 "NO FILE" = "DOSYA YOK";
 "File is gone" = "Dosya bulunamıyor";
 "Open the releases page" = "Sürümler sayfasını aç";
@@ -230,9 +190,6 @@
 "We can run it — it will install the game, and the installed game goes to your library." = "Çalıştırabiliriz — oyunu yükler, yüklenen oyun da kitaplığınıza eklenir.";
 "We will add it as is and run it from your library." = "Olduğu gibi ekleyip kitaplığınızdan çalıştıracağız.";
 "Uninstallers, runtimes and crash handlers look like this. Usually not what you want to add." = "Kaldırma programları, çalışma zamanları ve çökme işleyicileri böyle görünür. Genellikle eklemek istediğiniz bunlar değildir.";
-"Open a licence file" = "Lisans dosyası aç";
-"Works without internet" = "İnternetsiz çalışır";
-"Choose a licence file" = "Bir lisans dosyası seçin";
 "Open" = "Aç";
 "Uninstall “%@”?" = "“%@” kaldırılsın mı?";
 "Delete “%@” and its files?" = "“%@” ve dosyaları silinsin mi?";
@@ -244,14 +201,9 @@
 "The file is already gone from disk. Only the library entry is left to remove." = "Dosya zaten diskte yok. Yalnızca kitaplık girdisini kaldırmak kaldı.";
 "Could not delete the game" = "Oyun silinemedi";
 " bytes" = " bayt";
-"%d parts, expected 2 (payload.signature)" = "%d parça, 2 bekleniyordu (payload.signature)";
 "%d s" = "%d sn";
-"1 Mac" = "1 Mac";
-"1 Mac, one-time, not transferable" = "1 Mac, tek seferlik, devredilemez";
-"10 Macs, per year" = "10 Mac, yıllık";
 "About MacRunner" = "MacRunner Hakkında";
 "BACKEND" = "ARKA UÇ";
-"Business" = "İşletme";
 "Cannot unpack the winget catalog: no unzip tool at " = "winget kataloğu açılamıyor: şu konumda arşiv açma aracı yok: ";
 "Check for Updates…" = "Güncellemeleri denetle…";
 "Could not reach the winget catalog: " = "winget kataloğuna ulaşılamadı: ";
@@ -260,14 +212,10 @@
 "Delete this game from the library?" = "Bu oyun kitaplıktan silinsin mi?";
 "Drop a Windows .exe here, or browse to add one." = "Bir Windows .exe dosyasını buraya bırakın ya da göz atarak ekleyin.";
 "Drop the .exe to add it" = "Eklemek için .exe dosyasını bırakın";
-"IOPlatformExpertDevice has no IOPlatformUUID" = "IOPlatformExpertDevice içinde IOPlatformUUID yok";
-"IOPlatformExpertDevice not found" = "IOPlatformExpertDevice bulunamadı";
-"IOPlatformUUID is not a string or is empty" = "IOPlatformUUID bir dize değil ya da boş";
 "LAST RUN" = "SON ÇALIŞTIRMA";
 "MacRunner Help" = "MacRunner Yardım";
 "MacRunner engine not found. Reinstall MacRunner." = "MacRunner motoru bulunamadı. MacRunner’ı yeniden yükleyin.";
 "NOTES" = "NOTLAR";
-"No free trial. Refund within 14 days." = "Ücretsiz deneme yok. 14 gün içinde iade.";
 "No such package in the winget catalog: " = "winget kataloğunda böyle bir paket yok: ";
 "Not a winget package ID: " = "Geçerli bir winget paket kimliği değil: ";
 "STATUS" = "DURUM";
@@ -288,16 +236,11 @@
 "The winget catalog lists no versions for " = "winget kataloğunda şunun için sürüm yok: ";
 "The winget manifest is missing for " = "Şunun için winget manifesti yok: ";
 "The winget manifest lists no usable installer for " = "winget manifestinde şunun için uygun yükleyici yok: ";
-"This licence belongs to another Mac" = "Bu lisans başka bir Mac’e ait";
 "Unpacking the winget catalog failed with code " = "winget kataloğunu açma işlemi şu kodla başarısız oldu: ";
 "WHY IT DID NOT RUN" = "NEDEN ÇALIŞMADI";
 "Your library is empty" = "Kitaplığınız boş";
 "all installer entries lack a URL or a SHA256" = "hiçbir yükleyici girdisinde URL veya SHA256 yok";
-"empty string" = "boş dize";
 "no Installers: block" = "Installers: bloğu yok";
-"one half of the token is empty" = "belirtecin bir yarısı boş";
-"payload" = "yük";
-"signature" = "imza";
 "“%@” is a Windows Installer package (.msi). MacRunner cannot run .msi files yet — use the game’s .exe installer." = "“%@” bir Windows Installer paketi (.msi). MacRunner henüz .msi dosyalarını çalıştıramıyor — oyunun .exe yükleyicisini kullanın.";
 
 /* Встроенный движок и установка (23.09.2026) */
@@ -441,3 +384,42 @@
 "If you have a regular installer (for example, from GOG) or an already installed game folder, add that instead." = "Normal bir yükleyiciniz (örneğin GOG’dan) veya zaten kurulu bir oyun klasörünüz varsa onun yerine onu ekleyin.";
 "Found: %@" = "Bulundu: %@";
 "Game page" = "Oyun sayfası";
+
+/* Строки состава 1.1.0 (APP-L10N, 14.10.2026): ключи были только в en и ru */
+"Could not prepare Windows image decoding (WIC registration exit code %d)." = "Windows görüntü kod çözme altyapısı hazırlanamadı (WIC kaydı çıkış kodu %d).";
+"Not rechecked for this release" = "Bu sürümde yeniden denetlenmedi";
+"Latin keyboard during games" = "Oyunlar sırasında Latin klavye";
+"Use a Latin layout while the game runs, then restore your previous input source." = "Oyun çalışırken Latin düzeni kullanılır, oyun bitince önceki giriş kaynağı geri yüklenir.";
+"This game needs %@ next to its executable. Add the original game data and try again." = "Bu oyunun çalıştırılabilir dosyasının yanında %@ bulunması gerekir. Oyunun özgün verilerini ekleyip yeniden deneyin.";
+"No free drive letter is available for this game's CD data." = "Bu oyunun CD verileri için boş sürücü harfi yok.";
+"The game closed immediately after launch." = "Oyun başlatıldıktan hemen sonra kapandı.";
+
+/* Заметки профилей графики (graphics-profiles.json, known[].note), 14.10.2026. Ключ — английский текст заметки дословно; добавил заметку в JSON — добавь её сюда на всех языках */
+"User-confirmed gameplay, keyboard/mouse, audio, saving and reload at the saved position. Menu exit was also confirmed without an error in 1.0.7. Limits: Broader scene coverage and long-session performance were not established. FPS: Not measured." = "Kullanıcı tarafından doğrulandı: oynanış, klavye/fare, ses, kaydetme ve kayıtlı konumdan yeniden yükleme. Menüden çıkış da 1.0.7’de hatasız doğrulandı. Sınırlamalar: daha geniş sahne kapsamı ve uzun oturumlardaki performans belirlenmedi. FPS: ölçülmedi.";
+"Main menu displayed; closing the window and quitting through the game menu both completed without an error. Still to check: Gameplay and long sessions in this pass. FPS from one screenshot: Not measured." = "Ana menü görüntülendi; pencerenin kapatılması ve oyun menüsünden çıkış hatasız tamamlandı. Kontrol edilecekler: bu turda oynanış ve uzun oturumlar. Tek bir ekran görüntüsünden FPS: ölçülmedi.";
+"The tester confirmed gameplay and subsequently a successful launch, game entry and normal exit in the installed app. FPS reported on September 24. Limits: Repeated-run reliability, long sessions, save/reload, complete cinematic playback and a timed benchmark with recorded settings. FPS: 60." = "Test eden kişi önce oynanışı, ardından yüklü uygulamada başarılı bir başlatmayı, oyuna girişi ve normal çıkışı doğruladı. FPS 24 Eylül’de bildirildi. Sınırlamalar: tekrarlı çalıştırmalarda güvenilirlik, uzun oturumlar, kaydetme/yükleme, ara sahnelerin tam oynatılması ve ayarları kaydedilmiş zamanlı bir karşılaştırma testi. FPS: 60.";
+"Language selection displayed on first launch; an earlier check reached the main menu. Still to check: Gameplay in this pass. FPS from one screenshot: 115.66 at language selection." = "İlk başlatmada dil seçimi görüntülendi; daha önceki bir kontrol ana menüye ulaşmıştı. Kontrol edilecekler: bu turda oynanış. Tek bir ekran görüntüsünden FPS: dil seçiminde 115,66.";
+"Hollow Knight, ABZU and Divinity reach their menus; crypto known-answer tests pass 12/12 Limits: No new FPS measurement. Indiana stops at its Vulkan requirement. Automated Hedon and Stardew runs omit app profiles and do not replace the historical gameplay checks." = "Hollow Knight, ABZU ve Divinity menülerine ulaşıyor; kriptografik bilinen-yanıt testleri 12/12 geçiyor. Sınırlamalar: yeni FPS ölçümü yok. Indiana, Vulkan gereksiniminde duruyor. Hedon ve Stardew’in otomatik çalıştırmaları uygulama profillerini dışarıda bırakır ve önceki oynanış kontrollerinin yerini almaz.";
+"Not listed among the October 3 release checks; the earlier menu result remains historical." = "3 Ekim sürüm kontrolleri arasında yer almıyor; daha önceki menü sonucu geçmiş kayıt olarak kalıyor.";
+"User-confirmed gameplay and menu navigation. The maintainer reported 100 FPS on September 24; the FPS observation is separate from the earlier development check. Limits: Save/reload, voluntary exit, long sessions and complete automated graphics-path verification. The earlier run ended through a test timer. FPS: 100." = "Oynanış ve menü gezinmesi kullanıcı tarafından doğrulandı. Proje yürütücüsü 24 Eylül’de 100 FPS bildirdi; bu FPS gözlemi, daha önceki geliştirme sırasındaki kontrolden ayrıdır. Sınırlamalar: kaydetme/yükleme, oyuncunun isteğiyle çıkış, uzun oturumlar ve grafik yolunun tam otomatik doğrulaması. Önceki çalıştırma bir test zamanlayıcısıyla sona erdi. FPS: 100.";
+"Main menu and player profiles displayed. Still to check: Gameplay, saving and normal exit in this pass. FPS from one screenshot: 120, at the display's 120 Hz limit." = "Ana menü ve oyuncu profilleri görüntülendi. Kontrol edilecekler: bu turda oynanış, kaydetme ve normal çıkış. Tek bir ekran görüntüsünden FPS: 120, ekranın 120 Hz sınırında.";
+"User-confirmed gameplay, audio and loading. Limits: The run ended through a test timer. Manual save/reload, voluntary exit and long sessions were not verified. FPS: Not measured." = "Oynanış, ses ve yükleme kullanıcı tarafından doğrulandı. Sınırlamalar: çalıştırma bir test zamanlayıcısıyla sona erdi. Elle kaydetme/yükleme, oyuncunun isteğiyle çıkış ve uzun oturumlar doğrulanmadı. FPS: ölçülmedi.";
+"Loading screen displayed; the game opened its data files and selected Apple M1 Pro graphics. Still to check: Startup remains under investigation. FPS from one screenshot: Not measured." = "Yükleme ekranı görüntülendi; oyun veri dosyalarını açtı ve Apple M1 Pro grafiklerini seçti. Kontrol edilecekler: başlatma hâlâ inceleniyor. Tek bir ekran görüntüsünden FPS: ölçülmedi.";
+"User-confirmed gameplay, save/load and voluntary exit. Limits: Accelerated OpenGL remained unresolved. This was not a GPU-accelerated rendering result. FPS: Not measured." = "Oynanış, kaydetme/yükleme ve oyuncunun isteğiyle çıkış kullanıcı tarafından doğrulandı. Sınırlamalar: hızlandırılmış OpenGL çözülmemiş kaldı. Bu, GPU hızlandırmalı bir oluşturma sonucu değildi. FPS: ölçülmedi.";
+"Start opened the Voidpoint intro, where the game remained for the rest of the check. Still to check: Reaching the main menu; startup remains under investigation. FPS from one screenshot: Not measured." = "“Start” seçildiğinde Voidpoint girişi açıldı ve oyun kontrolün geri kalanında orada kaldı. Kontrol edilecekler: ana menüye ulaşma; başlatma hâlâ inceleniyor. Tek bir ekran görüntüsünden FPS: ölçülmedi.";
+"User-confirmed tutorial gameplay, saving, returning to the menu and reloading. Limits: Long sessions and measured performance were not established. FPS: Not measured." = "Eğitim bölümündeki oynanış, kaydetme, menüye dönme ve yeniden yükleme kullanıcı tarafından doğrulandı. Sınırlamalar: uzun oturumlar ve ölçülmüş performans belirlenmedi. FPS: ölçülmedi.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and save/load results are listed below. FPS from one screenshot: Not measured." = "Bu sürümde yeniden denetlenmedi. Kontrol edilecekler: önceki oynanış ve kaydetme/yükleme sonuçları aşağıda listelenmiştir. Tek bir ekran görüntüsünden FPS: ölçülmedi.";
+"Status: Tested & working — DirectX 12.\n\nFPS: Not measured.\n\nPath: FEX + Wine + MacRunner's DXMT-based DirectX 12 → Metal development path, separate from the current preview app's Direct3D 10/11 bundle.\n\nThe maintainer confirmed on September 23, 2026 that the game had already been launched successfully with DirectX 12 and was working in gameplay. This newer confirmation supersedes the earlier September 16 menu-only status. The status describes the tested configuration.\n\nCurrent focus: further optimization, including rendering quality and performance. Ray tracing is experimental, not released. Detailed graphics progress →" = "Durum: test edildi ve çalışıyor — DirectX 12.\n\nFPS: ölçülmedi.\n\nYol: FEX + Wine + MacRunner’ın DXMT tabanlı DirectX 12 → Metal geliştirme yolu; uygulamanın mevcut ön sürümündeki Direct3D 10/11 paketinden ayrıdır.\n\nProje yürütücüsü 23 Eylül 2026’da oyunun DirectX 12 ile daha önce başarıyla başlatıldığını ve oynanışta çalıştığını doğruladı. Bu daha yeni doğrulama, yalnızca menüyü kapsayan 16 Eylül tarihli önceki durumun yerini alır. Durum, test edilen yapılandırmayı anlatır.\n\nŞimdiki odak: oluşturma kalitesi ve performans dahil olmak üzere daha fazla optimizasyon. Işın izleme deneyseldir, yayımlanmamıştır. Grafik ilerlemesinin ayrıntıları →";
+"Heroes III also reached its main menu. Sound does not work correctly yet (silent or distorted, depending on the setup); gameplay, saving and wider 32-bit compatibility have not been accepted." = "Heroes III da ana menüye ulaştı. Ses henüz doğru çalışmıyor (kuruluma göre sessiz veya bozuk); oynanış, kaydetme ve daha geniş 32 bit uyumluluğu kabul edilmedi.";
+"User-confirmed gameplay, movement, audio and voluntary exit, with a gameplay screenshot. Limits: Long-session stability and measured performance were not established. FPS: Not measured." = "Oynanış, hareket, ses ve oyuncunun isteğiyle çıkış kullanıcı tarafından doğrulandı; oynanıştan bir ekran görüntüsü de var. Sınırlamalar: uzun oturumlardaki kararlılık ve ölçülmüş performans belirlenmedi. FPS: ölçülmedi.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and audio results are listed below. FPS from one screenshot: Not measured." = "Bu sürümde yeniden denetlenmedi. Kontrol edilecekler: önceki oynanış ve ses sonuçları aşağıda listelenmiştir. Tek bir ekran görüntüsünden FPS: ölçülmedi.";
+"In-level rendering, mouse, audio and save/load; a subsequent English-keyboard-layout check confirmed keyboard operation. Intro/attract sequence and voluntary exit were also accepted. Limits: Other keyboard layouts and long sessions need further testing. FPS: Not measured." = "Seviye içi oluşturma, fare, ses ve kaydetme/yükleme; ardından İngilizce klavye düzeniyle yapılan kontrol klavye kullanımını doğruladı. Giriş/tanıtım dizisi ve oyuncunun isteğiyle çıkış da kabul edildi. Sınırlamalar: diğer klavye düzenleri ve uzun oturumların daha fazla test edilmesi gerekiyor. FPS: ölçülmedi.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and save/load results are listed below. FPS from one screenshot: Not measured." = "Bu sürümde yeniden denetlenmedi. Kontrol edilecekler: önceki oynanış ve kaydetme/yükleme sonuçları aşağıda listelenmiştir. Tek bir ekran görüntüsünden FPS: ölçülmedi.";
+"Movement, audio, return to menu and continuation of saved state; a repeated mining-scene run with voluntary exit. Limits: Shutdown resource warnings remained; longer sessions need verification. FPS: Not measured." = "Hareket, ses, menüye dönüş ve kayıtlı durumdan devam etme; maden sahnesinin tekrarlanan çalıştırması ve oyuncunun isteğiyle çıkış. Sınırlamalar: kapanışta kaynak uyarıları sürdü; daha uzun oturumların doğrulanması gerekiyor. FPS: ölçülmedi.";
+"Not rechecked for this release. Still to check: Its earlier gameplay and saved-state results are listed below. FPS from one screenshot: Not measured." = "Bu sürümde yeniden denetlenmedi. Kontrol edilecekler: önceki oynanış ve kayıtlı durum sonuçları aşağıda listelenmiştir. Tek bir ekran görüntüsünden FPS: ölçülmedi.";
+"October 1, 2026: Indiana Jones and the Great Circle, Windows GOG version, uses HyperBridge inside ARM64EC Wine 11 and a separate MoltenVK Vulkan → Metal build. On a 2021 MacBook Pro M1 Pro with 32 GB and macOS 27.0, the release notes report about 10–12 FPS at minimum settings. These are the preview's observations, not new measurements for this page.\n\nKnown issues: firing a weapon hung the GPU and restarted the macOS session on M1 Pro; save all your work before playing. Split frames, stutter and sky artifacts remain. The preview replaces four shared engine files and can affect other titles. Ray tracing is experimental, not released.\n\nAdd `TheGreatCircle.exe` to MacRunner and press Play. If the game asks “Run In Safe Mode?” after an interrupted session, the preview notes say to choose No. This preview is separate from the ordinary 1.0.6 bundle and does not certify other Macs or games. Preview notes" = "1 Ekim 2026: Windows GOG sürümü Indiana Jones and the Great Circle, ARM64EC Wine 11 içinde HyperBridge’i ve ayrı bir MoltenVK (Vulkan → Metal) yapısını kullanır. 32 GB belleğe ve macOS 27.0’a sahip 2021 model MacBook Pro M1 Pro’da sürüm notları, en düşük ayarlarda yaklaşık 10–12 FPS bildiriyor. Bunlar ön sürümün gözlemleridir; bu sayfa için yeni ölçümler değildir.\n\nBilinen sorunlar: silah ateşlemek GPU’yu kilitledi ve M1 Pro’da macOS oturumunu yeniden başlattı; oynamadan önce tüm çalışmalarınızı kaydedin. Bölünmüş kareler, takılmalar ve gökyüzü artefaktları sürüyor. Ön sürüm dört ortak motor dosyasını değiştirir ve diğer oyunları etkileyebilir. Işın izleme deneyseldir, yayımlanmamıştır.\n\n`TheGreatCircle.exe` dosyasını MacRunner’a ekleyin ve “Oyna”ya basın. Yarıda kalan bir oturumdan sonra oyun “Run In Safe Mode?” diye sorarsa, ön sürüm notları No seçilmesini söylüyor. Bu ön sürüm olağan 1.0.6 paketinden ayrıdır ve diğer Mac’leri ya da oyunları onaylamaz. Ön sürüm notları";
+
+/* Высокое разрешение (Retina): переключатель на странице игры (лейн RETINA, 03.11.2026). */
+"High resolution (Retina)" = "Yüksek çözünürlük (Retina)";
+"The game sees the full list of this Mac's resolutions in real Retina pixels, including 1920×1080 and 2560×1440. Applies from the next launch; on a regular external monitor leave it off." = "Oyun bu Mac'in tüm çözünürlüklerini gerçek Retina piksellerinde görür; 1920×1080 ve 2560×1440 dahil. Bir sonraki başlatmadan itibaren geçerlidir; normal bir harici monitörde kapalı bırakın.";
+"Another program is still running in the same Windows environment with different settings. Close it and try again." = "Aynı Windows ortamında farklı ayarlarla başka bir program hâlâ çalışıyor. Kapatıp yeniden deneyin.";

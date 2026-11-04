@@ -176,4 +176,53 @@ struct WarmProfileIntegrationTests {
         #expect(admissions == 0)
         #expect(!FileManager.default.fileExists(atPath: prefix.appendingPathComponent("fake-calls").path))
     }
+
+    // MARK: - «Высокое разрешение (Retina)» (RETINA 03.11.2026): тот же путь, что EmulateModeset
+
+    /// Готовая бутылка: RetinaMode стоит в user.reg ДО того, как тёплая сессия поднимет свой wineserver.
+    @Test(arguments: [true, false])
+    func readyRetinaIsAppliedBeforeWarmAdmission(retina: Bool) throws {
+        let (root, prefix, engine, log) = try fixture()
+        defer { log.close(); try? FileManager.default.removeItem(at: root) }
+        let registry = prefix.appendingPathComponent("user.reg")
+        let before = try String(contentsOf: registry, encoding: .utf8)
+        try Data(BottleSetup.retinaRegistry(before, enabled: !retina).utf8).write(to: registry)
+        let setup = BottleSetup(engine: engine, prefix: prefix, environment: ["WINEPREFIX": prefix.path], log: log)
+        var admissions = 0
+        try setup.prepareIfNeeded(retinaMode: retina, allowTemplate: false, beforeRegistration: {
+            #expect(BottleSetup.retinaModeInRegistry(prefix: prefix) == retina)
+            #expect(!FileManager.default.fileExists(atPath: prefix.appendingPathComponent("fake-calls").path))
+            admissions += 1
+        })
+        #expect(admissions == 1)
+        #expect(setup.isReady)
+        // Выключение возвращает user.reg побайтно.
+        if !retina { #expect(try String(contentsOf: registry, encoding: .utf8) == before) }
+    }
+
+    /// Бутылка из шаблона: RetinaMode ставится на клон до его первого запуска, шаблон остаётся нейтральным.
+    @Test(arguments: [true, false])
+    func clonedRetinaSurvivesPublishAndSeedStaysNeutral(retina: Bool) throws {
+        let (root, prefix, engine, log) = try fixture()
+        let fm = FileManager.default
+        let generation = BottleTemplate.generation(manifest: try Data(contentsOf: engine.root.appendingPathComponent("ENGINE.json")))
+        let seed = EnginePaths.base.appendingPathComponent("BottleTemplates/" + generation)
+        defer { log.close(); try? fm.removeItem(at: root); try? fm.removeItem(at: seed) }
+        try fm.createDirectory(at: seed.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try fm.moveItem(at: prefix, to: seed)
+        let values = BottleTemplate.substitutions(engine: engine.root, prefix: prefix, data: EnginePaths.data(for: engine), home: "")
+        try BottleTemplate.seal(seed, generation: generation, values: values)
+        let neutral = try BottleTemplate.inventory(seed)
+        let setup = BottleSetup(engine: engine, prefix: prefix, environment: ["WINEPREFIX": prefix.path], log: log)
+        var admissions = 0
+        try setup.prepareIfNeeded(retinaMode: retina, beforeRegistration: {
+            #expect(BottleSetup.retinaModeInRegistry(prefix: prefix) == retina)
+            admissions += 1
+        })
+        #expect(admissions == 1)
+        #expect(setup.isReady)
+        #expect(BottleSetup.retinaModeInRegistry(prefix: prefix) == retina)
+        #expect(try BottleTemplate.inventory(seed) == neutral)
+        #expect(!BottleSetup.retinaModeInRegistry(prefix: seed))
+    }
 }

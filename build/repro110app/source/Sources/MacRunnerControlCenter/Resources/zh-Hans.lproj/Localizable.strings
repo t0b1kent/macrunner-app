@@ -4,8 +4,6 @@
 "Settings" = "设置";
 "AI Troubleshoot" = "AI 诊断";
 "Steam API Key" = "Steam API 密钥";
-"Buy License" = "购买许可";
-"Trial Mode" = "试用模式";
 "Add App" = "添加应用";
 "Run" = "运行";
 "Library" = "游戏库";
@@ -142,7 +140,7 @@
 "Do 32-bit games work?" = "32 位游戏能运行吗？";
 "Not in this release. The bundled engine supports 64-bit Windows programs; compatibility varies by game." = "此版本暂不支持。内置引擎支持 64 位 Windows 程序；兼容性因游戏而异。";
 "Is it free?" = "免费吗？";
-"Yes. MacRunner is free during early access." = "是的。抢先体验期间，MacRunner 免费。";
+"Yes. MacRunner is free, and its source code is open." = "是的。MacRunner 免费，源代码开放。";
 "No. The bundled engine translates Intel programs without Rosetta." = "不需要。内置引擎无需 Rosetta 即可转译 Intel 程序。";
 "Installed" = "已安装";
 "Games" = "游戏";
@@ -166,44 +164,6 @@
 "Some Windows features are missing there." = "其中缺少部分 Windows 版功能。";
 "ALSO IN THE WINGET CATALOGUE" = "winget 目录中还有";
 "Preparing the winget catalogue on first use — about 8 MB." = "首次使用，正在准备 winget 目录（约 8 MB）。";
-"No licence token on this device." = "此设备上没有许可令牌。";
-"The licence token is malformed." = "许可令牌格式错误。";
-"The licence token is not valid base64url." = "许可令牌不是有效的 base64url。";
-"The licence token is signed but its contents are unreadable." = "许可令牌已签名，但内容无法读取。";
-"The bundled licence public key is invalid; this build cannot check licences." = "内置的许可公钥无效，此版本无法验证许可。";
-"Could not read this Mac's hardware identifier." = "无法读取这台 Mac 的硬件标识符。";
-"Keychain refused the licence operation." = "钥匙串拒绝了许可操作。";
-"This licence token is not signed by MacRunner." = "此许可令牌并非由 MacRunner 签名。";
-"This licence token belongs to another Mac." = "此许可令牌属于另一台 Mac。";
-"This licence has expired." = "此许可已过期。";
-"This device's licence lease has expired; connect to the internet to renew it." = "此设备的许可租约已到期，请连接互联网以续期。";
-"Licence" = "许可";
-"Plan, device and renewal" = "方案、设备与续期";
-"No licence on this Mac" = "这台 Mac 上没有许可";
-"MacRunner needs a licence to start a game for the first time. Games you already run keep working." = "MacRunner 需要许可才能首次启动游戏。已运行过的游戏可继续使用。";
-"It was changed or came from somewhere else." = "它已被修改，或来源不明。";
-"Issued for %@, this Mac is %@" = "签发给 %@，而这台 Mac 是 %@";
-"PLANS" = "方案";
-"2 months" = "2 个月";
-"1 year" = "1 年";
-"1 device" = "1 台设备";
-"Teams" = "团队";
-"more devices" = "更多设备";
-"write to us" = "联系我们";
-"Buy on the site" = "在网站购买";
-"Active" = "有效";
-"Connect to the internet once — the device lease needs renewing" = "请连接一次互联网 — 设备租约需要续期";
-"Expired. Installed games keep working; new ones cannot be started." = "已过期。已安装的游戏仍可运行，但无法启动新游戏。";
-"This Mac" = "这台 Mac";
-"Devices" = "设备";
-"Paid until" = "付费至";
-"Unbind this Mac" = "解绑这台 Mac";
-"Unbind this Mac from the licence?" = "要将这台 Mac 从许可中解绑吗？";
-"Unbind" = "解绑";
-"The next unbind will only be allowed in one month." = "下次解绑需等一个月后才允许。";
-"This licence is bound to this Mac permanently and cannot be moved." = "此许可永久绑定这台 Mac，无法转移。";
-"Trial" = "试用";
-"Perpetual" = "永久";
 "NO FILE" = "无文件";
 "File is gone" = "文件已不存在";
 "Open the releases page" = "打开发布页面";
@@ -230,9 +190,6 @@
 "We can run it — it will install the game, and the installed game goes to your library." = "我们可以运行它：它会安装游戏，装好的游戏会进入你的游戏库。";
 "We will add it as is and run it from your library." = "我们会按原样添加，并从你的游戏库中运行。";
 "Uninstallers, runtimes and crash handlers look like this. Usually not what you want to add." = "卸载程序、运行库和崩溃处理程序通常是这样。一般不是你想添加的文件。";
-"Open a licence file" = "打开许可文件";
-"Works without internet" = "无需联网";
-"Choose a licence file" = "选择许可文件";
 "Open" = "打开";
 "Uninstall “%@”?" = "要卸载“%@”吗？";
 "Delete “%@” and its files?" = "要删除“%@”及其文件吗？";
@@ -244,14 +201,9 @@
 "The file is already gone from disk. Only the library entry is left to remove." = "该文件已不在磁盘上，只需移除游戏库中的条目。";
 "Could not delete the game" = "无法删除游戏";
 " bytes" = " 字节";
-"%d parts, expected 2 (payload.signature)" = "%d 个部分，应为 2 个（payload.signature）";
 "%d s" = "%d 秒";
-"1 Mac" = "1 台 Mac";
-"1 Mac, one-time, not transferable" = "1 台 Mac，一次性付费，不可转移";
-"10 Macs, per year" = "10 台 Mac，按年付费";
 "About MacRunner" = "关于 MacRunner";
 "BACKEND" = "后端";
-"Business" = "企业版";
 "Cannot unpack the winget catalog: no unzip tool at " = "无法解压 winget 目录，未找到解压工具，路径: ";
 "Check for Updates…" = "检查更新…";
 "Could not reach the winget catalog: " = "无法连接 winget 目录: ";
@@ -260,14 +212,10 @@
 "Delete this game from the library?" = "要从游戏库中删除这个游戏吗？";
 "Drop a Windows .exe here, or browse to add one." = "将 Windows .exe 拖到这里，或浏览选择文件。";
 "Drop the .exe to add it" = "松开 .exe 即可添加";
-"IOPlatformExpertDevice has no IOPlatformUUID" = "IOPlatformExpertDevice 没有 IOPlatformUUID";
-"IOPlatformExpertDevice not found" = "未找到 IOPlatformExpertDevice";
-"IOPlatformUUID is not a string or is empty" = "IOPlatformUUID 不是字符串或为空";
 "LAST RUN" = "上次运行";
 "MacRunner Help" = "MacRunner 帮助";
 "MacRunner engine not found. Reinstall MacRunner." = "未找到 MacRunner 引擎。请重新安装 MacRunner。";
 "NOTES" = "备注";
-"No free trial. Refund within 14 days." = "无免费试用。14 天内可退款。";
 "No such package in the winget catalog: " = "winget 目录中没有此软件包: ";
 "Not a winget package ID: " = "不是 winget 软件包 ID: ";
 "STATUS" = "状态";
@@ -288,16 +236,11 @@
 "The winget catalog lists no versions for " = "winget 目录中没有以下软件包的版本: ";
 "The winget manifest is missing for " = "缺少以下软件包的 winget 清单: ";
 "The winget manifest lists no usable installer for " = "winget 清单中没有以下软件包可用的安装程序: ";
-"This licence belongs to another Mac" = "此许可属于另一台 Mac";
 "Unpacking the winget catalog failed with code " = "解压 winget 目录失败，代码 ";
 "WHY IT DID NOT RUN" = "未能运行的原因";
 "Your library is empty" = "游戏库是空的";
 "all installer entries lack a URL or a SHA256" = "所有安装程序条目都缺少 URL 或 SHA256";
-"empty string" = "空字符串";
 "no Installers: block" = "没有 Installers: 块";
-"one half of the token is empty" = "令牌的一半为空";
-"payload" = "载荷";
-"signature" = "签名";
 "“%@” is a Windows Installer package (.msi). MacRunner cannot run .msi files yet — use the game’s .exe installer." = "“%@”是 Windows Installer 安装包（.msi）。MacRunner 暂时无法运行 .msi 文件，请使用游戏的 .exe 安装程序。";
 
 /* Встроенный движок и установка (23.09.2026) */
@@ -441,3 +384,42 @@
 "If you have a regular installer (for example, from GOG) or an already installed game folder, add that instead." = "如果你有普通安装程序（例如来自 GOG）或已经安装好的游戏文件夹，请改为添加它们。";
 "Found: %@" = "找到：%@";
 "Game page" = "游戏页面";
+
+/* Строки состава 1.1.0 (APP-L10N, 14.10.2026): ключи были только в en и ru */
+"Could not prepare Windows image decoding (WIC registration exit code %d)." = "无法准备 Windows 图像解码（WIC 注册退出代码 %d）。";
+"Not rechecked for this release" = "此版本未重新验证";
+"Latin keyboard during games" = "游戏期间使用拉丁字母键盘";
+"Use a Latin layout while the game runs, then restore your previous input source." = "游戏运行期间使用拉丁字母键盘布局，结束后恢复之前的输入法。";
+"This game needs %@ next to its executable. Add the original game data and try again." = "此游戏需要在可执行文件旁放置 %@。请添加游戏的原始数据后重试。";
+"No free drive letter is available for this game's CD data." = "此游戏的 CD 数据没有可用的空闲盘符。";
+"The game closed immediately after launch." = "游戏在启动后立即关闭。";
+
+/* Заметки профилей графики (graphics-profiles.json, known[].note), 14.10.2026. Ключ — английский текст заметки дословно; добавил заметку в JSON — добавь её сюда на всех языках */
+"User-confirmed gameplay, keyboard/mouse, audio, saving and reload at the saved position. Menu exit was also confirmed without an error in 1.0.7. Limits: Broader scene coverage and long-session performance were not established. FPS: Not measured." = "用户已确认：游戏过程、键盘/鼠标、音频、存档，以及从存档位置重新加载。1.0.7 中还确认了通过菜单退出时没有出错。局限：更广泛的场景覆盖和长时间会话下的性能尚未确定。帧率：未测量。";
+"Main menu displayed; closing the window and quitting through the game menu both completed without an error. Still to check: Gameplay and long sessions in this pass. FPS from one screenshot: Not measured." = "已显示主菜单；关闭窗口和通过游戏菜单退出均无错误完成。待验证：本轮中的游戏过程和长时间会话。根据单张截图得到的帧率：未测量。";
+"The tester confirmed gameplay and subsequently a successful launch, game entry and normal exit in the installed app. FPS reported on September 24. Limits: Repeated-run reliability, long sessions, save/reload, complete cinematic playback and a timed benchmark with recorded settings. FPS: 60." = "测试者先确认了游戏过程，随后在已安装的应用中确认了成功启动、进入游戏和正常退出。帧率于9月24日报告。局限：反复运行的可靠性、长时间会话、存档/读档、过场动画的完整播放，以及记录了设置的计时基准测试。帧率：60。";
+"Language selection displayed on first launch; an earlier check reached the main menu. Still to check: Gameplay in this pass. FPS from one screenshot: 115.66 at language selection." = "首次启动时显示了语言选择；之前的一次检查曾到达主菜单。待验证：本轮中的游戏过程。根据单张截图得到的帧率：语言选择界面为 115.66。";
+"Hollow Knight, ABZU and Divinity reach their menus; crypto known-answer tests pass 12/12 Limits: No new FPS measurement. Indiana stops at its Vulkan requirement. Automated Hedon and Stardew runs omit app profiles and do not replace the historical gameplay checks." = "Hollow Knight、ABZU 和 Divinity 都能到达各自的菜单；密码学已知答案测试 12/12 通过。局限：没有新的帧率测量。Indiana 停在其 Vulkan 要求上。Hedon 和 Stardew 的自动运行不含应用配置文件，不能替代以往的游戏过程检查。";
+"Not listed among the October 3 release checks; the earlier menu result remains historical." = "未列入10月3日的发布检查；此前的菜单结果仅作为历史记录保留。";
+"User-confirmed gameplay and menu navigation. The maintainer reported 100 FPS on September 24; the FPS observation is separate from the earlier development check. Limits: Save/reload, voluntary exit, long sessions and complete automated graphics-path verification. The earlier run ended through a test timer. FPS: 100." = "用户已确认游戏过程和菜单导航。维护者于9月24日报告了 100 FPS；这一帧率观察与此前的开发期检查是分开的。局限：存档/读档、玩家主动退出、长时间会话，以及图形路径的完整自动验证。此前的运行由测试计时器结束。帧率：100。";
+"Main menu and player profiles displayed. Still to check: Gameplay, saving and normal exit in this pass. FPS from one screenshot: 120, at the display's 120 Hz limit." = "已显示主菜单和玩家档案。待验证：本轮中的游戏过程、存档和正常退出。根据单张截图得到的帧率：120，达到显示器 120 Hz 的上限。";
+"User-confirmed gameplay, audio and loading. Limits: The run ended through a test timer. Manual save/reload, voluntary exit and long sessions were not verified. FPS: Not measured." = "用户已确认游戏过程、音频和加载。局限：运行由测试计时器结束。手动存档/读档、玩家主动退出和长时间会话均未验证。帧率：未测量。";
+"Loading screen displayed; the game opened its data files and selected Apple M1 Pro graphics. Still to check: Startup remains under investigation. FPS from one screenshot: Not measured." = "已显示加载画面；游戏打开了其数据文件并选择了 Apple M1 Pro 图形。待验证：启动问题仍在调查中。根据单张截图得到的帧率：未测量。";
+"User-confirmed gameplay, save/load and voluntary exit. Limits: Accelerated OpenGL remained unresolved. This was not a GPU-accelerated rendering result. FPS: Not measured." = "用户已确认游戏过程、存档/读档和玩家主动退出。局限：硬件加速的 OpenGL 仍未解决。这不是 GPU 加速渲染的结果。帧率：未测量。";
+"Start opened the Voidpoint intro, where the game remained for the rest of the check. Still to check: Reaching the main menu; startup remains under investigation. FPS from one screenshot: Not measured." = "点击“Start”后打开了 Voidpoint 的片头，游戏在检查的其余时间里一直停留在该画面。待验证：到达主菜单；启动问题仍在调查中。根据单张截图得到的帧率：未测量。";
+"User-confirmed tutorial gameplay, saving, returning to the menu and reloading. Limits: Long sessions and measured performance were not established. FPS: Not measured." = "用户已确认教程中的游戏过程、存档、返回菜单和重新加载。局限：长时间会话和实测性能尚未确定。帧率：未测量。";
+"Not rechecked for this release. Still to check: Its earlier gameplay and save/load results are listed below. FPS from one screenshot: Not measured." = "此版本未重新验证。待验证：此前的游戏过程和存档/读档结果列于下方。根据单张截图得到的帧率：未测量。";
+"Status: Tested & working — DirectX 12.\n\nFPS: Not measured.\n\nPath: FEX + Wine + MacRunner's DXMT-based DirectX 12 → Metal development path, separate from the current preview app's Direct3D 10/11 bundle.\n\nThe maintainer confirmed on September 23, 2026 that the game had already been launched successfully with DirectX 12 and was working in gameplay. This newer confirmation supersedes the earlier September 16 menu-only status. The status describes the tested configuration.\n\nCurrent focus: further optimization, including rendering quality and performance. Ray tracing is experimental, not released. Detailed graphics progress →" = "状态：已测试并可正常运行 — DirectX 12。\n\n帧率：未测量。\n\n路径：FEX + Wine + MacRunner 基于 DXMT 的 DirectX 12 → Metal 开发路径，与当前预览版应用的 Direct3D 10/11 组件包是分开的。\n\n维护者于2026年9月23日确认，该游戏已使用 DirectX 12 成功启动，并且在游戏过程中可以正常运行。这一较新的确认取代了此前9月16日仅涵盖菜单的状态。该状态描述的是已测试的配置。\n\n当前重点：继续优化，包括渲染质量和性能。光线追踪处于实验阶段，尚未发布。图形进展详情 →";
+"Heroes III also reached its main menu. Sound does not work correctly yet (silent or distorted, depending on the setup); gameplay, saving and wider 32-bit compatibility have not been accepted." = "Heroes III 也到达了主菜单。声音目前还不能正常工作（视配置而定，会无声或失真）；游戏过程、存档以及更广泛的 32 位兼容性尚未通过验收。";
+"User-confirmed gameplay, movement, audio and voluntary exit, with a gameplay screenshot. Limits: Long-session stability and measured performance were not established. FPS: Not measured." = "用户已确认游戏过程、移动、音频和玩家主动退出，并附有一张游戏过程截图。局限：长时间会话的稳定性和实测性能尚未确定。帧率：未测量。";
+"Not rechecked for this release. Still to check: Its earlier gameplay and audio results are listed below. FPS from one screenshot: Not measured." = "此版本未重新验证。待验证：此前的游戏过程和音频结果列于下方。根据单张截图得到的帧率：未测量。";
+"In-level rendering, mouse, audio and save/load; a subsequent English-keyboard-layout check confirmed keyboard operation. Intro/attract sequence and voluntary exit were also accepted. Limits: Other keyboard layouts and long sessions need further testing. FPS: Not measured." = "关卡内渲染、鼠标、音频和存档/读档；后续使用英文键盘布局的检查确认了键盘操作正常。开场/演示序列和玩家主动退出也已通过验收。局限：其他键盘布局和长时间会话还需要进一步测试。帧率：未测量。";
+"Not rechecked for this release. Still to check: Its earlier gameplay and save/load results are listed below. FPS from one screenshot: Not measured." = "此版本未重新验证。待验证：此前的游戏过程和存档/读档结果列于下方。根据单张截图得到的帧率：未测量。";
+"Movement, audio, return to menu and continuation of saved state; a repeated mining-scene run with voluntary exit. Limits: Shutdown resource warnings remained; longer sessions need verification. FPS: Not measured." = "移动、音频、返回菜单以及从已保存状态继续；重复运行了采矿场景并由玩家主动退出。局限：退出时的资源警告仍然存在；更长时间的会话需要验证。帧率：未测量。";
+"Not rechecked for this release. Still to check: Its earlier gameplay and saved-state results are listed below. FPS from one screenshot: Not measured." = "此版本未重新验证。待验证：此前的游戏过程和已保存状态结果列于下方。根据单张截图得到的帧率：未测量。";
+"October 1, 2026: Indiana Jones and the Great Circle, Windows GOG version, uses HyperBridge inside ARM64EC Wine 11 and a separate MoltenVK Vulkan → Metal build. On a 2021 MacBook Pro M1 Pro with 32 GB and macOS 27.0, the release notes report about 10–12 FPS at minimum settings. These are the preview's observations, not new measurements for this page.\n\nKnown issues: firing a weapon hung the GPU and restarted the macOS session on M1 Pro; save all your work before playing. Split frames, stutter and sky artifacts remain. The preview replaces four shared engine files and can affect other titles. Ray tracing is experimental, not released.\n\nAdd `TheGreatCircle.exe` to MacRunner and press Play. If the game asks “Run In Safe Mode?” after an interrupted session, the preview notes say to choose No. This preview is separate from the ordinary 1.0.6 bundle and does not certify other Macs or games. Preview notes" = "2026年10月1日：Windows GOG 版 Indiana Jones and the Great Circle 在 ARM64EC Wine 11 中使用 HyperBridge，并搭配单独的 MoltenVK（Vulkan → Metal）构建。在配备 32 GB 内存、运行 macOS 27.0 的 2021 款 MacBook Pro M1 Pro 上，发行说明报告在最低画质设置下约为 10–12 FPS。这些是预览版的观察结果，并非针对本页的新测量。\n\n已知问题：在 M1 Pro 上开火会导致 GPU 挂起并重启 macOS 会话；游玩前请保存好所有工作。画面分割、卡顿和天空伪影仍然存在。预览版会替换四个共享的引擎文件，可能影响其他游戏。光线追踪处于实验阶段，尚未发布。\n\n将 `TheGreatCircle.exe` 添加到 MacRunner 并点按“开始游戏”。如果在会话中断后游戏询问“Run In Safe Mode?”，预览版说明建议选择 No。此预览版与普通的 1.0.6 软件包是分开的，并不保证其他 Mac 或游戏可用。预览版说明";
+
+/* Высокое разрешение (Retina): переключатель на странице игры (лейн RETINA, 03.11.2026). */
+"High resolution (Retina)" = "高分辨率 (Retina)";
+"The game sees the full list of this Mac's resolutions in real Retina pixels, including 1920×1080 and 2560×1440. Applies from the next launch; on a regular external monitor leave it off." = "游戏将以真实的 Retina 像素看到这台 Mac 的全部分辨率，包括 1920×1080 和 2560×1440。从下次启动起生效；在普通外接显示器上请保持关闭。";
+"Another program is still running in the same Windows environment with different settings. Close it and try again." = "同一 Windows 环境中仍有其他程序以不同设置在运行。请关闭它后重试。";

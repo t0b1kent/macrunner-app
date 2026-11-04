@@ -253,11 +253,6 @@ struct HomeView: View {
     /// разделе (новый вид), а у библиотеки вместо него — шапка «Продолжить».
     private var topBar: some View {
         HStack(spacing: Theme.Spacing.m) {
-            if section == .licence {
-                Text(section.title)
-                    .font(Theme.Font.title)
-                    .foregroundColor(Theme.Palette.textPrimary(scheme))
-            }
             // Поиск нужен, когда есть что искать: в каталоге всегда, в своей библиотеке —
             // когда игр больше, чем помещается на экране.
             if detailApp == nil,
@@ -318,7 +313,12 @@ struct HomeView: View {
                 onEdit: { editingApp = app },
                 // Подтверждение — одно на всё приложение, с честным текстом исхода.
                 onDelete: { requestRemoval(app) },
-                onBack: closeGame
+                onBack: closeGame,
+                onSetHighResolution: { enabled in
+                    var entry = vm.apps.first { $0.id == app.id } ?? app
+                    entry.highResolution = enabled   // явный выбор; nil — «авто»
+                    vm.update(entry)
+                }
             )
         } else {
             switch section {
@@ -328,7 +328,6 @@ struct HomeView: View {
             case .programs: ProgramsView(search: vm.search, category: $programCategory,
                                          title: L("Programs"), subtitle: sectionSubtitle,
                                          onOpen: { detailProgram = $0 })
-            case .licence: LicenceView()
             }
         }
     }
@@ -361,8 +360,6 @@ struct HomeView: View {
                 if colors.count == 4 { break }
             }
             return colors.isEmpty ? .neutral : .colors(colors)
-        case .licence:
-            return .neutral
         }
     }
 
@@ -378,7 +375,6 @@ struct HomeView: View {
         case .library: return 0
         case .discover: return 1
         case .programs: return 2
-        case .licence: return 3
         }
     }
 
@@ -597,7 +593,6 @@ struct HomeView: View {
             let shown = programs.search(vm.search).filter { programCategory == nil || $0.category == programCategory }.count
             guard !isSearching, programCategory == nil else { return foundLabel(shown, of: total) }
             return String(format: L("%d Windows programs"), total)
-        case .licence: return L("Plan, device and renewal")
         }
     }
 
@@ -780,28 +775,12 @@ struct HomeView: View {
             return
         }
 
-        // ★ Движок проверяем ДО лицензии: без него не запустится ничего, и отправлять
-        //   человека покупать лицензию к неработающей установке было бы издевательством.
-        //   В запись игры отказ НЕ пишем — игра тут ни при чём.
+        // В запись игры отказ НЕ пишем — игра тут ни при чём.
         guard !RunFailure.engineMissing(settings: settingsVM.settings) else {
             launchFailure = RunFailure.engineMissingMessage
             return
         }
 
-        // ★ Мягкое правило: уже запускавшаяся игра идёт всегда, новая — по лицензии.
-        //   Проверка ЗДЕСЬ, в единственном месте запуска, а не в видах: разложить
-        //   её по плиткам значит однажды забыть одну.
-        // ★★ Пока лицензирование выключено (`ReleaseFlags`, ранний доступ бесплатный),
-        //    проверки нет вовсе: ни одна игра не упирается в лицензию и никого не
-        //    отправляют в раздел, которого нет в боковой панели.
-        //    Путь деинсталлятора (`remove`) лицензию не спрашивал и раньше — он идёт
-        //    мимо `runApp`, прямо через `RunAppViewModel`.
-        let hasRunBefore = app.lastRunStatus != nil
-        if ReleaseFlags.licensingEnabled,
-           !LicenceStore.shared.state.allowsLaunch(hasRunBefore: hasRunBefore) {
-            section = .licence
-            return
-        }
         runningIDs.insert(app.id)
         let runner = RunAppViewModel(settings: settingsVM.settings)
         let libraryVM = vm
@@ -1056,11 +1035,31 @@ struct HomeView: View {
 }
 
 /// Плитка «Добавить игру»: при наведении пунктир бежит по кругу, плюс поворачивается, фон чуть светлеет.
+///
+/// ★★★ ПУНКТИР СЧИТАЕТСЯ ОТ ЧАСОВ, А НЕ `repeatForever` (02.11.2026). Прежде бег запускался
+///   `withAnimation(.repeatForever)` при наведении, а «остановка» при уходе курсора была ещё одной
+///   анимацией того же значения. Бесконечную анимацию она не отменяет: анимации без слияния
+///   (linear, easeOut) у SwiftUI идут поверх друг друга, и после первого наведения плитка могла
+///   тикать на каждом кадре экрана до закрытия окна. Теперь пунктир берёт сдвиг из `TimelineView`,
+///   а расписание стоит на паузе, пока курсора нет, окно не активно или включено «Уменьшить
+///   движение»: нечему тикать.
+///   Ушёл курсор — пунктир замирает там, где был, и следующее наведение продолжает с того же места.
 private struct AddGameTile: View {
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.appearsActive) private var appearsActive
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let action: () -> Void
     @State private var hovering = false
-    @State private var dashPhase: CGFloat = 0
+    /// Сдвиг пунктира на момент начала наведения и сам момент. Шаг узора 6 + 5 = 11, за 1,2 с — 22.
+    @State private var restPhase: CGFloat = 0
+    @State private var hoverStart: Date?
+
+    private var running: Bool { hovering && appearsActive && !reduceMotion }
+
+    private func dashPhase(at date: Date) -> CGFloat {
+        guard let hoverStart else { return restPhase }
+        return restPhase - CGFloat(date.timeIntervalSince(hoverStart) / 1.2) * 22
+    }
 
     var body: some View {
         Button(action: action) {
@@ -1079,20 +1078,24 @@ private struct AddGameTile: View {
                     .fill(Theme.Palette.textPrimary(scheme).opacity(hovering ? 0.04 : 0))
             )
             .overlay(
-                RoundedRectangle(cornerRadius: Theme.Radius.large, style: .continuous)
-                    .strokeBorder(hovering ? Theme.Palette.textSecondary(scheme) : Theme.Palette.border(scheme),
-                                  style: StrokeStyle(lineWidth: 1, dash: [6, 5], dashPhase: dashPhase))
+                TimelineView(.animation(paused: !running)) { context in
+                    RoundedRectangle(cornerRadius: Theme.Radius.large, style: .continuous)
+                        .strokeBorder(hovering ? Theme.Palette.textSecondary(scheme) : Theme.Palette.border(scheme),
+                                      style: StrokeStyle(lineWidth: 1, dash: [6, 5], dashPhase: dashPhase(at: context.date)))
+                }
             )
             .contentShape(Rectangle())
         }
         .buttonStyle(.scalePress)
         .animation(Theme.Motion.gentle, value: hovering)
-        .onHover { entering in
-            hovering = entering
-            if entering {
-                withAnimation(.linear(duration: 1.2).repeatForever(autoreverses: false)) { dashPhase -= 22 }
+        .onHover { hovering = $0 }
+        // Курсор ушёл или окно ушло в фон под курсором — один и тот же стоп; вернулись — старт.
+        .onChange(of: running) { _, now in
+            if now {
+                hoverStart = Date()
             } else {
-                withAnimation(.easeOut(duration: 0.3)) { dashPhase = 0 }
+                restPhase = dashPhase(at: Date()).truncatingRemainder(dividingBy: 11)
+                hoverStart = nil
             }
         }
         .help(L("Drop a Windows .exe here, or browse to add one."))

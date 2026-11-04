@@ -1,189 +1,5 @@
 {
-  "c12_delta": {
-    "base": "the 375-file snapshot of the 1.0.9 recipe (build/repro109app/source, identical bytes); every row gives the base and the new SHA-256",
-    "files": [
-      {
-        "base_sha256": "ac63a3997c21109be122a60527c192f769e83e9380dd4ca072aa6ab60744aab8",
-        "bytes": 4797,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/App.swift",
-        "sha256": "f5dda766faf14541c1c79322af059763c95c8ae4b036b2e12b83fd4a940e0ecf"
-      },
-      {
-        "base_sha256": null,
-        "bytes": 5038,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/Services/CLI/LaunchQualificationCLI.swift",
-        "sha256": "f0761e90ecb68ccf516741c968e1cbed2490a4415282eb101af5cc818f6409d2"
-      },
-      {
-        "base_sha256": "520306f67c08ff84c4534e873751e5e32374eab3206f81414ee4851b9359dbb3",
-        "bytes": 3833,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/Services/CompatibilityStore.swift",
-        "sha256": "206e936451492e08f6e2024cff52e6813152d7d88dbdaa1f9cca84f36f88ce3c"
-      },
-      {
-        "base_sha256": "dfd65b217b368693c9adf728561716d12408b911e9714b259a286bc5b84bac0a",
-        "bytes": 1449,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/Services/ConfigStore.swift",
-        "sha256": "7ac0ffe8a31609e92bab55cbbdf2e5c5cdb824a301d168f68b2e9f6e37ab1141"
-      },
-      {
-        "base_sha256": "b191c23772b10070a696ecc66bcfaae2d16cdd7fb58fe062b47da8ea5ed2e3f6",
-        "bytes": 47098,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/Services/Engine/BottleSetup.swift",
-        "sha256": "3e6b5582123d8ad4e11a0fb4e7dd0e6562ad7344d7de53260cfb3db4c109d51d"
-      },
-      {
-        "base_sha256": null,
-        "bytes": 12569,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/Services/Engine/BottleTemplate.swift",
-        "sha256": "f9d26e34427d5811998038a067d910e3833bb6e06f4863abd38a88cae418f564"
-      },
-      {
-        "base_sha256": null,
-        "bytes": 14865,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/Services/Engine/BottleUpdateCatalogue.swift",
-        "sha256": "0f5631c31cc9c0d2339699c0558828d47115b349ca9c726a1e6d97f868ad881c"
-      },
-      {
-        "base_sha256": "b23e6e90e496492f4bbdca85527607789b07bda9f3765057f0ac08772a711667",
-        "bytes": 6387,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/Services/Engine/BundledEngine.swift",
-        "sha256": "69b4b9a551ed78d62b7bc890def256836f4a72fd61b7255e0e01a45f11390653"
-      },
-      {
-        "base_sha256": "d038068cf3371156828a9a440e271d920a2979339694e79e3e367a896d7137cf",
-        "bytes": 38950,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/Services/Engine/EngineLauncher.swift",
-        "sha256": "3391b0e09aae8746c9875c7dbd39602f73abba545da90ff9c8d6d2ec26fe081a"
-      },
-      {
-        "base_sha256": null,
-        "bytes": 2211,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/Services/Engine/LaunchDataRoot.swift",
-        "sha256": "4644a2098fa5e726ee62a940df80eb936161912362a26728975cfeab16c08aa3"
-      },
-      {
-        "base_sha256": null,
-        "bytes": 15237,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/Services/Engine/WarmBottleSessions.swift",
-        "sha256": "82b6572318adebd98f3959749af61c53cc9a772643bf152060d00f0ff3100d85"
-      },
-      {
-        "base_sha256": null,
-        "bytes": 5701,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/Services/Engine/WarmSessionState.swift",
-        "sha256": "b4d8c9f58c64cbe32c8092cb44d2ca60759fe24b846b9e9f2589f8c1f3becd54"
-      },
-      {
-        "base_sha256": "960859091f8e2cf235557c1292b33e433373cb8208b3167438e71c7c2b9c0a83",
-        "bytes": 4421,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/Services/PowerUser/ActivityDashboardService.swift",
-        "sha256": "5d1813ca79b3eac543717dfde29849e5ea3959252eb5682dff887015ba794023"
-      },
-      {
-        "base_sha256": "c1d2851952fd1b017427efae430a79a8cd548d8667c34d1cfbb974eb0ae6159b",
-        "bytes": 1401,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/Services/RunHistoryStore.swift",
-        "sha256": "b1817f2d8f6e8090ce62da53e1980cf5571458adbce6fa06d80d5f3a240166b6"
-      },
-      {
-        "base_sha256": "ea52330cb90a13158f5a2628c9596a930f5cb0e9c9104032b9036c2e44ef69c2",
-        "bytes": 10206,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/Services/Updater/SparkleBootstrap.swift",
-        "sha256": "1a0f79567aebc48a9ff6f143f6be125b5ddec799879107d94a51fa6c6ef52b5c"
-      },
-      {
-        "base_sha256": "e557f46e908964bca2c78913aac12ab5db5445d6333e0e73740b79a80a63e3ad",
-        "bytes": 1356,
-        "executable": false,
-        "path": "Sources/MacRunnerControlCenter/Services/Updater/UpdateSafetyGate.swift",
-        "sha256": "9767526623f0dad6990b21a09e29452271a2a556bfead784715e30cff09ad78b"
-      },
-      {
-        "base_sha256": "6126aeb8494729e7059311e3cbd8fd96f83171cddcfe7b570619dbda5856afb1",
-        "bytes": 7521,
-        "executable": false,
-        "path": "Tests/MacRunnerControlCenterTests/BottleRelocationTests.swift",
-        "sha256": "0fb2012d0db99f6345e3826289654a408bf9902d2369d8c7afd5a0b635c93a58"
-      },
-      {
-        "base_sha256": null,
-        "bytes": 19475,
-        "executable": false,
-        "path": "Tests/MacRunnerControlCenterTests/BottleTemplateTests.swift",
-        "sha256": "d375dff4a7ea088c3c37be9790dc334240e54026b94088dcc3eb7f75b643f9af"
-      },
-      {
-        "base_sha256": null,
-        "bytes": 20316,
-        "executable": false,
-        "path": "Tests/MacRunnerControlCenterTests/BottleUpdateCatalogueTests.swift",
-        "sha256": "f15eb3c202dcb14d14edfe5a527ab336fd5bfae229accc0c28e6be82e2a5f0d9"
-      },
-      {
-        "base_sha256": "02bb7ba9acf844f754f96c5a93e95fb10412a09a93e2f22efc281f4a180f695f",
-        "bytes": 29591,
-        "executable": false,
-        "path": "Tests/MacRunnerControlCenterTests/GraphicsSelectionTests.swift",
-        "sha256": "06924f1ffd49b6cf06ec4ed1de1123eab9f6ba955faf74a272b0af7e7f6f273b"
-      },
-      {
-        "base_sha256": null,
-        "bytes": 5861,
-        "executable": false,
-        "path": "Tests/MacRunnerControlCenterTests/SetupIdlePolicyTests.swift",
-        "sha256": "2753a4c5b35f961b70dffbae8ac35b7a77d1bd896cd99811ff09f93f3c91cfb9"
-      },
-      {
-        "base_sha256": "ad03a38c8f2768397fd65ceb87d84c9d30a298dd7196af5a9a08f1238399315c",
-        "bytes": 9046,
-        "executable": false,
-        "path": "Tests/MacRunnerControlCenterTests/WICRegistrationTests.swift",
-        "sha256": "b7dc07d54cecafb91ab8f7b03c90aeb718c192e7882657b9e6a39ae8cb86cccf"
-      },
-      {
-        "base_sha256": null,
-        "bytes": 12518,
-        "executable": false,
-        "path": "Tests/MacRunnerControlCenterTests/WarmProfileIntegrationTests.swift",
-        "sha256": "f3b3d66a8020c864804d05aade2b8a4af52558bf8a23e2ee8f76a0e9c14170b7"
-      },
-      {
-        "base_sha256": null,
-        "bytes": 4274,
-        "executable": false,
-        "path": "engine-tools/macrunner-job.c",
-        "sha256": "4d9b04974593fadc09db1d11d986d71479c7089498dca240fde515d4cc4b2c22"
-      },
-      {
-        "base_sha256": null,
-        "bytes": 3769,
-        "executable": false,
-        "path": "engine-tools/macrunner-session.c",
-        "sha256": "c7defd4d63d73fbd2ed35f410a1c1f549a285b23d8defc12cc5d25f8b425b863"
-      }
-    ],
-    "modified": 13,
-    "new": 12,
-    "note": "Text sources added or replaced on top of that snapshot; the 15 files that differ from it only by synthetic roots stay in snapshot form; Frameworks, Vendor, gogdl, legendary, the bottle catalogues and the engine tools are separate recipe inputs",
-    "origin": "INTEGRATE-110 composition c12, app-source of the accepted composition"
-  },
-  "classification": "TEXT_SOURCE_SNAPSHOT_WITH_BYTE_EXACT_IMAGE_MATERIALIZATION_NOT_COMPILED",
+  "classification": "RELEASE110_RETINA_AND_APPROVED_PSO_TRANSPLANT_TEXT_SOURCES_NOT_COMPILED",
   "encoded_assets": [
     {
       "bytes": 386346,
@@ -225,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 4297662,
+  "source_bytes": 5813306,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -233,8 +49,8 @@
     "Sources/MacRunnerControlCenter/Resources/tools/legendary",
     "Tests/Fixtures/test-pe.exe"
   ],
-  "source_files": 387,
-  "source_inventory_sha256": "3c9be502f7722694a705b8e3d97f91257e147df5283c543f9e255b2dc96e1a59",
+  "source_files": 400,
+  "source_inventory_sha256": "5ca8804a8c8b47a734d3d45f9a77245db1aee97e06f12c60be0406f2d89c6cfb",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,
@@ -252,5 +68,489 @@
     "OS-selected home and synthetic mailbox in privacy self-tests; sanitizer unchanged",
     "APP32 selects complete checkout through MACRUNNER_ROOT",
     "Base64 image source restored to exact pinned PNG/ICNS bytes"
-  ]
+  ],
+  "release110_delta": {
+    "base": "Published 1.0.9 recipe source snapshot; byte-exact preimages below",
+    "modified": 43,
+    "new": 25,
+    "files": [
+      {
+        "path": "Sources/MacRunnerControlCenter/App.swift",
+        "bytes": 4797,
+        "sha256": "f5dda766faf14541c1c79322af059763c95c8ae4b036b2e12b83fd4a940e0ecf",
+        "executable": false,
+        "base_sha256": "ac63a3997c21109be122a60527c192f769e83e9380dd4ca072aa6ab60744aab8"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Models/AppEntry.swift",
+        "bytes": 2751,
+        "sha256": "5d495bd4712570e387f3e032b120a55a8dbb9ad4006736884cd02d56f3aaaddb",
+        "executable": false,
+        "base_sha256": "b1ee7c2f471bce64ea5c05a407313c2b541cca128b5c147ccede6f48685643bc"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/BottleCatalogues/bottle-fast-pairs.json",
+        "bytes": 2822,
+        "sha256": "95a580f37e5057b53a4c678a7bdb83c134745a8f2ae4b514a16336364b968a67",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/BottleCatalogues/bottle-inputs-09fe4a424175cae511f5a11afad5b6299040b2587d0b70b32411b456ab8c5cb5.json",
+        "bytes": 434019,
+        "sha256": "09fe4a424175cae511f5a11afad5b6299040b2587d0b70b32411b456ab8c5cb5",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/BottleCatalogues/bottle-inputs-8f1b4ba59e4631cc23adead163785e6611f0aa91d03ca6e2fe1c8d206938c71b.json",
+        "bytes": 347682,
+        "sha256": "8f1b4ba59e4631cc23adead163785e6611f0aa91d03ca6e2fe1c8d206938c71b",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/BottleCatalogues/bottle-inputs-b4a31678b633f9ae057aca5e130d35fc0037552076320924b65f71b345c7b760.json",
+        "bytes": 433623,
+        "sha256": "b4a31678b633f9ae057aca5e130d35fc0037552076320924b65f71b345c7b760",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/de.lproj/Localizable.strings",
+        "bytes": 43840,
+        "sha256": "e148aa26c1456db7039fa056e074a85a6a6a4e62122146aa10a2444d3c68290e",
+        "executable": false,
+        "base_sha256": "e204cd51064750d0b9c17da5da6752cbe0e9a4672e111c5f9de4f9bd6fea76d1"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/en.lproj/Localizable.strings",
+        "bytes": 40901,
+        "sha256": "595c330bd0230e20b4abad56f8f68be77b130ee5d72426818bb493874eb618d3",
+        "executable": false,
+        "base_sha256": "2c18ea1a08ad2336490109c21a581171f2c11cdbc6e803b0aff90cfaeefaf3be"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/es.lproj/Localizable.strings",
+        "bytes": 43841,
+        "sha256": "7eb3f544d6cf81ea287b08c0ec6059c1d5cbb2165d0163c61fb1a2ea1e0d2548",
+        "executable": false,
+        "base_sha256": "a938c1777b4e725eee5f73f7e94706b09589115f2971170256741a201aa44815"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/fr.lproj/Localizable.strings",
+        "bytes": 45445,
+        "sha256": "d2e5dd9b9dd011d6d576d7bf053c9407c1828a43c788ba09f918ea47a530ae13",
+        "executable": false,
+        "base_sha256": "b1c2a3e070805656737dd6ffa6a4a404033fac5b1a7ca3aeed6a611f977fccc2"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/graphics-profiles.json",
+        "bytes": 19798,
+        "sha256": "e52b8cb023299e1d5420a313b42a82d117f9abf0d32b5f3ae392b90542f5c720",
+        "executable": false,
+        "base_sha256": "0c7cce563d1cc33e000e0aedee32d8b559dd891b592e1f39c8a6b3f9dd506488"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/indiana-profile.json",
+        "bytes": 539,
+        "sha256": "9367fb157e401c56252949df79e3fc413c72adc30d921516a3ac4848bc6957fc",
+        "executable": false,
+        "base_sha256": "f58689ac80438f9aa042a4fb0c31d5afd0ae0272160da18987b374c549a2456c"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/it.lproj/Localizable.strings",
+        "bytes": 43517,
+        "sha256": "84e60cd860a5a96202447637b3f51f0da0f6cde9a1ab4f2082e01718b34d6854",
+        "executable": false,
+        "base_sha256": "e0e9e9d8a02e9ab95da4316e72e24ff56b019769d4b2548e45d8bce600f44783"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/ja.lproj/Localizable.strings",
+        "bytes": 49825,
+        "sha256": "8c424f27efb342ab3d9dd9e93f17af50586ae8661dc4dca5e4ef00d8251bb5b3",
+        "executable": false,
+        "base_sha256": "a4caa95c4515ecae964b5a4a75228a7e562d39f0ed75f2c9e7a182f00a36ecac"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/ko.lproj/Localizable.strings",
+        "bytes": 46530,
+        "sha256": "f8b322fb22bb62a6d5327bbf4a004bfc34237988d3f6395b69fdc37493d54bb1",
+        "executable": false,
+        "base_sha256": "5bac30f66b9bea5bbe7be2f5d70ca5a32377cd81f74938d7b2da019131e97589"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/pl.lproj/Localizable.strings",
+        "bytes": 42876,
+        "sha256": "0c7b2c831d0535d855f14df25f07d937dc90c2a935126878a21d5da8ef370000",
+        "executable": false,
+        "base_sha256": "6b4ae58b01aaa8494b2048b57653fbc1239d587867629587d826a6d79393c719"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/pt-BR.lproj/Localizable.strings",
+        "bytes": 43242,
+        "sha256": "c77993514b0e9bc3e04387d46bc6e23746bcb80491cc50e4a2298a0d381f4206",
+        "executable": false,
+        "base_sha256": "15aa3d79f20782e9112088692c47efc91e106907f8f00ac49a88e581a6d9507e"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/ru.lproj/Localizable.strings",
+        "bytes": 55916,
+        "sha256": "4d0f3dbc70e1027d5a807ad82736371fee926cb13fbe34c8f586ebd435d8c986",
+        "executable": false,
+        "base_sha256": "f889cb680355242080fe25aac5f01e9a193f3da62f5bb0bb0f6cfedd964face8"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/tr.lproj/Localizable.strings",
+        "bytes": 43156,
+        "sha256": "150d16880d22eb71bc536151e8f9efaf4b0d458d06b0bf46a1bf2102734bab58",
+        "executable": false,
+        "base_sha256": "bfcbe1f1f9ec2ca1ab87814af7a19b81fb0d00237828e30b940c6b475c22572b"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Resources/zh-Hans.lproj/Localizable.strings",
+        "bytes": 40390,
+        "sha256": "cae385aadc67ec8d8920d313210749c57091d9ab8cbff5319776f688ef0c87cc",
+        "executable": false,
+        "base_sha256": "d5c404531fca6f0f4d99e55219001645855554c5732e74030c57635a6506d51b"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/BugReport/InternalBugReportService.swift",
+        "bytes": 2508,
+        "sha256": "10205b89ae9d643dc414430c3ee84fbf1bd14c70f29c0608510b75095d680954",
+        "executable": false,
+        "base_sha256": "6d8a0905ed185f3ea8658e8244963e869d9d4039c36b7fb5c474a1c7a89865fa"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/CLI/AppPathCLI.swift",
+        "bytes": 7292,
+        "sha256": "b6628befaab2fa236062fcccb5c2db1348dcccc01e1f3ea527284e9f361b61b7",
+        "executable": false,
+        "base_sha256": "7b18fa0b146702822eff3097eb6d237811966e24558d05170593eef0dccdccf5"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/CLI/ControlCenterCLI.swift",
+        "bytes": 9102,
+        "sha256": "d44521b45087bcf00126b2e6b6a440d1365ae8c1850b851b0797bfcc038fa654",
+        "executable": false,
+        "base_sha256": "8c75ea9ed256ec6e293bead1365e09678db87baa89928ebbeb9a3a8a48455d81"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/CLI/LaunchQualificationCLI.swift",
+        "bytes": 5038,
+        "sha256": "f0761e90ecb68ccf516741c968e1cbed2490a4415282eb101af5cc818f6409d2",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/Cache/PSOCacheTransplant.swift",
+        "bytes": 7283,
+        "sha256": "520180a0eaea83d3b4d20c0def5d0267686c147602dc6b49ee3e11eefb6e45e0",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/CompatibilityStore.swift",
+        "bytes": 3833,
+        "sha256": "206e936451492e08f6e2024cff52e6813152d7d88dbdaa1f9cca84f36f88ce3c",
+        "executable": false,
+        "base_sha256": "520306f67c08ff84c4534e873751e5e32374eab3206f81414ee4851b9359dbb3"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/ConfigStore.swift",
+        "bytes": 1449,
+        "sha256": "7ac0ffe8a31609e92bab55cbbdf2e5c5cdb824a301d168f68b2e9f6e37ab1141",
+        "executable": false,
+        "base_sha256": "dfd65b217b368693c9adf728561716d12408b911e9714b259a286bc5b84bac0a"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/Engine/BottleSetup.swift",
+        "bytes": 77218,
+        "sha256": "65d3820f5d84cb9c6e7c5cf51f3b3342fa261ba691a354431baf8afa114e86fe",
+        "executable": false,
+        "base_sha256": "b191c23772b10070a696ecc66bcfaae2d16cdd7fb58fe062b47da8ea5ed2e3f6"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/Engine/BottleTemplate.swift",
+        "bytes": 12569,
+        "sha256": "f9d26e34427d5811998038a067d910e3833bb6e06f4863abd38a88cae418f564",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/Engine/BottleUpdateCatalogue.swift",
+        "bytes": 43446,
+        "sha256": "abf883ce5a5b2e0208bdf34347d1f58e83a56f80ddb307a08b53033dce9951d2",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/Engine/BundledEngine.swift",
+        "bytes": 6387,
+        "sha256": "69b4b9a551ed78d62b7bc890def256836f4a72fd61b7255e0e01a45f11390653",
+        "executable": false,
+        "base_sha256": "b23e6e90e496492f4bbdca85527607789b07bda9f3765057f0ac08772a711667"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/Engine/EngineLauncher.swift",
+        "bytes": 40670,
+        "sha256": "fb9532c7856e7fdd6e3c46e0cea6cc70b0a5d32529981f937fcc2364ba7b2a49",
+        "executable": false,
+        "base_sha256": "d038068cf3371156828a9a440e271d920a2979339694e79e3e367a896d7137cf"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/Engine/GraphicsSelector.swift",
+        "bytes": 10058,
+        "sha256": "f4356b88458ef56f41c662ae6926543f6104f0f3e2132ae6ac0f5c550e92ba84",
+        "executable": false,
+        "base_sha256": "26390ab5581d94d4c45255d1ffafa3b72d5965206a910f92354c9299fdc585ee"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/Engine/LaunchDataRoot.swift",
+        "bytes": 2211,
+        "sha256": "4644a2098fa5e726ee62a940df80eb936161912362a26728975cfeab16c08aa3",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/Engine/WarmBottleSessions.swift",
+        "bytes": 17012,
+        "sha256": "16d3edfcf70645a5edf4d6ff2886989cf4dcd03b0cfbe43c427e2e13141da553",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/Engine/WarmSessionState.swift",
+        "bytes": 5701,
+        "sha256": "b4d8c9f58c64cbe32c8092cb44d2ca60759fe24b846b9e9f2589f8c1f3becd54",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/Library/GameRemoval.swift",
+        "bytes": 7390,
+        "sha256": "a01710720fa13e7b16de8ca060bdeddc500bfae0e55432ab485e47480ec46c20",
+        "executable": false,
+        "base_sha256": "227466253ae26150b5999b4db76d6648d18aaf2c78fb7aabcdcc98cf393dbc1c"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/PowerUser/ActivityDashboardService.swift",
+        "bytes": 4421,
+        "sha256": "5d1813ca79b3eac543717dfde29849e5ea3959252eb5682dff887015ba794023",
+        "executable": false,
+        "base_sha256": "960859091f8e2cf235557c1292b33e433373cb8208b3167438e71c7c2b9c0a83"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/RunHistoryStore.swift",
+        "bytes": 1401,
+        "sha256": "b1817f2d8f6e8090ce62da53e1980cf5571458adbce6fa06d80d5f3a240166b6",
+        "executable": false,
+        "base_sha256": "c1d2851952fd1b017427efae430a79a8cd548d8667c34d1cfbb974eb0ae6159b"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/Updater/SparkleBootstrap.swift",
+        "bytes": 10206,
+        "sha256": "1a0f79567aebc48a9ff6f143f6be125b5ddec799879107d94a51fa6c6ef52b5c",
+        "executable": false,
+        "base_sha256": "ea52330cb90a13158f5a2628c9596a930f5cb0e9c9104032b9036c2e44ef69c2"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/Updater/UpdateSafetyGate.swift",
+        "bytes": 1356,
+        "sha256": "9767526623f0dad6990b21a09e29452271a2a556bfead784715e30cff09ad78b",
+        "executable": false,
+        "base_sha256": "e557f46e908964bca2c78913aac12ab5db5445d6333e0e73740b79a80a63e3ad"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/ViewModels/RunAppViewModel.swift",
+        "bytes": 11714,
+        "sha256": "3dd13299a1bd77772e608ad63eda0e3e8a4b4b6c66e895ba03a9d78b4835f6c9",
+        "executable": false,
+        "base_sha256": "536fb0f650fe5dd9657673a56c2202d4eec4660e7de405942102ff1267bc45f2"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Views/Home/BrandMark.swift",
+        "bytes": 12205,
+        "sha256": "8cce404c36d736362a988d4d925069d568531efe122ff64b287ea6a4aed86f65",
+        "executable": false,
+        "base_sha256": "ce2ab4bf16a1661f1f8807d0b8e2228a5f1381f089279ef1cb6eed034816d2af"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Views/Home/EmptyLibraryView.swift",
+        "bytes": 3954,
+        "sha256": "b4c133808df218876235ac0c6c633cad62f3cd586892099c6d73835f2d1028fc",
+        "executable": false,
+        "base_sha256": "a2216e5ca47c2be85b5042d750c2933d537f9776f88c0580699fd9bff7fef3fc"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Views/Home/GamePageView.swift",
+        "bytes": 10239,
+        "sha256": "fae161531cbc9075d66c7aca1a0dd8ff823094cf8bbb16d32a982e2d0c4923d3",
+        "executable": false,
+        "base_sha256": "54560e12c5bf8d96932adc84fa9a98689859b2d58334e81e5b0c3d5c7c083add"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Views/Home/HelpSheet.swift",
+        "bytes": 10640,
+        "sha256": "4518f35d411f1e0a6ab6ed1a24102ba0016503d6bec5bd3a4144b9fca16143ff",
+        "executable": false,
+        "base_sha256": "50b4a1fcae370fdfb8a5683718acb51e539a8131a6f1113560bf9c2d1fa35f71"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Views/Home/HomeSidebar.swift",
+        "bytes": 9669,
+        "sha256": "79f5d2ea5d185d6e298929a18601d3bbdee943c1e4f3c074371ab85e4f02de83",
+        "executable": false,
+        "base_sha256": "027b37b3e30ef0f958b727adc31971d6a5497a6f29941407526eb6736d2948db"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Views/Home/HomeView.swift",
+        "bytes": 58508,
+        "sha256": "4e8b2793945436e0b07c37b05a83201920351b1d0e113469fead00b6a432afff",
+        "executable": false,
+        "base_sha256": "d621d534c4bacf243587f54c29a4557a253e4b3afda08c19df76ff3d75b030be"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Views/SettingsView.swift",
+        "bytes": 6268,
+        "sha256": "db1f41c23e1088d92520e56e40e5f36b14ea855fb07f58686fe9da33f1f2286a",
+        "executable": false,
+        "base_sha256": "0850e91edef2f8356174c3e76af7eeaccf19591750070e33f853a818ae632590"
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/BottleFastAcceptanceTests.swift",
+        "bytes": 14377,
+        "sha256": "ec49a9fc238b1fd76d3ed90aeaed656606878040d7a6ad6f08a8ee59474fa1f0",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/BottleFastClassesTests.swift",
+        "bytes": 34263,
+        "sha256": "015bd5c3ad8099899e79cbae9ea2ff69291d44ee6f0d193a25c455c0bded1a5f",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/BottleRelocationTests.swift",
+        "bytes": 7521,
+        "sha256": "0fb2012d0db99f6345e3826289654a408bf9902d2369d8c7afd5a0b635c93a58",
+        "executable": false,
+        "base_sha256": "6126aeb8494729e7059311e3cbd8fd96f83171cddcfe7b570619dbda5856afb1"
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/BottleSingleFileFixture.swift",
+        "bytes": 5502,
+        "sha256": "76bfba54cf227b7d1830614a5a02128d5be794b3204fee7a956562200180d649",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/BottleTemplateTests.swift",
+        "bytes": 19475,
+        "sha256": "d375dff4a7ea088c3c37be9790dc334240e54026b94088dcc3eb7f75b643f9af",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/BottleUpdateCatalogueTests.swift",
+        "bytes": 22450,
+        "sha256": "2a7e88c248d5aac8fde96216caa9d91adcc7f3d49b95f6134c6521b5641a9b6b",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/BrandSheenViewTests.swift",
+        "bytes": 1601,
+        "sha256": "b3d70d6d78ba68e3f77c5f51eb23d86be179039c1e900e959ccadab267bc1b20",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/GraphicsSelectionTests.swift",
+        "bytes": 29591,
+        "sha256": "06924f1ffd49b6cf06ec4ed1de1123eab9f6ba955faf74a272b0af7e7f6f273b",
+        "executable": false,
+        "base_sha256": "02bb7ba9acf844f754f96c5a93e95fb10412a09a93e2f22efc281f4a180f695f"
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/IndianaProfileTests.swift",
+        "bytes": 3625,
+        "sha256": "e4d821024442280ced24eb912b614f650208a7030780bebbed308969b36e65e1",
+        "executable": false,
+        "base_sha256": "3adba3c3d3439f6662f63462c149282cbb4e05ff03d4f18f46a9d974922cb30f"
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/PSOCacheTransplantTests.swift",
+        "bytes": 3573,
+        "sha256": "fe99118204ed4eda0c08ae55c997523673f0e241a2b9a9b9e549bda3d0a04ace",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/ReleaseBottleRouteTests.swift",
+        "bytes": 3774,
+        "sha256": "f7064f6b5ac4617b558f6f9ea53da82db036a6b49130d7a7cebe3c288d7d5879",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/ReleaseEngineEnvironmentTests.swift",
+        "bytes": 1559,
+        "sha256": "40f494c7cef6ff6d6da98b750ebddaf7bdde35f9c59ae6564d4d35611277ac38",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/RetinaModeTests.swift",
+        "bytes": 15032,
+        "sha256": "dc32665f9676705eca02485031f8d185b7fd2abdd2b46b848f14fbfc51d10f43",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/SetupIdlePolicyTests.swift",
+        "bytes": 5861,
+        "sha256": "2753a4c5b35f961b70dffbae8ac35b7a77d1bd896cd99811ff09f93f3c91cfb9",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/TestRoot.swift",
+        "bytes": 990,
+        "sha256": "ee44dc4604e0d9cff028c5f4797cc2ab5d2f84cea232e7aa3e5bc24decbabc99",
+        "executable": false,
+        "base_sha256": "b10ac3c0662914d2cc0e5ca80a5cb6a257d742b09ebd3e0e56519065d2558139"
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/WICRegistrationTests.swift",
+        "bytes": 9046,
+        "sha256": "b7dc07d54cecafb91ab8f7b03c90aeb718c192e7882657b9e6a39ae8cb86cccf",
+        "executable": false,
+        "base_sha256": "ad03a38c8f2768397fd65ceb87d84c9d30a298dd7196af5a9a08f1238399315c"
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/WarmProfileIntegrationTests.swift",
+        "bytes": 15733,
+        "sha256": "b2e9b46a0bcd9fda165984f8f51f507339345c2b5b29f4d578a8f2e3af533ba2",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "engine-tools/macrunner-job.c",
+        "bytes": 4274,
+        "sha256": "4d9b04974593fadc09db1d11d986d71479c7089498dca240fde515d4cc4b2c22",
+        "executable": false,
+        "base_sha256": null
+      },
+      {
+        "path": "engine-tools/macrunner-session.c",
+        "bytes": 3769,
+        "sha256": "c7defd4d63d73fbd2ed35f410a1c1f549a285b23d8defc12cc5d25f8b425b863",
+        "executable": false,
+        "base_sha256": null
+      }
+    ]
+  },
+  "release": "1.1.0"
 }

@@ -1,4 +1,4 @@
-"""Offline controls for the 1.1.0 candidate (c12) text sources layered on the pinned 1.0.8 snapshot."""
+"""Verify the release source delta against the preserved public 1.0.9 base."""
 import hashlib
 import json
 from pathlib import Path
@@ -7,56 +7,49 @@ import unittest
 
 HERE = Path(__file__).resolve().parent
 LOCK = json.loads((HERE / 'source.lock.json').read_bytes())
-DELTA = LOCK['c12_delta']
-# Personal machine roots, fixture roots that a public file must not carry, and mailboxes.
-# Written in pieces so that this file itself carries no machine root.
+DELTA = LOCK['release110_delta']
+BASE = HERE.parent / 'repro109app/source'
 PERSONAL = re.compile('(' + '/Us' + r'ers/[A-Za-z0-9_.-]+|' + '/bui' + r'ld/[A-Za-z]+/|' + '/Vol' + r'umes/[A-Za-z]|[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[a-z]+)')
 
-
-class C12SourceDelta(unittest.TestCase):
-    def test_every_row_matches_the_stored_file(self):
-        self.assertEqual((DELTA['modified'], DELTA['new'], len(DELTA['files'])), (13, 12, 25))
+class ReleaseSourceDelta(unittest.TestCase):
+    def test_every_delta_file_has_exact_bytes_and_mode(self):
+        self.assertEqual(len(DELTA['files']), DELTA['modified'] + DELTA['new'])
+        self.assertGreater(DELTA['modified'], 0)
+        self.assertGreater(DELTA['new'], 0)
         for row in DELTA['files']:
-            data = (HERE / 'source' / row['path']).read_bytes()
+            path = HERE / 'source' / row['path']
+            data = path.read_bytes()
             self.assertEqual((len(data), hashlib.sha256(data).hexdigest()), (row['bytes'], row['sha256']), row['path'])
-            self.assertFalse(row['executable'], row['path'])
+            self.assertEqual(bool(path.stat().st_mode & 0o111), row['executable'], row['path'])
 
-    def test_modified_rows_name_a_base_and_new_rows_do_not(self):
+    def test_delta_preimages_match_the_unchanged_public_base(self):
         for row in DELTA['files']:
-            self.assertEqual(row['base_sha256'] is None, row['path'].startswith(
-                ('engine-tools/', 'Sources/MacRunnerControlCenter/Services/CLI/')) or Path(row['path']).name in {
-                'BottleTemplate.swift', 'BottleUpdateCatalogue.swift', 'LaunchDataRoot.swift', 'WarmBottleSessions.swift',
-                'WarmSessionState.swift', 'BottleTemplateTests.swift', 'BottleUpdateCatalogueTests.swift',
-                'SetupIdlePolicyTests.swift', 'WarmProfileIntegrationTests.swift'}, row['path'])
+            old = BASE / row['path']
+            expected = hashlib.sha256(old.read_bytes()).hexdigest() if old.exists() else None
+            self.assertEqual(row['base_sha256'], expected, row['path'])
             self.assertNotEqual(row['base_sha256'], row['sha256'], row['path'])
 
-    def test_no_personal_root_or_mailbox_in_the_added_sources(self):
+    def test_no_personal_roots_or_mailboxes_in_changed_text(self):
         for row in DELTA['files']:
             text = (HERE / 'source' / row['path']).read_text(encoding='utf-8')
             self.assertEqual(sorted(set(m.group(0) for m in PERSONAL.finditer(text))), [], row['path'])
 
-    def test_snapshot_totals_follow_the_delta(self):
+    def test_snapshot_counts_reconcile_with_the_base(self):
         self.assertEqual(LOCK['source_files'], 375 + DELTA['new'])
         self.assertEqual(LOCK['source_origin']['source_files'], 375)
+        old = json.loads((BASE.parent / 'source.lock.json').read_bytes())
+        self.assertEqual((old['source_files'], 'release110_delta' in old), (375, False))
 
-
-    def test_workflow_runs_this_recipe_only_and_names_existing_modules(self):
+    def test_workflow_selects_this_recipe_and_existing_test_modules(self):
         raw = (HERE.parents[1] / '.github/workflows/repro110-app-c12-source-xcode27-arm64.yml').read_text()
         text = '\n'.join(line for line in raw.splitlines() if not line.lstrip().startswith('#'))
         self.assertIn('build/repro110app', text)
-        self.assertNotIn('build/repro109app', text)
         modules = re.search(r'for module in ([^;]+); do', text).group(1).split()
         self.assertGreaterEqual(len(modules), 7)
         for module in modules:
             self.assertTrue((HERE / (module + '.py')).is_file(), module)
         self.assertIn('retention-days: 30', text)
-
-    def test_the_1_0_9_recipe_stays_where_it_was_and_is_not_edited_by_this_directory(self):
-        # build/repro109app keeps its 375-file snapshot; this copy differs only by the c12 delta and its tests.
-        sibling = HERE.parent / 'repro109app'
-        if sibling.is_dir():
-            old = json.loads((sibling / 'source.lock.json').read_bytes())
-            self.assertEqual((old['source_files'], 'c12_delta' in old), (375, False))
+        self.assertIn('fail-fast: false', text)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

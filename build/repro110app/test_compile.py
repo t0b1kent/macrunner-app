@@ -49,7 +49,11 @@ if not pathlib.Path('Package.swift').is_file(): sys.exit(12)
 if a[0] not in ['build','test'] or a[a.index('--arch')+1]!='arm64': sys.exit(13)
 if a[a.index('-c')+1]!='release' or '--disable-automatic-resolution' not in a: sys.exit(14)
 if os.environ.get('MACOSX_DEPLOYMENT_TARGET')!='14.0': sys.exit(15)
-if any(k.startswith(('MACRUNNER_','WINE','DYLD_')) for k in os.environ): sys.exit(16)
+allowed_test_env={'MACRUNNER_APP_DATA_ROOT'} if a[0]=='test' else set()
+if any(k.startswith(('MACRUNNER_','WINE','DYLD_')) and k not in allowed_test_env for k in os.environ): sys.exit(16)
+if a[0]=='test':
+ test_root=pathlib.Path(os.environ.get('MACRUNNER_APP_DATA_ROOT',''))
+ if test_root.name!='app-test-data' or not test_root.is_dir(): sys.exit(17)
 scratch=pathlib.Path(a[a.index('--scratch-path')+1]); out=scratch/'arm64-apple-macosx'/'release'
 if '--show-bin-path' in a: print(out); sys.exit(0)
 if a[0]=='test':
@@ -137,7 +141,7 @@ print('install skipped')
 
     def test_plan_has_locked_source_and_explicit_gaps(self):
         result = b.plan()
-        self.assertEqual(result['source']['files'], 387)
+        self.assertEqual(result['source']['files'], 400)
         self.assertEqual(result['products'], ['MacRunnerControlCenter','macr-hud'])
         self.assertEqual(len(result['runtime_inputs']), 5)
 

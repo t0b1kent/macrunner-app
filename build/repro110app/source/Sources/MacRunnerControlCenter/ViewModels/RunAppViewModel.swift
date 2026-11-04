@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 /// Progress records work we actually observed, not whether the game rendered a frame.
@@ -163,14 +164,28 @@ final class RunAppViewModel: ObservableObject {
         let arguments = app.args ?? []
         let workdir = app.workdir.map { URL(fileURLWithPath: $0, isDirectory: true) }
         // Счётчик FPS (Metal HUD) из настроек; переменные самой игры главнее.
-        let extra = PerformanceHUD.launchEnvironment(appEnvironment: app.env ?? [:])
+        // The isolated CLI trial uses only its explicit environment, without
+        // importing the owner's persistent HUD preference. Normal launches keep it.
+        let extra = CommandLine.arguments.dropFirst().first == "--run-app-entry"
+            ? (app.env ?? [:]) : PerformanceHUD.launchEnvironment(appEnvironment: app.env ?? [:])
         let override = app.graphicsAPI.flatMap(GraphicsAPI.init(rawValue:))
+        // «Высокое разрешение (Retina)» записи игры. Выключено — тоже явное значение: RetinaMode
+        // общий на бутылку, и снять его, оставленный другой игрой, может только этот запуск.
+        // Выбор записи игры главнее; не выбрано — «авто» по главному экрану (RetinaDefault).
+        let highResolution = app.highResolution ?? RetinaDefault.automatic
         Task.detached(priority: .userInitiated) {
             defer { UpdateSafetyGate.shared.endActivity(activity) }
             // Графику подбираем по файлам игры до запуска: разбор читает только заголовки
             // и до 96 МБ строк, но на больших играх это заметно — не на главном потоке.
             let detection = GraphicsProbe.detect(exe: exe)
-            let plan = GraphicsSelector.plan(detection: detection, engine: engine, override: override)
+            var plan = GraphicsSelector.plan(detection: detection, engine: engine, override: override)
+            plan.highResolution = highResolution
+            // Мышь и курсор как без Retina (winemac, ключи по умолчанию 0): камера не вдвое быстрее, курсор не вдвое
+            // меньше. Ключи записи игры (`env`) главнее — ими рука испытания может их снять.
+            if highResolution {
+                plan.environment["MACRUNNER_MAC_RETINA_MOUSE_1X"] = "1"
+                plan.environment["MACRUNNER_MAC_RETINA_CURSOR_1X"] = "1"
+            }
             if case .launch = plan.decision {
                 await MainActor.run { self.keyboardLayout = GameKeyboardLayout(engine: engine, logURL: runDirectory.appendingPathComponent("keyboard-layout.jsonl")) }
             }
@@ -219,5 +234,17 @@ final class RunAppViewModel: ObservableObject {
         } catch {
             lastLauncherResult = nil
         }
+    }
+}
+
+/// «Высокое разрешение (Retina)» для записи игры без своего выбора: «авто» — по ГЛАВНОМУ экрану (на нём Wine открывает окно
+/// игры, по нему же winemac check_retina_status): Retina — включено, обычный монитор — выключено. Ключ процесса приложения
+/// `MACRUNNER_RETINA_AUTO=0` — выключено, как до 1.1.0; `=1` — авто при любом умолчании.
+enum RetinaDefault {
+    static let autoByDefault = true
+    static var automatic: Bool {
+        let key = ProcessInfo.processInfo.environment["MACRUNNER_RETINA_AUTO"]
+        guard key.map({ $0 == "1" }) ?? autoByDefault else { return false }
+        return (NSScreen.screens.first?.backingScaleFactor ?? 1) > 1
     }
 }
