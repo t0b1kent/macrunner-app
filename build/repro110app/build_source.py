@@ -85,10 +85,18 @@ def selected_bin_path(text, work):
 
 
 def test_count(text):
-    counts = re.findall(r'Test run with (\d+) tests(?: in \d+ suites)? passed', text)
-    if len(counts) != 1 or int(counts[0]) < 1:
-        raise ValueError('Swift Testing nonzero passed-test count NOT_PRESENT')
-    return int(counts[0])
+    """Count observed passes after the separate named-failure policy accepted the run."""
+    text = re.sub(r'\x1b\[[0-9;]*m', '', text)
+    runs = list(re.finditer(r'Test run with (\d+) tests?(?: in \d+ suites?)? (passed|failed)', text))
+    if len(runs) == 1 and runs[0].group(2) == 'passed' and int(runs[0].group(1)) > 0:
+        return int(runs[0].group(1))
+    if runs and runs[0].group(2) == 'failed' and int(runs[0].group(1)) > 0:
+        # A complete first run can retain named allowances. A later recheck is
+        # a different subset; count only real passed records of the first run.
+        passed = re.findall(r'^\s*✔ Test (?!run with ).+ passed after ', text[:runs[0].start()], re.M)
+        if passed:
+            return len(passed)
+    raise ValueError('Swift Testing nonzero passed-test count NOT_PRESENT')
 
 
 def capture_products(bin_path, framework_work, prefix, runner, output):

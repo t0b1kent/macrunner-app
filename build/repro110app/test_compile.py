@@ -227,6 +227,21 @@ print('install skipped')
                      'Test run with 2 tests passed\nTest run with 3 tests passed']:
             with self.assertRaises(ValueError): b.test_count(text)
         self.assertEqual(b.test_count('Test run with 284 tests in 45 suites passed after 2 seconds.'), 284)
+        self.assertEqual(b.test_count('✔ Test run with 1 test in 1 suite passed after 1 second.'), 1)
+
+    def test_actual_passes_count_when_the_separate_policy_accepts_named_failures(self):
+        text = ('\x1b[32m✔ Test launch() passed after 0.2 seconds.\x1b[0m\n'
+                '✘ Test absentEngine() failed after 0.1 seconds.\n'
+                '✘ Test run with 2 tests in 1 suites failed after 0.2 seconds.\n'
+                '✘ Test absentEngine() failed after 0.1 seconds.\n'
+                '✘ Test run with 1 tests in 1 suites failed after 0.1 seconds.\n')
+        self.assertEqual(b.test_count(text), 1)
+
+    def test_all_failed_or_unfinished_output_cannot_claim_a_pass_count(self):
+        for text in ['✘ Test run with 2 tests in 1 suites failed after 0.1 seconds.',
+                     '✔ Test launch() passed after 0.1 seconds.\n']:
+            with self.subTest(text=text), self.assertRaises(ValueError):
+                b.test_count(text)
 
     def test_actual_shell_wrapper_argv_results_and_failure_transport(self):
         script = (HERE.parent / 'jobs/repro109-app-source.sh').read_text()
