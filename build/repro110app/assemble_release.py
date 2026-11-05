@@ -227,7 +227,7 @@ def build(args):
         tools = json.loads((tools_work / 'RESULT.json').read_text())
         if tools.get('status') != 'ENGINE_TOOLS_BUILT_AS_ACCEPTED':
             raise ValueError('Engine tool source build incomplete: ' + str(tools.get('status')))
-        source_roots = [Path(paths['deps']), Path(paths['moltenvk'])]
+        source_roots = [Path(paths['deps']), Path(paths['moltenvk']), fex]
         required_libraries = sorted(Path(name).name for name in template['files']
                                     if name.startswith('wine/lib/wine/aarch64-unix/') and name.endswith('.dylib'))
         # FEX produces its native TSO companion, not Wine or the third-party dependency prefix.
