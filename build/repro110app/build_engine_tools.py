@@ -111,11 +111,12 @@ def fetch_mingw(row, work, run=default_run):
     return roots[0] / 'bin'
 
 
-def compile_argv(row, source, out, mingw_bin=None, clang='clang'):
+def compile_argv(row, source, out, mingw_bin=None, clang='clang', sdk=None):
     if row['kind'] == 'pe-x86_64-mingw':
         require(mingw_bin is not None, 'llvm-mingw bin directory required')
         return [str(Path(mingw_bin) / row['driver']), *row['argv'], '-o', str(out), str(Path(source) / row['source'])]
-    return [clang, *row['argv'], '-o', str(out), str(Path(source) / row['source'])]
+    require(sdk is not None, 'macOS SDK required for native engine tools')
+    return [clang, '-isysroot', str(sdk), *row['argv'], '-o', str(out), str(Path(source) / row['source'])]
 
 
 def build(args, run=default_run):
@@ -130,6 +131,11 @@ def build(args, run=default_run):
     try:
         mingw_bin = Path(args.mingw_bin) if args.mingw_bin else None
         clang = run(['/usr/bin/xcrun', '--find', 'clang'], 'find-clang').strip() if sys.platform == 'darwin' else 'clang'
+        sdk_text = run(['/usr/bin/xcrun', '--sdk', 'macosx', '--show-sdk-path'], 'find-sdk').strip() if sys.platform == 'darwin' else ''
+        require(bool(sdk_text) and Path(sdk_text).is_absolute(), 'Selected macOS SDK is missing')
+        sdk = Path(sdk_text)
+        require((sdk / 'usr/include/errno.h').is_file(), 'Selected macOS SDK lacks standard C headers')
+        result['native_toolchain'] = dict(clang=clang, sdk=str(sdk))
         result['xcode'] = run(['/usr/bin/xcodebuild', '-version'], 'xcode-version').strip() if sys.platform == 'darwin' else ''
         for row in lock['tools']:
             phase = row['name'] + ':SOURCE'
@@ -140,7 +146,7 @@ def build(args, run=default_run):
                 mingw_bin = fetch_mingw(row, work, run)
             phase = row['name'] + ':COMPILE'
             target = out / row['name']
-            run(compile_argv(row, source, target, mingw_bin, clang), 'compile-' + row['name'], cwd=work)
+            run(compile_argv(row, source, target, mingw_bin, clang, sdk), 'compile-' + row['name'], cwd=work)
             item.update(bytes=target.stat().st_size, sha256=sha(target))
             phase = row['name'] + ':COMPARE'
             ref = row['reference']

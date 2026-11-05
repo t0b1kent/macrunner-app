@@ -41,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 5690413,
+  "source_bytes": 5690165,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -50,7 +50,7 @@
     "Tests/Fixtures/test-pe.exe"
   ],
   "source_files": 392,
-  "source_inventory_sha256": "d7b4dbb487a88d5293e06331e69c33c538d8e25415087008e01c4314229e65bc",
+  "source_inventory_sha256": "1a21ea6a8cbaea23f91962d429b326422d8c8d6a9cdbfbf5617f1325926f2554",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,
@@ -71,7 +71,7 @@
   ],
   "release110_delta": {
     "base": "Published 1.0.9 recipe source snapshot; byte-exact preimages below",
-    "modified": 44,
+    "modified": 45,
     "new": 23,
     "files": [
       {
@@ -537,6 +537,13 @@
         "base_sha256": null
       },
       {
+        "path": "Tests/MacRunnerControlCenterTests/ShippablePhase2Tests.swift",
+        "bytes": 5414,
+        "sha256": "5b6a0f9479bb467e893709cdb08ec046da39c29b2ab14a0f1967f6bac47f2fbc",
+        "executable": false,
+        "base_sha256": "3ab3cec24261db3908d80ebbaa19581f2cc1d5cf56880c7d1addbd35470dfb5c"
+      },
+      {
         "path": "engine-tools/macrunner-session.c",
         "bytes": 3769,
         "sha256": "c7defd4d63d73fbd2ed35f410a1c1f549a285b23d8defc12cc5d25f8b425b863",
@@ -577,12 +584,12 @@
       }
     ]
   },
-  "release": "1.1.0",
+  "release": "1.1.1",
   "release110_source_basis": {
     "base": "APPIDLE c17 + idle fix",
     "overlay": "APP-RETINA-20261103.p1.patch",
     "patch_sha256": "06f56d71bd689e9b3c1d1bcae665798e28b48bf29daa6cdfe5d09d3ac9479d54",
     "scope": "Manual per-game Retina; no automatic default or PSO transplant; product code still to be compared",
-    "known_public_source_difference": "Existing privacy-safe synthetic bug-report sample is retained; restoring the original sample mailbox was rejected by public-check and requires curator allowlist review"
+    "known_public_source_difference": "Existing privacy-safe synthetic bug-report sample is retained as directed; application code does not require byte convergence with 1.1.0"
   }
 }

@@ -49,8 +49,11 @@ class Lock(unittest.TestCase):
         job, session = step.read_lock()['tools']
         argv = step.compile_argv(job, '/src', '/out/j.exe', '/mingw/bin')
         self.assertEqual((argv[0], argv[-3:]), ('/mingw/bin/x86_64-w64-mingw32-clang', ['-o', '/out/j.exe', '/src/engine-tools/macrunner-job.c']))
-        argv = step.compile_argv(session, '/src', '/out/s', clang='/x/clang')
-        self.assertEqual(argv[:2], ['/x/clang', '-O2'])
+        argv = step.compile_argv(session, '/src', '/out/s', clang='/x/clang', sdk='/sdk/MacOSX.sdk')
+        self.assertEqual(argv[:4], ['/x/clang', '-isysroot', '/sdk/MacOSX.sdk', '-O2'])
+        self.assertNotIn('-isysroot', step.compile_argv(job, '/src', '/out/j.exe', '/mingw/bin', sdk='/sdk'))
+        with self.assertRaisesRegex(ValueError, 'macOS SDK required'):
+            step.compile_argv(session, '/src', '/out/s')
         with self.assertRaises(ValueError):
             step.compile_argv(job, '/src', '/out/j.exe')
 
@@ -113,6 +116,9 @@ class FakeBuild(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(prefix='engine-tools-', dir=base)
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
+        self.sdk = self.root / 'MacOSX.sdk'
+        (self.sdk / 'usr/include').mkdir(parents=True)
+        (self.sdk / 'usr/include/errno.h').write_text('/* fixture SDK */\n')
         (self.root / 'source/engine-tools').mkdir(parents=True)
         for name in ('macrunner-job.c', 'macrunner-session.c'):
             shutil.copyfile(HERE / 'source/engine-tools' / name, self.root / 'source/engine-tools' / name)
@@ -124,14 +130,17 @@ class FakeBuild(unittest.TestCase):
                                              normalized_sha256=hashlib.sha256(step.zero_macho_uuid(macho(uuid))[0]).hexdigest())
         return lock
 
-    def run_build(self, lock, pe=b'MZ fake job', uuid=b'\x44' * 16, wipe_source=False):
+    def run_build(self, lock, pe=b'MZ fake job', uuid=b'\x44' * 16, wipe_source=False, sdk_response=None):
         calls = []
         def run(argv, label, cwd=None, timeout=1800):
             calls.append(label)
             if label.startswith('compile-'):
+                if label == 'compile-macrunner-session':
+                    self.assertEqual(argv[argv.index('-isysroot') + 1], str(self.sdk))
                 target = Path(argv[argv.index('-o') + 1])
                 target.write_bytes(pe if label.endswith('.exe') else macho(uuid))
-            return {'find-clang': '/usr/bin/clang\n', 'xcode-version': 'Xcode 27.0\n'}.get(label, '')
+            return {'find-clang': '/usr/bin/clang\n', 'find-sdk': str(self.sdk) if sdk_response is None else sdk_response,
+                    'xcode-version': 'Xcode 27.0\n'}.get(label, '')
         if wipe_source:
             (self.root / 'source/engine-tools/macrunner-job.c').write_text('/* changed */\n')
         args = type('A', (), dict(source=self.root / 'source', work=self.root / 'work', mingw_bin=self.root / 'mingw'))()
@@ -158,6 +167,20 @@ class FakeBuild(unittest.TestCase):
     def test_a_changed_source_is_refused_before_any_compiler_runs(self):
         with self.assertRaisesRegex(ValueError, 'source differs'):
             calls = self.run_build(self.lock(), wipe_source=True)
+        self.assertEqual(self.result['status'], 'FAILED')
+        self.assertFalse((self.root / 'work/outputs/tools/macrunner-job.exe').exists())
+
+    def test_missing_sdk_is_refused_before_compilation(self):
+        with self.assertRaisesRegex(ValueError, 'macOS SDK is missing'):
+            self.run_build(self.lock(), sdk_response='')
+        self.assertEqual(self.result['status'], 'FAILED')
+        self.assertFalse((self.root / 'work/outputs/tools/macrunner-job.exe').exists())
+
+    def test_sdk_without_standard_headers_is_refused_before_compilation(self):
+        empty_sdk = self.root / 'Empty.sdk'
+        empty_sdk.mkdir()
+        with self.assertRaisesRegex(ValueError, 'lacks standard C headers'):
+            self.run_build(self.lock(), sdk_response=str(empty_sdk))
         self.assertEqual(self.result['status'], 'FAILED')
         self.assertFalse((self.root / 'work/outputs/tools/macrunner-job.exe').exists())
 

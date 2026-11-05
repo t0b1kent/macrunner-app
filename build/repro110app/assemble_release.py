@@ -161,7 +161,7 @@ def build(args):
         prefix = args.work / 'app-prefix'; unpack(archive, prefix)
         app = prefix / 'MacRunner.app'; contents = app / 'Contents'; resources = contents / 'Resources'
         info = plistlib.loads((contents / 'Info.plist').read_bytes())
-        if (info.get('CFBundleShortVersionString'), info.get('CFBundleVersion')) != ('1.1.0', '119'):
+        if (info.get('CFBundleShortVersionString'), info.get('CFBundleVersion')) != ('1.1.1', '120'):
             raise ValueError('Application release metadata differs')
         helpers_report = receipt(roots['helpers'] / 'release110-helpers/reports/RESULT.json',
                                  'SOURCE_HELPERS_BUILT_NOT_FINAL_APP')
@@ -234,7 +234,7 @@ def build(args):
                 if path.is_file():
                     licenses.append(dict(name=namespace + '-' + name, path=str(path), sha256=sha(path)))
         intent = HERE / 'wine-loader.entitlements.plist'
-        config = dict(name='MacRunner 1.1.0 c32r - GitHub source build', wine=paths['wine'], fex=str(fex),
+        config = dict(name='MacRunner 1.1.1 c32r - GitHub source build', wine=paths['wine'], fex=str(fex),
                       graphics=str(graphics), dependencyRoots=[str(x) for x in source_roots] + [paths['wine']],
                       dlopenLibraries=libraries, licenseInputs=licenses,
                       wineEntitlements=str(intent), wineEntitlementsSHA256=sha(intent),
@@ -265,11 +265,11 @@ def build(args):
         run('app-architecture', [sys.executable, '-I', '-B', HERE / 'check-macho-arch.py', app])
         if not os.access(contents / 'MacOS' / info['CFBundleExecutable'], os.X_OK):
             raise ValueError('Application executable lost mode')
-        run('archive-app', ['tar', '-czf', args.work / 'MacRunner-1.1.0-unsigned-source-built.tar.gz',
+        run('archive-app', ['tar', '-czf', args.work / 'MacRunner-1.1.1-unsigned-source-built.tar.gz',
                             '-C', prefix, 'MacRunner.app'])
         result.update(status='WHOLE_APP_SOURCE_ASSEMBLED_SIGNING_AND_GATES_REQUIRED',
-                      archive=dict(name='MacRunner-1.1.0-unsigned-source-built.tar.gz',
-                                   sha256=sha(args.work / 'MacRunner-1.1.0-unsigned-source-built.tar.gz')),
+                      archive=dict(name='MacRunner-1.1.1-unsigned-source-built.tar.gz',
+                                   sha256=sha(args.work / 'MacRunner-1.1.1-unsigned-source-built.tar.gz')),
                       app=str(app), engine_sha256=sha(manifest_path))
         return 0
     except Exception as error:
