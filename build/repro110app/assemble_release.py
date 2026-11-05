@@ -311,6 +311,11 @@ def build(args):
         tools = json.loads((tools_work / 'RESULT.json').read_text())
         if tools.get('status') != 'ENGINE_TOOLS_BUILT_AS_ACCEPTED':
             raise ValueError('Engine tool source build incomplete: ' + str(tools.get('status')))
+        bottle_work = args.work / 'bottle-tools'
+        run('bottle-tools', [sys.executable, '-I', '-B', HERE / 'build_bottle_tools.py',
+                             '--work', bottle_work, '--mingw-bin', Path(paths['compiler']) / 'bin'])
+        bottle_builder = load_module('release110_bottle_tools', HERE / 'build_bottle_tools.py')
+        result['bottle_tools'] = bottle_builder.install(bottle_work, app)
         source_roots = [Path(paths['deps']), Path(paths['moltenvk']), fex]
         required_libraries = sorted(Path(name).name for name in template['files']
                                     if name.startswith('wine/lib/wine/aarch64-unix/') and name.endswith('.dylib'))

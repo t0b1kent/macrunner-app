@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "compiler": {
+    "archive_sha256": "050379de888f0c843787819dadf183df3693330a5724643919e9121f16355295",
+    "clang": "22.1.5",
+    "name": "llvm-mingw",
+    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/20260505/llvm-mingw-20260505-ucrt-macos-universal.tar.xz",
+    "version": "20260505"
+  },
+  "tools": [
+    {
+      "name": "macrunner-bottle-register-native.exe",
+      "driver": "aarch64-w64-mingw32-clang",
+      "machine": 43620,
+      "source": "checked-registration.c",
+      "source_sha256": "fa2b9a935a45e9e36ef52c36a2137371dd51b62d780bfb2664325bc87d8762c3",
+      "argv": ["-O2", "-Wall", "-Wextra", "-municode", "-Wl,--Xlink=/timestamp:1792046587", "-lsetupapi"],
+      "reference_sha256": "3407c2e28e0b17c04d74154fdd01920ecde0899749c3769b9fc487da892ee4cc"
+    },
+    {
+      "name": "macrunner-bottle-register-32.exe",
+      "driver": "i686-w64-mingw32-clang",
+      "machine": 332,
+      "source": "checked-registration.c",
+      "source_sha256": "fa2b9a935a45e9e36ef52c36a2137371dd51b62d780bfb2664325bc87d8762c3",
+      "argv": ["-O2", "-Wall", "-Wextra", "-municode", "-Wl,--Xlink=/timestamp:1792046587", "-lsetupapi"],
+      "reference_sha256": "e6258e657664f041f2f04cf1eb41b3266a1c848dd7e9c52431e50604cc3779c2"
+    },
+    {
+      "name": "macrunner-bottle-devices.exe",
+      "driver": "aarch64-w64-mingw32-clang",
+      "machine": 43620,
+      "source": "device-refresh.c",
+      "source_sha256": "fc84191207a7dc298393b058a9912022749daee21b3e18c1774780b78456a21c",
+      "argv": ["-O2", "-Wall", "-Wextra", "-Wl,--Xlink=/timestamp:1792047116", "-lole32", "-luser32"],
+      "reference_sha256": "0024c621460716ca8a2de98c5a4382c06fbfc062de4387bae9c75bf7c1d7652b"
+    }
+  ],
+  "inf": {
+    "name": "checked-registration.inf",
+    "source": "checked-registration.inf",
+    "source_sha256": "36e5b9db1c7cc182990b2d11c6a74676d4c26c8457ba51bd4a90181dcfe48706"
+  }
+}
