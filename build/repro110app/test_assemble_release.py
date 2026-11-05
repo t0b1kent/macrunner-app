@@ -43,6 +43,28 @@ class ReleaseCompositionTests(unittest.TestCase):
         self.assertTrue(os.access(self.root / 'output/Framework/Versions/Current/Framework', os.X_OK))
         self.assertTrue((self.root / 'output/Framework/Versions/Current').is_symlink())
 
+    def test_native_fex_companion_is_selected_from_the_fex_output(self):
+        deps = self.root / 'deps/lib'; deps.mkdir(parents=True)
+        fex = self.root / 'fex/aarch64-unix'; fex.mkdir(parents=True)
+        (deps / 'libdependency.dylib').write_bytes(b'dependency')
+        companion = fex / 'libmacrunner-hwtso.dylib'; companion.write_bytes(b'FEX source output')
+        self.assertEqual(producer.source_libraries(
+            ['libdependency.dylib', companion.name], [deps, fex]),
+            [str(deps / 'libdependency.dylib'), str(companion)])
+
+    def test_missing_and_conflicting_source_libraries_are_refused(self):
+        first = self.root / 'first'; first.mkdir()
+        second = self.root / 'second'; second.mkdir()
+        name = 'libmacrunner-hwtso.dylib'
+        with self.assertRaisesRegex(ValueError, 'leaves missing: ' + name):
+            producer.source_libraries([name], [first, second])
+        (first / name).write_bytes(b'one')
+        (second / name).write_bytes(b'two')
+        with self.assertRaisesRegex(ValueError, 'Conflicting selected dependency'):
+            producer.source_libraries([name], [first, second])
+        (second / name).write_bytes(b'one')
+        self.assertEqual(producer.source_libraries([name], [first, second]), [str(first / name)])
+
     def test_tar_parent_escape_is_refused(self):
         archive = self.root / 'bad.tar.gz'
         with tarfile.open(archive, 'w:gz') as stream:
