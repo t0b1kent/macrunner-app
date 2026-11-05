@@ -4,7 +4,7 @@
 
 This page records what has actually been observed while developing MacRunner. A title in the library or launch-profile catalog is not automatically a tested game. Results apply to the configurations used for those sessions.
 
-**Current ordinary release: [MacRunner 1.1.0, build 119](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.0).** The owner recorded Elden Ring and Hollow Knight on the c32r candidate on November 4. No live games were launched for final release packaging. These recordings are distinct from the historical observations below. [Full performance tables and methodology](docs/PERFORMANCE-1.1.0-EN.md) · [Русская методика](docs/PERFORMANCE-1.1.0-RU.md).
+**Current ordinary release: [MacRunner 1.1.0, build 119](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.0).** The owner recorded Elden Ring and Hollow Knight on the c32r candidate on November 4. No live games were launched for final release packaging. These recordings are distinct from the historical observations below. [Full performance tables and methodology](docs/PERFORMANCE-1.1.0-EN.md).
 
 | November 4 recording | MacRunner mean FPS | Reference |
 |---|---:|---|
