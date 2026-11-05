@@ -1,4 +1,5 @@
 """Own inert source-output composition tests, without runtime or cloud acquisition."""
+import ast
 import importlib.util
 import io
 import os
@@ -18,6 +19,18 @@ class ReleaseCompositionTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(dir=os.environ['REPRO109_TEST_TMP'])
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
+
+    def test_workflow_uploads_the_archive_produced_by_the_composer(self):
+        here = Path(__file__).resolve().parent
+        tree = ast.parse((here / 'assemble_release.py').read_text())
+        archives = [call.args[1].elts[2].right.value for call in ast.walk(tree)
+                    if isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
+                    and call.func.id == 'run' and call.args
+                    and isinstance(call.args[0], ast.Constant)
+                    and call.args[0].value == 'archive-app']
+        self.assertEqual(len(archives), 1)
+        workflow = (here.parents[1] / '.github/workflows/repro110-app-c12-source-xcode27-arm64.yml').read_text()
+        self.assertIn('${{ runner.temp }}/release110-package/' + archives[0], workflow)
 
     def test_tar_preserves_executable_and_internal_framework_link(self):
         archive = self.root / 'app.tar.gz'
