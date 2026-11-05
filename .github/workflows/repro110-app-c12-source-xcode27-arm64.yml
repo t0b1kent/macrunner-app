@@ -129,7 +129,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: t0b1kent/macrunner-wine
-          ref: 0db5d3a80e302315a1dc37e8f6e1bba551310430
+          ref: 9f1130183005e41c597d7591f83627188d76bdf8
           path: wine
           persist-credentials: false
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -149,7 +149,9 @@ jobs:
           python-version: '3.13.7'
           architecture: arm64
       - name: Source-output and absent-tool checks
-        run: REPRO109_TEST_TMP="$RUNNER_TEMP" python3 -I -B -m unittest discover -s build/repro110app -p test_assemble_release.py
+        run: |
+          REPRO109_TEST_TMP="$RUNNER_TEMP" python3 -I -B -m unittest discover -s build/repro110app -p test_assemble_release.py
+          REPRO109_TEST_TMP="$RUNNER_TEMP" python3 -I -B -m unittest discover -s build/repro110app -p test_release_preparation.py
       - name: Compose the whole application from successful source outputs
         env:
           GH_TOKEN: ${{ github.token }}

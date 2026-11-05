@@ -18,6 +18,7 @@ import time
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import assemble_engine as engine
+import release_sections
 
 
 def sha(path):
@@ -101,6 +102,71 @@ def source_libraries(names, directories):
     return libraries
 
 
+def stage_wine_loader(app, backup):
+    """Bundle the source-built Wine loader; the local signing step adds its profile."""
+    resources = app / 'Contents/Resources'
+    wine = resources / 'engine/wine'
+    source = wine / 'lib/wine/aarch64-unix/wine'
+    data = source.read_bytes()
+    plists = [plistlib.loads(data[at:at + size].rstrip(b'\0'))
+              for name, at, size, _ in release_sections.ranges(data) if name.endswith('/__info_plist')]
+    if len(plists) != 1 or plists[0].get('CFBundleIdentifier') != 'app.macrunner.wineloader':
+        raise ValueError('Source Wine loader embedded identity differs')
+    required = [b'/wine-loader/MacRunner Wine Loader.app/Contents/MacOS',
+                b'engine/wine/lib/wine/aarch64-unix/ntdll.so']
+    if not all(marker in data for marker in required):
+        raise ValueError('Source Wine loader lacks the signed-helper runtime layout')
+    helper = resources / 'wine-loader/MacRunner Wine Loader.app'
+    executable = helper / 'Contents/MacOS/wine'
+    executable.parent.mkdir(parents=True, exist_ok=False)
+    shutil.copy2(source, executable)
+    info = dict(plists[0], CFBundleExecutable='wine')
+    (helper / 'Contents/Info.plist').write_bytes(plistlib.dumps(info))
+    if executable.read_bytes() != data:
+        raise ValueError('Bundled loader differs from the source-built executable')
+    backup.mkdir(parents=True, exist_ok=False)
+    for index, path in enumerate([wine / 'bin/wine', source]):
+        shutil.move(path, backup / (str(index) + '-wine'))
+        path.symlink_to(os.path.relpath(executable, path.parent))
+    return dict(source_sha256=hashlib.sha256(data).hexdigest(), code_equal=True,
+                bundle=str(helper.relative_to(app)), profile='LOCAL_SIGNING_REQUIRED')
+
+
+def map_ci_paths(app, backup, old=None):
+    """Fixed-width data mapping, with the established executable-section guard."""
+    old = old if old is not None else Path.home().as_posix().encode()
+    new = b'/MacRunnerCI/'
+    if len(old) < len(new):
+        raise ValueError('CI build prefix is shorter than the public replacement')
+    new = new.ljust(len(old), b'/')
+    pairs = [(old, new), (old.decode().encode('utf-16le'), new.decode().encode('utf-16le'))]
+    rows = []
+    for path in sorted(app.rglob('*')):
+        if not path.is_file() or path.is_symlink():
+            continue
+        data = path.read_bytes()
+        if not any(source in data for source, _ in pairs):
+            continue
+        mapped = data
+        for source, target in pairs:
+            mapped = mapped.replace(source, target)
+        assert len(data) == len(mapped)
+        if path.suffix == '.json':
+            json.loads(mapped); code = {}
+        else:
+            code = release_sections.code_hashes(data)
+            if not code or code != release_sections.code_hashes(mapped):
+                raise ValueError('Build-prefix mapping changed executable sections: ' + path.name)
+        relative = path.relative_to(app)
+        saved = backup / relative
+        saved.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(path, saved)
+        path.write_bytes(mapped)
+        rows.append(dict(path=str(relative), before_sha256=hashlib.sha256(data).hexdigest(),
+                         after_sha256=hashlib.sha256(mapped).hexdigest(), code_hashes=code, code_equal=True))
+    return rows
+
+
 def license_inputs(roots):
     selected = []
     for namespace, root in roots:
@@ -132,6 +198,13 @@ def source_inputs(args):
     return [dict(path=str(path), sha256=sha(path)) for path in selected]
 
 
+def select_wine_source(transport, pin):
+    """Retain the proven dependency inputs while selecting the release's Wine build."""
+    if pin['repo'] != 't0b1kent/macrunner-wine':
+        raise ValueError('Wine source producer repository differs')
+    transport.INPUTS = dict(transport.INPUTS, wine=dict(pin))
+
+
 def build(args):
     if os.environ.get('GITHUB_ACTIONS') != 'true' or platform.system() != 'Darwin' or platform.machine() != 'arm64':
         raise ValueError('Whole release composition requires the native ARM64 GitHub builder')
@@ -155,9 +228,10 @@ def build(args):
     try:
         pins = json.loads(args.pins.read_text())
         names = ['app', 'helpers', 'inno', 'fex64', 'fex32', 'graphics_x64', 'graphics_ec', 'graphics_native']
-        if set(pins) != set(names):
+        if set(pins) != set(names + ['wine']):
             raise ValueError('Exactly the selected release source components are required')
         transport = load_module('release_source_transport', args.transport)
+        select_wine_source(transport, pins['wine'])
         # The existing receiver restores source Wine/deps/MoltenVK/LLVM and the pinned compiler.
         restored = args.work / 'source-runtime'
         if transport.restore(argparse.Namespace(work=restored, wine=args.wine, dxmt=args.dxmt)) != 0:
@@ -252,6 +326,7 @@ def build(args):
         run('assemble-engine', [sys.executable, '-I', '-B', HERE / 'assemble_engine.py', selected,
                                 resources / 'engine', '--defer-signing'])
         runtime = resources / 'engine'
+        result['wine_loader'] = stage_wine_loader(app, args.work / 'original-wine-loaders')
         # Keep Wine's separately source-built bridge DLLs. Only the actual translator aliases are installed.
         for name in ['xtajit.dll', 'xtajit64.dll']:
             target = runtime / 'wine/lib/wine/aarch64-windows' / name
@@ -262,6 +337,9 @@ def build(args):
                 result.setdefault('replaced_wine_aliases', []).append(dict(path=name, before_sha256=sha(target),
                                                                            backup=str(backup)))
             shutil.copy2(fex / 'aarch64-windows' / name, target)
+        mapped = map_ci_paths(app, args.work / 'original-build-prefix-files')
+        (reports / 'build-path-map.json').write_text(json.dumps(mapped, indent=2) + '\n')
+        result['build_prefix_mapping'] = dict(files=len(mapped), code_equal=all(row['code_equal'] for row in mapped))
         manifest_path = runtime / 'ENGINE.json'
         manifest = json.loads(manifest_path.read_text())
         manifest['capabilities'] = template.get('capabilities', {})

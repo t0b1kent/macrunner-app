@@ -1,4 +1,12 @@
 {
+  "wine": {
+    "repo": "t0b1kent/macrunner-wine",
+    "run": 42007663870,
+    "revision": "9f1130183005e41c597d7591f83627188d76bdf8",
+    "artifact": 13408322869,
+    "sha256": "531f5ee441d4964de0c599908cb7d5e430ed7b777b6cf634628be9cd15ac1264",
+    "artifact_name": "repro110-wine-c12-9f1130183005e41c597d7591f83627188d76bdf8"
+  },
   "app": {
     "repo": "t0b1kent/macrunner-app",
     "run": 41985803557,
