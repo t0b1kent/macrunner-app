@@ -34,11 +34,11 @@
   },
   "fex32": {
     "repo": "t0b1kent/hyperbridge",
-    "run": 41882085883,
-    "revision": "be81a7acd447f4e64f4edbc17644abf4cd54dd1b",
-    "artifact": 13352532288,
-    "sha256": "fe839d0b66ccc6d9f5916873d92d48816554395dcd6becd5aa792b665b691663",
-    "artifact_name": "repro109-fex32-full-be81a7acd447f4e64f4edbc17644abf4cd54dd1b",
+    "run": 41970092478,
+    "revision": "4bf123ec200e8410ab13a2b95c17b702e2d2c1c3",
+    "artifact": 13389532071,
+    "sha256": "2d67c834163b1095106809292956c54fc6d403b417887a7a82d927eb3ef96824",
+    "artifact_name": "repro109-fex32-full-4bf123ec200e8410ab13a2b95c17b702e2d2c1c3",
     "job": "FEX fex32-full"
   },
   "graphics_x64": {
