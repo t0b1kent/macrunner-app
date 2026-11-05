@@ -86,6 +86,21 @@ def merge_tree(source, destination):
         shutil.copy2(path, target)
 
 
+def source_libraries(names, directories):
+    libraries, missing = [], []
+    for name in names:
+        found = [root / name for root in directories if (root / name).is_file()]
+        if not found:
+            missing.append(name)
+        elif len({sha(path) for path in found}) != 1:
+            raise ValueError('Conflicting selected dependency: ' + name)
+        else:
+            libraries.append(str(found[0]))
+    if missing:
+        raise ValueError('Source dependency leaves missing: ' + ', '.join(missing))
+    return libraries
+
+
 def license_inputs(roots):
     selected = []
     for namespace, root in roots:
@@ -215,17 +230,9 @@ def build(args):
         source_roots = [Path(paths['deps']), Path(paths['moltenvk'])]
         required_libraries = sorted(Path(name).name for name in template['files']
                                     if name.startswith('wine/lib/wine/aarch64-unix/') and name.endswith('.dylib'))
-        libraries, missing = [], []
-        for name in required_libraries:
-            found = [root / 'lib' / name for root in source_roots if (root / 'lib' / name).is_file()]
-            if not found:
-                missing.append(name)
-            elif len(found) > 1 and len({sha(path) for path in found}) != 1:
-                raise ValueError('Conflicting selected dependency: ' + name)
-            else:
-                libraries.append(str(found[0]))
-        if missing:
-            raise ValueError('Source dependency leaves missing: ' + ', '.join(missing))
+        # FEX produces its native TSO companion, not Wine or the third-party dependency prefix.
+        libraries = source_libraries(required_libraries,
+                                     [root / 'lib' for root in source_roots] + [fex / 'aarch64-unix'])
         licenses = license_inputs([('deps', Path(paths['deps']) / 'share/licenses'),
                                    ('moltenvk', Path(paths['moltenvk']) / 'share/licenses')])
         for namespace, root in [('wine', args.wine), ('dxmt', args.dxmt), ('fex', args.hyperbridge)]:
