@@ -1,10 +1,10 @@
 {
   "app": {
     "repo": "t0b1kent/macrunner-app",
-    "run": 41928207741,
-    "revision": "eaacef820cb4d13ac03a2bc46ef2ce474fa1e308",
-    "artifact": 13370543417,
-    "sha256": "5c2e6202e370b4b3dad7fc21ffc7da67d3151ce4467a9691a8de31b896376e59",
+    "run": 41985803557,
+    "revision": "c1d3a53b0d912be82f7e4125a02b5d50658741da",
+    "artifact": 13397040271,
+    "sha256": "ad75ee54df856a7b7216b2a02522446a94de88551dccabd9976df93bd9a54391",
     "artifact_name": "repro110-app-source-native-fullmode"
   },
   "helpers": {
