@@ -6,7 +6,7 @@ MacRunner is a standalone native Mac application. Its CPU engine is **HyperBridg
 
 ## MacRunner 1.1.0 · build 119
 
-[Application release](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.0) · [Translator release](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.0) · [English release notes](docs/RELEASE-1.1.0-EN.md) · [Заметки по-русски](docs/RELEASE-1.1.0-RU.md).
+[Application release](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.0) · [Translator release](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.0) · [English release notes](docs/RELEASE-1.1.0-EN.md).
 
 This release updates Wine memory allocation and asynchronous exceptions, including IsBad*, improves QueryPerformanceCounter and D3D11 → Metal, and includes a Retina toggle on the game's page. HEADER_BY_PC, RET_NOPOLL, CMP_ZC, RIP_LITERAL and QPC_INLINE are disabled by default. Automatic Retina, EmulateModeset, shader-cache migration and faster bottle updates are planned for 1.1.1.
 
