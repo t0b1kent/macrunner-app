@@ -3,6 +3,28 @@ import Testing
 @testable import MacRunnerControlCenter
 
 @Suite struct PSOCacheTransplantTests {
+    @Test func signedGraphicsCatalogueBindsBothBinariesAndNamespaces() throws {
+        let hashes = [
+            "graphics/aarch64-unix/winemetal.so": String(repeating: "a", count: 64),
+            "graphics/aarch64-windows/d3d12.dll": String(repeating: "b", count: 64)
+        ]
+        let versions = ["9598ab010d5b-4e89a8cc-": "9598ab010d5b-de834a3d-"]
+        let data = try JSONSerialization.data(withJSONObject: ["schema": 1, "versions": versions, "binaries": hashes])
+        let value = try PSOCacheTransplant.decodeCompatibility(data)
+        #expect(value.binaries == hashes)
+        #expect(value.versions == versions)
+        let invalidValues: [[String: Any]] = [
+            ["schema": 2, "versions": versions, "binaries": hashes],
+            ["schema": 1, "versions": ["../cache-": "elsewhere-"], "binaries": hashes],
+            ["schema": 1, "versions": versions, "binaries": [:]],
+            ["schema": 1, "versions": versions, "binaries": hashes.merging(["graphics/aarch64-unix/winemetal.so": "bad"]) { _, new in new }]
+        ]
+        for bad in invalidValues {
+            let invalid = try JSONSerialization.data(withJSONObject: bad)
+            #expect(throws: PSOCacheTransplant.Failure.self) { try PSOCacheTransplant.decodeCompatibility(invalid) }
+        }
+    }
+
     private func fixture() throws -> (URL, URL, URL) {
         let environment = ProcessInfo.processInfo.environment
         let parent = environment["MACRUNNER_TEST_WORKSPACE_ROOT"].map { URL(fileURLWithPath: $0, isDirectory: true) }

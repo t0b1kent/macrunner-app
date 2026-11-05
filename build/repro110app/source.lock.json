@@ -41,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 5702574,
+  "source_bytes": 5705576,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -50,7 +50,7 @@
     "Tests/Fixtures/test-pe.exe"
   ],
   "source_files": 395,
-  "source_inventory_sha256": "77a771510eed287c49e9f2e5b44d9ea052d76129086eddabd7b4f8045a6348f8",
+  "source_inventory_sha256": "f6ca442e58ea52e24b89f4b0198faba9bbf8c23d8870ad088724c5c012906453",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,
@@ -552,15 +552,15 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/Services/Cache/PSOCacheTransplant.swift",
-        "bytes": 7283,
-        "sha256": "520180a0eaea83d3b4d20c0def5d0267686c147602dc6b49ee3e11eefb6e45e0",
+        "bytes": 8989,
+        "sha256": "21218c036e9057f2d2842d62bee7b0b2a53233385c7d64a007d535d08ad59f40",
         "executable": false,
         "base_sha256": null
       },
       {
         "path": "Tests/MacRunnerControlCenterTests/PSOCacheTransplantTests.swift",
-        "bytes": 3775,
-        "sha256": "3500cfb201b253f4947dd8a4e561d4bb16f59f03346bc87dccd1f498bc1423c4",
+        "bytes": 5071,
+        "sha256": "0948ba318f69030ee78914cf56e5c31c7c4a7e6df1606c371480556de92cdb00",
         "executable": false,
         "base_sha256": null
       },
