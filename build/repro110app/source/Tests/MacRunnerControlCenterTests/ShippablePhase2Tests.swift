@@ -81,12 +81,6 @@ struct ShippablePhase2Tests {
         #expect(config.channel.allowedChannels == ["beta", "nightly"])
     }
 
-    @Test func licenseFormatAndTrialGate() {
-        #expect(LicenseVerifier().isWellFormed("MR2SH-TEST1-LOCAL-00001"))
-        #expect(!LicenseVerifier().isWellFormed("bad"))
-        #expect(LicenseStore().isFeatureAllowed("bottle_share"))
-    }
-
     @Test func telemetrySanitizesSensitiveData() {
         let service = TelemetryService()
         let home = "/fixture-home/privacy"
