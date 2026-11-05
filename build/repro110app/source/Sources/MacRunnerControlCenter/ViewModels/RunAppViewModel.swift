@@ -171,8 +171,12 @@ final class RunAppViewModel: ObservableObject {
         let override = app.graphicsAPI.flatMap(GraphicsAPI.init(rawValue:))
         // «Высокое разрешение (Retina)» записи игры. Выключено — тоже явное значение: RetinaMode
         // общий на бутылку, и снять его, оставленный другой игрой, может только этот запуск.
-        // Выбор записи игры главнее; не выбрано — «авто» по главному экрану (RetinaDefault).
-        let highResolution = app.highResolution ?? RetinaDefault.automatic
+        // Рука испытания «авто» (ключ процесса приложения MACRUNNER_RETINA_AUTO=1, по умолчанию нет): без переключателя
+        // RetinaMode следует ГЛАВНОМУ экрану (на нём Wine открывает окно игры, по нему же winemac check_retina_status):
+        // Retina — включено, обычный монитор — выключено. Явное «включено» записи игры главнее.
+        let autoRetina = ProcessInfo.processInfo.environment["MACRUNNER_RETINA_AUTO"] == "1"
+            && (NSScreen.screens.first?.backingScaleFactor ?? 1) > 1
+        let highResolution = app.highResolution == true || (app.highResolution == nil && autoRetina)
         Task.detached(priority: .userInitiated) {
             defer { UpdateSafetyGate.shared.endActivity(activity) }
             // Графику подбираем по файлам игры до запуска: разбор читает только заголовки
@@ -234,17 +238,5 @@ final class RunAppViewModel: ObservableObject {
         } catch {
             lastLauncherResult = nil
         }
-    }
-}
-
-/// «Высокое разрешение (Retina)» для записи игры без своего выбора: «авто» — по ГЛАВНОМУ экрану (на нём Wine открывает окно
-/// игры, по нему же winemac check_retina_status): Retina — включено, обычный монитор — выключено. Ключ процесса приложения
-/// `MACRUNNER_RETINA_AUTO=0` — выключено, как до 1.1.0; `=1` — авто при любом умолчании.
-enum RetinaDefault {
-    static let autoByDefault = true
-    static var automatic: Bool {
-        let key = ProcessInfo.processInfo.environment["MACRUNNER_RETINA_AUTO"]
-        guard key.map({ $0 == "1" }) ?? autoByDefault else { return false }
-        return (NSScreen.screens.first?.backingScaleFactor ?? 1) > 1
     }
 }

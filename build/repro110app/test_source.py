@@ -83,7 +83,7 @@ class SourceControls(unittest.TestCase):
 
     def test_exact_published_source_inventory_and_fixture(self):
         measured = p.verify_source(HERE / 'source', self.lock)
-        self.assertEqual((measured['files'], measured['bytes']), (400, 5813715))
+        self.assertEqual((measured['files'], measured['bytes']), (392, 5690413))
         data = p.fixture_bytes(self.lock)
         self.assertEqual(hashlib.sha256(data).hexdigest(),
                          '8c2a2f7328e85fc0868e174dd80057bbb9e136b5229d8d6f3ed316c67f37cd3b')

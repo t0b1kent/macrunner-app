@@ -1,5 +1,5 @@
 {
-  "classification": "RELEASE110_RETINA_AND_APPROVED_PSO_TRANSPLANT_TEXT_SOURCES_NOT_COMPILED",
+  "classification": "RELEASE110_SHIPPED_MANUAL_RETINA_SOURCE_RECONSTRUCTED_NOT_YET_CONVERGED",
   "encoded_assets": [
     {
       "bytes": 386346,
@@ -41,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 5813715,
+  "source_bytes": 5690413,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -49,8 +49,8 @@
     "Sources/MacRunnerControlCenter/Resources/tools/legendary",
     "Tests/Fixtures/test-pe.exe"
   ],
-  "source_files": 400,
-  "source_inventory_sha256": "2e5ce4b42887eaf55d28146505b979c55939df24a1fd403c18b12563158f51e6",
+  "source_files": 392,
+  "source_inventory_sha256": "d7b4dbb487a88d5293e06331e69c33c538d8e25415087008e01c4314229e65bc",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,
@@ -72,7 +72,7 @@
   "release110_delta": {
     "base": "Published 1.0.9 recipe source snapshot; byte-exact preimages below",
     "modified": 44,
-    "new": 25,
+    "new": 23,
     "files": [
       {
         "path": "Sources/MacRunnerControlCenter/App.swift",
@@ -83,8 +83,8 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/Models/AppEntry.swift",
-        "bytes": 2751,
-        "sha256": "5d495bd4712570e387f3e032b120a55a8dbb9ad4006736884cd02d56f3aaaddb",
+        "bytes": 2683,
+        "sha256": "530b95e95b752eb598b4abd6bd0560734b9ce5de708d5cf3ebac518d4ee0e7db",
         "executable": false,
         "base_sha256": "b1ee7c2f471bce64ea5c05a407313c2b541cca128b5c147ccede6f48685643bc"
       },
@@ -243,13 +243,6 @@
         "base_sha256": null
       },
       {
-        "path": "Sources/MacRunnerControlCenter/Services/Cache/PSOCacheTransplant.swift",
-        "bytes": 7283,
-        "sha256": "520180a0eaea83d3b4d20c0def5d0267686c147602dc6b49ee3e11eefb6e45e0",
-        "executable": false,
-        "base_sha256": null
-      },
-      {
         "path": "Sources/MacRunnerControlCenter/Services/CompatibilityStore.swift",
         "bytes": 3833,
         "sha256": "206e936451492e08f6e2024cff52e6813152d7d88dbdaa1f9cca84f36f88ce3c",
@@ -293,8 +286,8 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/Services/Engine/EngineLauncher.swift",
-        "bytes": 40670,
-        "sha256": "fb9532c7856e7fdd6e3c46e0cea6cc70b0a5d32529981f937fcc2364ba7b2a49",
+        "bytes": 40502,
+        "sha256": "893a7149496da0519c7a4a7136893076a825fd2fddee34ba8fb6a6aa6e21ae0a",
         "executable": false,
         "base_sha256": "d038068cf3371156828a9a440e271d920a2979339694e79e3e367a896d7137cf"
       },
@@ -363,8 +356,8 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/ViewModels/RunAppViewModel.swift",
-        "bytes": 11714,
-        "sha256": "3dd13299a1bd77772e608ad63eda0e3e8a4b4b6c66e895ba03a9d78b4835f6c9",
+        "bytes": 11422,
+        "sha256": "5e06ba83ff7d2df796997686ec640c0071ce268035ee0a9230442768d7a727cd",
         "executable": false,
         "base_sha256": "536fb0f650fe5dd9657673a56c2202d4eec4660e7de405942102ff1267bc45f2"
       },
@@ -384,8 +377,8 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/Views/Home/GamePageView.swift",
-        "bytes": 10239,
-        "sha256": "fae161531cbc9075d66c7aca1a0dd8ff823094cf8bbb16d32a982e2d0c4923d3",
+        "bytes": 10220,
+        "sha256": "4aff4e3131e033db5804230d63e371af742458fcfd2767118e9bef24c055c318",
         "executable": false,
         "base_sha256": "54560e12c5bf8d96932adc84fa9a98689859b2d58334e81e5b0c3d5c7c083add"
       },
@@ -405,8 +398,8 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/Views/Home/HomeView.swift",
-        "bytes": 58508,
-        "sha256": "4e8b2793945436e0b07c37b05a83201920351b1d0e113469fead00b6a432afff",
+        "bytes": 58472,
+        "sha256": "ee0aabe8051b1ea44ee5f8cddb3d04ccc3576d80adc8efcb160e7e2503761a4d",
         "executable": false,
         "base_sha256": "d621d534c4bacf243587f54c29a4557a253e4b3afda08c19df76ff3d75b030be"
       },
@@ -488,13 +481,6 @@
         "base_sha256": "3adba3c3d3439f6662f63462c149282cbb4e05ff03d4f18f46a9d974922cb30f"
       },
       {
-        "path": "Tests/MacRunnerControlCenterTests/PSOCacheTransplantTests.swift",
-        "bytes": 3573,
-        "sha256": "fe99118204ed4eda0c08ae55c997523673f0e241a2b9a9b9e549bda3d0a04ace",
-        "executable": false,
-        "base_sha256": null
-      },
-      {
         "path": "Tests/MacRunnerControlCenterTests/ReleaseBottleRouteTests.swift",
         "bytes": 3774,
         "sha256": "f7064f6b5ac4617b558f6f9ea53da82db036a6b49130d7a7cebe3c288d7d5879",
@@ -557,7 +543,46 @@
         "executable": false,
         "base_sha256": null
       }
+    ],
+    "deleted": [
+      {
+        "path": "Sources/MacRunnerControlCenter/Models/ReleaseFlags.swift",
+        "bytes": 1834,
+        "sha256": "32e3c33a7c0aecfd8ce843ddf0c2cc229702072f502c79bf9e855c0c21290f0e"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/Licence/Licence.swift",
+        "bytes": 39773,
+        "sha256": "1556c31e6cf4514ca6bfb922647a80a6f547d6b45b725dec60a1db46cdfb3887"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/License/LicenseStore.swift",
+        "bytes": 6531,
+        "sha256": "0971f293b0008070a8eb215a0ae1b8b2c646911ac2bf97fd4aac822f7e2bdc40"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Services/Purchase/PurchaseService.swift",
+        "bytes": 1686,
+        "sha256": "b9f80aeae24b9575493d9998a1779d7495c750a5515cbf59a4d1e3bca9ba5686"
+      },
+      {
+        "path": "Sources/MacRunnerControlCenter/Views/Home/LicenceView.swift",
+        "bytes": 13619,
+        "sha256": "6a1bb51c6db80d2ce2a0d402383fc0c025662ca7b107e26f2dcac7383ccc0b5d"
+      },
+      {
+        "path": "Tests/MacRunnerControlCenterTests/LicenceTests.swift",
+        "bytes": 48420,
+        "sha256": "6b1e2d62ee0fd988db4cee49913925e117d24bd1feba7de4e15487c8f4635d80"
+      }
     ]
   },
-  "release": "1.1.0"
+  "release": "1.1.0",
+  "release110_source_basis": {
+    "base": "APPIDLE c17 + idle fix",
+    "overlay": "APP-RETINA-20261103.p1.patch",
+    "patch_sha256": "06f56d71bd689e9b3c1d1bcae665798e28b48bf29daa6cdfe5d09d3ac9479d54",
+    "scope": "Manual per-game Retina; no automatic default or PSO transplant; product code still to be compared",
+    "known_public_source_difference": "Existing privacy-safe synthetic bug-report sample is retained; restoring the original sample mailbox was rejected by public-check and requires curator allowlist review"
+  }
 }

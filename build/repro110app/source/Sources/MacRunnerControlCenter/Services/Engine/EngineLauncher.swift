@@ -227,9 +227,6 @@ final class EngineLauncher: @unchecked Sendable {
             return finish("STOPPED", log: log)
         }
 
-        if plan.api == .d3d12 {
-            log.note("PSO cache migration: " + PSOCacheTransplant.prepare(engine: engine, executable: exe, environment: env))
-        }
         let target = Self.windowsPath(for: exe, prefix: prefix)
         let directory = workdir ?? exe.deletingLastPathComponent()
         let fullArguments = arguments + plan.extraArguments

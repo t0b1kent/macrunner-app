@@ -35,10 +35,20 @@ class ReleaseSourceDelta(unittest.TestCase):
             self.assertEqual(sorted(set(m.group(0) for m in PERSONAL.finditer(text))), [], row['path'])
 
     def test_snapshot_counts_reconcile_with_the_base(self):
-        self.assertEqual(LOCK['source_files'], 375 + DELTA['new'])
+        self.assertEqual(LOCK['source_files'], 375 + DELTA['new'] - len(DELTA.get('deleted', [])))
         self.assertEqual(LOCK['source_origin']['source_files'], 375)
         old = json.loads((BASE.parent / 'source.lock.json').read_bytes())
         self.assertEqual((old['source_files'], 'release110_delta' in old), (375, False))
+
+    def test_deleted_source_preimages_are_complete_and_preserved(self):
+        expected = {p.relative_to(BASE).as_posix() for p in BASE.rglob('*')
+                    if p.is_file() and not (HERE / 'source' / p.relative_to(BASE)).exists()}
+        self.assertEqual({row['path'] for row in DELTA.get('deleted', [])}, expected)
+        for row in DELTA.get('deleted', []):
+            data = (BASE / row['path']).read_bytes()
+            self.assertEqual((len(data), hashlib.sha256(data).hexdigest()),
+                             (row['bytes'], row['sha256']), row['path'])
+            self.assertFalse((HERE / 'source' / row['path']).exists(), row['path'])
 
     def test_workflow_selects_this_recipe_and_existing_test_modules(self):
         raw = (HERE.parents[1] / '.github/workflows/repro110-app-c12-source-xcode27-arm64.yml').read_text()

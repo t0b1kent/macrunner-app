@@ -191,7 +191,7 @@ struct GamePageView: View {
     @ViewBuilder
     private var highResolutionToggle: some View {
         if let onSetHighResolution, BundledEngine.current != nil {
-            Toggle(isOn: Binding(get: { app.highResolution ?? RetinaDefault.automatic }, set: { onSetHighResolution($0) })) {
+            Toggle(isOn: Binding(get: { app.highResolution == true }, set: { onSetHighResolution($0) })) {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(L("High resolution (Retina)"))
                         .font(.system(size: 14.5, weight: .medium))
