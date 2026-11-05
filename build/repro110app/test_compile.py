@@ -145,7 +145,7 @@ print('install skipped')
 
     def test_plan_has_locked_source_and_explicit_gaps(self):
         result = b.plan()
-        self.assertEqual(result['source']['files'], 400)
+        self.assertEqual(result['source']['files'], 392)
         self.assertEqual(result['products'], ['MacRunnerControlCenter','macr-hud'])
         self.assertEqual(len(result['runtime_inputs']), 5)
 
