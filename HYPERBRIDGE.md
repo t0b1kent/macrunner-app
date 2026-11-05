@@ -8,6 +8,7 @@ HyperBridge is built on **[FEX-Emu](https://github.com/FEX-Emu/FEX)** (MIT) and 
 
 | MacRunner | HyperBridge engine |
 | --- | --- |
+| **1.1.0**, November 5, 2026 | [HyperBridge 1.1.0](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.0), with the merged translator improvements. HEADER_BY_PC, RET_NOPOLL, CMP_ZC, RIP_LITERAL and QPC_INLINE are disabled by default; experimental configuration M is reported separately in the [translator notes](https://github.com/t0b1kent/hyperbridge/blob/main/docs/RELEASE-1.1.0-EN.md). The package was built locally; clean GitHub convergence is pending. |
 | **1.0.9**, October 7, 2026 | FEX-Emu `fd141ed6d` with MacRunner's patch series — 87 patches for the 64-bit translator, [engine 0227](https://github.com/t0b1kent/hyperbridge/releases/tag/engine-0227); shorter translated code for integer division, read-modify-write instructions and scalar SSE arithmetic, exact unaligned `lock` operations. In micro-loops `div` is 2.3 times and `idiv` 2.4 times faster than in 1.0.8 |
 | **1.0.8**, October 5, 2026 | FEX-Emu `fd141ed6d` with MacRunner's patch series (shipped in the release's source archive); hardware x86 memory ordering by default, startup defaults that avoid repeated translation, x87 state fixes, AVX self-modifying code, a code-buffer guard that accounts for 16 KB host pages |
 | **1.0.7**, October 3, 2026 | FEX-Emu `fd141ed6d` with patches 0001–0049; the 32-bit (WOW64) translator ships for the first time; 16-bit SHLD/SHRD carry flag; code mapped at two addresses handled for .NET |

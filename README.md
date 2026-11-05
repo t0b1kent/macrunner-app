@@ -24,7 +24,34 @@ MacRunner is built around a simple idea: **choose an app or game, add it to your
 
 **HyperBridge is MacRunner's CPU engine:** an **x86-64 / x86 → ARM64 engine for Windows software on Apple Silicon**, built on [FEX-Emu](https://github.com/FEX-Emu/FEX) with MacRunner's own patch series. Its source is public under MIT at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). Wine provides Windows API compatibility, and Metal handles graphics through the relevant translation components. [Explore the engine, its current scope and roadmap →](HYPERBRIDGE.md)
 
-**Development preview: [MacRunner 1.0.9](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.9), October 7, 2026**, for Apple Silicon Macs. The app is signed with a Developer ID and notarized by Apple, so it opens normally. It declares macOS 26.5 as its minimum; our checks ran on macOS 27.0. 1.0.9 is a speed release of the 64-bit CPU translator: in our micro-loops integer division is 2.3–2.4 times faster than in 1.0.8 (`div` 2.09 → 0.92 ns, `idiv` 1.96 → 0.81 ns) and a chain of scalar `addss` 1.7 times faster (1.57 → 0.94 ns); unaligned `lock` operations are now exact. It was accepted on test stands rather than by replaying games, so the game results below retain their original test dates and configurations. [Changes in each release and current limits →](RELEASE_STATUS.md)
+**Development preview: [MacRunner 1.1.0](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.0), build 119, November 5, 2026**, for Apple Silicon Macs. This release improves Wine memory allocation and asynchronous exception handling (including IsBad*), speeds up QueryPerformanceCounter and D3D11 → Metal, and adds a Retina toggle on each game's page. It was built locally under a one-time exception approved by the owner; the clean GitHub build and package convergence remain in progress. [Release notes: English](docs/RELEASE-1.1.0-EN.md) · [Что нового: русский](docs/RELEASE-1.1.0-RU.md).
+
+### 1.1.0: recorded performance / производительность
+
+Owner recordings, November 4, M1 Pro, macOS 27.0; gameplay HUD sampled every 0.5 s:
+
+| Game / игра | MacRunner mean FPS / средние к/с | Reference / сравнение |
+|---|---:|---|
+| Elden Ring, 1920×1200 High | 44.81 | 24.84 — CrossOver Preview 20261015, Rosetta + D3DMetal |
+| Hollow Knight 1.5.12620 | 118.66 at 3024×1964 | 119.71 — native Mac at 3024×1898 |
+
+These are individual c32r recordings with different routes and pause durations; HK renders 3.48% more pixels in MacRunner. They are not controlled comparisons of the final signed package. A separate HK GPU comparison at 1280×720, capped at 60 FPS, measured **2.27 ms versus native 2.39 ms** in one scene. [Full tables and methodology](docs/PERFORMANCE-1.1.0-EN.md) · [Полные таблицы и методика](docs/PERFORMANCE-1.1.0-RU.md).
+
+### First launch / Первый запуск
+
+On the first game launch after installation, MacRunner prepares the bottle for several minutes. The game compiles shaders during its first few minutes, which can cause stuttering. On the second launch, preparation is complete and cached shaders allow smoother play; new scenes may still compile shaders. For the best frame rates, close demanding background apps and disconnect your second monitor; both remained active in the owner's recordings.
+
+При первом запуске игры приложение готовит бутылку несколько минут. В первые минуты игры компилируются шейдеры, поэтому возможны подтормаживания. Со второго запуска подготовка выполнена, а кеш шейдеров делает игру плавнее; новые сцены могут требовать компиляции. Для лучших к/с закройте тяжёлые фоновые программы и отключите второй монитор — в записях владельца они оставались активны.
+
+Retina is a per-game toggle. Automatic Retina, fullscreen EmulateModeset, shader-cache migration between engine versions and faster bottle updates are planned for 1.1.1 and are not included in 1.1.0. Updating the engine may repeat preparation and shader compilation. HEADER_BY_PC, RET_NOPOLL, CMP_ZC, RIP_LITERAL and QPC_INLINE are disabled by default; the benchmark result “on par with Rosetta” uses experimental configuration M.
+
+В 1.1.0 Retina включается переключателем на странице игры. Автоматический выбор Retina, EmulateModeset, перенос кеша шейдеров и быстрое обновление бутылки в выпуск не вошли; они запланированы для 1.1.1. «Наравне с Rosetta» — результат экспериментальной настройки M, а не умолчаний выпуска.
+
+### DirectX 12 without Rosetta / без Rosetta
+
+Elden Ring (DirectX 12) runs on Apple Silicon without Rosetta — our own x86 translator (HyperBridge) and our own DX12 → Metal layer. As far as we know, this is a first: CrossOver Preview (FEX, no Rosetta) does not start Elden Ring. This was checked by the owner; its FEX bottles include only D3D10/11.
+
+Elden Ring (DirectX 12) идёт на Apple Silicon без Rosetta: свой переводчик x86 (HyperBridge) и свой слой DX12 → Metal. Насколько нам известно — первыми: CrossOver Preview (FEX, без Rosetta) Elden Ring не запускает (проверено владельцем), его FEX-бутылки несут только D3D10/11.
 
 A separate [1.0.6-indiana experimental preview](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.6-indiana) adds Indiana Jones and the Great Circle (GOG) through MoltenVK. Its M1 Pro check reported about 10–12 FPS at minimum settings, with rendering issues and a GPU hang that restarted the macOS session when firing a weapon. Save your work before trying it. It is based on 1.0.6 and is separate from the ordinary releases, including 1.0.9. [Test scope →](TESTED_GAMES.md#indiana-jones--106-indiana-experimental-preview)
 
@@ -95,7 +122,7 @@ These credits recognise people, development tools and upstream projects. GitHub'
 | Milestone | What it means |
 | --- | --- |
 | **HyperBridge engine in 1.0.9** | FEX-Emu `fd141ed6d` with MacRunner's patch series: 87 patches for the 64-bit translator, public in the [HyperBridge repository](https://github.com/t0b1kent/hyperbridge) and shipped in the release's source archive. This build was compiled on our own Mac; rebuilding it from the public repositories on a clean cloud machine is in progress (for 1.0.8 both translator modules had been rebuilt there and matched byte for byte). The loop comparison on the HyperBridge page is measured on this package. |
-| **Native Mac app** | Development preview 1.0.9 released, Developer ID-signed and notarized, with the corresponding source of its LGPL/GPL components. |
+| **Native Mac app** | Development preview 1.1.0, build 119; local release exception, with the GitHub source-build work continuing. [Release notes](docs/RELEASE-1.1.0-EN.md). |
 | **Compatibility fixes since 1.0.3** | 1.0.4 fixes a Wine-server mapping failure; 1.0.5 exposes crypto CPU features and fixes L3 reporting and executable loading; 1.0.6 updates exception handling, the x18 transition path and Hedon's graphics profile; 1.0.7 adds notarization, the 32-bit runtime and .NET 6 startup; 1.0.8 enables hardware memory ordering and faster startup defaults, fixes sound in two titles and lets the app start 32-bit programs; 1.0.9 makes integer division and scalar SSE arithmetic faster in the 64-bit translator and unaligned `lock` operations exact. [Release details →](RELEASE_STATUS.md) |
 | **Automated application checks** | Launch status, installation, localization, packaging and update coordination are covered by passing checks. |
 | **45,998 shaders** | The separate DirectX 12 development path passes native loading and parsing/reflection checks for this shader corpus. |
@@ -167,4 +194,4 @@ We want the people and projects behind this work to be visible. [Meet the founda
 
 ---
 
-<p align="center"><sub>HyperBridge engine (FEX-Emu based, MIT) · MacRunner 1.0.9 development preview · Updated October 7, 2026</sub></p>
+<p align="center"><sub>HyperBridge engine (FEX-Emu based, MIT) · MacRunner 1.1.0 development preview · Updated November 5, 2026</sub></p>

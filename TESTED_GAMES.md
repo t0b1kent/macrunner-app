@@ -1,10 +1,17 @@
 # Tested games & engines
 
-**Last updated: October 5, 2026**
+**Last updated: November 5, 2026**
 
 This page records what has actually been observed while developing MacRunner. A title in the library or launch-profile catalog is not automatically a tested game. Results apply to the configurations used for those sessions.
 
-**Current ordinary release: MacRunner 1.0.9 (October 7).** It changes only the 64-bit CPU translator and was accepted on test stands; no games were replayed on it, so the newest game observations below are the 1.0.8 checks of October 5. The September 29 FPS section was measured on 1.0.3 with engine 0015; those figures have not been re-measured since. Other entries keep their original configurations. The separate Indiana preview is identified explicitly. [HyperBridge status →](HYPERBRIDGE.md)
+**Current ordinary release: [MacRunner 1.1.0, build 119](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.0).** The owner recorded Elden Ring and Hollow Knight on the c32r candidate on November 4. No live games were launched for final release packaging. These recordings are distinct from the historical observations below. [Full performance tables and methodology](docs/PERFORMANCE-1.1.0-EN.md) · [Русская методика](docs/PERFORMANCE-1.1.0-RU.md).
+
+| November 4 recording | MacRunner mean FPS | Reference |
+|---|---:|---|
+| Elden Ring, 1920×1200 High | 44.81 | 24.84, CrossOver Preview 20261015, Rosetta + D3DMetal |
+| Hollow Knight 1.5.12620 | 118.66, 3024×1964 | 119.71, native Mac, 3024×1898 |
+
+M1 Pro, macOS 27.0, HUD every 0.5 s, gameplay only. Routes and pause durations differ; these are single recordings of c32r, not a controlled comparison of the final signed package. The September 29 FPS section below remains a historical 1.0.3 / engine 0015 measurement.
 
 ## MacRunner 1.0.8 · October 5 checks
 
