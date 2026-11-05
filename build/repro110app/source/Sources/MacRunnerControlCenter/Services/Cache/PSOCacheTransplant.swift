@@ -2,19 +2,48 @@ import CryptoKit
 import Darwin
 import Foundation
 
-/// The c31/c32 DXIL corpus and both PSO controls proved these two namespaces
-/// interchangeable. A different graphics binary needs a new equivalence proof.
+/// A release catalogue binds proved cache namespaces to the final signed graphics bytes.
+/// Its hashes are filled after signing; the application code is built from source on GitHub.
 enum PSOCacheTransplant {
     private static let lock = NSLock()
-    static let versions = [
+    struct Compatibility: Decodable {
+        let schema: Int
+        let versions: [String: String]
+        let binaries: [String: String]
+    }
+    private static let historicalVersions = [
         "9598ab010d5b-4e89a8cc-": "9598ab010d5b-de834a3d-",
         "9598ab010d5b-864097a5-": "9598ab010d5b-072b0e05-"
     ]
-    private static let binaries = [
+    private static let historicalBinaries = [
         "graphics/aarch64-unix/winemetal.so": "f8d176c7c1020a94ae96162739eed2a9be514a32d8b2df61292d267370b8bf08",
         "graphics/aarch64-windows/d3d12.dll": "bdc20b6bd1b97141d3331d9e203777771cc5d9d64221724fee957f6fc689e981"
     ]
     enum Failure: Error { case unsafeNode, invalidFormat, inventoryLimit, changedSource, changedCopy, copyFailed(Int32) }
+
+    static func decodeCompatibility(_ data: Data) throws -> Compatibility {
+        let value = try JSONDecoder().decode(Compatibility.self, from: data)
+        guard value.schema == 1, !value.versions.isEmpty, value.versions.count <= 16,
+              Set(value.binaries.keys) == Set(historicalBinaries.keys),
+              value.binaries.values.allSatisfy({ $0.range(of: "^[0-9a-f]{64}$", options: .regularExpression) != nil }),
+              value.versions.allSatisfy({ source, target in
+                  source != target && [source, target].allSatisfy {
+                      $0.range(of: "^[0-9a-f]{12}-[0-9a-f]{8}-$", options: .regularExpression) != nil
+                  }
+              }) else { throw Failure.invalidFormat }
+        return value
+    }
+
+    private static let compatibility: Compatibility = {
+        guard let url = Bundle.module.url(forResource: "pso-cache-compatibility", withExtension: "json", subdirectory: "BottleCatalogues")
+                ?? Bundle.module.url(forResource: "pso-cache-compatibility", withExtension: "json") else {
+            return Compatibility(schema: 1, versions: historicalVersions, binaries: historicalBinaries)
+        }
+        // An invalid release catalogue disables migration. It must never broaden the approved set.
+        return (try? decodeCompatibility(Data(contentsOf: url)))
+            ?? Compatibility(schema: 1, versions: [:], binaries: [:])
+    }()
+    static var versions: [String: String] { compatibility.versions }
 
     static func digest(_ file: URL) throws -> String {
         let data = try Data(contentsOf: file, options: .mappedIfSafe)
@@ -45,7 +74,7 @@ enum PSOCacheTransplant {
         do {
             let candidates = try candidates(in: directory)
             guard !candidates.isEmpty else { return "EMPTY: no approved warm source awaiting migration" }
-            for (name, expected) in binaries {
+            for (name, expected) in compatibility.binaries {
                 let file = engine.root.appendingPathComponent(name)
                 guard try digest(file) == expected else { return "NOT_ENABLED: graphics binary has no PSO equivalence proof" }
             }
