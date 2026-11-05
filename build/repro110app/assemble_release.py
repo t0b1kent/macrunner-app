@@ -128,8 +128,18 @@ def stage_wine_loader(app, backup):
     for index, path in enumerate([wine / 'bin/wine', source]):
         shutil.move(path, backup / (str(index) + '-wine'))
         path.symlink_to(os.path.relpath(executable, path.parent))
+    # The signed helper owns address reservation. A legacy preloader wins
+    # Wine's SETEXEC lookup and has no provisioning profile for 4 KiB mode.
+    # Keep it outside the application so Wine falls back to the signed loader.
+    omitted = []
+    for index, relative in enumerate(('bin/wine-preloader', 'lib/wine/aarch64-unix/wine-preloader')):
+        path = wine / relative
+        if path.exists() or path.is_symlink():
+            omitted.append(dict(path=relative, sha256=sha(path)))
+            shutil.move(path, backup / (str(index) + '-wine-preloader'))
     return dict(source_sha256=hashlib.sha256(data).hexdigest(), code_equal=True,
-                bundle=str(helper.relative_to(app)), profile='LOCAL_SIGNING_REQUIRED')
+                bundle=str(helper.relative_to(app)), profile='LOCAL_SIGNING_REQUIRED',
+                omitted_legacy_preloaders=omitted)
 
 
 def map_ci_paths(app, backup, old=None):

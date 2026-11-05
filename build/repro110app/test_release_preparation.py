@@ -111,6 +111,26 @@ class ReleasePreparationTests(unittest.TestCase):
         self.assertEqual((self.root / 'backup/1-wine').read_bytes(), binary)
         self.assertEqual(plistlib.loads((helper / 'Contents/Info.plist').read_bytes())['CFBundleExecutable'], 'wine')
         self.assertEqual(result['profile'], 'LOCAL_SIGNING_REQUIRED')
+        self.assertEqual(result['omitted_legacy_preloaders'], [])
+
+    def test_legacy_preloaders_are_preserved_outside_the_signed_helper_package(self):
+        app = self.root / 'App'
+        wine = app / 'Contents/Resources/engine/wine'
+        source = wine / 'lib/wine/aarch64-unix/wine'; source.parent.mkdir(parents=True)
+        binary = macho(payload=LOADER_PATHS)
+        source.write_bytes(binary)
+        shim = wine / 'bin/wine'; shim.parent.mkdir(); shim.write_bytes(b'original shim')
+        relatives = ('bin/wine-preloader', 'lib/wine/aarch64-unix/wine-preloader')
+        for index, relative in enumerate(relatives):
+            (wine / relative).write_bytes(b'legacy preloader ' + bytes([index]))
+        result = producer.stage_wine_loader(app, self.root / 'backup')
+        self.assertEqual([row['path'] for row in result['omitted_legacy_preloaders']], list(relatives))
+        for index, relative in enumerate(relatives):
+            self.assertFalse((wine / relative).exists())
+            preserved = self.root / 'backup' / (str(index) + '-wine-preloader')
+            self.assertEqual(preserved.read_bytes(), b'legacy preloader ' + bytes([index]))
+            self.assertEqual(result['omitted_legacy_preloaders'][index]['sha256'], producer.sha(preserved))
+        self.assertEqual((app / result['bundle'] / 'Contents/MacOS/wine').read_bytes(), binary)
 
     def test_unfixed_source_loader_is_rejected_before_helper_creation(self):
         app = self.root / 'App'
