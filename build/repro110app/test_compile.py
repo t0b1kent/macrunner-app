@@ -57,6 +57,10 @@ if a[0]=='test':
 scratch=pathlib.Path(a[a.index('--scratch-path')+1]); out=scratch/'arm64-apple-macosx'/'release'
 if '--show-bin-path' in a: print(out); sys.exit(0)
 if a[0]=='test':
+ if os.environ.get('OWN_TEST_REWRITES_PRODUCTS'):
+  for name in ['MacRunnerControlCenter','macr-hud']:
+   (out/name).write_bytes(bytes.fromhex('cffaedfe0c000001')+b'TESTABLE_BUILD_PRODUCT')
+  (out/'MacRunnerControlCenter_MacRunnerControlCenter.bundle'/'resource.txt').write_text('test-only resource bytes')
  print('Test run with 1 tests passed'); sys.exit(int(os.environ.get('OWN_TEST_RC','0')))
 if os.environ.get('OWN_BUILD_RC'): sys.exit(int(os.environ['OWN_BUILD_RC']))
 out.mkdir(parents=True)
@@ -163,6 +167,23 @@ print('install skipped')
         self.assertEqual(result['app_bundle']['status'], 'PARTIAL_APP_BUNDLE_RUNTIME_INPUTS_NOT_ENABLED')
         self.assertEqual(result['app_bundle']['release_signing'], 'NOT_ENABLED')
         self.assertEqual(result['app_bundle']['whole_product'], 'NOT_ENABLED')
+
+    def test_test_rebuild_cannot_replace_production_executables_or_resources(self):
+        rc, result = self.exercise(env={'OWN_TEST_REWRITES_PRODUCTS': '1'})
+        self.assertEqual(rc, 0)
+        production = bytes.fromhex('cffaedfe0c000001') + bytes(24)
+        for name in ['MacRunnerControlCenter', 'macr-hud']:
+            self.assertEqual((self.args.work / 'prefix/products' / name).read_bytes(), production)
+        resource = self.args.work / 'prefix/products/MacRunnerControlCenter_MacRunnerControlCenter.bundle/resource.txt'
+        self.assertEqual(resource.read_text(), 'own resource bytes')
+        self.assertTrue(result['products_captured_before_tests'])
+
+    def test_failed_test_rebuild_retains_production_bytes_and_failure_status(self):
+        rc, result = self.exercise(env={'OWN_TEST_REWRITES_PRODUCTS': '1', 'OWN_TEST_RC': '9'})
+        self.assertEqual(rc, 1)
+        self.assertEqual(result['first_failure']['phase'], 'SWIFT_TEST')
+        self.assertEqual((self.args.work / 'prefix/products/MacRunnerControlCenter').read_bytes(),
+                         bytes.fromhex('cffaedfe0c000001') + bytes(24))
 
     def test_framework_failure_stops_before_swift(self):
         rc, result = self.exercise(framework_rc=1)

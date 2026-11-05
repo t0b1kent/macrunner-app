@@ -226,6 +226,18 @@ def build(args):
             checkpoint('START')
             if action == 'build':
                 command(swift_argv(swift, action, app_work, args.jobs), phase.lower(), cwd=app_work / 'app')
+                # Swift test can rebuild these same paths with testability enabled.
+                # Preserve both release executables and resources before that happens.
+                phase = 'PRODUCTS'
+                checkpoint('START')
+                selected = output(swift_argv(swift, 'build', app_work, args.jobs) + ['--show-bin-path'],
+                                  'bin-path', cwd=app_work / 'app')
+                bin_path = selected_bin_path(selected, app_work)
+                result['products'], result['prefix_inventory'] = capture_products(
+                    bin_path, framework_args.work, work / 'prefix', runner, output)
+                result['products_captured_before_tests'] = True
+                checkpoint('PASSED')
+                phase = 'SWIFT_BUILD'
             else:
                 # The unit tests run under an explicit rule (swift_test_report.py): the whole output is kept, failures are
                 # listed by name, failed tests are rechecked once, only named allowances may stay red. A red test does
@@ -238,13 +250,6 @@ def build(args):
                 result['swift_tests'] = load_test_report(reports)
             result['phases'][-1]['status'] = 'FAILED' if action == 'test' and tests_failed else 'PASSED'
             checkpoint('FAILED' if action == 'test' and tests_failed else 'PASSED')
-        phase = 'PRODUCTS'
-        checkpoint('START')
-        selected = output(swift_argv(swift, 'build', app_work, args.jobs) + ['--show-bin-path'],
-                          'bin-path', cwd=app_work / 'app')
-        bin_path = selected_bin_path(selected, app_work)
-        result['products'], result['prefix_inventory'] = capture_products(
-            bin_path, framework_args.work, work / 'prefix', runner, output)
         phase = 'PACKAGE_APP'
         checkpoint('START')
         packager = package_module()
