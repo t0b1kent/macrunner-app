@@ -1,0 +1,9 @@
+[Version]
+Signature="$Windows NT$"
+
+[MacRunnerCheckedRegistration]
+RegisterDlls=RegisterDllsSection
+
+[DestinationDirs]
+MacRunnerExpected11=11
+MacRunnerExpected55=55
