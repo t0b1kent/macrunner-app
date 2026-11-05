@@ -171,12 +171,8 @@ final class RunAppViewModel: ObservableObject {
         let override = app.graphicsAPI.flatMap(GraphicsAPI.init(rawValue:))
         // «Высокое разрешение (Retina)» записи игры. Выключено — тоже явное значение: RetinaMode
         // общий на бутылку, и снять его, оставленный другой игрой, может только этот запуск.
-        // Рука испытания «авто» (ключ процесса приложения MACRUNNER_RETINA_AUTO=1, по умолчанию нет): без переключателя
-        // RetinaMode следует ГЛАВНОМУ экрану (на нём Wine открывает окно игры, по нему же winemac check_retina_status):
-        // Retina — включено, обычный монитор — выключено. Явное «включено» записи игры главнее.
-        let autoRetina = ProcessInfo.processInfo.environment["MACRUNNER_RETINA_AUTO"] == "1"
-            && (NSScreen.screens.first?.backingScaleFactor ?? 1) > 1
-        let highResolution = app.highResolution == true || (app.highResolution == nil && autoRetina)
+        // An explicit per-game choice wins over automatic detection of the primary screen.
+        let highResolution = RetinaDefault.forGame(app.highResolution)
         Task.detached(priority: .userInitiated) {
             defer { UpdateSafetyGate.shared.endActivity(activity) }
             // Графику подбираем по файлам игры до запуска: разбор читает только заголовки
@@ -239,4 +235,22 @@ final class RunAppViewModel: ObservableObject {
             lastLauncherResult = nil
         }
     }
+}
+
+/// Wine opens on the primary screen. Unconfigured games follow its pixel scale.
+enum RetinaDefault {
+    static let autoByDefault = true
+
+    static func resolve(choice: Bool?, scaleFactor: CGFloat, override: String?) -> Bool {
+        if let choice { return choice }
+        guard override.map({ $0 == "1" }) ?? autoByDefault else { return false }
+        return scaleFactor > 1
+    }
+
+    static func forGame(_ choice: Bool?) -> Bool {
+        resolve(choice: choice, scaleFactor: NSScreen.screens.first?.backingScaleFactor ?? 1,
+                override: ProcessInfo.processInfo.environment["MACRUNNER_RETINA_AUTO"])
+    }
+
+    static var automatic: Bool { forGame(nil) }
 }
