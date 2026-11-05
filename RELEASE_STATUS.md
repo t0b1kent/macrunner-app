@@ -1,8 +1,20 @@
 # Release status
 
-**MacRunner 1.0.9 development preview · Updated October 7, 2026**
+**MacRunner 1.1.0 development preview · Updated November 5, 2026**
 
-MacRunner is a standalone native Mac application. Its CPU engine is **HyperBridge**: FEX-Emu with MacRunner's patch series, public under MIT at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). The ordinary 1.0.9 preview, the separate 1.0.6-indiana experimental preview and DirectX 12 graphics research are distinct configurations.
+MacRunner is a standalone native Mac application. Its CPU engine is **HyperBridge**: FEX-Emu with MacRunner's patch series, public under MIT at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). The current ordinary preview is 1.1.0; the 1.0.6-indiana experimental preview remains a separate configuration.
+
+## MacRunner 1.1.0 · build 119
+
+[Application release](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.0) · [Translator release](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.0) · [English release notes](docs/RELEASE-1.1.0-EN.md) · [Заметки по-русски](docs/RELEASE-1.1.0-RU.md).
+
+This release updates Wine memory allocation and asynchronous exceptions, including IsBad*, improves QueryPerformanceCounter and D3D11 → Metal, and includes a Retina toggle on the game's page. HEADER_BY_PC, RET_NOPOLL, CMP_ZC, RIP_LITERAL and QPC_INLINE are disabled by default. Automatic Retina, EmulateModeset, shader-cache migration and faster bottle updates are planned for 1.1.1.
+
+The package was built locally under a one-time exception approved by the owner. Clean GitHub builds and convergence continue separately. Final packaging did not launch live games. Owner recordings of the c32r candidate show ER 44.81 vs 24.84 FPS (CrossOver Rosetta), and HK 118.66 vs 119.71 FPS (native Mac); see the [full measurement limits](docs/PERFORMANCE-1.1.0-EN.md).
+
+On a game's first launch, bottle preparation can take several minutes and shader compilation can cause stuttering. Subsequent launches use the prepared bottle and cached shaders; an engine update may require preparation again because 1.1.0 does not migrate shader caches.
+
+## Historical releases
 
 ## MacRunner 1.0.9 development preview
 
