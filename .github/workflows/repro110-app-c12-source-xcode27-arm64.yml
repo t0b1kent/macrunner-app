@@ -129,7 +129,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: t0b1kent/macrunner-wine
-          ref: 9f1130183005e41c597d7591f83627188d76bdf8
+          ref: f612c4724c12659b4ae2ab3eb4ee093e32e47838
           path: wine
           persist-credentials: false
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262

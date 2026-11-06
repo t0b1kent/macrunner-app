@@ -1,11 +1,11 @@
 {
   "wine": {
     "repo": "t0b1kent/macrunner-wine",
-    "run": 42007663870,
-    "revision": "9f1130183005e41c597d7591f83627188d76bdf8",
-    "artifact": 13408322869,
-    "sha256": "531f5ee441d4964de0c599908cb7d5e430ed7b777b6cf634628be9cd15ac1264",
-    "artifact_name": "repro110-wine-c12-9f1130183005e41c597d7591f83627188d76bdf8"
+    "run": 42126910465,
+    "revision": "f612c4724c12659b4ae2ab3eb4ee093e32e47838",
+    "artifact": 13464129070,
+    "sha256": "67640dccb0040c16d4a63978e3acdd5d338d8fe4b774e1997c87393f9df60e8e",
+    "artifact_name": "repro110-wine-c12-f612c4724c12659b4ae2ab3eb4ee093e32e47838"
   },
   "app": {
     "repo": "t0b1kent/macrunner-app",
