@@ -130,7 +130,7 @@ class FakeBuild(unittest.TestCase):
                                              normalized_sha256=hashlib.sha256(step.zero_macho_uuid(macho(uuid))[0]).hexdigest())
         return lock
 
-    def run_build(self, lock, pe=b'MZ fake job', uuid=b'\x44' * 16, wipe_source=False, sdk_response=None):
+    def run_build(self, lock, pe=b'MZ fake job', uuid=b'\x44' * 16, wipe_source=False, sdk_response=None, fetch_compiler=False):
         calls = []
         def run(argv, label, cwd=None, timeout=1800):
             calls.append(label)
@@ -143,12 +143,15 @@ class FakeBuild(unittest.TestCase):
                     'xcode-version': 'Xcode 27.0\n'}.get(label, '')
         if wipe_source:
             (self.root / 'source/engine-tools/macrunner-job.c').write_text('/* changed */\n')
-        args = type('A', (), dict(source=self.root / 'source', work=self.root / 'work', mingw_bin=self.root / 'mingw'))()
-        with patch.object(step, 'read_lock', return_value=lock), patch.object(step.sys, 'platform', 'darwin'):
+        args = type('A', (), dict(source=self.root / 'source', work=self.root / 'work',
+                                 mingw_bin=None if fetch_compiler else self.root / 'mingw'))()
+        with patch.object(step, 'read_lock', return_value=lock), patch.object(step.sys, 'platform', 'darwin'), \
+                patch.object(step, 'fetch_mingw', return_value=self.root / 'mingw') as fetch:
             try:
                 step.build(args, run)
             finally:
                 self.result = json.loads((self.root / 'work/RESULT.json').read_text())
+            self.fetch_calls = fetch.call_args_list
         return calls
 
     def test_matching_tools_report_the_accepted_status_and_sign_and_install_nothing(self):
@@ -158,6 +161,16 @@ class FakeBuild(unittest.TestCase):
         self.assertEqual((self.result['install'], self.result['signing']), ('NOT_PERFORMED', 'NOT_PERFORMED'))
         self.assertTrue(all(not c.startswith(('codesign-sign', 'install')) for c in calls))
         self.assertTrue((self.root / 'work/outputs/tools/macrunner-job.exe').is_file())
+        self.assertEqual(self.result['pe_toolchain']['provenance'], 'SUPPLIED_BIN')
+
+    def test_no_supplied_compiler_fetches_the_independent_sealed_pin(self):
+        lock = self.lock()
+        self.run_build(lock, fetch_compiler=True)
+        self.assertEqual(self.result['status'], 'ENGINE_TOOLS_BUILT_AS_ACCEPTED')
+        self.assertEqual(len(self.fetch_calls), 1)
+        self.assertEqual(self.fetch_calls[0].args[0]['compiler'], lock['tools'][0]['compiler'])
+        self.assertEqual(self.result['pe_toolchain']['provenance'], 'PINNED_ARCHIVE')
+        self.assertEqual(self.result['pe_toolchain']['compiler'], lock['tools'][0]['compiler'])
 
     def test_a_different_pe_is_reported_not_hidden(self):
         self.run_build(self.lock(pe=b'MZ other'), pe=b'MZ fake job')

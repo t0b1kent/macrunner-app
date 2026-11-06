@@ -32,6 +32,18 @@ def load_module(name, path):
     return module
 
 
+def selected_helper_compiler(report, work):
+    """Helpers keep their own sealed compiler pin, independently of Wine."""
+    selected = report.get('pe_toolchain', {})
+    expected = json.loads((HERE / 'engine-tools.lock.json').read_bytes())['tools'][0]['compiler']
+    if selected.get('provenance') != 'PINNED_ARCHIVE' or selected.get('compiler') != expected:
+        raise ValueError('Helper compiler was not restored from its independent pinned archive')
+    binary_dir = Path(selected.get('bin', '')).resolve()
+    if not binary_dir.is_relative_to(Path(work).resolve()) or not (binary_dir / 'x86_64-w64-mingw32-clang').is_file():
+        raise ValueError('Helper compiler leaves its owned build directory or is incomplete')
+    return binary_dir
+
+
 def unpack(archive, destination):
     if destination.exists() or destination.is_symlink():
         raise ValueError('Fresh release extraction destination required')
@@ -307,13 +319,16 @@ def build(args):
         (diagnostics / 'airconv').chmod(0o755)
         tools_work = args.work / 'engine-tools'
         run('engine-tools', [sys.executable, '-I', '-B', HERE / 'build_engine_tools.py', '--build',
-                            '--work', tools_work, '--mingw-bin', Path(paths['compiler']) / 'bin'])
+                            '--work', tools_work])
         tools = json.loads((tools_work / 'RESULT.json').read_text())
+        shutil.copy2(tools_work / 'RESULT.json', reports / 'engine-tools-build.json')
+        result['engine_tools'] = tools
         if tools.get('status') != 'ENGINE_TOOLS_BUILT_AS_ACCEPTED':
             raise ValueError('Engine tool source build incomplete: ' + str(tools.get('status')))
+        helper_compiler = selected_helper_compiler(tools, tools_work)
         bottle_work = args.work / 'bottle-tools'
         run('bottle-tools', [sys.executable, '-I', '-B', HERE / 'build_bottle_tools.py',
-                             '--work', bottle_work, '--mingw-bin', Path(paths['compiler']) / 'bin'])
+                             '--work', bottle_work, '--mingw-bin', helper_compiler])
         bottle_builder = load_module('release110_bottle_tools', HERE / 'build_bottle_tools.py')
         result['bottle_tools'] = bottle_builder.install(bottle_work, app)
         source_roots = [Path(paths['deps']), Path(paths['moltenvk']), fex]

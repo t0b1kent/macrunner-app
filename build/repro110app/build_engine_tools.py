@@ -144,6 +144,9 @@ def build(args, run=default_run):
             if row['kind'] == 'pe-x86_64-mingw' and mingw_bin is None:
                 phase = row['name'] + ':COMPILER'
                 mingw_bin = fetch_mingw(row, work, run)
+            if row['kind'] == 'pe-x86_64-mingw':
+                result['pe_toolchain'] = dict(bin=str(mingw_bin.resolve()), compiler=row['compiler'],
+                    provenance='SUPPLIED_BIN' if args.mingw_bin else 'PINNED_ARCHIVE')
             phase = row['name'] + ':COMPILE'
             target = out / row['name']
             run(compile_argv(row, source, target, mingw_bin, clang, sdk), 'compile-' + row['name'], cwd=work)
