@@ -71,6 +71,37 @@ class ReleasePreparationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'repository differs'):
             producer.select_wine_source(transport, dict(pins['wine'], repo='invalid/repository'))
 
+    def helper_compiler_fixture(self):
+        work = self.root / 'helpers'
+        binary_dir = work / 'llvm-mingw/pinned/bin'
+        binary_dir.mkdir(parents=True)
+        (binary_dir / 'x86_64-w64-mingw32-clang').write_bytes(b'fixture compiler')
+        compiler = json.loads((HERE / 'engine-tools.lock.json').read_bytes())['tools'][0]['compiler']
+        return work, binary_dir, dict(pe_toolchain=dict(bin=str(binary_dir), compiler=compiler,
+                                                       provenance='PINNED_ARCHIVE'))
+
+    def test_helper_compiler_keeps_its_independent_pin(self):
+        work, binary_dir, report = self.helper_compiler_fixture()
+        self.assertEqual(producer.selected_helper_compiler(report, work), binary_dir)
+
+    def test_new_wine_compiler_and_unverified_supplied_bin_are_refused_for_helpers(self):
+        work, _, report = self.helper_compiler_fixture()
+        report['pe_toolchain']['compiler'] = dict(report['pe_toolchain']['compiler'], clang='23.1.1')
+        with self.assertRaisesRegex(ValueError, 'independent pinned archive'):
+            producer.selected_helper_compiler(report, work)
+        work_report = json.loads((HERE / 'engine-tools.lock.json').read_bytes())['tools'][0]['compiler']
+        report['pe_toolchain'].update(compiler=work_report, provenance='SUPPLIED_BIN')
+        with self.assertRaisesRegex(ValueError, 'independent pinned archive'):
+            producer.selected_helper_compiler(report, work)
+
+    def test_helper_compiler_cannot_escape_owned_work_or_omit_driver(self):
+        work, binary_dir, report = self.helper_compiler_fixture()
+        with self.assertRaisesRegex(ValueError, 'owned build directory'):
+            producer.selected_helper_compiler(report, self.root / 'wine-compiler')
+        (binary_dir / 'x86_64-w64-mingw32-clang').unlink()
+        with self.assertRaisesRegex(ValueError, 'incomplete'):
+            producer.selected_helper_compiler(report, work)
+
     def test_macho_pe_and_json_mapping_preserves_code_and_originals(self):
         app = self.root / 'App'; app.mkdir()
         for name, value in [('native', macho()), ('guest.dll', pe()),
