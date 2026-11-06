@@ -18,12 +18,26 @@ import time
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import assemble_engine as engine
+import bundle_minimum_macos
 import release_sections
 
 
 def sha(path):
     with Path(path).open('rb') as stream:
         return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+
+def finalize_bundle_minimum(app):
+    """Include every staged component, retaining a higher application baseline."""
+    app = Path(app)
+    info = plistlib.loads((app / 'Contents/Info.plist').read_bytes())
+    baseline = bundle_minimum_macos.parse_version(info['LSMinimumSystemVersion'])
+    minimum, targets = bundle_minimum_macos.scan_bundle(app, baseline)
+    bundle_minimum_macos.apply_minimum(app, minimum)
+    return dict(previous=info['LSMinimumSystemVersion'],
+                minimum_macos=bundle_minimum_macos.version_string(minimum),
+                mach_o_files_with_macos_target=len(targets),
+                floor_components=sorted(path for path, version in targets.items() if version == minimum))
 
 
 def load_module(name, path):
@@ -380,6 +394,7 @@ def build(args):
         run('app-architecture', [sys.executable, '-I', '-B', HERE / 'check-macho-arch.py', app])
         if not os.access(contents / 'MacOS' / info['CFBundleExecutable'], os.X_OK):
             raise ValueError('Application executable lost mode')
+        result['bundle_minimum_macos'] = finalize_bundle_minimum(app)
         run('archive-app', ['tar', '-czf', args.work / 'MacRunner-1.1.1-unsigned-source-built.tar.gz',
                             '-C', prefix, 'MacRunner.app'])
         result.update(status='WHOLE_APP_SOURCE_ASSEMBLED_SIGNING_AND_GATES_REQUIRED',

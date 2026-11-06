@@ -57,6 +57,43 @@ class ReleasePreparationTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
 
+    def final_bundle_fixture(self, baseline='26.5'):
+        app = self.root / 'final.app'
+        contents = app / 'Contents'
+        (contents / 'Resources/engine/tools').mkdir(parents=True)
+        (contents / 'Info.plist').write_bytes(plistlib.dumps(dict(
+            LSMinimumSystemVersion=baseline, CFBundleVersion='120', SUFeedURL='https://example.invalid/appcast.xml')))
+        return app
+
+    def test_final_bundle_floor_includes_late_staged_native_tools(self):
+        app = self.final_bundle_fixture()
+        command = struct.pack('<IIIIII', 0x32, 24, 1, 27 << 16, 28 << 16, 0)
+        helper = app / 'Contents/Resources/engine/tools/macrunner-session'
+        helper.write_bytes(struct.pack('<IIIIIIII', 0xfeedfacf, 0x100000c, 0, 2, 1, len(command), 0, 0) + command)
+        before = helper.read_bytes()
+        result = producer.finalize_bundle_minimum(app)
+        self.assertEqual(result['previous'], '26.5')
+        self.assertEqual(result['minimum_macos'], '27.0')
+        self.assertEqual(result['floor_components'], ['Contents/Resources/engine/tools/macrunner-session'])
+        info = plistlib.loads((app / 'Contents/Info.plist').read_bytes())
+        self.assertEqual(info['LSMinimumSystemVersion'], '27.0')
+        self.assertEqual(info['CFBundleVersion'], '120')
+        self.assertEqual(info['SUFeedURL'], 'https://example.invalid/appcast.xml')
+        self.assertEqual(helper.read_bytes(), before)
+
+    def test_final_bundle_floor_preserves_higher_application_baseline(self):
+        app = self.final_bundle_fixture('28.1')
+        self.assertEqual(producer.finalize_bundle_minimum(app)['minimum_macos'], '28.1')
+
+    def test_corrupt_late_component_does_not_rewrite_declared_floor(self):
+        app = self.final_bundle_fixture()
+        info = app / 'Contents/Info.plist'
+        before = info.read_bytes()
+        (app / 'Contents/Resources/engine/tools/broken').write_bytes(struct.pack('<I', 0xfeedfacf))
+        with self.assertRaises(ValueError):
+            producer.finalize_bundle_minimum(app)
+        self.assertEqual(info.read_bytes(), before)
+
     def test_release_wine_selection_retains_dependency_inputs_and_matches_recipe(self):
         pins = json.loads((HERE / 'release-inputs.lock.json').read_text())
         old_inputs = dict(wine={'revision': 'old'}, deps={'revision': 'deps'}, llvm={'revision': 'llvm'})
