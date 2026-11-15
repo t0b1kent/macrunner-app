@@ -52,6 +52,28 @@ import Testing
         #expect(try PSOCacheTransplant.candidates(in: root).isEmpty)
     }
 
+    /// The product path composes the namespace from DARWIN_USER_CACHE_DIR (/var/... after
+    /// resolvingSymlinksInPath) while the directory listing answers /private/var/...; the
+    /// candidate pair itself must be transplantable (1.1.1 R7 refused it with unsafeNode).
+    @Test func candidatePairFromTheUserCacheDirectoryTransplants() throws {
+        let relative = "macrunner-tests/pso-transplant-\(UUID())/eldenring.exe/pso"
+        let root = try #require(PSOCacheTransplant.cacheDirectory(
+            environment: ["MACRUNNER_DX12_PSO_CACHE_DIR": relative], executable: "eldenring.exe"))
+        let owned = root.deletingLastPathComponent().deletingLastPathComponent()
+        defer { try? FileManager.default.removeItem(at: owned) }
+        let source = root.appendingPathComponent("9598ab010d5b-4e89a8cc-27.0.1-Apple_M1_Pro")
+        try FileManager.default.createDirectory(at: source, withIntermediateDirectories: true)
+        try Data([77, 82, 80, 83, 79, 49, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]).write(to: source.appendingPathComponent("manifest.bin"))
+        try (Data("MRPKIDX6".utf8) + Data(repeating: 0, count: 8)).write(to: source.appendingPathComponent("pack.idx"))
+        let before = try PSOCacheTransplant.inventory(source)
+        let pairs = try PSOCacheTransplant.candidates(in: root)
+        let pair = try #require(pairs.first)
+        #expect(pairs.count == 1)
+        #expect(try PSOCacheTransplant.transplant(source: pair.0, target: pair.1))
+        #expect(try PSOCacheTransplant.inventory(pair.1) == before)
+        #expect(try PSOCacheTransplant.candidates(in: root).isEmpty)
+    }
+
     @Test func existingTargetIsPreserved() throws {
         let (root, source, target) = try fixture()
         defer { try? FileManager.default.removeItem(at: root) }

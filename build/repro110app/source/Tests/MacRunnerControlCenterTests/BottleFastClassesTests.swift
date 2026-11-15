@@ -53,7 +53,8 @@ struct BottleFastClassesTests {
     /// `change`: package-relative source -> new bytes (not given: unchanged).
     private func fixture(change: [String: String] = [:], env: [String: String] = ["WINEDEBUG": "-all"],
                          nextEnv: [String: String]? = nil, receipt: Bool = true,
-                         registry: String = "WINE REGISTRY Version 2\n\n[Software\\\\Wine] 1\n\"x\"=\"y\"\n") throws -> Fixture {
+                         registry: String = "WINE REGISTRY Version 2\n\n[Software\\\\Wine] 1\n\"x\"=\"y\"\n",
+                         additionalInputs: [String: String] = [:]) throws -> Fixture {
         let fm = FileManager.default
         let root = fm.temporaryDirectory.appendingPathComponent("bottle-classes-\(UUID().uuidString)")
         let package = root.appendingPathComponent("engine"), prefix = root.appendingPathComponent("prefix")
@@ -74,6 +75,9 @@ struct BottleFastClassesTests {
         for extra in ["wine/lib/wine/aarch64-unix/ntdll.so", "wine/bin/wineserver", "wine/share/wine/wine.inf",
                       "fex/aarch64-windows/xtajit64.dll"] {
             declare(extra, old: "old-" + extra, new: change[extra] ?? "old-" + extra)
+        }
+        for (source, old) in additionalInputs {
+            declare(source, old: old, new: change[source] ?? old)
         }
         try Data(registry.utf8).write(to: prefix.appendingPathComponent("system.reg"))
         let inf = package.appendingPathComponent("wine/share/wine/wine.inf")
@@ -286,6 +290,35 @@ struct BottleFastClassesTests {
         #expect(C.unnormalisedRegistration(systemRegistry: updated, engineRoot: root) == nil)
         // another engine root is not this bottle's package path
         #expect(C.unnormalisedRegistration(systemRegistry: unnormalised, engineRoot: "/Applications/MacRunner.app/Contents/Resources/engine") == nil)
+    }
+
+    /// Curator 07.11: after ANY update shell32 names C:\windows\system32\shell32.dll, never the package.
+    /// The three value shapes the 119 -> R7 full route left (gate r13: 38 values) all normalise; other
+    /// modules keep their package path (unchanged rule); a shape this rule does not know is refused.
+    @Test func fullRouteShell32ShapesNormaliseAndLeaveNoPackagePath() throws {
+        let root = "/fixture-mount/x/MacRunner.app/Contents/Resources/engine"
+        let package = "Z:" + (root + "/wine/lib/wine/aarch64-windows/").replacingOccurrences(of: "/", with: "\\\\")
+        let system32 = "C:\\\\windows\\\\system32\\\\shell32.dll"
+        let full = """
+        [Software\\\\Classes\\\\CLSID\\\\{00021400-0000-0000-C000-000000000046}] 1
+        "LocalizedString"="@\(package)shell32.dll,-20"
+        [Software\\\\Classes\\\\CLSID\\\\{00021400-0000-0000-C000-000000000046}\\\\InprocServer32] 1
+        @="\(package)shell32.dll"
+        [Software\\\\Classes\\\\Typelib\\\\{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}\\\\1.0\\\\0\\\\win64] 1
+        @="\(package)shell32.dll"
+        [Software\\\\Classes\\\\CLSID\\\\{1}\\\\InprocServer32] 1
+        @="\(package)quartz.dll"
+
+        """
+        let result = try #require(try C.normalisedRegistry(full, engineRoot: root))
+        #expect(result.replaced == 3)
+        #expect(result.text.contains("\"LocalizedString\"=\"@\(system32),-20\""))
+        #expect(result.text.components(separatedBy: "@=\"\(system32)\"").count - 1 == 2)
+        #expect(result.text.contains("@=\"\(package)quartz.dll\""))
+        #expect(C.unnormalisedRegistration(systemRegistry: result.text, engineRoot: root) == nil)
+        #expect(try C.normalisedRegistry(result.text, engineRoot: root) == nil) // idempotent: nothing left
+        let unknown = "@=\"" + package.replacingOccurrences(of: "aarch64-windows", with: "x86_64-windows") + "shell32.dll\"\n"
+        #expect(throws: C.NormalisationFailure.self) { try C.normalisedRegistry(full + unknown, engineRoot: root) }
     }
 
     @Test func fastRouteRefusesABottleThatNeverWentThroughUpdate() throws {
@@ -518,5 +551,155 @@ struct BottleFastClassesTests {
             }
         }
         #expect(Set(pairs.map { "\($0["from"] as? String ?? "")>\($0["to"] as? String ?? "")" }).count == pairs.count)
+    }
+
+    @Test(arguments: ["advapi32.dll", "ole32.dll", "windowscodecs.dll"], ["aarch64-windows", "i386-windows"])
+    func checkedFullEnrollmentCoversExecutorsAndRegistrars(module: String, architecture: String) throws {
+        let source = "wine/lib/wine/\(architecture)/\(module)"
+        let extra = targets.values.contains(source) ? [:] : [source: "old-registration-code"]
+        let f = try fixture(change: [source: "new-registration-code"], additionalInputs: extra)
+        defer { f.remove() }
+        #expect(f.next.classRefusal(from: f.old, package: f.package)?.hasPrefix("class R changed:") == true)
+        #expect(f.next.classRefusal(from: f.old, package: f.package, registrationPolicy: .checkedFull) == nil)
+        guard case .delta = try f.next.deltaDecision(from: f.old, prefix: f.prefix, package: f.package,
+            classRule: true, registrationPolicy: .checkedFull) else {
+            Issue.record("checked full enrollment candidate was refused"); return
+        }
+        #expect(try f.next.registrationSelection(from: f.old, package: f.package, registrationPolicy: .checkedFull) == nil)
+        #expect(try f.next.registrationReceipt(package: f.package) != f.old.registrationReceipt(package: f.package))
+    }
+
+    @Test func checkedFullPreservesOwnedDroppedTargetsLikeFullPreparation() throws {
+        let f = try fixture()
+        defer { f.remove() }
+        let target = "drive_c/windows/system32/d3d8.dll"
+        let next = C(schema: f.next.schema, engine: f.next.engine, engineRoot: f.next.engineRoot,
+            layers: f.next.layers, inputs: f.next.inputs, files: f.next.files.filter { $0.key != target },
+            manifest: f.next.manifest)
+        #expect(try next.deltaDecision(from: f.old, prefix: f.prefix, package: f.package, classRule: true)
+            == .refuse("set of copied targets changed"))
+        #expect(try next.deltaDecision(from: f.old, prefix: f.prefix, package: f.package, classRule: true,
+            registrationPolicy: .checkedFull) == .delta([]))
+        #expect(FileManager.default.fileExists(atPath: f.prefix.appendingPathComponent(target).path))
+        try Data("user override".utf8).write(to: f.prefix.appendingPathComponent(target))
+        guard case .refuse(let reason) = try next.deltaDecision(from: f.old, prefix: f.prefix, package: f.package,
+            classRule: true, registrationPolicy: .checkedFull) else {
+            Issue.record("changed retained target was accepted"); return
+        }
+        #expect(reason.hasPrefix("installed target changed since receipt:"))
+    }
+
+    @Test func checkedFullStillRefusesNewCopiedTargets() throws {
+        let f = try fixture()
+        defer { f.remove() }
+        var files = f.next.files
+        files["drive_c/windows/system32/new.dll"] = .init(source: "wine/lib/wine/aarch64-windows/new.dll",
+            sha256: String(repeating: "0", count: 64))
+        let next = C(schema: f.next.schema, engine: f.next.engine, engineRoot: f.next.engineRoot,
+            layers: f.next.layers, inputs: f.next.inputs, files: files, manifest: f.next.manifest)
+        #expect(try next.deltaDecision(from: f.old, prefix: f.prefix, package: f.package, classRule: true,
+            registrationPolicy: .checkedFull) == .refuse("set of copied targets changed"))
+    }
+
+    @Test func checkedINFStagingCoversAliasesWildcardsAndNEButSkipsUnchanged() throws {
+        let inf = """
+        [FakeDlls]
+        16422,Internet Explorer,iexplore.exe
+        12,,*.sys
+        11,,*
+        11,,missing.dll,*
+        11,,deleted.dll,-
+        [FakeDllsWin32]
+        10,,rundll.exe,rundll.exe16
+        10,,twain_32.dll
+        [FakeDllsWin64]
+        10,twain_64,sane.ds
+        [FakeDllsWow64]
+        16426,Internet Explorer,iexplore.exe
+        12,,*.sys,-
+        11,,*.msstyles,-
+        11,,*
+        """
+        let names = ["iexplore.exe", "cng.sys", "shell.dll16", "rundll.exe16", "kernelbase.dll"]
+        var old: [String: String] = [:], next: [String: String] = [:]
+        for arch in ["aarch64-windows", "i386-windows"] {
+            for name in names {
+                let path = "wine/lib/wine/\(arch)/\(name)"
+                old[path] = "old"; next[path] = name == "kernelbase.dll" ? "old" : "new"
+            }
+        }
+        let rows = try #require(C.changedFakeDLLRows(infText: inf, previous: old, current: next))
+        let native = try #require(rows["native"])
+        let wow64 = try #require(rows["32"])
+        #expect(native.contains("16422,Internet Explorer,iexplore.exe"))
+        #expect(native.contains("12,,cng.sys,cng.sys"))
+        #expect(!native.contains("16426,Internet Explorer,iexplore.exe"))
+        #expect(wow64.contains("16426,Internet Explorer,iexplore.exe"))
+        #expect(wow64.contains("10,,rundll.exe,rundll.exe16"))
+        #expect(!wow64.contains("11,,rundll.exe,rundll.exe16"))
+        #expect(!native.contains("11,,cng.sys,cng.sys"))
+        #expect(!wow64.contains("16422,Internet Explorer,iexplore.exe"))
+        #expect(!wow64.contains("12,,cng.sys,cng.sys"))
+        #expect(!wow64.contains("11,,cng.sys,cng.sys"))
+        for list in [native, wow64] {
+            #expect(list.contains("11,,shell.dll,shell.dll16"))
+            #expect(!list.contains(where: { $0.contains("kernelbase") || $0.contains("missing") || $0.contains("deleted") }))
+        }
+        #expect(C.changedFakeDLLRows(infText: inf.replacingOccurrences(of: "*.sys", with: "a*.sys"), previous: old, current: next) == nil)
+    }
+
+    /// Gate r12 (119 -> R7): unchanged typelib-only modules must re-assert their Interface claims after
+    /// changed modules that describe the same interfaces, in Wine's sorted wildcard order.
+    @Test func unchangedTypelibModulesFollowChangedModulesInWildcardOrder() throws {
+        let inf = """
+        [FakeDlls]
+        11,,*
+        [FakeDllsWin32]
+        [FakeDllsWin64]
+        [FakeDllsWow64]
+        11,,*
+        """
+        var old: [String: String] = [:], next: [String: String] = [:]
+        for arch in ["aarch64-windows", "i386-windows"] {
+            for name in ["dhtmled.ocx", "mshtml.tlb", "stdole2.tlb", "olepro32.dll", "kernelbase.dll"] {
+                let path = "wine/lib/wine/\(arch)/\(name)"
+                old[path] = "old"
+                next[path] = name.hasSuffix(".tlb") || name == "kernelbase.dll" ? "old" : "new"
+            }
+        }
+        let rows = try #require(C.changedFakeDLLRows(infText: inf, previous: old, current: next))
+        for view in ["native", "32"] {
+            #expect(rows[view] == ["11,,dhtmled.ocx,dhtmled.ocx", "11,,mshtml.tlb,mshtml.tlb",
+                                   "11,,olepro32.dll,olepro32.dll", "11,,stdole2.tlb,stdole2.tlb"])
+        }
+        // Nothing changed in a view: an unchanged typelib alone is never staged.
+        let quiet = try #require(C.changedFakeDLLRows(infText: inf, previous: old, current: old))
+        #expect(quiet["native"] == [] && quiet["32"] == [])
+    }
+
+    @Test func checkedFullEnrollmentStillRefusesWineDataChanges() throws {
+        let source = "wine/share/wine/wine.inf"
+        let f = try fixture(change: [source: "changed-nonregistration-recipe"])
+        defer { f.remove() }
+        #expect(f.next.classRefusal(from: f.old, package: f.package, registrationPolicy: .checkedFull)
+            == "class R changed: \(source)")
+    }
+
+    @Test func thePairDigestAuthenticatesTheRegistrationPolicy() throws {
+        let modes = ["drive_c/windows/system32/kernelbase.dll": "0644"]
+        let text = C.PairRecord.digestText(from: "old", to: "new", modes: modes, registrationPolicy: .checkedFull)
+        var record: [String: Any] = ["from": "old", "to": "new", "modes": modes,
+            "registrationPolicy": "checked-full-v1", "digest": C.digest(Data(text.utf8))]
+        func lookup(_ value: [String: Any]) throws -> C.PairLookup {
+            C.pairLookup(file: try JSONSerialization.data(withJSONObject: ["schema": 1, "pairs": [value]]), from: "old", to: "new")
+        }
+        guard case .approved(let approved) = try lookup(record) else { Issue.record("valid policy refused"); return }
+        #expect(approved.registrationPolicy == .checkedFull)
+        record["registrationPolicy"] = "independent"
+        #expect(try lookup(record) == .refused("engine-pair record damaged (digest)"))
+        record.removeValue(forKey: "registrationPolicy")
+        #expect(try lookup(record) == .refused("engine-pair record damaged (digest)"))
+        record["registrationPolicy"] = "unchecked"
+        #expect(try lookup(record) == .refused("engine-pair record damaged (registration policy)"))
     }
 }

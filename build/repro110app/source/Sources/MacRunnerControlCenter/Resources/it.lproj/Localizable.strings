@@ -271,6 +271,8 @@
 "%@ Windows programs cannot run in this version of MacRunner yet." = "I programmi Windows (%@) non funzionano ancora in questa versione di MacRunner.";
 "The game uses DXGI, but its Direct3D version could not be determined." = "Il gioco usa DXGI, ma non è stato possibile determinare la versione di Direct3D.";
 "The graphics API could not be determined from the game files." = "Non è stato possibile determinare l’API grafica dai file del gioco.";
+"This game uses Direct3D effects (%@), but the DirectX files from its installer were not found next to it. The 3D picture may stay black. Put the game's DirectX folder (__redist/DirectX from its installer) next to the game and start it again." = "Questo gioco usa effetti Direct3D (%@), ma i file DirectX del suo programma di installazione non sono stati trovati accanto al gioco. L'immagine 3D potrebbe restare nera. Metti la cartella DirectX del gioco (__redist/DirectX dal suo programma di installazione) accanto al gioco e avvialo di nuovo.";
+"The DirectX file %@ next to this game was not used: %@. The 3D picture may stay black." = "Il file DirectX %@ accanto a questo gioco non è stato usato: %@. L'immagine 3D potrebbe restare nera.";
 "The game files mention several graphics APIs (%@); the one the game uses could not be determined." = "I file del gioco citano più API grafiche (%@); non è stato possibile capire quale usa.";
 "The game may also use %@, which is not available for %@ games. If it chooses it, it will not start." = "Il gioco può usare anche %@, non disponibile per i giochi (%@). Se la sceglie, non si avvierà.";
 "This game uses %@ (%@). This version of MacRunner has no support for it yet." = "Questo gioco usa %@ (%@). Questa versione di MacRunner non la supporta ancora.";
@@ -423,3 +425,18 @@
 "High resolution (Retina)" = "Alta risoluzione (Retina)";
 "The game sees the full list of this Mac's resolutions in real Retina pixels, including 1920×1080 and 2560×1440. Applies from the next launch; on a regular external monitor leave it off." = "Il gioco vede l’elenco completo delle risoluzioni di questo Mac in veri pixel Retina, comprese 1920×1080 e 2560×1440. Vale dal prossimo avvio; su un normale monitor esterno lascialo disattivato.";
 "Another program is still running in the same Windows environment with different settings. Close it and try again." = "Un altro programma è ancora in esecuzione nello stesso ambiente Windows con impostazioni diverse. Chiudilo e riprova.";
+
+/* Calculation accuracy: per-game advanced setting and the one-time offer (12.11.2026). */
+"Calculation accuracy" = "Precisione dei calcoli";
+"Automatic (recommended) — MacRunner picks what this game needs" = "Automatico (consigliato) — MacRunner sceglie ciò che serve a questo gioco";
+"Fast — same approach as Windows on Arm" = "Veloce — come Windows on Arm";
+"Exact — as on an Intel/AMD processor, noticeably slower" = "Esatto — come su un processore Intel/AMD, sensibilmente più lento";
+"Change this only if the game misbehaves: crashes at launch, freezes, or has broken sound or physics. This mode does not improve speed or graphics — the game will run slower." = "Modifica solo se il gioco si comporta male: si chiude all’avvio, si blocca o ha audio o fisica alterati. Questa modalità non migliora velocità né grafica: il gioco sarà più lento.";
+"This game uses Exact mode." = "Questo gioco usa la modalità esatta.";
+"Did it help? Tell us and we'll turn it on for this game for everyone." = "Ha aiutato? Faccelo sapere e la attiveremo per questo gioco per tutti.";
+"Advanced" = "Avanzate";
+"The game closed right after launch twice. Try Exact calculation mode? It is slower." = "Il gioco si è chiuso due volte subito dopo l’avvio. Provare la modalità di calcolo esatta? È più lenta.";
+"Try it" = "Prova";
+"Fast" = "Veloce";
+"Exact" = "Esatto";
+"Exact (game profile)" = "Esatto (profilo del gioco)";

@@ -32,6 +32,14 @@ struct AppEntry: Codable, Sendable, Identifiable, Hashable {
     /// Настройка Wine общая на бутылку (winemac читает её без AppDefaults), поэтому пишется
     /// при каждом запуске, до Wine, — см. `BottleSetup.applyRetina`.
     var highResolution: Bool? = nil
+    /// "Calculation accuracy": nil — Automatic (the game's profile and the engine defaults decide),
+    /// otherwise `CalculationAccuracy.rawValue` ("fast" / "exact") chosen by the player for this game.
+    var calculationAccuracy: String? = nil
+    /// Early failures in a row and whether "try Exact?" was already asked (`EarlyFailureOffer`).
+    /// Mode of the last launch (`LauncherResult.calculationAccuracy`), shown in the technical details a player copies into a report.
+    var lastCalculationAccuracy: String? = nil
+    var earlyFailureStreak: Int? = nil
+    var accuracyOfferShown: Bool? = nil
 
     static func new(name: String, exePath: String) -> AppEntry {
         AppEntry(

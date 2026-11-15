@@ -30,6 +30,8 @@ struct HomeView: View {
     @State private var runningIDs = Set<UUID>()
     @State private var section: HomeSection = .library
     @State private var addFailure: String?
+    /// Game for which "try Exact calculation mode?" is being asked (once per game, never applied silently).
+    @State private var accuracyOffer: AppEntry?
     /// Что выбрали кнопкой «Добавить игру» и что мы об этом думаем.
     /// Показываем ДО того, как что-то сделали: установщик и игру надо запускать
     /// по-разному, а ошибиться распознавание может.
@@ -230,6 +232,20 @@ struct HomeView: View {
         .sheet(isPresented: $showHelp) {
             HelpSheet(onClose: { showHelp = false })
         }
+        .alert(L("The game closed right after launch twice. Try Exact calculation mode? It is slower."),
+               isPresented: Binding(get: { accuracyOffer != nil }, set: { if !$0 { accuracyOffer = nil } })) {
+            Button(L("Try it")) {
+                if let game = accuracyOffer, var entry = vm.apps.first(where: { $0.id == game.id }) {
+                    entry.calculationAccuracy = CalculationAccuracy.exact.stored
+                    vm.update(entry)
+                    if detailApp?.id == entry.id { detailApp = entry }
+                }
+                accuracyOffer = nil
+            }
+            Button(L("Not now"), role: .cancel) { accuracyOffer = nil }
+        } message: {
+            Text(accuracyOffer?.name ?? "")
+        }
         .alert(L("Could not start the game"),
                isPresented: Binding(get: { launchFailure != nil },
                                     set: { if !$0 { launchFailure = nil } })) {
@@ -317,6 +333,11 @@ struct HomeView: View {
                 onSetHighResolution: { enabled in
                     var entry = vm.apps.first { $0.id == app.id } ?? app
                     entry.highResolution = enabled ? true : nil
+                    vm.update(entry)
+                },
+                onSetCalculationAccuracy: { choice in
+                    var entry = vm.apps.first { $0.id == app.id } ?? app
+                    entry.calculationAccuracy = choice.stored
                     vm.update(entry)
                 }
             )
@@ -793,12 +814,26 @@ struct HomeView: View {
                 updated.lastRunStatus = result?.status
                 updated.lastDurationMs = result?.durationMs
                 updated.lastGraphicsSummary = result?.graphicsSummary ?? updated.lastGraphicsSummary
+                updated.lastCalculationAccuracy = result?.calculationAccuracy ?? updated.lastCalculationAccuracy
                 // Причину храним только у отказа: у удачного прогона старая улика
                 // врала бы о прошлом.
                 updated.lastRunError = RunFailure.isFailure(status: result?.status)
                     ? RunFailure.detail(from: result) : nil
                 updated.updatedAt = Date()
+                // Settings changed on the game page while it ran belong to the library copy, not to the launch copy.
+                let current = libraryVM.apps.first { $0.id == app.id } ?? app
+                updated.calculationAccuracy = current.calculationAccuracy
+                updated.highResolution = current.highResolution
+                var offer = EarlyFailureOffer(streak: current.earlyFailureStreak ?? 0, offered: current.accuracyOfferShown ?? false)
+                let ask = offer.record(result: result,
+                                       choice: CalculationAccuracy.applicable(stored: app.calculationAccuracy,
+                                                                              arch: CalculationAccuracy.guestArch(exePath: app.exePath)),
+                                       usedExact: result?.calculationAccuracy == "auto-exact",
+                                       available: BundledEngine.current?.calculationAccuracy != nil)
+                updated.earlyFailureStreak = offer.streak == 0 ? nil : offer.streak
+                updated.accuracyOfferShown = offer.offered ? true : nil
                 libraryVM.update(updated)
+                if ask { accuracyOffer = updated }
                 runningIDs.remove(app.id)
                 activeRuns[app.id] = nil
                 launchProgress[app.id] = nil

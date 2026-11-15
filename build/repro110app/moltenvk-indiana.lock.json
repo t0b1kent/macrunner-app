@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "purpose": "Vulkan driver of the Indiana Jones route: MoltenVK from the experimental ray-tracing branch with the MacRunner changes published with 1.0.6-indiana. The public build fetches exactly these inputs; nothing else is downloaded.",
+  "output": {
+    "engine_path": "graphics/moltenvk/libMoltenVK.dylib",
+    "architecture": "arm64",
+    "deployment_target": "12.0",
+    "license": {
+      "engine_name": "moltenvk-LICENSE.txt",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "spdx": "Apache-2.0"
+    },
+    "local_reference": {
+      "bytes": 5820224,
+      "sha256": "5590d653e7b9d849ed762501aae5bcf849d96f3e772ad0ce5b4d9a623aceb3eb",
+      "note": "Built locally on 12.11.2026 with Xcode 27.0 (27A266a), SDK 27.0, with the linker's ad hoc signature. Against the library shipped in 1.0.6-indiana (ae2fa61e..., 5786544 bytes) all 29 sections have equal sizes and the only differing instruction words are address fix-ups. Byte reproduction on another machine is not established; compare by sections and report every other difference."
+    }
+  },
+  "sources": {
+    "macrunner": {
+      "url": "https://github.com/t0b1kent/macrunner-app/releases/download/v1.0.6-indiana/MacRunner-1.0.6-indiana-extra-sources.tar.gz",
+      "bytes": 55190691,
+      "sha256": "9f9ab21e972fc3383e414f4d886a1b3f8eaaf6e189f5961a03de9bef96d725d6",
+      "contents": "The published archive contains the p17 source snapshot, dependencies, and generated Package outputs. Select only the declared MoltenVK core and SPIRV-Cross trees, then apply the three sealed rebuild postimages; no Package binary is selected."
+    },
+    "pinned": [
+      {
+        "name": "Vulkan-Headers",
+        "url": "https://github.com/KhronosGroup/Vulkan-Headers/archive/e3b1eec08173d6b825cd3ac88c885a63b621504a.tar.gz",
+        "bytes": 3376893,
+        "sha256": "f492279345cbc10708b64fcd432b3ff6c8246a5837c4db2b649abba00cf82208"
+      },
+      {
+        "name": "SPIRV-Headers",
+        "url": "https://github.com/KhronosGroup/SPIRV-Headers/archive/29981f65241605e08b0ede4cfeb999fe3b723c6a.tar.gz",
+        "bytes": 572275,
+        "sha256": "232899f1ad4104fb5bc377b94596c7621575eee62ad9a9e8f929b63a7dd8a7ad"
+      },
+      {
+        "name": "SPIRV-Tools",
+        "url": "https://github.com/KhronosGroup/SPIRV-Tools/archive/0d6fd73ca73830ccab5fa1f00ed5ed40124e2c55.tar.gz",
+        "bytes": 3527179,
+        "sha256": "20219c0962dffb0d7644bb3116a5923cfcf0526a569baa0b2a17343dd2fa6e5d"
+      },
+      {
+        "name": "cereal",
+        "url": "https://github.com/USCiLab/cereal/archive/a56bad8bbb770ee266e930c95d37fff2a5be7fea.tar.gz",
+        "bytes": 386830,
+        "sha256": "12e10fb541270632f6683286ce8c7e8c321fe4addb53fa91ed498b95c1758f93"
+      }
+    ]
+  },
+  "build": {
+    "steps": "As build/repro109moltenvk/build_moltenvk.py of t0b1kent/macrunner-wine: SPIRV-Tools generated headers by CMake (Release, arm64, no tests, no executables, Homebrew and /usr/local ignored), SPIRV-Headers placed at External/SPIRV-Tools/external/spirv-headers, then the Xcode schemes ExternalDependencies-macOS and 'MoltenVK Package (macOS only)' with ARCHS=arm64, code signing off and MACOSX_DEPLOYMENT_TARGET=12.0.",
+    "revision_string": "Set MVK_GIT_REV=1c466b088b62ccfb9e6af9e4df1d5128503cf47e in Scripts/gen_moltenvk_rev_hdr.sh: a source tree without .git otherwise embeds the commit of the enclosing repository.",
+    "checks": "No 'install skipped' in any log; otool -L shows system frameworks and libraries only.",
+    "status": "Public build_indiana.py prepared; archive/core/SPIRV-Cross audit passed. Full cloud compilation and binary comparison remain pending."
+  },
+  "source_profile": {
+    "revision": "1c466b088b62ccfb9e6af9e4df1d5128503cf47e",
+    "core_prefix": "sources/MoltenVK-p17/",
+    "core_files": 271,
+    "core_before_inventory_sha256": "6202215ae6472b38bb8cbcf6859da20b6cf89f19d46263b3647d634332a3b386",
+    "core_after_inventory_sha256": "1aa83a6e60f7ff8972d9425bfbd2199ec0b59c2edabdc3a38055a722e44f2718",
+    "cross_prefix": "sources/MoltenVK-p17/External/SPIRV-Cross/",
+    "cross_files": 4797,
+    "cross_inventory_sha256": "27545de02ea1274e57878fb5508592517b404e6c803709a79d6eaf56b47e9fe9",
+    "excluded_core_trees": [
+      "External",
+      "Package",
+      "macrunner"
+    ],
+    "postimages": [
+      {
+        "path": "MoltenVK/MoltenVK/GPUObjects/Cas64Capture/config_capture.hpp",
+        "store": "indiana-source-fixes/MoltenVK/MoltenVK/GPUObjects/Cas64Capture/config_capture.hpp",
+        "before_sha256": "93a06e9880383fdc79dcec4f8f2425ca57ada8bac4a3604c16157e8fd77db010",
+        "after_sha256": "8047a404c6e990e27c3f8960842eb73dda5574f0fe10d9ae42b08417dda32547",
+        "bytes": 10958
+      },
+      {
+        "path": "MoltenVK/MoltenVK/GPUObjects/Cas64Capture/config_wire_fields.hpp",
+        "store": "indiana-source-fixes/MoltenVK/MoltenVK/GPUObjects/Cas64Capture/config_wire_fields.hpp",
+        "before_sha256": "8d6d590505de1c532256145d8c838b6bbf5d47c70d814cff1e2981dc06a410bd",
+        "after_sha256": "845abcd475c97f2f02e9ccfbf5185c07a4808768b6f10bcdf0e9548511cf0276",
+        "bytes": 6697
+      },
+      {
+        "path": "MoltenVK/MoltenVK/GPUObjects/MVKShaderModule.mm",
+        "store": "indiana-source-fixes/MoltenVK/MoltenVK/GPUObjects/MVKShaderModule.mm",
+        "before_sha256": "b8689f354ee79e419c6677603694308a77eab6c277bd4a5b46a4153ed16d0a99",
+        "after_sha256": "90983c93f5a6068fe0ebb466d8040a719e6dc1242730230cf9de68ce5acb140a",
+        "bytes": 28539
+      }
+    ],
+    "source_equivalence": "Published archive SHA verified. After three explicit postimages, all271 core files match the retained pre-build source; all4797 SPIRV-Cross files match byte-for-byte. Publication-only macrunner notices are not compiler inputs.",
+    "toolchain": {
+      "xcode": "27.0",
+      "xcode_build": "27A266a",
+      "sdk": "27.0",
+      "deployment_target": "12.0",
+      "jobs": 2
+    },
+    "binary_reference_sha256": "5590d653e7b9d849ed762501aae5bcf849d96f3e772ad0ce5b4d9a623aceb3eb"
+  }
+}

@@ -8,7 +8,10 @@ struct IndianaProfileTests {
         #expect(profile.exe == ["TheGreatCircle.exe"])
         #expect(profile.apis == [.vulkan])
         #expect(profile.environment?["MVK_CONFIG_ENABLE_EXPERIMENTAL_RAY_TRACING"] == "1")
-        for key in ["MACRUNNER_MVK_SPARSE_FULL_BACKING", "WINEDEBUG", "MTL_HUD_ENABLED", "MACRUNNER_MVK_RT_NULL_GUARD",
+        // With the bundled MoltenVK a ray-tracing pipeline that fails to compile comes back as a null handle and the game
+        // still binds it; without the guard MoltenVK dereferences it and the launch hangs. Every working run carried it.
+        #expect(profile.environment?["MACRUNNER_MVK_RT_NULL_GUARD"] == "1")
+        for key in ["WINEDEBUG", "MTL_HUD_ENABLED",
                     "MACRUNNER_MVK_DYNSTRIDE_ROUND", "MACRUNNER_MVK_CB_ENCODER_STATUS",
                     "MACRUNNER_MVK_VERTEX_TRACE", "MACRUNNER_MVK_CAS64_CAPTURE_DIR"] {
             #expect(profile.environment?[key] == nil)

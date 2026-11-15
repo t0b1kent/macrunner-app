@@ -28,16 +28,33 @@ def sha(path):
 
 
 def finalize_bundle_minimum(app):
-    """Include every staged component, retaining a higher application baseline."""
+    """Reject components that exceed the release's macOS 26.5 baseline."""
     app = Path(app)
     info = plistlib.loads((app / 'Contents/Info.plist').read_bytes())
     baseline = bundle_minimum_macos.parse_version(info['LSMinimumSystemVersion'])
+    if baseline != bundle_minimum_macos.parse_version('26.5'):
+        raise ValueError('Release LSMinimumSystemVersion must be 26.5')
     minimum, targets = bundle_minimum_macos.scan_bundle(app, baseline)
-    bundle_minimum_macos.apply_minimum(app, minimum)
+    violations = sorted((path, bundle_minimum_macos.version_string(version))
+                        for path, version in targets.items() if version > baseline)
+    if violations:
+        raise ValueError('Mach-O deployment target exceeds macOS 26.5: ' + repr(violations))
     return dict(previous=info['LSMinimumSystemVersion'],
                 minimum_macos=bundle_minimum_macos.version_string(minimum),
                 mach_o_files_with_macos_target=len(targets),
                 floor_components=sorted(path for path, version in targets.items() if version == minimum))
+
+
+def verify_no_wine_backups(app):
+    """Use INTEGRATE111's gate before a package can become a release candidate."""
+    app = Path(app)
+    if not app.is_dir():
+        raise ValueError('Package directory missing for lib/wine backup gate')
+    check = subprocess.run([sys.executable, '-I', '-B', str(HERE / 'check_no_backups.py'), str(app)],
+                           stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=60)
+    if check.returncode:
+        raise ValueError('Packaged lib/wine backup gate failed: ' + check.stdout + check.stderr)
+    return dict(status='PASS', tool='check_no_backups.py', output=check.stdout.strip())
 
 
 def load_module(name, path):
@@ -337,7 +354,7 @@ def build(args):
         tools = json.loads((tools_work / 'RESULT.json').read_text())
         shutil.copy2(tools_work / 'RESULT.json', reports / 'engine-tools-build.json')
         result['engine_tools'] = tools
-        if tools.get('status') != 'ENGINE_TOOLS_BUILT_AS_ACCEPTED':
+        if tools.get('status') != 'ENGINE_TOOLS_BUILT_AS_PINNED':
             raise ValueError('Engine tool source build incomplete: ' + str(tools.get('status')))
         helper_compiler = selected_helper_compiler(tools, tools_work)
         bottle_work = args.work / 'bottle-tools'
@@ -394,6 +411,7 @@ def build(args):
         run('app-architecture', [sys.executable, '-I', '-B', HERE / 'check-macho-arch.py', app])
         if not os.access(contents / 'MacOS' / info['CFBundleExecutable'], os.X_OK):
             raise ValueError('Application executable lost mode')
+        result['wine_backups'] = verify_no_wine_backups(app)
         result['bundle_minimum_macos'] = finalize_bundle_minimum(app)
         run('archive-app', ['tar', '-czf', args.work / 'MacRunner-1.1.1-unsigned-source-built.tar.gz',
                             '-C', prefix, 'MacRunner.app'])

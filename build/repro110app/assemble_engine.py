@@ -165,6 +165,40 @@ def install_tools(rows, out):
     return report
 
 
+VULKAN_DRIVER_PATH = 'graphics/moltenvk/libMoltenVK.dylib'
+
+
+def validate_vulkan_driver(row, selected):
+    """Optional source-built Vulkan driver (MoltenVK), pinned by SHA-256; None when the config selects none."""
+    if row is None:
+        return None
+    if not isinstance(row, dict) or set(row) != {'path', 'sha256'}:
+        die('vulkanDriver requires exactly path and sha256')
+    path = Path(selected(row['path']))
+    if not path.is_file():
+        die('vulkanDriver is not a file')
+    if not re.fullmatch(r'[0-9a-f]{64}', str(row['sha256'])) or sha256(path) != row['sha256']:
+        die('vulkanDriver SHA256 mismatch')
+    if not is_macho(path):
+        die('vulkanDriver is not a Mach-O file')
+    return {'path': str(path), 'sha256': row['sha256']}
+
+
+def install_vulkan_driver(row, out):
+    """Stage the driver at the path the graphics layer names; never replace a file of the graphics tree."""
+    if row is None:
+        return None
+    target = Path(out) / VULKAN_DRIVER_PATH
+    if target.exists() or target.is_symlink():
+        die('graphics tree already contains ' + VULKAN_DRIVER_PATH)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(row['path'], target)
+    target.chmod(0o755)
+    if sha256(target) != row['sha256']:
+        die('vulkanDriver changed during assembly')
+    return {'path': VULKAN_DRIVER_PATH, 'sha256': row['sha256'], 'source': row['path']}
+
+
 def load_config(path, strip_pe=False):
     """Resolve selected build outputs relative to this config, never to the host."""
     path = Path(path).resolve()
@@ -181,6 +215,24 @@ def load_config(path, strip_pe=False):
     config['dependencyRoots'] = [selected(value) for value in roots]
     if any(not Path(value).is_dir() for value in config['dependencyRoots']):
         die('selected dependency root is not a directory')
+    mappings = config.get('dependencyPrefixMappings', [])
+    if not isinstance(mappings, list):
+        die('dependencyPrefixMappings must be a list')
+    prefixes = []
+    for row in mappings:
+        if not isinstance(row, dict) or set(row) != {'from', 'to'}:
+            die('dependency prefix mapping requires from and to')
+        prefix = row['from']
+        if (not isinstance(prefix, str) or not prefix.startswith('/') or prefix == '/' or
+                os.path.normpath(prefix) != prefix or '\x00' in prefix):
+            die('dependency source prefix must be a normalized absolute directory')
+        if any(prefix == p or prefix.startswith(p + '/') or p.startswith(prefix + '/') for p in prefixes):
+            die('dependency source prefixes overlap')
+        prefixes.append(prefix)
+        row['to'] = selected(row['to'])
+        if row['to'] not in config['dependencyRoots']:
+            die('dependency mapping target must be a selected dependency root')
+    config['dependencyPrefixMappings'] = mappings
     licenses = config.get('licenseInputs')
     if not isinstance(licenses, list) or not licenses:
         die('licenseInputs must explicitly select pinned license files')
@@ -197,6 +249,7 @@ def load_config(path, strip_pe=False):
             die('license input SHA256 mismatch: ' + name)
     config['dlopenLibraries'] = [selected(value) for value in config.get('dlopenLibraries', [])]
     config['tools'] = validate_tools(config.get('tools'), selected)
+    config['vulkanDriver'] = validate_vulkan_driver(config.get('vulkanDriver'), selected)
     if strip_pe:
         config['stripTool'] = selected(config.get('stripTool'))
         if not re.fullmatch(r'[0-9a-f]{64}', str(config.get('stripToolSHA256', ''))) or sha256(config['stripTool']) != config['stripToolSHA256']:
@@ -204,8 +257,21 @@ def load_config(path, strip_pe=False):
     return config
 
 
-def selected_dependency(path, roots):
-    real = Path(path).resolve()
+def mapped_dependency(path, mappings=()):
+    """Resolve recorded producer prefixes without modifying producer binaries."""
+    value = str(path)
+    for row in mappings:
+        prefix = row['from']
+        if value == prefix or value.startswith(prefix + '/'):
+            suffix = Path(value).relative_to(prefix)
+            if '..' in suffix.parts:
+                die('dependency reference escapes its recorded prefix')
+            return Path(row['to']) / suffix
+    return Path(path)
+
+
+def selected_dependency(path, roots, mappings=()):
+    real = mapped_dependency(path, mappings).resolve()
     if not any(real == root or root in real.parents for root in map(Path, roots)):
         die('dependency is outside selected source-built prefixes: ' + str(path))
     if not real.is_file():
@@ -213,16 +279,47 @@ def selected_dependency(path, roots):
     return real
 
 
-def dependency_closure(machos, libdir, roots, extra=(), media=None):
+def dependency_closure(machos, libdir, roots, extra=(), media=None, mappings=()):
     """Use the existing closure traversal for arbitrary selected build prefixes."""
     queue = [Path(value) for value in extra]
+
+    def enqueue_dependencies(owner, staged=False):
+        for value in macho_deps(owner):
+            if external_reference(value):
+                queue.append(Path(value))
+            elif value.startswith(('@loader_path/', '@rpath/')):
+                sibling = Path(owner).parent / value.split('/', 1)[1]
+                if sibling.is_file():
+                    if not staged:
+                        queue.append(sibling)
+                    continue
+                name = Path(value).name
+                if staged and (libdir / name).is_file():
+                    continue
+                # Preserve the loader-visible basename, including versioned
+                # aliases. Resolving extra dlopen inputs to a canonical file
+                # alone does not satisfy an import such as libjpeg.8.dylib.
+                candidates = {}
+                for root in map(Path, roots):
+                    for directory in [root, root / 'lib', root / 'aarch64-unix',
+                                      root / 'lib/wine/aarch64-unix']:
+                        candidate = directory / name
+                        if candidate.is_file():
+                            real = selected_dependency(candidate, roots, mappings)
+                            candidates.setdefault(real, candidate)
+                if not candidates:
+                    die('missing selected-prefix relative dependency ' + value + ' from ' + str(owner))
+                if len({sha256(real) for real in candidates}) != 1:
+                    die('conflicting dependency sources for ' + name)
+                queue.append(sorted(candidates.values(), key=str)[0])
+
     for macho in machos:
-        queue.extend(Path(dep) for dep in macho_deps(macho) if external_reference(dep))
+        enqueue_dependencies(macho, staged=True)
     bundled, inputs = {}, {}
     while queue:
         queue.sort(key=str, reverse=True)
         dep = queue.pop()
-        real = selected_dependency(dep, roots)
+        real = selected_dependency(dep, roots, mappings)
         digest = sha256(real)
         if dep.name in inputs:
             if inputs[dep.name]['sha256'] != digest:
@@ -240,14 +337,7 @@ def dependency_closure(machos, libdir, roots, extra=(), media=None):
             shutil.copy2(real, target)
             os.chmod(target, 0o755)
             bundled[dep.name] = str(real)
-        for value in macho_deps(real):
-            if external_reference(value):
-                queue.append(Path(value))
-            elif value.startswith(('@loader_path/', '@rpath/')):
-                # Preserve the original sibling rule; this is not a dyld loader.
-                sibling = real.parent / value.split('/', 1)[1]
-                if sibling.exists():
-                    queue.append(sibling)
+        enqueue_dependencies(real)
     return bundled, inputs
 
 
@@ -270,12 +360,12 @@ def relocation_args(info, path, libdir, bundled):
     return args
 
 
-def discover_gstreamer(wine_module):
+def discover_gstreamer(wine_module, mappings=()):
     """Derive plugin provenance from Wine's actual linked core, never live PATH."""
     wine_module = Path(wine_module)
     if not wine_module.exists():
         return None
-    cores = {Path(d).resolve() for d in macho_deps(wine_module)
+    cores = {mapped_dependency(d, mappings).resolve() for d in macho_deps(wine_module)
              if Path(d).name == GSTREAMER_CORE and d.startswith('/')}
     if len(cores) != 1:
         die('winegstreamer requires exactly one absolute GStreamer core source; '
@@ -297,7 +387,7 @@ def discover_gstreamer(wine_module):
         linked = []
         for dep in macho_deps(src):
             if Path(dep).name == GSTREAMER_CORE:
-                linked.append(Path(dep).resolve() if dep.startswith('/') else
+                linked.append(mapped_dependency(dep, mappings).resolve() if dep.startswith('/') else
                               (root / 'lib' / Path(dep).name).resolve())
         if linked != [core]:
             die(f'GStreamer media component uses a different or missing core: {src}')
@@ -409,10 +499,11 @@ def main(argv):
     report['counts']['wine/lib'] = copy_tree(wine / 'lib/wine', out / 'wine/lib/wine')
     report['counts']['wine/share'] = copy_tree(wine / 'share/wine', out / 'wine/share/wine')
     report['sources']['wine'] = str(wine)
-    media = discover_gstreamer(wine / 'lib/wine/aarch64-unix/winegstreamer.so')
+    mappings = config['dependencyPrefixMappings']
+    media = discover_gstreamer(wine / 'lib/wine/aarch64-unix/winegstreamer.so', mappings)
     if media:
         for source, _ in media['sources']:
-            selected_dependency(source, config['dependencyRoots'])
+            selected_dependency(source, config['dependencyRoots'], mappings)
         report['gstreamer'] = stage_gstreamer(media, out)
         report['counts']['mediaPlugins'] = len(GSTREAMER_PLUGINS)
 
@@ -424,6 +515,11 @@ def main(argv):
         for base in (out / 'fex', out / 'graphics'):
             if (base / extra).exists():
                 (base / extra).unlink()
+
+    # 2a. Source-built Vulkan driver (MoltenVK), when the config selects one; the graphics matrix names it as a layer's unix file.
+    driver = install_vulkan_driver(config['vulkanDriver'], out)
+    if driver:
+        report['vulkanDriver'] = driver
 
     # 2b. Engine tools built by build_engine_tools.py (job launcher PE, session supervisor), when the config selects them.
     tool_rows = install_tools(config['tools'], out)
@@ -450,7 +546,7 @@ def main(argv):
     libdir = out / 'wine/lib/wine/aarch64-unix'
     machos = [p for p in sorted(out.rglob('*')) if p.is_file() and not p.is_symlink() and is_macho(p)]
     bundled, dependency_inputs = dependency_closure(
-        machos, libdir, config['dependencyRoots'], config['dlopenLibraries'], media)
+        machos, libdir, config['dependencyRoots'], config['dlopenLibraries'], media, mappings)
     report['bundledLibraries'] = bundled
     report['dependencyInputs'] = dependency_inputs
 

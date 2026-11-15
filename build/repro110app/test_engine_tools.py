@@ -32,8 +32,9 @@ class Lock(unittest.TestCase):
         job, session = step.read_lock()['tools']
         self.assertEqual(job['argv'], ['-O2', '-municode', '-Wl,--subsystem,windows', '-Wl,-e,WinMainCRTStartup',
                                        '-Wl,--Xlink=/timestamp:1791424979'])
-        self.assertEqual(job['compiler']['archive_sha256'], '050379de888f0c843787819dadf183df3693330a5724643919e9121f16355295')
-        self.assertEqual(session['argv'], ['-O2', '-arch', 'arm64', '-mmacosx-version-min=27.0'])
+        self.assertEqual(job['compiler']['archive_sha256'], 'd1dc5d1ecf3a3ced5ed5544c72f1acd0c8e84eb3024d520ecc6b143eec62a149')
+        self.assertEqual((job['compiler']['version'], job['compiler']['clang']), ('20260908', '23.1.1'))
+        self.assertEqual(session['argv'], ['-O2', '-arch', 'arm64', '-mmacosx-version-min=26.5'])
         self.assertEqual(len(session['reference']['normalized_sha256']), 64)
 
     def test_unsafe_arguments_are_refused(self):
@@ -108,6 +109,19 @@ class MachO(unittest.TestCase):
             step.zero_macho_uuid(b'\x00' * 64)
 
 
+class CommandEvidence(unittest.TestCase):
+    def test_compiler_failure_preserves_both_byte_exact_streams_and_command(self):
+        base = os.environ['REPRO109_TEST_TMP']
+        with tempfile.TemporaryDirectory(prefix='engine-tool-logs-', dir=base) as tmp:
+            argv = [sys.executable, '-I', '-B', '-c',
+                    "import os; os.write(1,b'out\\r\\n'); os.write(2,b'bad\\xff\\r\\n'); raise SystemExit(3)"]
+            with self.assertRaisesRegex(ValueError, 'failed rc=3'):
+                step.default_run(argv, 'compiler', log_root=tmp)
+            self.assertEqual((Path(tmp) / 'compiler.stdout.log').read_bytes(), b'out\r\n')
+            self.assertEqual((Path(tmp) / 'compiler.stderr.log').read_bytes(), b'bad\xff\r\n')
+            self.assertEqual(json.loads((Path(tmp) / 'compiler.command.json').read_bytes())['returncode'], 3)
+
+
 class FakeBuild(unittest.TestCase):
     def setUp(self):
         base = os.environ.get('REPRO109_TEST_TMP')
@@ -130,21 +144,25 @@ class FakeBuild(unittest.TestCase):
                                              normalized_sha256=hashlib.sha256(step.zero_macho_uuid(macho(uuid))[0]).hexdigest())
         return lock
 
-    def run_build(self, lock, pe=b'MZ fake job', uuid=b'\x44' * 16, wipe_source=False, sdk_response=None, fetch_compiler=False):
+    def run_build(self, lock, pe=b'MZ fake job', uuid=b'\x44' * 16, wipe_source=False, sdk_response=None, fetch_compiler=False,
+                  compiler_version='clang version 23.1.1 (fixture)', relative_compiler=False):
         calls = []
         def run(argv, label, cwd=None, timeout=1800):
             calls.append(label)
             if label.startswith('compile-'):
+                self.assertTrue(Path(argv[0]).is_absolute())
                 if label == 'compile-macrunner-session':
                     self.assertEqual(argv[argv.index('-isysroot') + 1], str(self.sdk))
                 target = Path(argv[argv.index('-o') + 1])
                 target.write_bytes(pe if label.endswith('.exe') else macho(uuid))
-            return {'find-clang': '/usr/bin/clang\n', 'find-sdk': str(self.sdk) if sdk_response is None else sdk_response,
+            return {'pe-compiler-version': compiler_version,
+                    'find-clang': '/usr/bin/clang\n', 'find-sdk': str(self.sdk) if sdk_response is None else sdk_response,
                     'xcode-version': 'Xcode 27.0\n'}.get(label, '')
         if wipe_source:
             (self.root / 'source/engine-tools/macrunner-job.c').write_text('/* changed */\n')
+        supplied = Path(os.path.relpath(self.root / 'mingw')) if relative_compiler else self.root / 'mingw'
         args = type('A', (), dict(source=self.root / 'source', work=self.root / 'work',
-                                 mingw_bin=None if fetch_compiler else self.root / 'mingw'))()
+                                 mingw_bin=None if fetch_compiler else supplied))()
         with patch.object(step, 'read_lock', return_value=lock), patch.object(step.sys, 'platform', 'darwin'), \
                 patch.object(step, 'fetch_mingw', return_value=self.root / 'mingw') as fetch:
             try:
@@ -154,10 +172,10 @@ class FakeBuild(unittest.TestCase):
             self.fetch_calls = fetch.call_args_list
         return calls
 
-    def test_matching_tools_report_the_accepted_status_and_sign_and_install_nothing(self):
+    def test_matching_tools_report_recipe_reproduction_and_sign_and_install_nothing(self):
         calls = self.run_build(self.lock())
-        self.assertEqual(self.result['status'], 'ENGINE_TOOLS_BUILT_AS_ACCEPTED')
-        self.assertEqual([t['comparison'] for t in self.result['tools']], ['EXACT_ACCEPTED_BYTES', 'EQUAL_EXCEPT_LC_UUID'])
+        self.assertEqual(self.result['status'], 'ENGINE_TOOLS_BUILT_AS_PINNED')
+        self.assertEqual([t['comparison'] for t in self.result['tools']], ['EXACT_RECIPE_BYTES', 'EQUAL_RECIPE_EXCEPT_LC_UUID'])
         self.assertEqual((self.result['install'], self.result['signing']), ('NOT_PERFORMED', 'NOT_PERFORMED'))
         self.assertTrue(all(not c.startswith(('codesign-sign', 'install')) for c in calls))
         self.assertTrue((self.root / 'work/outputs/tools/macrunner-job.exe').is_file())
@@ -166,7 +184,7 @@ class FakeBuild(unittest.TestCase):
     def test_no_supplied_compiler_fetches_the_independent_sealed_pin(self):
         lock = self.lock()
         self.run_build(lock, fetch_compiler=True)
-        self.assertEqual(self.result['status'], 'ENGINE_TOOLS_BUILT_AS_ACCEPTED')
+        self.assertEqual(self.result['status'], 'ENGINE_TOOLS_BUILT_AS_PINNED')
         self.assertEqual(len(self.fetch_calls), 1)
         self.assertEqual(self.fetch_calls[0].args[0]['compiler'], lock['tools'][0]['compiler'])
         self.assertEqual(self.result['pe_toolchain']['provenance'], 'PINNED_ARCHIVE')
@@ -175,7 +193,17 @@ class FakeBuild(unittest.TestCase):
     def test_a_different_pe_is_reported_not_hidden(self):
         self.run_build(self.lock(pe=b'MZ other'), pe=b'MZ fake job')
         self.assertEqual(self.result['status'], 'ENGINE_TOOLS_BUILT_REPORT_DIFFERS')
-        self.assertEqual(self.result['tools'][0]['comparison'], 'DIFFERENT_FROM_ACCEPTED_BYTES')
+        self.assertEqual(self.result['tools'][0]['comparison'], 'DIFFERENT_FROM_RECIPE_BYTES')
+
+    def test_llvm22_is_refused_before_compilation_even_when_the_lock_claims_llvm23(self):
+        with self.assertRaisesRegex(ValueError, 'compiler version differs'):
+            self.run_build(self.lock(), compiler_version='clang version 22.1.6 (fixture)')
+        self.assertEqual(self.result['status'], 'FAILED')
+        self.assertFalse((self.root / 'work/outputs/tools/macrunner-job.exe').exists())
+
+    def test_relative_supplied_compiler_remains_absolute_after_compile_changes_cwd(self):
+        self.run_build(self.lock(), relative_compiler=True)
+        self.assertEqual(self.result['status'], 'ENGINE_TOOLS_BUILT_AS_PINNED')
 
     def test_a_changed_source_is_refused_before_any_compiler_runs(self):
         with self.assertRaisesRegex(ValueError, 'source differs'):

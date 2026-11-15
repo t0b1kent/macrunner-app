@@ -21,16 +21,18 @@ enum WarmBottleSessions {
         let engine: BundledEngine, prefix: URL, log: EngineLog
         let environment: [String: String], layer: GraphicsLayer?
         let emulateModeset: Bool?, retinaMode: Bool?, cdromDataFilename: String?, gameDirectory: URL?
+        let gameRedist: [GameRedist.Install]
         private var server: Process?
         private var lifetimeWriter: FileHandle?
         private var ownsSetup = false
         private var cancelled = false
         private let lock = NSLock()
         init(engine: BundledEngine, prefix: URL, environment: [String: String], layer: GraphicsLayer?, log: EngineLog,
-             emulateModeset: Bool?, retinaMode: Bool?, cdromDataFilename: String?, gameDirectory: URL?) throws {
+             emulateModeset: Bool?, retinaMode: Bool?, cdromDataFilename: String?, gameDirectory: URL?,
+             gameRedist: [GameRedist.Install] = []) throws {
             self.engine = engine; self.prefix = prefix; self.environment = environment; self.layer = layer
             self.emulateModeset = emulateModeset; self.retinaMode = retinaMode; self.cdromDataFilename = cdromDataFilename
-            self.gameDirectory = gameDirectory
+            self.gameDirectory = gameDirectory; self.gameRedist = gameRedist
             // A session outlives each game's log. Keep its own bounded collector alive.
             let file = log.url.deletingLastPathComponent().appendingPathComponent("warm-session-\(UUID().uuidString).log")
             self.log = try EngineLog(url: file)
@@ -46,7 +48,8 @@ enum WarmBottleSessions {
             if stopped { throw WarmSessionState.Failure.closed }
             try BottleSetup(engine: engine, prefix: prefix, environment: environment, log: log)
                 .prepareIfNeeded(requiredLayer: layer, emulateModeset: emulateModeset, retinaMode: retinaMode,
-                                 cdromDataFilename: cdromDataFilename, gameDirectory: gameDirectory, checkCancellation: {
+                                 cdromDataFilename: cdromDataFilename, gameDirectory: gameDirectory,
+                                 gameRedist: gameRedist, checkCancellation: {
                     self.lock.lock(); let stopped = self.cancelled; self.lock.unlock()
                     if stopped { throw WarmSessionState.Failure.closed }
                 }, beforeRegistration: { try self.startServer() })
@@ -172,7 +175,7 @@ enum WarmBottleSessions {
     }
     static func signature(engine: BundledEngine, environment: [String: String], layer: GraphicsLayer?,
                           emulateModeset: Bool? = nil, retinaMode: Bool? = nil, cdromDataFilename: String? = nil,
-                          gameDirectory: URL? = nil) throws -> String {
+                          gameDirectory: URL? = nil, gameRedist: [GameRedist.Install] = []) throws -> String {
         var identity = environment
         for key in ["WINEDEBUG", "DXMT_INSTR_LOG", "DXMT_LOG_PATH"] { identity.removeValue(forKey: key) }
         identity["engineGeneration"] = BottleSetup.engineStamp(engine)
@@ -188,6 +191,8 @@ enum WarmBottleSessions {
         } ?? "unchanged"
         identity["cdromDataFilename"] = cdromDataFilename ?? ""
         identity["cdromDirectory"] = cdromDataFilename == nil ? "" : gameDirectory?.resolvingSymlinksInPath().path ?? ""
+        // GOTHIC3 0006: the redist files the session's preparation placed are part of what the session is.
+        identity["gameRedist"] = gameRedist.map(\.identity).sorted().joined(separator: ",")
         let bytes = try JSONSerialization.data(withJSONObject: identity, options: [.sortedKeys])
         return SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
     }
@@ -195,11 +200,12 @@ enum WarmBottleSessions {
                         preparationEnvironment: [String: String],
                         layer: GraphicsLayer?, log: EngineLog, admitProgram: Bool = false,
                         emulateModeset: Bool? = nil, retinaMode: Bool? = nil, cdromDataFilename: String? = nil,
-                        gameDirectory: URL? = nil) throws -> WarmSessionState {
+                        gameDirectory: URL? = nil, gameRedist: [GameRedist.Install] = []) throws -> WarmSessionState {
         let key = namespace(prefix: prefix, environment: environment)
         let wanted = try signature(engine: engine, environment: environment, layer: layer,
                                   emulateModeset: emulateModeset, retinaMode: retinaMode,
-                                  cdromDataFilename: cdromDataFilename, gameDirectory: gameDirectory)
+                                  cdromDataFilename: cdromDataFilename, gameDirectory: gameDirectory,
+                                  gameRedist: gameRedist)
         lock.lock(); defer { lock.unlock() }
         // Switching bottles releases other idle sessions. Active programs keep their leases.
         for (otherKey, entry) in entries where otherKey != key {
@@ -216,7 +222,8 @@ enum WarmBottleSessions {
         }
         let entry = Entry(key: key, signature: wanted, backend: try Backend(engine: engine, prefix: prefix,
             environment: preparationEnvironment, layer: layer, log: log, emulateModeset: emulateModeset,
-            retinaMode: retinaMode, cdromDataFilename: cdromDataFilename, gameDirectory: gameDirectory))
+            retinaMode: retinaMode, cdromDataFilename: cdromDataFilename, gameDirectory: gameDirectory,
+            gameRedist: gameRedist))
         entries[key] = entry
         if admitProgram {
             guard try entry.state.reserveProgramLease() else { throw WarmSessionState.Failure.closed }
@@ -229,12 +236,13 @@ enum WarmBottleSessions {
                              preparationEnvironment: [String: String],
                              layer: GraphicsLayer?, log: EngineLog, emulateModeset: Bool? = nil,
                              retinaMode: Bool? = nil,
-                             cdromDataFilename: String? = nil, gameDirectory: URL? = nil) throws -> WarmSessionState {
+                             cdromDataFilename: String? = nil, gameDirectory: URL? = nil,
+                             gameRedist: [GameRedist.Install] = []) throws -> WarmSessionState {
         let state = try session(engine: engine, prefix: prefix, environment: environment,
                                 preparationEnvironment: preparationEnvironment,
                                 layer: layer, log: log, admitProgram: true, emulateModeset: emulateModeset,
                                 retinaMode: retinaMode, cdromDataFilename: cdromDataFilename,
-                                gameDirectory: gameDirectory)
+                                gameDirectory: gameDirectory, gameRedist: gameRedist)
         do { try state.ensureReady() }
         catch { state.endProgram(); throw error }
         return state

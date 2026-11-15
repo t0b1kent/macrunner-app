@@ -271,6 +271,8 @@
 "%@ Windows programs cannot run in this version of MacRunner yet." = "Windows プログラム（%@）はこのバージョンの MacRunner ではまだ動きません。";
 "The game uses DXGI, but its Direct3D version could not be determined." = "このゲームは DXGI を使いますが、Direct3D のバージョンを特定できませんでした。";
 "The graphics API could not be determined from the game files." = "ゲームのファイルからグラフィックス API を特定できませんでした。";
+"This game uses Direct3D effects (%@), but the DirectX files from its installer were not found next to it. The 3D picture may stay black. Put the game's DirectX folder (__redist/DirectX from its installer) next to the game and start it again." = "このゲームは Direct3D エフェクト（%@）を使用しますが、インストーラーの DirectX ファイルがゲームの横に見つかりませんでした。3D 画面が黒いままになる可能性があります。ゲームの DirectX フォルダー（インストーラーの __redist/DirectX）をゲームの横に置いて、もう一度起動してください。";
+"The DirectX file %@ next to this game was not used: %@. The 3D picture may stay black." = "このゲームの横にある DirectX ファイル %@ は使用されませんでした: %@。3D 画面が黒いままになる可能性があります。";
 "The game files mention several graphics APIs (%@); the one the game uses could not be determined." = "ゲームのファイルに複数のグラフィックス API（%@）が現れます。どれを使うかは特定できませんでした。";
 "The game may also use %@, which is not available for %@ games. If it chooses it, it will not start." = "このゲームは %@ も使う可能性がありますが、（%@）のゲームでは利用できません。それを選ぶと起動しません。";
 "This game uses %@ (%@). This version of MacRunner has no support for it yet." = "このゲームは %@（%@）を使います。このバージョンの MacRunner はまだ対応していません。";
@@ -423,3 +425,18 @@
 "High resolution (Retina)" = "高解像度 (Retina)";
 "The game sees the full list of this Mac's resolutions in real Retina pixels, including 1920×1080 and 2560×1440. Applies from the next launch; on a regular external monitor leave it off." = "ゲームがこの Mac のすべての解像度を Retina の実ピクセルで使えるようになります（1920×1080 や 2560×1440 を含む）。次回の起動から有効です。通常の外部モニタではオフのままにしてください。";
 "Another program is still running in the same Windows environment with different settings. Close it and try again." = "同じ Windows 環境で、別の設定の別のプログラムが動いています。閉じてからやり直してください。";
+
+/* Calculation accuracy: per-game advanced setting and the one-time offer (12.11.2026). */
+"Calculation accuracy" = "計算の精度";
+"Automatic (recommended) — MacRunner picks what this game needs" = "自動(推奨)— このゲームに必要な設定を MacRunner が選びます";
+"Fast — same approach as Windows on Arm" = "高速 — Windows on Arm と同じ方式";
+"Exact — as on an Intel/AMD processor, noticeably slower" = "正確 — Intel/AMD プロセッサと同じ結果、明らかに遅くなります";
+"Change this only if the game misbehaves: crashes at launch, freezes, or has broken sound or physics. This mode does not improve speed or graphics — the game will run slower." = "ゲームの動作がおかしい場合(起動時に終了する、フリーズする、音や物理演算が乱れる)にのみ変更してください。このモードで速度やグラフィックが良くなることはなく、ゲームは遅くなります。";
+"This game uses Exact mode." = "このゲームは正確モードを使用しています。";
+"Did it help? Tell us and we'll turn it on for this game for everyone." = "改善しましたか?お知らせいただければ、このゲームでは全員に対してこのモードを有効にします。";
+"Advanced" = "詳細設定";
+"The game closed right after launch twice. Try Exact calculation mode? It is slower." = "ゲームが起動直後に 2 回終了しました。正確な計算モードを試しますか?速度は遅くなります。";
+"Try it" = "試す";
+"Fast" = "高速";
+"Exact" = "正確";
+"Exact (game profile)" = "正確(ゲームのプロファイル)";

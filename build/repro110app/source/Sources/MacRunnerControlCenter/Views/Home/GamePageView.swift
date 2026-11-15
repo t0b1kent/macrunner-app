@@ -20,8 +20,11 @@ struct GamePageView: View {
     let onBack: () -> Void
     /// Переключатель «Высокое разрешение (Retina)»; nil — не показывать.
     var onSetHighResolution: ((Bool) -> Void)? = nil
+    /// "Calculation accuracy" under Advanced; nil — do not show.
+    var onSetCalculationAccuracy: ((CalculationAccuracy) -> Void)? = nil
 
     @State private var showDetails = false
+    @State private var showAdvanced = false
 
     var body: some View {
         ScrollView {
@@ -168,6 +171,7 @@ struct GamePageView: View {
                 if let ms = app.lastDurationMs { fact(L("LAST RUN"), GameTechnicalDetails.durationText(ms)) }
             }
             highResolutionToggle
+            advancedSettings
             Button { showDetails.toggle() } label: {
                 HStack(spacing: 6) {
                     Image(systemName: "info.circle").font(.system(size: 12))
@@ -205,6 +209,56 @@ struct GamePageView: View {
             .toggleStyle(.switch)
             .disabled(isRunning)
         }
+    }
+
+    /// Advanced: one setting, for a game that misbehaves. It is deliberately not on the card and not in the
+    /// general settings; the caption names the cost so that nobody turns Exact on "to make it better".
+    @ViewBuilder
+    private var advancedSettings: some View {
+        if let onSetCalculationAccuracy, let sets = BundledEngine.current?.calculationAccuracy {
+            let arch = CalculationAccuracy.guestArch(exePath: app.exePath)
+            let offered = CalculationAccuracy.choices(for: arch)
+            let choice = CalculationAccuracy.applicable(stored: app.calculationAccuracy, arch: arch)
+            DisclosureGroup(isExpanded: $showAdvanced) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Picker(L("Calculation accuracy"), selection: Binding(get: { choice }, set: { onSetCalculationAccuracy($0) })) {
+                        Text(L("Automatic (recommended) — MacRunner picks what this game needs")).tag(CalculationAccuracy.automatic)
+                        if offered.contains(.fast) {
+                            Text(L("Fast — same approach as Windows on Arm")).tag(CalculationAccuracy.fast)
+                        }
+                        Text(L("Exact — as on an Intel/AMD processor, noticeably slower")).tag(CalculationAccuracy.exact)
+                    }
+                    .pickerStyle(.radioGroup)
+                    .disabled(isRunning)
+                    Text(L("Change this only if the game misbehaves: crashes at launch, freezes, or has broken sound or physics. This mode does not improve speed or graphics — the game will run slower."))
+                        .font(Theme.Font.caption)
+                        .foregroundColor(Theme.Palette.textSecondary(scheme))
+                        .fixedSize(horizontal: false, vertical: true)
+                    if choice == .automatic, GamePageView.profileUsesExact(app, sets: sets) {
+                        Text(L("This game uses Exact mode."))
+                            .font(Theme.Font.caption)
+                            .foregroundColor(Theme.Palette.textSecondary(scheme))
+                    }
+                    if choice == .exact {
+                        Text(L("Did it help? Tell us and we'll turn it on for this game for everyone."))
+                            .font(Theme.Font.caption)
+                            .foregroundColor(Theme.Palette.textSecondary(scheme))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .padding(.top, 8)
+            } label: {
+                Text(L("Advanced"))
+                    .font(.system(size: 14.5, weight: .medium))
+                    .foregroundColor(Theme.Palette.textPrimary(scheme))
+            }
+        }
+    }
+
+    /// The bundled profile of this game already carries the whole Exact set.
+    static func profileUsesExact(_ app: AppEntry, sets: CalculationAccuracySets) -> Bool {
+        guard let profile = GraphicsProfile.match(exe: URL(fileURLWithPath: app.exePath), in: GraphicsProfile.bundled) else { return false }
+        return sets.isExact(profile.environment ?? [:])
     }
 
     private func fact(_ label: String, _ value: String) -> some View {

@@ -36,6 +36,8 @@ struct LauncherResult: Codable, Sendable, Equatable {
     var metalDeviceDetected: Bool?
     var args: [String]?
     var envOverrides: [String]?
+    /// Calculation accuracy of this launch: auto, auto-exact, fast, exact or unavailable.
+    var calculationAccuracy: String?
     /// Explicit CLI acceptance overrides; absent for ordinary library launches.
     var acceptanceEnvironment: [String: String]?
     var workdir: String?
@@ -90,6 +92,7 @@ struct LauncherResult: Codable, Sendable, Equatable {
         case metalDeviceDetected = "metal_device_detected"
         case args
         case envOverrides = "env_overrides"
+        case calculationAccuracy = "calculation_accuracy"
         case acceptanceEnvironment = "acceptance_environment"
         case workdir
         case command

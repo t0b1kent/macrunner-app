@@ -22,6 +22,53 @@ def load_command(index, command, value):
     return f'Load command {index}\n          cmd {command}\n      cmdsize 96\n         {field} {value} (offset 24)\n'
 
 
+class VulkanDriverTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.data = b'\xcf\xfa\xed\xfe' + b'driver'
+        (self.root / 'libMoltenVK.dylib').write_bytes(self.data)
+        self.row = {'path': 'libMoltenVK.dylib', 'sha256': hashlib.sha256(self.data).hexdigest()}
+        self.select = lambda value: str((self.root / value).resolve())
+
+    def test_pinned_driver_is_staged_where_the_graphics_layer_names_it(self):
+        row = engine.validate_vulkan_driver(self.row, self.select)
+        out = self.root / 'engine'
+        (out / 'graphics').mkdir(parents=True)
+        report = engine.install_vulkan_driver(row, out)
+        self.assertEqual(report['path'], 'graphics/moltenvk/libMoltenVK.dylib')
+        self.assertEqual((out / report['path']).read_bytes(), self.data)
+        self.assertTrue(os.access(out / report['path'], os.X_OK))
+
+    def test_no_driver_leaves_the_engine_unchanged(self):
+        out = self.root / 'engine'
+        out.mkdir()
+        self.assertIsNone(engine.validate_vulkan_driver(None, self.select))
+        self.assertIsNone(engine.install_vulkan_driver(None, out))
+        self.assertEqual(list(out.iterdir()), [])
+
+    def test_wrong_digest_extra_keys_non_macho_and_missing_file_refuse(self):
+        with self.assertRaises(SystemExit):
+            engine.validate_vulkan_driver(dict(self.row, sha256='0' * 64), self.select)
+        with self.assertRaises(SystemExit):
+            engine.validate_vulkan_driver(dict(self.row, name='x'), self.select)
+        (self.root / 'text.dylib').write_bytes(b'not a library')
+        with self.assertRaises(SystemExit):
+            engine.validate_vulkan_driver({'path': 'text.dylib', 'sha256': hashlib.sha256(b'not a library').hexdigest()}, self.select)
+        with self.assertRaises(SystemExit):
+            engine.validate_vulkan_driver(dict(self.row, path='missing.dylib'), self.select)
+
+    def test_existing_file_in_the_graphics_tree_is_never_replaced(self):
+        row = engine.validate_vulkan_driver(self.row, self.select)
+        out = self.root / 'engine'
+        (out / 'graphics/moltenvk').mkdir(parents=True)
+        (out / 'graphics/moltenvk/libMoltenVK.dylib').write_bytes(b'other')
+        with self.assertRaises(SystemExit):
+            engine.install_vulkan_driver(row, out)
+        self.assertEqual((out / 'graphics/moltenvk/libMoltenVK.dylib').read_bytes(), b'other')
+
+
 class EngineToolsTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -203,6 +250,7 @@ class MediaFactoryTests(unittest.TestCase):
             'audioresample': 'audioresample', 'videoconvert': 'videoconvertscale',
             'deinterlace': 'deinterlace', 'videoflip': 'videofilter',
             'capsfilter': 'coreelements', 'avdec_h264': 'libav',
+            'jpegdec': 'jpeg', 'jpegenc': 'jpeg', 'pngdec': 'png', 'pngenc': 'png',
         }
         for factory, plugin in required.items():
             with self.subTest(factory=factory):
@@ -211,6 +259,13 @@ class MediaFactoryTests(unittest.TestCase):
         self.assertTrue(set(verifier.FACTORY_PLUGINS.values()) <= set(engine.GSTREAMER_PLUGINS))
         self.assertNotIn('winegstreamerstepper', verifier.FACTORIES)
         self.assertNotIn('vaapidecodebin', verifier.FACTORIES)
+
+    def test_unregistered_packaged_codec_fails_even_when_explicit_factories_pass(self):
+        self.assertEqual(verifier.packaged_plugin_errors({'libav': 'a', 'png': 'b'},
+            ['libav', 'jpeg', 'png']), ['Packaged media plugin unavailable: jpeg'])
+        self.assertEqual(verifier.packaged_plugin_errors({'jpeg': 'a'}, ['jpeg']), [])
+        self.assertTrue(verifier.packaged_plugin_errors({}, None))
+        self.assertTrue(verifier.packaged_plugin_errors({}, []))
 
     def test_construction_failure_is_not_hidden_by_other_available_factories(self):
         calls, released = [], []

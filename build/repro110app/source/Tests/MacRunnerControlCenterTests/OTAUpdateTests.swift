@@ -367,6 +367,15 @@ struct OTAUpdateTests {
         #expect(WineServerProbe.mayBeAlive(prefix: prefix, environment: environment))
         #expect(WineServerProbe.isAlive(prefix: prefix, environment: environment))
 
+        // Both probes connected without sending Wine protocol data. Drain those
+        // pending peers before closing the listener: pending AF_UNIX connections
+        // can otherwise make immediate close/connect observations transient.
+        try #require(fcntl(fd, F_SETFL, O_NONBLOCK) == 0)
+        for _ in 0..<2 {
+            let peer = accept(fd, nil, nil)
+            try #require(peer >= 0)
+            close(peer)
+        }
         close(fd)
         closed = true
         #expect(FileManager.default.fileExists(atPath: path))

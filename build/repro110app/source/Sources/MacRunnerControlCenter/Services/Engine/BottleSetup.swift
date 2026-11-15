@@ -19,8 +19,12 @@ struct BottleSetup {
     let prefix: URL
     let environment: [String: String]
     let log: EngineLog
+    /// Validated Microsoft redist files (GameRedist store, 0003); nil — the app's own `GameRedist.defaultStore`.
+    var redistStore: URL? = nil
 
     static let markerName = ".macrunner-bottle.json"
+    /// Marker key: game redist files that stand in this bottle instead of Wine's builtins (GOTHIC3 0004).
+    static let redistKey = "gameRedist"
     static let updatingName = ".macrunner-bottle-updating"
     /// Запуски приложения по бутылкам: слой графики нельзя менять под идущей игрой.
     private static var activeRuns: [String: Int] = [:]
@@ -128,6 +132,8 @@ struct BottleSetup {
         if let registrationInputs {
             marker["registrationInputs"] = try JSONSerialization.jsonObject(with: JSONEncoder().encode(registrationInputs))
         }
+        // The redist record outlives every rewrite of the marker: it says what applyGameRedist must put back.
+        if let redist = readMarker()?[Self.redistKey] { marker[Self.redistKey] = redist }
         let data = try JSONSerialization.data(withJSONObject: marker, options: [.prettyPrinted, .sortedKeys])
         try data.write(to: markerURL, options: .atomic)
     }
@@ -153,6 +159,7 @@ struct BottleSetup {
                           retinaMode: Bool? = nil,
                           cdromDataFilename: String? = nil, gameDirectory: URL? = nil,
                           allowTemplate: Bool = true,
+                          gameRedist: [GameRedist.Install] = [],
                           checkCancellation: () throws -> Void = {},
                           beforeRegistration: (() throws -> Void)? = nil) throws {
         Self.lock.lock()
@@ -252,8 +259,98 @@ struct BottleSetup {
             try writeMarker(layers: installedLayers, wicRegistration: registration, updateInputs: installed,
                             registrationInputs: inputs, stamp: stamp)
         }
-        if updating { try FileManager.default.removeItem(at: prefix.appendingPathComponent(Self.updatingName)) }
         launchPhase("wicEnd")
+        // ★ GOTHIC3 07.11 (0004): the game's Microsoft d3dx9 is put back as the LAST step of EVERY preparation —
+        //   after create/fast update/its fallback to full/layer switch/WIC and after the installation receipt.
+        //   Measured trap: any change of ENGINE.json sends the bottle through syncModules, which copies Wine's
+        //   builtin d3dx9_NN over the native one, silently — and Gothic 3 is black again. Fails closed: if this
+        //   step throws, the update flag stays and the next preparation repeats the whole route.
+        launchPhase("gameRedistBegin")
+        try applyGameRedist(gameRedist)
+        launchPhase("gameRedistEnd")
+        if updating { try FileManager.default.removeItem(at: prefix.appendingPathComponent(Self.updatingName)) }
+    }
+
+    // MARK: - Redist of the game (GOTHIC3 0004)
+
+    /// What the marker says stands in this bottle from games' own redist.
+    static func recordedRedist(prefix: URL) -> [GameRedist.Install] {
+        guard let raw = readMarker(prefix: prefix)?[redistKey],
+              let data = try? JSONSerialization.data(withJSONObject: raw),
+              let list = try? JSONDecoder().decode([GameRedist.Install].self, from: data) else { return [] }
+        return list
+    }
+
+    /// Recorded entries plus `requested` (the game being started), by target; the request wins for the same target.
+    /// Idempotent: a target that already holds the right bytes is not touched (same inode, no marker rewrite).
+    /// Only pinned Microsoft releases (`GameRedist.microsoftReleases`) from the validated store ever reach the bottle.
+    /// Returns the targets it replaced.
+    @discardableResult
+    func applyGameRedist(_ requested: [GameRedist.Install]) throws -> [String] {
+        var wanted: [String: GameRedist.Install] = [:]
+        for item in Self.recordedRedist(prefix: prefix) + requested { wanted[item.target] = item }
+        guard !wanted.isEmpty || readMarker()?[Self.redistKey] != nil else { return [] }
+        let fm = FileManager.default
+        let store = redistStore ?? GameRedist.defaultStore
+        var installed: [GameRedist.Install] = []
+        var changed: [String] = []
+        for target in wanted.keys.sorted() {
+            let item = wanted[target]!
+            guard GameRedist.microsoftReleases["\(item.dll)#\(item.bits)"]?.sha256 == item.sha256 else {
+                log.note("redist: \(target) sha256=\(item.sha256) is not a pinned Microsoft release; not installed")
+                continue
+            }
+            let destination = prefix.appendingPathComponent(target)
+            if (try? BottleUpdateCatalogue.digest(destination)) == item.sha256 {
+                installed.append(item)
+                continue
+            }
+            let source = GameRedist.storedFile(item.sha256, in: store)
+            guard (try? BottleUpdateCatalogue.digest(source)) == item.sha256 else {
+                log.note("redist: \(item.dll) \(item.bits)-bit: no valid stored copy; Wine's builtin stays until the game is started again")
+                continue
+            }
+            try fm.createDirectory(at: destination.deletingLastPathComponent(), withIntermediateDirectories: true)
+            // Same directory, verified, then one rename: a program that has the old file mapped keeps its inode.
+            let staged = destination.deletingLastPathComponent().appendingPathComponent(".macrunner-redist-\(UUID().uuidString)")
+            try fm.copyItem(at: source, to: staged)
+            guard (try? BottleUpdateCatalogue.digest(staged)) == item.sha256, rename(staged.path, destination.path) == 0 else {
+                try? fm.removeItem(at: staged)
+                throw CocoaError(.fileWriteUnknown, userInfo: [NSFilePathErrorKey: destination.path])
+            }
+            changed.append(target)
+            installed.append(item)
+            log.note("redist: \(item.dll) \(item.bits)-bit \(item.version) installed at \(target) sha256=\(item.sha256) (\(item.cabinet))")
+        }
+        try recordRedist(installed, changed: changed)
+        return changed
+    }
+
+    /// Marker: the redist list, and — for the targets just replaced — their identities in the installation receipt.
+    /// The receipt is a change detector of what WE placed (BottleUpdateCatalogue.recordingInstallation); a redist file
+    /// is placed by us too, so the next engine update's fast route does not see a foreign file. If the new engine
+    /// changes Wine's own d3dx9_NN, `apply` refuses (the file is not the previous package's) → full route → this step.
+    private func recordRedist(_ installed: [GameRedist.Install], changed: [String]) throws {
+        guard var marker = readMarker() else { return }
+        let before = try JSONSerialization.data(withJSONObject: marker, options: [.prettyPrinted, .sortedKeys])
+        if installed.isEmpty {
+            marker.removeValue(forKey: Self.redistKey)
+        } else {
+            marker[Self.redistKey] = try JSONSerialization.jsonObject(with:
+                JSONEncoder().encode(installed.sorted { $0.target < $1.target }))
+        }
+        if !changed.isEmpty, let object = marker["updateInputs"],
+           var receipt = try? JSONDecoder().decode(BottleUpdateCatalogue.self, from: JSONSerialization.data(withJSONObject: object)),
+           let ownership = receipt.ownership {
+            var files = ownership.files
+            for target in changed where files[target] != nil {
+                files[target] = try BottleUpdateCatalogue.Identity.read(prefix.appendingPathComponent(target))
+            }
+            receipt.ownership = BottleUpdateCatalogue.Ownership(prefixRoot: ownership.prefixRoot, files: files)
+            marker["updateInputs"] = try JSONSerialization.jsonObject(with: JSONEncoder().encode(receipt))
+        }
+        let after = try JSONSerialization.data(withJSONObject: marker, options: [.prettyPrinted, .sortedKeys])
+        if after != before { try after.write(to: markerURL, options: .atomic) }
     }
 
     private var defaultLayerIDs: [String] {
@@ -330,13 +427,17 @@ struct BottleSetup {
             // approved (a record in the pair file shipped with this release); anything else takes the full route.
             var pairModes: [String: mode_t]? = nil
             var previousActual: [String: String] = [:]
+            var registrationPolicy = BottleUpdateCatalogue.RegistrationPolicy.independent
             if !BottleUpdateCatalogue.pairGateMode {
                 switch BottleUpdateCatalogue.pairLookup(file: Self.pairFileData(), from: previousStamp, to: current.engine) {
                 case .refused(let reason): return refuse(reason)
-                case .approved(let record): pairModes = record.modes; previousActual = record.fromActual
+                case .approved(let record):
+                    pairModes = record.modes; previousActual = record.fromActual
+                    registrationPolicy = record.registrationPolicy
                 }
             } else {
                 previousActual = BottleUpdateCatalogue.pairGateActual
+                registrationPolicy = BottleUpdateCatalogue.pairGateRegistrationPolicy
             }
             // A legacy bottle was written by the OLD app from the OLD package's real bytes. If that package's
             // inventory misdescribes some file, the signed record carries the real digest (see PairRecord.fromActual).
@@ -348,7 +449,8 @@ struct BottleSetup {
             let normalisation = BottleUpdateCatalogue.Normalisation.current
             let decision = try current.deltaDecision(from: effective, prefix: prefix, package: engine.root,
                                                       classRule: true, trustedLegacy: trustedLegacy,
-                                                      normalisation: normalisation)
+                                                      normalisation: normalisation,
+                                                      registrationPolicy: registrationPolicy)
             guard case .delta(let delta) = decision else {
                 if case .refuse(let reason) = decision { return refuse(reason) }
                 return false
@@ -366,6 +468,13 @@ struct BottleSetup {
                 registrationCurrent = stored == expected
                 registrationPrevious = stored == (try effective.registrationReceipt(package: engine.root))
             }
+            var staging: [String: [String]]? = nil
+            if registrationPolicy == .checkedFull && !registrationCurrent {
+                guard let selected = try current.changedFakeDLLRows(from: effective, package: engine.root) else {
+                    return refuse("checked INF file staging unavailable")
+                }
+                staging = selected
+            }
             try current.apply(delta, from: effective, prefix: prefix, package: engine.root)
             let applied = DispatchTime.now().uptimeNanoseconds
             // Older markers do not prove post-staging i386 registration. Enroll
@@ -376,13 +485,24 @@ struct BottleSetup {
                 try refreshDevicesOnly()
                 log.note("bottle: registration inputs unchanged; registration calls=0; devices refreshed")
             } else if registrationPrevious,
-                      let selection = try current.registrationSelection(from: effective, package: engine.root) {
+                      let selection = try current.registrationSelection(from: effective, package: engine.root,
+                                                                          registrationPolicy: registrationPolicy) {
                 try refreshDeltaRegistration(selection: selection)
                 log.note("bottle: selective registration calls=\(selection.values.reduce(0) { $0 + $1.count }); devices refreshed")
             } else {
-                try refreshDeltaRegistration()
+                if registrationPolicy == .checkedFull {
+                    try refreshDeltaRegistration(staging: staging)
+                    // Match full preparation's final native registrar process,
+                    // after INF file/resource registration and device discovery.
+                    try refreshWICRegistration()
+                } else {
+                    try refreshDeltaRegistration()
+                }
                 log.note("bottle: post-staging registration completed; receipt enrolled")
             }
+            // Same post-condition as full preparation: shell32 is registered as
+            // C:\\windows\\system32\\shell32.dll, never as the package path (curator 07.11).
+            try normaliseShell32(strategy: .text)
             let repaired = try current.repairSetupChanges(from: beforeSetup, prefix: prefix, package: engine.root)
             log.note("bottle: repaired \(repaired.count) setup-mutated files")
             if let pairModes { try applyFullRouteModes(current, modes: pairModes) }
@@ -413,7 +533,7 @@ struct BottleSetup {
     /// propagate failed DLL registrations or an EXE's exit code. A small INF
     /// section runs only registrations; the helper checks every callback and
     /// runs each EXE itself. Device discovery remains a separate operation.
-    private func refreshDeltaRegistration(selection: [String: [String]]? = nil) throws {
+    private func refreshDeltaRegistration(selection: [String: [String]]? = nil, staging: [String: [String]]? = nil) throws {
         guard syncUpdateTimestamp() else { throw SetupError.missing("Wine update timestamp") }
         func resource(_ name: String, _ ext: String) throws -> URL {
             guard let url = Bundle.module.url(forResource: name, withExtension: ext, subdirectory: "BottleTools")
@@ -426,10 +546,22 @@ struct BottleSetup {
         let wrapper = try resource("checked-registration", "inf")
         let inf = engine.root.appendingPathComponent("wine/share/wine/wine.inf")
         let temporary = prefix.appendingPathComponent(".macrunner-registration-\(UUID().uuidString)")
-        if selection != nil { try FileManager.default.createDirectory(at: temporary, withIntermediateDirectories: false) }
-        defer { if selection != nil { try? FileManager.default.removeItem(at: temporary) } }
+        if selection != nil || staging != nil { try FileManager.default.createDirectory(at: temporary, withIntermediateDirectories: false) }
+        defer { if selection != nil || staging != nil { try? FileManager.default.removeItem(at: temporary) } }
         for view in ["native", "32"] {
             var selectedINF = inf
+            var selectedWrapper = wrapper
+            if let staging {
+                let rows = staging[view] ?? []
+                selectedWrapper = temporary.appendingPathComponent(view + "-wrapper.inf")
+                let text = try String(contentsOf: wrapper, encoding: .utf8)
+                guard text.contains("RegisterDlls=RegisterDllsSection") else { throw SetupError.missing("checked INF section") }
+                try (text.replacingOccurrences(of: "RegisterDlls=RegisterDllsSection",
+                    with: "RegisterDlls=RegisterDllsSection\nWineFakeDlls=MacRunnerChangedModules")
+                    + "\n[MacRunnerChangedModules]\n" + rows.joined(separator: "\n") + "\n")
+                    .write(to: selectedWrapper, atomically: true, encoding: .utf8)
+                log.note("bottle: checked INF file staging view=\(view) rows=\(rows.count)")
+            }
             if let selection {
                 let rows = selection[view] ?? []
                 if rows.isEmpty { continue }
@@ -439,7 +571,7 @@ struct BottleSetup {
             }
             let helper = try resource("macrunner-bottle-register-" + view, "exe")
             try startSetupServer()
-            let outcome = try EngineProcess.run(engine.wine, [helper.path, windowsPath(selectedINF), windowsPath(wrapper)],
+            let outcome = try EngineProcess.run(engine.wine, [helper.path, windowsPath(selectedINF), windowsPath(selectedWrapper)],
                                                 environment: environment, log: log)
             EngineProcess.waitForServer(engine: engine, environment: environment, log: log)
             guard outcome.status == 0, !outcome.signaled else { throw SetupError.bootFailed(outcome.status) }
@@ -1026,6 +1158,11 @@ struct BottleSetup {
         if let catalogue = try currentCatalogue(layers: layers, manifest: manifest) {
             let beforeSetup = try catalogue.recordingInstallation(prefix: prefix)
             try refreshDeltaRegistration()
+            // wineboot and the checked registrar load shell32 under its package path
+            // (Z:\\<engine>\\wine\\lib\\wine\\aarch64-windows\\shell32.dll, measured 119 -> R7:
+            // 38 values). The bottle must name C:\\windows\\system32\\shell32.dll, as Windows and
+            // the 1.0.9 -> c12 full route did: a package path breaks when the app moves.
+            try normaliseShell32(strategy: .text)
             _ = try catalogue.repairSetupChanges(from: beforeSetup, prefix: prefix, package: engine.root)
             let codec = try BottleUpdateCatalogue.digest(windows.appendingPathComponent("system32/windowscodecs.dll"))
             let registration = ["engine": engineStamp, "engineRoot": engineRootPath, "codec": codec]

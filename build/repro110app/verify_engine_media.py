@@ -29,6 +29,7 @@ FACTORY_PLUGINS = {
     "videoconvert": "videoconvertscale", "videoscale": "videoconvertscale",
     "deinterlace": "deinterlace", "videoflip": "videofilter",
     "audioconvert": "audioconvert", "audioresample": "audioresample",
+    "jpegdec": "jpeg", "jpegenc": "jpeg", "pngdec": "png", "pngenc": "png",
 }
 FACTORIES = tuple(FACTORY_PLUGINS)
 RESULT_MARKER = "MACRUNNER_MEDIA_RESULT="
@@ -140,6 +141,14 @@ def construct_elements(make_element, unref):
     return created, errors
 
 
+def packaged_plugin_errors(registered, expected):
+    """Every deliberately packaged plugin must register, including codecs
+    outside the small explicit factory set used by Wine itself."""
+    if not isinstance(expected, list) or not expected or not all(isinstance(x, str) for x in expected):
+        return ["Packaged media plugin census missing or invalid"]
+    return ["Packaged media plugin unavailable: " + name for name in expected if name not in registered]
+
+
 def inspect_engine(engine, data):
     manifest = json.loads((engine / "ENGINE.json").read_text())
     values, plugins, scanner, registry_path = media_environment(engine, data, manifest)
@@ -206,6 +215,7 @@ def inspect_engine(engine, data):
         if head:
             free_plugins(head)
 
+    errors.extend(packaged_plugin_errors(registered, manifest.get("report", {}).get("gstreamer", {}).get("plugins")))
     for name in FACTORIES:
         factory = find(name.encode("ascii"))
         if not factory:
