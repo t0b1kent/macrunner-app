@@ -58,8 +58,10 @@ def verify_archives(lock, directory):
     return result
 
 
-def select_archive(archive, selections):
+def select_archive(archive, selections, allowed_symlinks=None):
     """Materialize only selected regular source files; no archive Package output is copied."""
+    allowed_symlinks = allowed_symlinks or {}
+    matched_links = set()
     selected = []
     seen = set()
     with tarfile.open(archive, 'r:gz') as stream:
@@ -74,11 +76,17 @@ def select_archive(archive, selections):
                 parts = PurePosixPath(name).parts
                 if parts[0] in excluded or '.git' in parts or parts[-1] == '.DS_Store':
                     continue
+                if member.issym() and member.name in allowed_symlinks:
+                    require(member.linkname == allowed_symlinks[member.name] and member.name not in matched_links,
+                            'Pinned source symlink differs')
+                    matched_links.add(member.name)
+                    continue
                 require(member.isfile() and 0 <= member.size <= 32 * 1024**2, 'Foreign selected archive member')
                 target = Path(destination) / name
                 require(target not in seen and not target.exists(), 'Duplicate selected archive source')
                 seen.add(target)
                 selected.append((member, target))
+        require(matched_links == set(allowed_symlinks), 'Pinned source symlink missing')
         require(len(selected) <= 30000 and sum(row.size for row, _ in selected) <= 512 * 1024**2,
                 'Source extraction budget exceeded')
         # Validate every selected path/type before writing the first source.
@@ -88,6 +96,24 @@ def select_archive(archive, selections):
                 shutil.copyfileobj(src, dst)
             target.chmod(0o755 if member.mode & 0o111 else 0o644)
     return len(selected)
+
+
+def restore_links(root, links):
+    """Restore the pinned source layout only after regular files have been verified."""
+    root = Path(root)
+    pending = []
+    for name, value in links.items():
+        target = root / relative(name)
+        require(not PurePosixPath(value).is_absolute() and
+                (target.parent / value).resolve().is_relative_to(root.resolve()),
+                'Source symlink target escapes source root')
+        require(not target.exists() and not target.is_symlink() and
+                not any(parent.is_symlink() for parent in target.parents if parent.is_relative_to(root)),
+                'Source symlink path conflicts')
+        pending.append((target, value))
+    for target, value in pending:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.symlink_to(value)
 
 
 def unpack_single(archive, destination):
@@ -103,11 +129,12 @@ def prepare(lock, directory, output, here=HERE):
     output = Path(output)
     require(not output.exists(), 'Fresh Indiana source path required')
     profile = lock['source_profile']
+    links = profile.get('core_symlinks', {})
     source, cross = output / 'MoltenVK', output / 'SPIRV-Cross'
     select_archive(inputs['indiana'], [
         (profile['core_prefix'], source, set(profile['excluded_core_trees'])),
         (profile['cross_prefix'], cross, set()),
-    ])
+    ], {profile['core_prefix'] + name: value for name, value in links.items()})
     require(inventory(source) == dict(files=profile['core_files'], sha256=profile['core_before_inventory_sha256']),
             'MoltenVK base source inventory differs')
     require(inventory(cross) == dict(files=profile['cross_files'], sha256=profile['cross_inventory_sha256']),
@@ -138,7 +165,9 @@ def prepare(lock, directory, output, here=HERE):
     for name in ['Vulkan-Headers', 'SPIRV-Tools', 'cereal']:
         unpack_single(inputs[name], external / name)
     unpack_single(inputs['SPIRV-Headers'], external / 'SPIRV-Tools/external/spirv-headers')
+    restore_links(source, links)
     return dict(status='INDIANA_EXACT_REBUILD_SOURCES_PREPARED', core=core, cross=inventory(cross),
+                source_symlinks=links,
                 revision_script_sha256=sha(revision), archives={k: sha(v) for k, v in inputs.items()},
                 source=str(source), downloads='NOT_PERFORMED', compilation='NOT_PERFORMED')
 
