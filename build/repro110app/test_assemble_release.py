@@ -32,7 +32,7 @@ class ReleaseCompositionTests(unittest.TestCase):
         self.assertEqual(len(archives), 1)
         workflow = (here.parents[1] / '.github/workflows/repro110-app-c12-source-xcode27-arm64.yml').read_text()
         if 'build/repro110app/assemble_release.py' in workflow:
-            self.assertIn('${{ runner.temp }}/release110-package/' + archives[0], workflow)
+            self.assertIn('${{ runner.temp }}/release111-package/' + archives[0], workflow)
         else:
             # A source-only dispatcher must not offer assembly with historical inputs.
             options = re.search(r'^\s+options: \[([^]]+)\]', workflow, re.M).group(1)
