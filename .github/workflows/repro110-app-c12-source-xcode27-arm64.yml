@@ -7,21 +7,21 @@ on:
       group:
         description: sources = the five stages of the application source; steps = engine tools and bottle catalogues
         type: choice
-        options: [sources, steps]
+        options: [sources, steps, application]
         default: sources
 permissions:
   contents: read
   actions: read
 jobs:
   stage:
-    if: ${{ inputs.group == 'sources' }}
+    if: ${{ inputs.group == 'sources' || inputs.group == 'application' }}
     runs-on: xcode-27
     timeout-minutes: 130
     strategy:
       fail-fast: false
       max-parallel: 2
       matrix:
-        stage: [offline-normal, offline-optimized, sparkle, plcrashreporter, native-fullmode]
+        stage: ${{ fromJSON(inputs.group == 'application' && '["offline-normal","offline-optimized","native-fullmode"]' || '["offline-normal","offline-optimized","sparkle","plcrashreporter","native-fullmode"]') }}
     env:
       DEVELOPER_DIR: /Applications/Xcode_27.app/Contents/Developer
       PYTHONDONTWRITEBYTECODE: '1'

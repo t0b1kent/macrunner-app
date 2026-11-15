@@ -41,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 5926365,
+  "source_bytes": 5926531,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -50,7 +50,7 @@
     "Tests/Fixtures/test-pe.exe"
   ],
   "source_files": 410,
-  "source_inventory_sha256": "dc08a81ff4dd48c93d2e5381ea35106eedada7f733a881708de59eeeb5aaf2f4",
+  "source_inventory_sha256": "2dd10c88c9ff88451eaac51218ab9baf5ac92da566ebac56f3b5d8376d9f043c",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,
@@ -67,7 +67,8 @@
     "Synthetic fixture roots instead of machine roots",
     "OS-selected home and synthetic mailbox in privacy self-tests; sanitizer unchanged",
     "APP32 selects complete checkout through MACRUNNER_ROOT",
-    "Base64 image source restored to exact pinned PNG/ICNS bytes"
+    "Base64 image source restored to exact pinned PNG/ICNS bytes",
+    "Two Gothic routing integration tests require APP32_ENGINE_ROOT, consistently with the existing complete-engine test suites. Component-only CI reports them skipped; final whole-engine acceptance must enable them. Product sources and the frozen local candidate are unchanged by this test-scope correction."
   ],
   "release110_delta": {
     "base": "Published 1.0.9 recipe source snapshot; byte-exact preimages below",
@@ -594,8 +595,8 @@
       },
       {
         "path": "Tests/MacRunnerControlCenterTests/GothicRouteTests.swift",
-        "sha256": "f6a6be7a21a8394b8ea590c0f0323029ae90c349519e07b909498eb4123d2632",
-        "bytes": 8401,
+        "sha256": "ce9a25e2b8759c972728d76e33419245d57549d2251cbcdf3afc56d3db94ddd5",
+        "bytes": 8567,
         "executable": false,
         "base_sha256": null
       },
@@ -750,7 +751,7 @@
     "base": "APPIDLE c17 + idle fix",
     "overlay": "APP-RETINA-20261103.p1.patch",
     "patch_sha256": "06f56d71bd689e9b3c1d1bcae665798e28b48bf29daa6cdfe5d09d3ac9479d54",
-    "scope": "Manual per-game Retina; no automatic default or PSO transplant; product code still to be compared",
+    "scope": "Historical 1.1.0 source origin only. The current 1.1.1 source delta is enumerated under release110_delta and bound by the current complete source inventory.",
     "known_public_source_difference": "Existing privacy-safe synthetic bug-report sample is retained as directed; application code does not require byte convergence with 1.1.0"
   }
 }
