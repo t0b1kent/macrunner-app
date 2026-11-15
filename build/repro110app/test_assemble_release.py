@@ -3,6 +3,7 @@ import ast
 import importlib.util
 import io
 import os
+import re
 from pathlib import Path
 import tarfile
 import tempfile
@@ -30,7 +31,12 @@ class ReleaseCompositionTests(unittest.TestCase):
                     and call.args[0].value == 'archive-app']
         self.assertEqual(len(archives), 1)
         workflow = (here.parents[1] / '.github/workflows/repro110-app-c12-source-xcode27-arm64.yml').read_text()
-        self.assertIn('${{ runner.temp }}/release110-package/' + archives[0], workflow)
+        if 'build/repro110app/assemble_release.py' in workflow:
+            self.assertIn('${{ runner.temp }}/release110-package/' + archives[0], workflow)
+        else:
+            # A source-only dispatcher must not offer assembly with historical inputs.
+            options = re.search(r'^\s+options: \[([^]]+)\]', workflow, re.M).group(1)
+            self.assertNotIn('assemble', [value.strip() for value in options.split(',')])
 
     def test_tar_preserves_executable_and_internal_framework_link(self):
         archive = self.root / 'app.tar.gz'

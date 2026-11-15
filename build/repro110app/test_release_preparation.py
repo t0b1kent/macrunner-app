@@ -131,7 +131,10 @@ class ReleasePreparationTests(unittest.TestCase):
         self.assertEqual(transport.INPUTS['llvm'], old_inputs['llvm'])
         self.assertEqual(old_inputs['wine'], {'revision': 'old'})
         workflow = (HERE.parents[1] / '.github/workflows/repro110-app-c12-source-xcode27-arm64.yml').read_text()
-        self.assertIn('ref: ' + pins['wine']['revision'] + '\n          path: wine\n', workflow)
+        if 'build/repro110app/assemble_release.py' in workflow:
+            self.assertIn('ref: ' + pins['wine']['revision'] + '\n          path: wine\n', workflow)
+        else:
+            self.assertNotIn('--pins build/repro110app/release-inputs.lock.json', workflow)
         with self.assertRaisesRegex(ValueError, 'repository differs'):
             producer.select_wine_source(transport, dict(pins['wine'], repo='invalid/repository'))
 

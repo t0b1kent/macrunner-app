@@ -54,10 +54,7 @@ class ReleaseSourceDelta(unittest.TestCase):
         raw = (HERE.parents[1] / '.github/workflows/repro110-app-c12-source-xcode27-arm64.yml').read_text()
         text = '\n'.join(line for line in raw.splitlines() if not line.lstrip().startswith('#'))
         self.assertIn('build/repro110app', text)
-        modules = re.search(r'for module in ([^;]+); do', text).group(1).split()
-        self.assertGreaterEqual(len(modules), 7)
-        for module in modules:
-            self.assertTrue((HERE / (module + '.py')).is_file(), module)
+        self.assertIn('-m unittest discover -s build/repro110app -p \'test_*.py\'', text)
         self.assertIn('retention-days: 30', text)
         self.assertIn('fail-fast: false', text)
 
