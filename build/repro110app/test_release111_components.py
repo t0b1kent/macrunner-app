@@ -100,18 +100,19 @@ class CurrentComponentInputs(unittest.TestCase):
         self.assertFalse(any(p.name == 'libarm64ecfex.dll' for p in output.rglob('*')))
 
     def test_wine_entry_names_use_current_translators_and_preserve_replaced_bytes(self):
-        overlay = self.root / 'overlay'; runtime = self.root / 'runtime'; backup = self.root / 'backup'
+        runtime = self.root / 'runtime'; overlay = runtime / 'fex'; backup = self.root / 'backup'
         for arch, _, source in component.ALIASES:
-            self.write(overlay / arch / source, ('current ' + source).encode())
+            self.write(overlay / arch / source, ('final packaged ' + source).encode())
+            self.write(self.root / 'producer' / arch / source, ('before packaging ' + source).encode())
         legacy = runtime / 'wine/lib/wine/aarch64-windows/libarm64ecfex.dll'
         self.write(legacy, b'previous translator')
-        rows = component.install_aliases(runtime, overlay, backup)
+        rows = component.install_aliases(runtime, backup)
         self.assertEqual(len(rows), 8)
         for arch, target, source in component.ALIASES:
             self.assertEqual((runtime / 'wine/lib/wine' / arch / target).read_bytes(),
                              (overlay / arch / source).read_bytes())
         self.assertEqual((backup / 'aarch64-windows/libarm64ecfex.dll.BYLO').read_bytes(), b'previous translator')
-        self.assertEqual(component.install_aliases(runtime, overlay, backup), [dict(row, before_sha256=row['sha256']) for row in rows])
+        self.assertEqual(component.install_aliases(runtime, backup), [dict(row, before_sha256=row['sha256']) for row in rows])
 
     def test_missing_compatibility_entry_and_development_archives_refuse(self):
         runtime = self.root / 'runtime'

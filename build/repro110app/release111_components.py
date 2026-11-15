@@ -82,7 +82,10 @@ ALIASES = [('aarch64-windows', 'xtajit.dll', 'xtajit.dll'),
              ['xtajit.so', 'libwow64fex.so', 'xtajit64.so', 'libarm64ecfex.so']]]
 
 
-def install_aliases(runtime, overlay, backup):
+def install_aliases(runtime, backup):
+    # Use the final packaged overlay: PE debug stripping may normalize executable
+    # section padding, so the original producer tree is not an alias source here.
+    overlay = runtime / 'fex'
     rows = []
     for architecture, name, original in ALIASES:
         source = overlay / architecture / original
