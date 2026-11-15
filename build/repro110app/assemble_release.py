@@ -387,7 +387,7 @@ def build(args):
         result['wine_loader'] = stage_wine_loader(app, args.work / 'original-wine-loaders')
         # Upstream Wine does not build the external FEX DLLs. Install both current
         # translator entry names and standard compatibility names from one verified family.
-        result['translator_aliases'] = current.install_aliases(runtime, fex, args.work / 'replaced-wine-aliases')
+        result['translator_aliases'] = current.install_aliases(runtime, args.work / 'replaced-wine-aliases')
         result['runtime_layout'] = current.validate_runtime_paths(runtime, template)
         mapped = map_ci_paths(app, args.work / 'original-build-prefix-files')
         (reports / 'build-path-map.json').write_text(json.dumps(mapped, indent=2) + '\n')
