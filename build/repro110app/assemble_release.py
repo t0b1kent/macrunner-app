@@ -359,6 +359,9 @@ def build(args):
         licenses = license_inputs([('deps', Path(paths['deps']) / 'share/licenses'),
                                    ('moltenvk', Path(paths['moltenvk']) / 'share/licenses')])
         licenses.append(indiana['license'])
+        native_notices = license_inputs([('llvm', Path(paths['llvm']) / 'share/licenses')])
+        current.validate_native_notices(native_notices)
+        licenses += native_notices
         licenses += license_inputs([(row['namespace'], Path(row['path']))
                                     for row in result['translator_components']['license_roots']])
         for namespace, root in [('wine', args.wine), ('dxmt', args.dxmt), ('fex', args.hyperbridge)]:
@@ -382,19 +385,10 @@ def build(args):
                                 resources / 'engine', '--strip-pe', '--defer-signing'])
         runtime = resources / 'engine'
         result['wine_loader'] = stage_wine_loader(app, args.work / 'original-wine-loaders')
-        # Keep Wine's separately source-built bridge DLLs. Only the actual translator aliases are installed.
-        aliases = [('aarch64-windows', name) for name in ['xtajit.dll', 'xtajit64.dll']]
-        aliases += [('aarch64-unix', name) for name in ['xtajit.so', 'libwow64fex.so', 'xtajit64.so', 'libarm64ecfex.so']]
-        for architecture, name in aliases:
-            source = fex / architecture / name
-            target = runtime / 'wine/lib/wine' / architecture / name
-            if target.exists() and sha(target) != sha(source):
-                backups = args.work / 'replaced-wine-aliases'; backups.mkdir(exist_ok=True)
-                backup = backups / (name + '.BYLO-' + time.strftime('%H%M%S', time.gmtime()))
-                shutil.copy2(target, backup)
-                result.setdefault('replaced_wine_aliases', []).append(dict(path=name, before_sha256=sha(target),
-                                                                           backup=str(backup)))
-            shutil.copy2(source, target)
+        # Upstream Wine does not build the external FEX DLLs. Install both current
+        # translator entry names and standard compatibility names from one verified family.
+        result['translator_aliases'] = current.install_aliases(runtime, fex, args.work / 'replaced-wine-aliases')
+        result['runtime_layout'] = current.validate_runtime_paths(runtime, template)
         mapped = map_ci_paths(app, args.work / 'original-build-prefix-files')
         (reports / 'build-path-map.json').write_text(json.dumps(mapped, indent=2) + '\n')
         result['build_prefix_mapping'] = dict(files=len(mapped), code_equal=all(row['code_equal'] for row in mapped))
