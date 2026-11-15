@@ -144,8 +144,7 @@
       "emulateModeset": true,
       "environment": {
         "WINE_D3D_CONFIG": "renderer=gdi,csmt=disabled",
-        "WINEDLLOVERRIDES": "winedbg.exe=d;ddraw=b;d3d8=b;d3d9=b;wined3d=b;d3d11,dxgi,d3d10core,winemetal=n,b",
-        "MACRUNNER_PE32_USD_ALIAS": "0"
+        "WINEDLLOVERRIDES": "winedbg.exe=d;ddraw=b;d3d8=b;d3d9=b;wined3d=b;d3d11,dxgi,d3d10core,winemetal=n,b"
       },
       "evidence": "artifacts/pe32-av-20261002/run-heroes3.py and artifacts/release-108-20261004/run-field.py: builtin DirectDraw, GDI renderer, csmt disabled. Developer runs reached the menu; app-path acceptance is recorded separately in artifacts/app32-20261004/HANDOFF-APP32.md."
     },

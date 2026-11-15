@@ -4,6 +4,19 @@ import Testing
 
 @Suite struct ReleaseEngineEnvironmentTests {
     @Test(.enabled(if: ProcessInfo.processInfo.environment["APP32_ENGINE_ROOT"] != nil))
+    func explicitSilenceCoversPreparationAndCannotBeUndoneByTheGame() throws {
+        let root = try #require(ProcessInfo.processInfo.environment["APP32_ENGINE_ROOT"])
+        let engine = try #require(BundledEngine.load(from: URL(fileURLWithPath: root)))
+        let prefix = FileManager.default.temporaryDirectory.appendingPathComponent("silent-environment-\(UUID().uuidString)")
+        let launcher = EngineLauncher(engine: engine, prefix: prefix)
+        let requested = ["MACRUNNER_AUDIO_SILENT_OUTPUT": "1"]
+        #expect(launcher.makeEnvironment(extra: [:], inherited: requested)["MACRUNNER_AUDIO_SILENT_OUTPUT"] == "1")
+        #expect(launcher.makeEnvironment(extra: ["MACRUNNER_AUDIO_SILENT_OUTPUT": "0"], inherited: requested)["MACRUNNER_AUDIO_SILENT_OUTPUT"] == "1")
+        #expect(launcher.makeEnvironment(extra: [:], inherited: [:])["MACRUNNER_AUDIO_SILENT_OUTPUT"] == engine.environmentTemplate["MACRUNNER_AUDIO_SILENT_OUTPUT"])
+        #expect(launcher.makeEnvironment(extra: ["MACRUNNER_AUDIO_SILENT_OUTPUT": "1"], inherited: [:])["MACRUNNER_AUDIO_SILENT_OUTPUT"] == "1")
+    }
+
+    @Test(.enabled(if: ProcessInfo.processInfo.environment["APP32_ENGINE_ROOT"] != nil))
     func eldenRingUsesAcceptedEngineCPUSettings() throws {
         let root = try #require(ProcessInfo.processInfo.environment["APP32_ENGINE_ROOT"])
         let engine = try #require(BundledEngine.load(from: URL(fileURLWithPath: root)))

@@ -19,8 +19,10 @@ final class EngineLauncher: @unchecked Sendable {
     private let lock = NSLock()
     private var stopRequested = false
     private var environment: [String: String] = [:]
+    /// Validated redist store (GameRedist, GOTHIC3 0006); nil — the app's own data (`GameRedist.defaultStore`).
+    var redistStore: URL? = nil
 
-    private static func isNativeLoaderSetting(_ key: String) -> Bool {
+    static func isNativeLoaderSetting(_ key: String) -> Bool {
         if key.hasPrefix("DYLD_") || key.hasPrefix("LD_") { return true }
         switch key {
         case "WINEDLLPATH", "WINESYSTEMDLLPATH", "WINELOADER", "WINESERVER",
@@ -41,8 +43,7 @@ final class EngineLauncher: @unchecked Sendable {
 
     /// Окружение процесса движка. От приложения берём только то, без чего не живёт
     /// любой процесс; остальное (в том числе DYLD_* от отладчика) не передаём.
-    func makeEnvironment(extra: [String: String]) -> [String: String] {
-        let inherited = ProcessInfo.processInfo.environment
+    func makeEnvironment(extra: [String: String], inherited: [String: String] = ProcessInfo.processInfo.environment) -> [String: String] {
         var env: [String: String] = [:]
         for key in ["HOME", "USER", "LOGNAME", "TMPDIR", "LANG", "LC_ALL", "LC_CTYPE", "__CF_USER_TEXT_ENCODING"] {
             if let value = inherited[key] { env[key] = value }
@@ -58,6 +59,11 @@ final class EngineLauncher: @unchecked Sendable {
         // profile or manual override must not make Wine load host Homebrew
         // backends (winebth then waits for an external D-Bus session).
         env.merge(extra.filter { !Self.isNativeLoaderSetting($0.key) }) { _, new in new }
+        // An operator's silent-output request covers preparation and the game.
+        // A saved game profile must not undo it; ordinary launches stay audible.
+        if inherited["MACRUNNER_AUDIO_SILENT_OUTPUT"] == "1" {
+            env["MACRUNNER_AUDIO_SILENT_OUTPUT"] = "1"
+        }
         env["WINEPREFIX"] = prefix.path
         GameActivity.remember(prefix: prefix, environment: env)
         return env
@@ -149,12 +155,48 @@ final class EngineLauncher: @unchecked Sendable {
         do {
             try FileManager.default.createDirectory(at: runDirectory, withIntermediateDirectories: true)
             log = try EngineLog(url: runDirectory.appendingPathComponent("engine.log"))
+        } catch {
+            return finish("FAIL", error: error.localizedDescription)
+        }
+
+        // ★ GOTHIC3 07.11 (0006): the game's own Microsoft redist, when its route asks for it (ENGINE.json
+        //   `routes[].redist`, per API × architecture). Read only the game folder and the app's validated store;
+        //   the load order goes into THIS program's environment, never into preparation or other games.
+        let redist = Self.resolveRedist(exe: exe, plan: plan, store: redistStore)
+        for line in redist.notes { log.note(line) }
+        if !redist.warnings.isEmpty {
+            result.graphicsWarnings = (result.graphicsWarnings ?? []) + redist.warnings
+            // The player sees it in the game's details (GRAPHICS row); the tile keeps its two short parts.
+            result.graphicsSummary = ([plan.summary] + redist.warnings).joined(separator: " · ")
+        }
+        // Scope (0005): native for this game's own redist, builtin for what other games put into the bottle.
+        if let merged = GameRedist.scopedOverrides(env["WINEDLLOVERRIDES"], own: redist.installs,
+                                                   present: BottleSetup.recordedRedist(prefix: prefix)),
+           merged != env["WINEDLLOVERRIDES"] {
+            env["WINEDLLOVERRIDES"] = merged
+            log.note("redist: program WINEDLLOVERRIDES=\(merged)")
+            lock.lock(); environment = env; lock.unlock()
+        }
+        // Before Wine/bottle preparation: a warm server or an external process
+        // prevents cache mutation. Never rebuild with an unverified compiler.
+        let cache = GothicShaderCache.prepare(executable: exe, prefix: prefix, layer: plan.layer?.id,
+                                             environment: env, isBusy: {
+            BottleSetup.hasActiveRuns || WineServerProbe.mayBeAlive(prefix: prefix, environment: preparationEnvironment)
+        })
+        if exe.lastPathComponent.caseInsensitiveCompare("Gothic3.exe") == .orderedSame {
+            log.note("Gothic shader cache: " + cache.note)
+        }
+        if let notice = cache.notice {
+            result.graphicsWarnings = (result.graphicsWarnings ?? []) + [notice]
+            result.graphicsSummary = ([result.graphicsSummary ?? plan.summary, notice]).joined(separator: " · ")
+        }
+        do {
             if ProcessInfo.processInfo.environment["MACRUNNER_LAUNCH_PHASES"] == "1" {
                 let child = try JSONSerialization.data(withJSONObject: env, options: [.prettyPrinted, .sortedKeys])
                 try child.write(to: runDirectory.appendingPathComponent("final-child.json"), options: .atomic)
             }
         } catch {
-            return finish("FAIL", error: error.localizedDescription)
+            return finish("FAIL", error: error.localizedDescription, log: log)
         }
 
         let ignoredLoaderKeys = Set(plan.environment.keys).union(extraEnvironment.keys)
@@ -188,6 +230,7 @@ final class EngineLauncher: @unchecked Sendable {
             "selectedBinaries": binaries,
             "exe": exe.path, "arguments": arguments + plan.extraArguments,
             "prefix": prefix.path, "graphicsRoute": result.graphicsRoute ?? "unknown",
+            "gameRedist": redist.installs.map(\.identity),
             "highResolution": plan.highResolution.map { $0 ? "on" : "off" } ?? "unchanged"
         ]
         if let bytes = try? JSONSerialization.data(withJSONObject: receipt, options: [.prettyPrinted, .sortedKeys]) {
@@ -205,15 +248,18 @@ final class EngineLauncher: @unchecked Sendable {
                     preparationEnvironment: preparationEnvironment,
                     layer: plan.layer, log: log, emulateModeset: plan.emulateModeset,
                     retinaMode: plan.highResolution,
-                    cdromDataFilename: plan.cdromDataFilename, gameDirectory: exe.deletingLastPathComponent())
+                    cdromDataFilename: plan.cdromDataFilename, gameDirectory: exe.deletingLastPathComponent(),
+                    gameRedist: redist.installs)
                 warmSession = session
                 log.mark("warmProgramAdmitted")
             } else {
-                try BottleSetup(engine: engine, prefix: prefix, environment: preparationEnvironment, log: log)
-                    .prepareIfNeeded(requiredLayer: plan.layer, emulateModeset: plan.emulateModeset,
+                var setup = BottleSetup(engine: engine, prefix: prefix, environment: preparationEnvironment, log: log)
+                setup.redistStore = redistStore
+                try setup.prepareIfNeeded(requiredLayer: plan.layer, emulateModeset: plan.emulateModeset,
                                      retinaMode: plan.highResolution,
                                      cdromDataFilename: plan.cdromDataFilename,
-                                     gameDirectory: exe.deletingLastPathComponent())
+                                     gameDirectory: exe.deletingLastPathComponent(),
+                                     gameRedist: redist.installs)
             }
             log.mark("bottleReady")
         } catch {
@@ -296,6 +342,20 @@ final class EngineLauncher: @unchecked Sendable {
         return stopRequested
     }
 
+    // MARK: - Redist of the game (GOTHIC3 0006)
+
+    /// The redist the route asks for (`GraphicsRoute.redist`), resolved from the game's own folder.
+    /// `MACRUNNER_GAME_REDIST=0` in the APP's environment switches it off (control hand of a comparison), named in the log.
+    static func resolveRedist(exe: URL, plan: GraphicsPlan, store: URL? = nil,
+                              appEnvironment: [String: String] = ProcessInfo.processInfo.environment) -> GameRedist.Resolution {
+        guard plan.route?.redist?.contains("d3dx9") == true,
+              let arch = plan.arch, arch == .x86 || arch == .x86_64 else { return GameRedist.Resolution() }
+        if appEnvironment["MACRUNNER_GAME_REDIST"] == "0" {
+            return GameRedist.Resolution(notes: ["redist: switched off by MACRUNNER_GAME_REDIST=0"])
+        }
+        return GameRedist.resolve(exe: exe, bits: arch == .x86 ? 32 : 64, store: store ?? GameRedist.defaultStore)
+    }
+
     // MARK: - Пути
 
     static func exitedTooSoon(elapsed: TimeInterval, minimum: TimeInterval?) -> Bool {
@@ -344,7 +404,11 @@ extension EngineLauncher {
                 let layer = engine.graphics.layers.first { $0.id.hasPrefix("dxmt-") }
                 let extra = PerformanceHUD.launchEnvironment(appEnvironment: layer?.environment ?? [:])
                 let preparationEnvironment = launcher.makeEnvironment(extra: [:])
-                let env = launcher.makeEnvironment(extra: extra)
+                var env = launcher.makeEnvironment(extra: extra)
+                // GOTHIC3 0006: the same redist scope a DXMT game gets at launch, or its signature would never match
+                // the background session in a bottle where another game placed its d3dx9 (cold start every time).
+                env["WINEDLLOVERRIDES"] = GameRedist.scopedOverrides(env["WINEDLLOVERRIDES"], own: [],
+                                                                     present: BottleSetup.recordedRedist(prefix: prefix))
                 let directory = EnginePaths.newRunDirectory().appendingPathExtension("warm-session")
                 guard (try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)) != nil,
                       let log = try? EngineLog(url: directory.appendingPathComponent("engine.log")) else { return }

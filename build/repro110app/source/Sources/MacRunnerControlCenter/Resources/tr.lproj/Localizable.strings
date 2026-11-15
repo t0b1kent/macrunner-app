@@ -271,6 +271,8 @@
 "%@ Windows programs cannot run in this version of MacRunner yet." = "Windows programları (%@) MacRunner’ın bu sürümünde henüz çalışmıyor.";
 "The game uses DXGI, but its Direct3D version could not be determined." = "Oyun DXGI kullanıyor, ancak Direct3D sürümü belirlenemedi.";
 "The graphics API could not be determined from the game files." = "Grafik API oyun dosyalarından belirlenemedi.";
+"This game uses Direct3D effects (%@), but the DirectX files from its installer were not found next to it. The 3D picture may stay black. Put the game's DirectX folder (__redist/DirectX from its installer) next to the game and start it again." = "Bu oyun Direct3D efektleri (%@) kullanıyor, ancak yükleyicisindeki DirectX dosyaları oyunun yanında bulunamadı. 3D görüntü siyah kalabilir. Oyunun DirectX klasörünü (yükleyicideki __redist/DirectX) oyunun yanına koyun ve oyunu yeniden başlatın.";
+"The DirectX file %@ next to this game was not used: %@. The 3D picture may stay black." = "Bu oyunun yanındaki DirectX dosyası %@ kullanılmadı: %@. 3D görüntü siyah kalabilir.";
 "The game files mention several graphics APIs (%@); the one the game uses could not be determined." = "Oyun dosyalarında birden fazla grafik API geçiyor (%@); oyunun hangisini kullandığı belirlenemedi.";
 "The game may also use %@, which is not available for %@ games. If it chooses it, it will not start." = "Oyun %@ da kullanabilir; bu, (%@) oyunlar için kullanılamıyor. Oyun bunu seçerse başlamaz.";
 "This game uses %@ (%@). This version of MacRunner has no support for it yet." = "Bu oyun %@ (%@) kullanıyor. MacRunner’ın bu sürümü bunu henüz desteklemiyor.";
@@ -423,3 +425,18 @@
 "High resolution (Retina)" = "Yüksek çözünürlük (Retina)";
 "The game sees the full list of this Mac's resolutions in real Retina pixels, including 1920×1080 and 2560×1440. Applies from the next launch; on a regular external monitor leave it off." = "Oyun bu Mac'in tüm çözünürlüklerini gerçek Retina piksellerinde görür; 1920×1080 ve 2560×1440 dahil. Bir sonraki başlatmadan itibaren geçerlidir; normal bir harici monitörde kapalı bırakın.";
 "Another program is still running in the same Windows environment with different settings. Close it and try again." = "Aynı Windows ortamında farklı ayarlarla başka bir program hâlâ çalışıyor. Kapatıp yeniden deneyin.";
+
+/* Calculation accuracy: per-game advanced setting and the one-time offer (12.11.2026). */
+"Calculation accuracy" = "Hesaplama doğruluğu";
+"Automatic (recommended) — MacRunner picks what this game needs" = "Otomatik (önerilir) — MacRunner bu oyunun ihtiyacını kendisi seçer";
+"Fast — same approach as Windows on Arm" = "Hızlı — Windows on Arm ile aynı yaklaşım";
+"Exact — as on an Intel/AMD processor, noticeably slower" = "Tam — Intel/AMD işlemcideki gibi, belirgin biçimde daha yavaş";
+"Change this only if the game misbehaves: crashes at launch, freezes, or has broken sound or physics. This mode does not improve speed or graphics — the game will run slower." = "Yalnızca oyun hatalı davranıyorsa değiştirin: açılışta kapanıyor, donuyor ya da ses veya fizik bozuk. Bu mod hızı veya grafikleri iyileştirmez — oyun daha yavaş çalışır.";
+"This game uses Exact mode." = "Bu oyun tam modu kullanıyor.";
+"Did it help? Tell us and we'll turn it on for this game for everyone." = "İşe yaradı mı? Bize bildirin, bu modu bu oyun için herkese açalım.";
+"Advanced" = "Gelişmiş";
+"The game closed right after launch twice. Try Exact calculation mode? It is slower." = "Oyun açıldıktan hemen sonra iki kez kapandı. Tam hesaplama modu denensin mi? Daha yavaştır.";
+"Try it" = "Dene";
+"Fast" = "Hızlı";
+"Exact" = "Tam";
+"Exact (game profile)" = "Tam (oyun profili)";

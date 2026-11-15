@@ -91,7 +91,10 @@ enum PSOCacheTransplant {
         let fm = FileManager.default
         guard !directory.resolvingSymlinksInPath().path.isEmpty,
               directory.standardizedFileURL.path == directory.resolvingSymlinksInPath().path else { throw Failure.unsafeNode }
+        // contentsOfDirectory(at:) answers /private/var/... for the /var/... directory that cacheDirectory()
+        // composes; build every source from the same directory URL so transplant() sees one parent.
         return try fm.contentsOfDirectory(at: directory, includingPropertiesForKeys: [.isSymbolicLinkKey])
+            .map { directory.appendingPathComponent($0.lastPathComponent) }
             .sorted { $0.lastPathComponent < $1.lastPathComponent }.compactMap { source in
                 guard let pair = versions.first(where: { source.lastPathComponent.hasPrefix($0.key) }) else { return nil }
                 let suffix = String(source.lastPathComponent.dropFirst(pair.key.count))

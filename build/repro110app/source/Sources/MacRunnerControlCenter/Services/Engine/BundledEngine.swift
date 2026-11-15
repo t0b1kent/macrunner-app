@@ -27,6 +27,8 @@ struct BundledEngine: Sendable {
     var incompleteLayers: [String: [String]] = [:]
     /// Set only by a package whose selected wineboot has passed the local-name-only control (0092).
     var localNameOnlyWineboot = false
+    /// Named Fast / Exact sets of the engine description; nil — this engine offers no accuracy choice.
+    var calculationAccuracy: CalculationAccuracySets? = nil
     var programJobLauncher: URL { root.appendingPathComponent("tools/macrunner-job.exe") }
     var sessionSupervisor: URL { root.appendingPathComponent("tools/macrunner-session") }
 
@@ -53,6 +55,7 @@ struct BundledEngine: Sendable {
         var engine = BundledEngine(root: root, name: object["name"] as? String ?? "engine", environmentTemplate: environment)
         engine.localNameOnlyWineboot = (object["capabilities"] as? [String: Bool])?["winebootLocalNameOnly"] == true
         engine.graphics = GraphicsCatalog.load(manifest: object, engineRoot: root)
+        engine.calculationAccuracy = CalculationAccuracySets.load(manifest: object)
         for layer in engine.graphics.layers {
             let files = layer.modules.flatMap { dir, names in names.map { "\(dir)/\($0)" } } + (layer.unix ?? [])
             let missing = files.filter { !FileManager.default.fileExists(atPath: root.appendingPathComponent($0).path) }

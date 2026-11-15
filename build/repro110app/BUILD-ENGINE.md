@@ -1,104 +1,108 @@
-# Engine из новых source outputs
+# Assemble an engine from source build outputs
 
-Этот consumer переносит существующий MacRunner assembler в macrunner-app.
-Он собирает только Contents/Resources/engine из выбранных результатов исходниковой
-сборки. Swift-приложение, помощники и конечная подпись остаются отдельными шагами.
-Нынешний рецепт не удостоверяет, что весь MacRunner.app уже воспроизведён.
+This consumer brings the existing MacRunner engine assembler into macrunner-app.
+It assembles only Contents/Resources/engine from explicitly selected source build
+outputs. The Swift application, helpers and final signing remain separate steps.
+Running this recipe does not establish reproduction of the complete MacRunner.app.
 
-## Входы
+## Inputs
 
-Сначала получить новые outputs из закреплённых рецептов hyperbridge,
-macrunner-wine и dxmt. Для каждого сохранить RESULT, source/driver/lock SHA,
-inventory outputs и версии инструментов. Проверить Wine через
-check-arm64ec-dist.py из того же закреплённого Wine recipe и сохранить число
-проверенных EC-модулей. Исторический engine выпуска не является новым source output.
+First produce new outputs with the pinned hyperbridge, macrunner-wine and dxmt
+recipes. Retain each RESULT, source/driver/lock SHA, output inventory and tool
+versions. Run check-arm64ec-dist.py from the same pinned Wine recipe and retain
+the number of checked EC modules. A historical release engine is a reference,
+not a new source build output.
 
-engine-inputs.json содержит явные выбранные пути, разрешаемые относительно
-этого JSON, и следующие поля:
+engine-inputs.json selects explicit paths, resolved relative to that JSON, with
+the following fields:
 
-| Поле | Требование |
+| Field | Requirement |
 |---|---|
-| name | Имя source candidate |
-| wine | Новый install prefix: bin/wine, bin/wineserver, lib/wine, share/wine |
-| fex | Новые Windows/Unix outputs обоих переводчиков |
-| graphics | Выбранные новые graphics outputs |
-| dependencyRoots | Непустой список prefixes исходниковой сборки зависимостей |
-| dlopenLibraries | Явно выбранные библиотеки, загружаемые по имени |
-| licenseInputs | Непустой список name/path/sha256 закреплённых текстов лицензий |
-| environment | Полное окружение запуска, подготовленное из закреплённого recipe |
-| wineEntitlements | Исходниковый plist с ожидаемыми ключами ABI/JIT/Game Mode |
-| wineEntitlementsSHA256 | Полный SHA256 этого plist, обязателен при deferred signing |
-| graphicsMatrix | Матрица слоёв, модулей и доказательств capability, если она заявлена |
-| stripTool, stripToolSHA256 | Закреплённый llvm-strip, только при --strip-pe |
-| tools | Необязательно (кандидат 1.1.0): список name/path/sha256 для `macrunner-job.exe` и `macrunner-session`, их строит `build_engine_tools.py`; ассемблер кладёт их в `engine/tools` с правами 0755 |
+| name | Source candidate name |
+| wine | New install prefix: bin/wine, bin/wineserver, lib/wine, share/wine |
+| fex | New Windows/Unix outputs of both translators |
+| graphics | Selected new graphics outputs |
+| dependencyRoots | Nonempty list of source-built dependency prefixes |
+| dlopenLibraries | Explicit libraries loaded by name |
+| licenseInputs | Nonempty list of pinned license texts, with name/path/sha256 |
+| environment | Complete launch environment prepared from the pinned recipe |
+| wineEntitlements | Source plist containing the expected ABI/JIT/Game Mode keys |
+| wineEntitlementsSHA256 | Full plist SHA-256; required for deferred signing |
+| graphicsMatrix | Layer/module/capability evidence matrix, when declared |
+| stripTool, stripToolSHA256 | Pinned llvm-strip, used only with --strip-pe |
+| tools | Optional to this consumer: name/path/sha256 records for `macrunner-job.exe` and `macrunner-session`, built by `build_engine_tools.py` and installed in `engine/tools` with mode 0755 |
 
-Все пути и SHA выбираются из квитанций конкретной сборки, а не из установок
-Homebrew и не из рабочего каталога автора. SHA entitlement intent закрепляется
-в описи source inputs до assembly. Один hash не доказывает полноту ключей:
-их состав ещё надо сверить с принятым loader recipe, не печатая значения
-идентичности, отпечатки сертификатов или учётные данные.
+Select paths and hashes from the specific build receipts. Do not substitute an
+ambient Homebrew installation or a developer's working directory. Pin the
+entitlement intent in the source input inventory before assembly. A matching
+digest does not establish that every required entitlement is present: compare
+the key set with the accepted loader recipe without printing identity values,
+certificate fingerprints or credentials.
 
-## Один вызов перед финальной подписью
+## Assemble before final signing
 
-Из чистого клона macrunner-app, на macOS с toolchain выбранного producer:
+From a clean macrunner-app clone on macOS with the selected producer's toolchain:
 
 ```sh
 python3 -I -B build/repro110app/assemble_engine.py work/engine-inputs.json work/engine --defer-signing
 ```
 
-OUT должен быть новым каталогом. Чтобы вложить engine в уже собранный свежий
-source app, тем же вызовом указать его новый Contents/Resources/engine как OUT.
-Путь к native приложению и его own-source receipt определяет app producer.
+OUT must be a new directory. To embed the engine in a newly source-built app,
+use its new Contents/Resources/engine directory as OUT. The app producer supplies
+the native application path and its source receipt.
 
---defer-signing не вызывает codesign, не читает подписи и не использует
-идентичность владельца. Перед созданием OUT проверяет SHA и форму plist; после
-копирования и изменения Mach-O снова проверяет pin. Точные исходные bytes
-сохраняются в signing/wine-loader.entitlements.plist и входят в ENGINE.json
-с полным SHA. report.signing.mode=DEFERRED_FOR_OWNER, actual_entitlements и
-signature_validation=NOT_ENABLED, final_owner_signing_required=true.
+--defer-signing does not invoke codesign, inspect signatures or use the owner's
+identity. It checks the plist digest and structure before creating OUT, then
+rechecks the pin after copying and modifying Mach-O files. Exact source bytes
+are preserved in signing/wine-loader.entitlements.plist and recorded with their
+full SHA in ENGINE.json. report.signing.mode=DEFERRED_FOR_OWNER;
+actual_entitlements and signature_validation are NOT_ENABLED;
+final_owner_signing_required=true.
 
-Это пакет до финальной подписи. Случайные ad-hoc подписи линкера или входов
-не считаются подтверждёнными: install_name_tool может сделать их негодными.
-Режим не утверждает, что такой пакет уже допускается Gatekeeper или исполняется
-с нужными ABI/JIT/Game Mode правами. Финальные подпись и нотаризация — у владельца;
-после них необходимо проверить actual native loader, его ключи и final hashes.
+This is a package awaiting final signing. Incidental linker/input ad-hoc
+signatures do not count as verified signatures: install_name_tool can invalidate
+them. This mode does not establish Gatekeeper acceptance or execution with the
+required ABI/JIT/Game Mode entitlements. Final signing and notarization belong
+to the owner. Afterwards, verify the actual native loader, its entitlements and
+the final hashes.
 
-Без --defer-signing остаётся прежний режим: изменённые Mach-O подписываются
-ad hoc с исходными entitlements; ключи выбранного native Wine loader должны
-совпасть с ожидаемым plist. Несовпадение остаётся отказом, значения в ошибку
-не попадают. Проверка ключей не является проверкой доверенной подписи.
+Without --defer-signing, the existing behavior remains: modified Mach-O files
+receive ad-hoc signatures with their original entitlements. The selected native
+Wine loader's keys must match the expected plist. A mismatch fails without
+printing their values. Key-set validation does not establish trusted signing.
 
---strip-pe необязателен, допустим в любом порядке с --defer-signing. Он удаляет
-DWARF только указанным SHA-pinned llvm-strip и сохраняет Wine builtin marker.
-Без этого флага PE bytes consumer не меняет.
+--strip-pe is optional and may appear before or after --defer-signing. It removes
+DWARF only with the SHA-pinned llvm-strip and preserves Wine's builtin marker.
+Without this option, the consumer preserves the PE bytes.
 
-## Состав и границы
+## Contents and limits
 
-Поддерживаются legacy bin/wine-preloader и установленная multiarch раскладка:
-bin/wine dispatcher, lib/wine/aarch64-unix/wine и wine-preloader. Отсутствие
-native loader/preloader или wineserver остаётся отказом. В signed mode проверяется
-native loader, а не dispatcher.
+The consumer supports the legacy bin/wine-preloader layout and the installed
+multiarch layout: bin/wine dispatcher, lib/wine/aarch64-unix/wine and
+wine-preloader. Missing native loader/preloader or wineserver is an error.
+Signed mode verifies the native loader rather than the dispatcher.
 
-Все связанные и явно dlopen-библиотеки разрешаются только внутри выбранных
-dependencyRoots; системные /usr/lib и /System не копируются. Вложенные зависимости
-обходятся до конца. Коллизия leaf names, выход symlink за выбранный prefix и
-несовпадение bytes уже имеющейся библиотеки остаются отказами. Absolute host
-references проверяются после relocation.
+Linked and explicitly dlopen-loaded libraries must resolve within the selected
+dependencyRoots. System /usr/lib and /System libraries are not copied. Nested
+dependencies are traversed to completion. Duplicate leaf names, symlinks outside
+the selected prefix and differing bytes for an existing library fail closed.
+Absolute host references are checked after relocation.
 
-Media consumer использует существующий набор GStreamer plugins/scanner из
-той же исходниковой установки, включая deinterlace/videofilter для Wine 11.
-verify_engine_media.py проверяет offline media factories на готовом engine;
-такую реальную проверку запускает согласованный cloud producer, не этот local
-offline suite. Наличие файлов не подтверждает рабочий media flow.
+The media consumer uses the existing GStreamer plugin/scanner set from the same
+source-built installation, including Wine 11 deinterlace/videofilter support.
+verify_engine_media.py checks offline media factories in the assembled engine.
+The coordinated cloud producer runs that real check; the local offline unit
+suite does not. File presence does not establish a working media flow.
 
-wine/share/wine копируется, но происхождение шрифтов и лицензий каждого
-компонента требует отдельной source census. ENGINE.json честно сообщает
+wine/share/wine is copied, but font provenance and each component's license
+mapping require a separate source census. ENGINE.json reports
 licenseCoverage=INPUTS_HASHED_COMPONENT_MAPPING_NOT_AUDITED. Stock MoltenVK,
-D3D11 и наличие Vulkan файлов не закрывают Indiana fork и D3D12/DXIL.
+D3D11 support and Vulkan file presence do not establish Indiana-fork or
+D3D12/DXIL acceptance.
 
-## Offline проверки собственного кода
+## Offline tests of this consumer
 
-На любой машине с Python 3.9+:
+On a machine with Python 3.9 or later:
 
 ```sh
 mkdir -p work/engine-test-tmp
@@ -106,33 +110,74 @@ REPRO109_TEST_TMP="$PWD/work/engine-test-tmp" TMPDIR="$PWD/work/engine-test-tmp"
 REPRO109_TEST_TMP="$PWD/work/engine-test-tmp" TMPDIR="$PWD/work/engine-test-tmp" python3 -I -B -O -m unittest discover -s build/repro110app -p 'test*engine.py'
 ```
 
-Tests используют синтетические bytes и mocked native tools, без Wine/GPU,
-игр, downloads и исполнения сторонних компонентов. Они покрывают dependency/
-media closure, обе Wine layouts, сохранение default signed checks и deferred
-intent, malformed/empty/non-dictionary plist, digest drift, отказ до OUT/tools,
-privacy ошибки и неизвестные/повторные CLI flags. Это не приёмка engine.
+Tests use synthetic bytes and mocked native tools. They do not run Wine/GPU,
+games, downloads or third-party components. Coverage includes dependency/media
+closure, both Wine layouts, default signed checks and deferred intent,
+malformed/empty/non-dictionary plists, digest drift, refusal before OUT/tools,
+privacy failures and unknown/duplicate CLI flags. These are not engine
+acceptance tests.
 
-## Следующий продуктовый рубеж
+## Local LLVM23 validation before the engine freeze
 
-На новых outputs построить engine-inputs.json по их receipts, выполнить ровно
-этот consumer в чистом cloud job и сохранить unsigned source package, ENGINE.json
-и полные bounded logs. Сверить с принятой опорой тем же function/section прибором,
-объяснить каждое отличие и выполнить hb-stand-diff, hb-stand32, dxmt-stand,
-app32-gate на собранном составе. Затем проверять финальный BUILD.md целиком.
+Use the Wine compiler pinned by the large-release recipe. Generated configure
+must match the pinned configure.ac. The cc1 async-SEH probe must survive
+generation: the bare clang driver option can be rejected for MinGW targets.
+Check the resulting aarch64, arm64ec, x86_64 and i386 EXTRACFLAGS and the actual
+compiler argument tokens for `-Xclang -fasync-exceptions`. A one-command
+ntdll/wow64 override is lost on a later recompilation. When the flag policy
+changes, rebuild all affected objects coherently; an incremental success does
+not establish that the existing objects use the new flags.
 
-Локальный перенос consumer, offline tests и готовый packet не означают
-завершение (A)–(F). Выкладку и запуск задач делает куратор.
+Private exports must have definitions on every architecture on which they are
+exported. Validate the actual generated Makefile targets: ARM64EC ntdll objects
+belong to the ARM64X aarch64 DLL; there is no separate ARM64EC ntdll.dll target.
+Preserve original source, objects and complete logs. Any source repair used in
+local validation remains an explicit diagnostic difference until adopted into
+the final frozen public source. See BUILD-LARGE-RELEASE.md for the release order.
 
-## Шаги кандидата 1.1.0 (c12)
+## Product acceptance
 
-**Мелкие инструменты движка.** `build_engine_tools.py --build --work <новый каталог>` собирает из исходников снимка
-(`source/engine-tools/*.c`) `macrunner-job.exe` (PE x86_64, llvm-mingw 20260505 с закреплённым архивом) и
-`macrunner-session` (macOS arm64, Apple clang выбранного Xcode). Флаги, ссылочные хэши и ожидаемый исход — в
-`engine-tools.lock.json`. Проверено 14.10.2026 на Маке: PE совпал с принятым файлом побайтно, Mach-O совпал после снятия
-подписи и обнуления LC_UUID. Результат: `outputs/tools/*` и `RESULT.json`; подписи и установки нет.
+Create engine-inputs.json from the new output receipts. After the curator's
+engine freeze and local acceptance, run this exact consumer in the coordinated
+clean cloud job. Retain the unsigned source package, ENGINE.json and complete
+bounded logs. Compare with the accepted reference using the same function/
+section tools, explain every material difference, and run hb-stand-diff,
+hb-stand32, dxmt-stand and app32-gate on the assembled package. Complete the
+remaining large-release matrix and the final BUILD.md procedure.
 
-**Справочники обновления бутылки.** `bottle_catalogues.py` берёт из опубликованных архивов выпусков 1.0.9 и 1.0.8
-`engine/ENGINE.json`, проверяет размер и SHA-256 архива, SHA-256 и имя манифеста и пишет его как
-`Resources/BottleCatalogues/bottle-inputs-<SHA-256>.json`. Производитель (`build_source.py`) делает это после подготовки
-дерева и до сборки Swift. Совпадение манифестов опубликованных архивов с принятыми справочниками на машине с доступом к
-сети ещё не проверялось: при расхождении шаг останавливается с найденным именем и хэшем.
+The local consumer, offline tests and a prepared package do not establish
+release acceptance. The curator coordinates the one final cloud build;
+Developer ID signing, notarization and publication require the owner's later
+instruction.
+
+## Tool and bottle-catalogue builds
+
+**Engine tools.** `build_engine_tools.py --build --work <fresh-directory>` builds
+`source/engine-tools/*.c`: `macrunner-job.exe` with pinned llvm-mingw 20260908
+(LLVM 23.1.1), and the arm64 `macrunner-session` with Apple clang and deployment
+target 26.0. `engine-tools.lock.json` retains the previous release references
+separately from the new recipe references. `ENGINE_TOOLS_BUILT_AS_PINNED` means
+reproduction of the recipe's bytes, not runtime acceptance: compare the PE
+exactly and the Mach-O after removing its linker ad-hoc signature and zeroing
+LC_UUID. A different compiler version is refused. Outputs are `outputs/tools/*`,
+`RESULT.json`, and byte-exact command stdout/stderr in `logs/`; no installation
+or Developer ID signing occurs.
+
+**Bottle-update catalogues.** `bottle_catalogues.py` extracts engine/ENGINE.json
+from the published 1.0.9 and 1.0.8 archives. It verifies each archive's size and
+SHA-256, plus the manifest's name and SHA-256, then writes
+Resources/BottleCatalogues/bottle-inputs-<SHA-256>.json. The producer
+(`build_source.py`) runs this after source preparation and before the Swift
+build. Network-backed equality between those published manifests and the
+accepted catalogue inputs remains unverified; a mismatch stops the step and
+reports the observed name and hash.
+
+**Downloaded dependency prefixes.** A local build may consume a byte-verified
+dependency prefix produced at another absolute path. `assemble_engine.py` accepts
+an optional `dependencyPrefixMappings` list in its input JSON. Each entry has
+`from` (the normalized absolute producer prefix) and `to` (one explicitly selected
+`dependencyRoots` directory). Source prefixes cannot overlap. The mapping applies
+to transitive native dependencies and GStreamer core provenance; missing files,
+path traversal, symlink escapes and foreign media cores still fail. Producer
+binaries remain unchanged. Only copied package outputs receive relocated load
+commands. An omitted list retains the original behavior.

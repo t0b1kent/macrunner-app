@@ -166,8 +166,14 @@ final class RunAppViewModel: ObservableObject {
         // Счётчик FPS (Metal HUD) из настроек; переменные самой игры главнее.
         // The isolated CLI trial uses only its explicit environment, without
         // importing the owner's persistent HUD preference. Normal launches keep it.
+        // "Calculation accuracy": Fast / Exact add the engine's named set under the entry's own keys.
+        // Fast is not applied to a 64-bit program even if an older entry or a hand-edited library stores it.
+        let accuracy = CalculationAccuracy.applicable(stored: app.calculationAccuracy,
+                                                      arch: CalculationAccuracy.guestArch(exePath: app.exePath))
+        let entryEnvironment = CalculationAccuracyPolicy.entryEnvironment(choice: accuracy, sets: engine.calculationAccuracy,
+                                                                          entry: app.env ?? [:])
         let extra = CommandLine.arguments.dropFirst().first == "--run-app-entry"
-            ? (app.env ?? [:]) : PerformanceHUD.launchEnvironment(appEnvironment: app.env ?? [:])
+            ? entryEnvironment : PerformanceHUD.launchEnvironment(appEnvironment: entryEnvironment)
         let override = app.graphicsAPI.flatMap(GraphicsAPI.init(rawValue:))
         // «Высокое разрешение (Retina)» записи игры. Выключено — тоже явное значение: RetinaMode
         // общий на бутылку, и снять его, оставленный другой игрой, может только этот запуск.
@@ -189,20 +195,25 @@ final class RunAppViewModel: ObservableObject {
             if case .launch = plan.decision {
                 await MainActor.run { self.keyboardLayout = GameKeyboardLayout(engine: engine, logURL: runDirectory.appendingPathComponent("keyboard-layout.jsonl")) }
             }
-            let result = launcher.run(exe: exe, arguments: arguments, workdir: workdir,
+            var result = launcher.run(exe: exe, arguments: arguments, workdir: workdir,
                                       extraEnvironment: extra, runDirectory: runDirectory, graphics: plan,
                                       minimumProcessLifetime: detection.profile != nil && !(app.tags ?? []).contains("acceptance-probe") ? 10 : nil,
                                       onProgress: { phase in
                 Task { @MainActor in self.advance(to: phase, runID: runID) }
             })
+            result.calculationAccuracy = CalculationAccuracyPolicy.effective(
+                choice: accuracy, sets: engine.calculationAccuracy,
+                launchEnvironment: engine.environmentTemplate.merging(plan.environment) { _, own in own }
+                    .merging(extra) { _, own in own })
+            let finished = result
             await MainActor.run {
                 self.keyboardLayout?.finish()
                 self.keyboardLayout = nil
                 self.runner.isRunning = false
-                self.lastLauncherResult = result
-                CompatibilityStore.shared.update(from: app, result: result)
+                self.lastLauncherResult = finished
+                CompatibilityStore.shared.update(from: app, result: finished)
                 self.finishProgress(runID: runID)
-                self.onComplete?(result)
+                self.onComplete?(finished)
             }
         }
     }

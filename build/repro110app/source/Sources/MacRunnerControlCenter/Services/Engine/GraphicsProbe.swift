@@ -106,9 +106,55 @@ enum GraphicsProbe {
             }
             if index > 0 { detection.notes.append("engine module \(label)") }
         }
+        // ★ GOTHIC3 07.11: рендер живёт в СВОЕЙ DLL игры, которую exe импортирует статически
+        //   (Gothic3.exe -> Engine.dll -> d3d9.dll + d3dx9_40.dll). Ни exe, ни Unity/Unreal-модули
+        //   этого не видят — приложение писало «Graphics API not determined». Запасной ход только
+        //   когда улик нет вовсе: локальные DLL из таблиц импорта exe (глубина 2, не больше 24 файлов),
+        //   только таблицы импорта — без строк (fmodex/binkw32 называют d3d9 строкой, это шум).
+        //   Статический импорт по цепочке грузится при старте процесса, поэтому сила importTable.
+        if detection.evidence.isEmpty, !sawDXGI {
+            for module in localImportClosure(of: exe) {
+                guard let pe = try? PEImportReader.read(module) else { continue }
+                let label = module.lastPathComponent
+                for dll in pe.imports where api(forDLL: dll) != nil {
+                    if isServiceOnlyImport(dll, functions: pe.functions[dll]) { continue }
+                    detection.evidence.append(.init(api: api(forDLL: dll)!, strength: .importTable,
+                                                    source: "\(label): \(dll) (via \(exe.lastPathComponent))"))
+                }
+                for dll in pe.delayImports where api(forDLL: dll) != nil {
+                    if isServiceOnlyImport(dll, functions: pe.functions[dll]) { continue }
+                    detection.evidence.append(.init(api: api(forDLL: dll)!, strength: .delayImport,
+                                                    source: "\(label): \(dll) (delay, via \(exe.lastPathComponent))"))
+                }
+                if pe.imports.contains(where: { $0.lowercased() == "dxgi.dll" }) { sawDXGI = true }
+                detection.notes.append("game module \(label)")
+            }
+        }
         let direct3D: Set<GraphicsAPI> = [.d3d10, .d3d11, .d3d12]
         detection.dxgiOnly = sawDXGI && !detection.evidence.contains { direct3D.contains($0.api) }
         return detection
+    }
+
+    /// Локальные DLL (в каталоге exe), достижимые по статическим импортам exe, глубина ≤ 2.
+    static func localImportClosure(of exe: URL, depth: Int = 2, limit: Int = 24) -> [URL] {
+        let dir = exe.deletingLastPathComponent()
+        let local = Dictionary(((try? FileManager.default.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil)) ?? [])
+            .filter { $0.pathExtension.lowercased() == "dll" }
+            .map { ($0.lastPathComponent.lowercased(), $0) }, uniquingKeysWith: { a, _ in a })
+        var seen = Set<String>(), frontier = [exe], found: [URL] = []
+        for _ in 0..<depth {
+            var next: [URL] = []
+            for file in frontier {
+                guard let pe = try? PEImportReader.read(file) else { continue }
+                for name in pe.imports + pe.delayImports where !seen.contains(name.lowercased()) {
+                    guard let url = local[name.lowercased()] else { continue }
+                    seen.insert(name.lowercased()); found.append(url); next.append(url)
+                    if found.count >= limit { return found }
+                }
+            }
+            frontier = next
+        }
+        return found
     }
 
     /// ★ Импорт ради служебных функций — не рендер. Игры на DX11 берут из `d3d9.dll`

@@ -222,16 +222,25 @@ struct BottleUpdateCatalogue: Codable, Equatable {
     /// every target against the trusted previous catalogue.
     func deltaDecision(from previous: Self, prefix: URL, package: URL? = nil,
                        classRule: Bool = false, trustedLegacy: Bool = false,
-                       normalisation: Normalisation = .refuse) throws -> Decision {
+                       normalisation: Normalisation = .refuse,
+                       registrationPolicy: RegistrationPolicy = .independent) throws -> Decision {
         guard schema == 1, previous.schema == 1 else { return .refuse("catalogue schema") }
         guard engineRoot == previous.engineRoot else { return .refuse("engine root changed") }
         guard layers == previous.layers else { return .refuse("default graphics layers changed") }
         if classRule {
-            if let reason = classRefusal(from: previous, package: package) { return .refuse(reason) }
+            if let reason = classRefusal(from: previous, package: package, registrationPolicy: registrationPolicy) { return .refuse(reason) }
         } else if inputs != previous.inputs {
             return .refuse("inputs differ (rule r9)")
         }
-        guard Set(files.keys) == Set(previous.files.keys) else { return .refuse("set of copied targets changed") }
+        let targets = Set(files.keys), previousTargets = Set(previous.files.keys)
+        // Full preparation copies its current inventory without removing old targets. An
+        // approved checked-full pair may preserve dropped targets in exactly the same way.
+        // The complete previous ownership receipt is still verified below, including those
+        // retained files. New targets require the full route and its installation work.
+        guard targets == previousTargets ||
+                (classRule && registrationPolicy == .checkedFull && targets.isSubset(of: previousTargets)) else {
+            return .refuse("set of copied targets changed")
+        }
         let root = prefix.resolvingSymlinksInPath().standardizedFileURL.path
         // A bottle that never went through `wineboot -u` still holds the package path of shell32.dll in
         // system.reg. `.refuse` keeps r10 behaviour (full route once); `.text` and `.regsvr32` let the fast
@@ -282,6 +291,10 @@ struct BottleUpdateCatalogue: Codable, Equatable {
     /// wine.inf registers, images the INF run starts). B: runtime base (changes how processes behave,
     /// not what the INF writes; proven per release by the full-vs-fast pair). O: everything else.
     enum FileClass: String { case registration = "R", runtimeBase = "B", other = "O" }
+    enum RegistrationPolicy: String {
+        case independent
+        case checkedFull = "checked-full-v1"
+    }
 
     static let executorModules: Set<String> = [
         "rundll32.exe", "setupapi.dll", "wineboot.exe", "regsvr32.exe", "services.exe", "rpcss.exe",
@@ -309,6 +322,76 @@ struct BottleUpdateCatalogue: Codable, Equatable {
             }
         }
         return result
+    }
+
+    /// Keep Wine's INF installer responsible for aliases, embedded SxS resources and NE images.
+    /// Expand its two wildcard forms to changed source modules so unchanged modules are not staged.
+    static func changedFakeDLLRows(infText: String, previous: [String: String], current: [String: String]) -> [String: [String]]? {
+        var sections: [String: [String]] = [:], section = ""
+        for original in infText.components(separatedBy: .newlines) {
+            let line = original.components(separatedBy: ";")[0].trimmingCharacters(in: .whitespaces)
+            if line.hasPrefix("["), line.hasSuffix("]") {
+                section = String(line.dropFirst().dropLast()); sections[section] = sections[section] ?? []
+            } else if !line.isEmpty { sections[section, default: []].append(line) }
+        }
+        guard ["FakeDlls", "FakeDllsWin32", "FakeDllsWin64", "FakeDllsWow64"].allSatisfy({ sections[$0] != nil }) else { return nil }
+        var result: [String: [String]] = [:]
+        // wineboot runs DefaultInstall.ntarm64 followed by Wow64Install.ntx86.
+        // The WOW64 pass deliberately excludes BaseInstall/FakeDlls: repeating
+        // it would overwrite Windows-root native EXEs and create WOW64 drivers.
+        for (view, arch, selected) in [
+            ("native", "aarch64-windows", ["FakeDlls", "FakeDllsWin64"]),
+            ("32", "i386-windows", ["FakeDllsWin32", "FakeDllsWow64"]),
+        ] {
+            let base = "wine/lib/wine/\(arch)/"
+            let modules = current.keys.filter { $0.hasPrefix(base) }
+                .map { String($0.dropFirst(base.count)) }.filter { !$0.contains("/") && !$0.hasSuffix(".a") }.sorted()
+            let changed = Set(modules.filter { previous[base + $0] != current[base + $0] })
+            // Typelib-only modules (*.tlb) register Interface -> TypeLib claims that changed modules
+            // describing the same interfaces (dhtmled.ocx, olepro32.dll...) also write. Wine's full pass
+            // re-installs every module in sorted order, so an unchanged .tlb re-asserts its claims after
+            // them. Measured on 119 -> R7 (gate r12): 116 system.reg values differed while they stayed out.
+            var rows: [(line: String, typelibRefresh: Bool)] = []
+            var handled = Set<String>()
+            for line in selected.flatMap({ sections[$0] ?? [] }) {
+                let fields = line.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+                guard fields.count >= 3, Int(fields[0]) != nil else { return nil }
+                let name = fields[2]
+                if name.isEmpty { continue } // directory creation belongs to full preparation
+                let source = fields.count >= 4 && !fields[3].isEmpty ? fields[3] : name
+                if name.contains("*") || name.contains("?") {
+                    guard name == "*" || name == "*.sys" || (name == "*.msstyles" && source == "-") else { return nil }
+                    for module in modules where name == "*" || module.hasSuffix(String(name.dropFirst())) {
+                        let target = module.hasSuffix("16") ? String(module.dropLast(2)) : module
+                        // Wine's wildcard installer suppresses names already
+                        // handled by an earlier explicit alias, across directories.
+                        guard handled.insert(target.lowercased()).inserted else { continue }
+                        // An unchanged deletion section still reserves names
+                        // before the following wildcard, as Wine itself does.
+                        if source == "-" { continue }
+                        let refresh = name == "*" && module.hasSuffix(".tlb") && !changed.contains(module)
+                        if !refresh && !changed.contains(module) { continue }
+                        rows.append(([fields[0], fields[1], target, module].joined(separator: ","), refresh))
+                    }
+                } else {
+                    handled.insert(name.lowercased())
+                    if source == "-" || source == "*" { continue } // deletion/unchanged placeholder
+                    if changed.contains(source) { rows.append((line, false)) }
+                }
+            }
+            let staged = rows.contains { !$0.typelibRefresh }
+            result[view] = rows.filter { staged || !$0.typelibRefresh }.map(\.line)
+        }
+        return result
+    }
+
+    func changedFakeDLLRows(from previous: Self, package: URL) throws -> [String: [String]]? {
+        let path = "wine/share/wine/wine.inf"
+        guard let old = previous.manifestSections(), let next = manifestSections(),
+              let hash = next.files[path], old.files[path] == hash else { return nil }
+        let data = try Data(contentsOf: package.appendingPathComponent(path))
+        guard Self.digest(data) == hash, let text = String(data: data, encoding: .utf8) else { return nil }
+        return Self.changedFakeDLLRows(infText: text, previous: old.files, current: next.files)
     }
 
     static func fileClass(_ key: String, registered: Set<String>) -> FileClass {
@@ -366,8 +449,8 @@ struct BottleUpdateCatalogue: Codable, Equatable {
         return RegistrationReceipt(schema: 3, engineRoot: engineRoot, inputs: Self.digest(data))
     }
 
-    /// Source-audited, disjoint CLSID/MFT registrations. Provider changes remain
-    /// a full-route decision; the exact release-pair gate is still mandatory.
+    /// Source-audited, disjoint CLSID/MFT registrations for the independent policy.
+    /// Broader code replacements require an exact checked-full pair approval.
     static let independentRegistrars: Set<String> = ["mfh264enc.dll", "msauddecmft.dll", "msvproc.dll"]
 
     private static func selectiveRegistrationSource(_ key: String) -> Bool {
@@ -379,7 +462,9 @@ struct BottleUpdateCatalogue: Codable, Equatable {
 
     /// Original INF rows in their original order, selected by the actual staged
     /// destination/view. An unused package copy must not register another view.
-    func registrationSelection(from previous: Self, package: URL) throws -> [String: [String]]? {
+    func registrationSelection(from previous: Self, package: URL,
+                               registrationPolicy: RegistrationPolicy = .independent) throws -> [String: [String]]? {
+        guard registrationPolicy == .independent else { return nil }
         guard classRefusal(from: previous, package: package) == nil else { return nil }
         let text = try String(contentsOf: package.appendingPathComponent("wine/share/wine/wine.inf"), encoding: .utf8)
         var rows: [(String, String)] = [], inSection = false, seen = Set<String>()
@@ -406,7 +491,8 @@ struct BottleUpdateCatalogue: Codable, Equatable {
     }
 
     /// nil = the class rule allows the route; otherwise the reason it does not.
-    func classRefusal(from previous: Self, package: URL?) -> String? {
+    func classRefusal(from previous: Self, package: URL?,
+                      registrationPolicy: RegistrationPolicy = .independent) -> String? {
         guard let now = manifestSections(), let before = previous.manifestSections() else {
             return "release inventory unavailable"
         }
@@ -416,13 +502,23 @@ struct BottleUpdateCatalogue: Codable, Equatable {
         let relevant: (String) -> Bool = { ($0.hasPrefix("wine/") || $0.hasPrefix("graphics/")) && !$0.hasSuffix(".a") }
         let changed = Set(now.files.keys).union(before.files.keys)
             .filter { relevant($0) && now.files[$0] != before.files[$0] }.sorted()
+        // Checked full enrollment may replace registration implementations only.
+        // All Wine data/INF recipes, module sets, prefix environment and graphics
+        // definitions remain guarded. A signed exact-pair approval is mandatory.
+        func checkedCode(_ key: String) -> Bool {
+            let parts = key.split(separator: "/").map(String.init)
+            return registrationPolicy == .checkedFull && parts.count == 5
+                && Array(parts.prefix(3)) == ["wine", "lib", "wine"]
+                && ["aarch64-windows", "i386-windows", "x86_64-windows"].contains(parts[3])
+                && (Self.executorModules.contains(parts[4]) || registered.contains(parts[4]))
+        }
         if let hit = changed.first(where: { Self.fileClass($0, registered: registered) == .registration
-            && (!Self.selectiveRegistrationSource($0) || now.files[$0] == nil || before.files[$0] == nil) }) {
+            && ((!Self.selectiveRegistrationSource($0) && !checkedCode($0)) || now.files[$0] == nil || before.files[$0] == nil) }) {
             return "class R changed: \(hit)"
         }
         // Do not infer independence for an unrelated simultaneous provider
         // replacement, including runtime implementations of registry APIs.
-        if changed.contains(where: Self.selectiveRegistrationSource),
+        if registrationPolicy == .independent, changed.contains(where: Self.selectiveRegistrationSource),
            let hit = Set(now.files.keys).union(before.files.keys).sorted().first(where: {
                now.files[$0] != before.files[$0] && !Self.selectiveRegistrationSource($0)
            }) {
@@ -517,6 +613,7 @@ struct BottleUpdateCatalogue: Codable, Equatable {
     /// test target can set them, so a shipped app cannot be talked out of the pair file.
     static var pairFileOverride: URL? = nil
     static var pairGateMode = false
+    static var pairGateRegistrationPolicy: RegistrationPolicy = .independent
     /// Gate mode only (no record is in force there): the previous release's corrections that the gate measured.
     static var pairGateActual: [String: String] = [:]
 
@@ -537,11 +634,14 @@ struct BottleUpdateCatalogue: Codable, Equatable {
         let to: String
         let modes: [String: mode_t]
         var fromActual: [String: String] = [:]
+        var registrationPolicy: RegistrationPolicy = .independent
 
         /// Text that the digest covers (the same lines are produced by the gate): sorted, no JSON canonicalisation.
         /// Corrections follow the modes as `~<key>=<sha256>` lines; none = the text of an uncorrected record, unchanged.
-        static func digestText(from: String, to: String, modes: [String: String], fromActual: [String: String] = [:]) -> String {
+        static func digestText(from: String, to: String, modes: [String: String], fromActual: [String: String] = [:],
+                               registrationPolicy: RegistrationPolicy = .independent) -> String {
             var text = "from=\(from)\nto=\(to)\n"
+            if registrationPolicy != .independent { text += "registration=\(registrationPolicy.rawValue)\n" }
             for key in modes.keys.sorted() { text += "\(key)=\(modes[key]!)\n" }
             for key in fromActual.keys.sorted() { text += "~\(key)=\(fromActual[key]!)\n" }
             return text
@@ -570,12 +670,22 @@ struct BottleUpdateCatalogue: Codable, Equatable {
             return .refused("engine pair \(from.prefix(8)) -> \(to.prefix(8)) has more than one record")
         }
         var actual: [String: String] = [:]
+        let registrationPolicy: RegistrationPolicy
+        if let raw = record["registrationPolicy"] {
+            guard let value = raw as? String, let policy = RegistrationPolicy(rawValue: value) else {
+                return .refused("engine-pair record damaged (registration policy)")
+            }
+            registrationPolicy = policy
+        } else {
+            registrationPolicy = .independent
+        }
         if let raw = record["fromActual"] {
             guard let value = raw as? [String: String] else { return .refused("engine-pair record damaged (correction)") }
             actual = value
         }
         guard let digest = record["digest"] as? String, let modes = record["modes"] as? [String: String],
-              digest == Self.digest(Data(PairRecord.digestText(from: from, to: to, modes: modes, fromActual: actual).utf8)) else {
+              digest == Self.digest(Data(PairRecord.digestText(from: from, to: to, modes: modes, fromActual: actual,
+                                                             registrationPolicy: registrationPolicy).utf8)) else {
             return .refused("engine-pair record damaged (digest)")
         }
         for (key, value) in actual {
@@ -590,7 +700,8 @@ struct BottleUpdateCatalogue: Codable, Equatable {
             }
             parsed[target] = value
         }
-        return .approved(PairRecord(from: from, to: to, modes: parsed, fromActual: actual))
+        return .approved(PairRecord(from: from, to: to, modes: parsed, fromActual: actual,
+                                    registrationPolicy: registrationPolicy))
     }
 
     /// The previous catalogue with the real bytes of the package files that its inventory misdescribes. Targets are

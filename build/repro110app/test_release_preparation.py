@@ -65,25 +65,52 @@ class ReleasePreparationTests(unittest.TestCase):
             LSMinimumSystemVersion=baseline, CFBundleVersion='120', SUFeedURL='https://example.invalid/appcast.xml')))
         return app
 
-    def test_final_bundle_floor_includes_late_staged_native_tools(self):
+    def test_final_bundle_rejects_late_tool_above_26_5_without_rewriting(self):
         app = self.final_bundle_fixture()
         command = struct.pack('<IIIIII', 0x32, 24, 1, 27 << 16, 28 << 16, 0)
         helper = app / 'Contents/Resources/engine/tools/macrunner-session'
         helper.write_bytes(struct.pack('<IIIIIIII', 0xfeedfacf, 0x100000c, 0, 2, 1, len(command), 0, 0) + command)
         before = helper.read_bytes()
-        result = producer.finalize_bundle_minimum(app)
-        self.assertEqual(result['previous'], '26.5')
-        self.assertEqual(result['minimum_macos'], '27.0')
-        self.assertEqual(result['floor_components'], ['Contents/Resources/engine/tools/macrunner-session'])
+        with self.assertRaisesRegex(ValueError, 'macrunner-session.*27.0'):
+            producer.finalize_bundle_minimum(app)
         info = plistlib.loads((app / 'Contents/Info.plist').read_bytes())
-        self.assertEqual(info['LSMinimumSystemVersion'], '27.0')
+        self.assertEqual(info['LSMinimumSystemVersion'], '26.5')
         self.assertEqual(info['CFBundleVersion'], '120')
         self.assertEqual(info['SUFeedURL'], 'https://example.invalid/appcast.xml')
         self.assertEqual(helper.read_bytes(), before)
 
-    def test_final_bundle_floor_preserves_higher_application_baseline(self):
+    def test_final_bundle_rejects_higher_application_baseline(self):
         app = self.final_bundle_fixture('28.1')
-        self.assertEqual(producer.finalize_bundle_minimum(app)['minimum_macos'], '28.1')
+        with self.assertRaisesRegex(ValueError, 'LSMinimumSystemVersion must be 26.5'):
+            producer.finalize_bundle_minimum(app)
+
+    def test_final_bundle_accepts_26_5_and_older_components_unchanged(self):
+        app = self.final_bundle_fixture()
+        for name, version in [('current', (26 << 16) | (5 << 8)), ('older', 14 << 16)]:
+            command = struct.pack('<IIIIII', 0x32, 24, 1, version, 28 << 16, 0)
+            (app / 'Contents/Resources/engine/tools' / name).write_bytes(
+                struct.pack('<IIIIIIII', 0xfeedfacf, 0x100000c, 0, 2, 1, len(command), 0, 0) + command)
+        info = app / 'Contents/Info.plist'
+        before = info.read_bytes()
+        result = producer.finalize_bundle_minimum(app)
+        self.assertEqual(result['minimum_macos'], '26.5')
+        self.assertEqual(result['mach_o_files_with_macos_target'], 2)
+        self.assertEqual(result['floor_components'], ['Contents/Resources/engine/tools/current'])
+        self.assertEqual(info.read_bytes(), before)
+
+    def test_packaged_wine_rejects_backup_names(self):
+        app = self.final_bundle_fixture()
+        modules = app / 'Contents/Resources/engine/wine/lib/wine/aarch64-windows'
+        modules.mkdir(parents=True)
+        (modules / 'mmdevapi.dll').write_bytes(b'active module')
+        self.assertEqual(producer.verify_no_wine_backups(app)['status'], 'PASS')
+        for name in ['mmdevapi.dll.BYLO-181805', 'ntdll.dll.bak']:
+            with self.subTest(name=name):
+                backup = modules / name
+                backup.write_bytes(b'backup module')
+                with self.assertRaisesRegex(ValueError, 'backup gate failed'):
+                    producer.verify_no_wine_backups(app)
+                backup.unlink()
 
     def test_corrupt_late_component_does_not_rewrite_declared_floor(self):
         app = self.final_bundle_fixture()
@@ -121,9 +148,9 @@ class ReleasePreparationTests(unittest.TestCase):
         work, binary_dir, report = self.helper_compiler_fixture()
         self.assertEqual(producer.selected_helper_compiler(report, work), binary_dir)
 
-    def test_new_wine_compiler_and_unverified_supplied_bin_are_refused_for_helpers(self):
+    def test_wrong_compiler_and_unverified_supplied_bin_are_refused_for_helpers(self):
         work, _, report = self.helper_compiler_fixture()
-        report['pe_toolchain']['compiler'] = dict(report['pe_toolchain']['compiler'], clang='23.1.1')
+        report['pe_toolchain']['compiler'] = dict(report['pe_toolchain']['compiler'], clang='22.1.5')
         with self.assertRaisesRegex(ValueError, 'independent pinned archive'):
             producer.selected_helper_compiler(report, work)
         work_report = json.loads((HERE / 'engine-tools.lock.json').read_bytes())['tools'][0]['compiler']

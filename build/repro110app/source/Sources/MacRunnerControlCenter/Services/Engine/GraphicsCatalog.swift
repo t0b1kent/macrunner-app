@@ -110,6 +110,11 @@ struct GraphicsRoute: Codable, Sendable, Equatable {
     let status: RouteStatus
     /// Чем подтверждено (путь к прогону/отчёту) — или почему недоступно.
     let evidence: String?
+    /// GOTHIC3 07.11.2026 (0006): redist families the app takes from the GAME's own installer files for this
+    /// API × architecture — `["d3dx9"]`: Microsoft d3dx9_NN from the game's DirectX cabinets (GameRedist).
+    /// Absent (every package up to 1.1.0) — nothing is taken, exactly the old behaviour. Data, not app code:
+    /// the package decides per route, the same way it decides the layer.
+    var redist: [String]? = nil
 }
 
 /// Разрядность целиком: 32 бита могут быть недоступны вне зависимости от графики

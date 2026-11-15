@@ -1,7 +1,7 @@
 {
   "install": "The tools are copied into engine/tools of the assembled engine by assemble_engine.py (field tools of engine-inputs.json).",
   "output_dir": "tools",
-  "purpose": "Two small engine tools of the 1.1.0 candidate (c12), built from the snapshot sources: the program-job launcher (a Windows x86_64 PE) and the session supervisor (a macOS arm64 tool).",
+  "purpose": "Two source-built tools for the large release: the Windows x86_64 program-job launcher and the macOS arm64 session supervisor. Recipe reproduction is separate from runtime acceptance.",
   "schema": 1,
   "tools": [
     {
@@ -13,21 +13,26 @@
         "-Wl,--Xlink=/timestamp:1791424979"
       ],
       "compiler": {
-        "archive_sha256": "050379de888f0c843787819dadf183df3693330a5724643919e9121f16355295",
-        "clang": "22.1.5",
+        "archive_sha256": "d1dc5d1ecf3a3ced5ed5544c72f1acd0c8e84eb3024d520ecc6b143eec62a149",
+        "clang": "23.1.1",
         "name": "llvm-mingw",
-        "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/20260505/llvm-mingw-20260505-ucrt-macos-universal.tar.xz",
-        "version": "20260505"
+        "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/20260908/llvm-mingw-20260908-ucrt-macos-universal.tar.xz",
+        "version": "20260908"
       },
       "driver": "x86_64-w64-mingw32-clang",
-      "expected": "EXACT_ACCEPTED_BYTES",
+      "expected": "EXACT_RECIPE_BYTES",
       "kind": "pe-x86_64-mingw",
       "name": "macrunner-job.exe",
-      "note": "Measured 14.10.2026 with the same llvm-mingw archive on a Mac: 0 differing bytes; the link timestamp is fixed to the value of the accepted file",
-      "reference": {
+      "note": "Recipe reference rebuilt locally on 08.11.2026 with llvm-mingw 20260908 / LLVM 23.1.1 and the unchanged pinned source. The previous release used LLVM 22; runtime validation of the new tool remains required.",
+      "previous_release_reference": {
         "bytes": 91136,
         "path": "MacRunner.app/Contents/Resources/engine/tools/macrunner-job.exe",
         "sha256": "b4f6c879b51e9fa5c0b8d9e6ca90d4f109cfac3323cabfb51e380efd111dbe3f"
+      },
+      "reference": {
+        "bytes": 69120,
+        "path": "MacRunner.app/Contents/Resources/engine/tools/macrunner-job.exe",
+        "sha256": "8258357ae8c263feb9a977f3ffae25781578f2a301b4efd34df36e75bf6f2d55"
       },
       "source": "engine-tools/macrunner-job.c",
       "source_sha256": "4d9b04974593fadc09db1d11d986d71479c7089498dca240fde515d4cc4b2c22"
@@ -37,24 +42,35 @@
         "-O2",
         "-arch",
         "arm64",
-        "-mmacosx-version-min=27.0"
+        "-mmacosx-version-min=26.5"
       ],
       "driver": "clang",
-      "expected": "EQUAL_EXCEPT_LC_UUID",
+      "expected": "EQUAL_RECIPE_EXCEPT_LC_UUID",
       "kind": "macho-arm64-apple-clang",
       "name": "macrunner-session",
-      "note": "Measured 14.10.2026 with Xcode 27A266a on a Mac: after codesign --remove-signature on both files the only differing bytes are the 16 bytes of LC_UUID, which the linker derives from the build; the accepted file carries the linker ad-hoc signature",
-      "reference": {
+      "note": "The c33r frozen helper targets macOS 26.5, matching the declared application minimum. This reference was source-built with Xcode 27A266a and deployment target 26.5. Compare after removing the linker ad-hoc signature and zeroing LC_UUID; the deployment field is never normalized. The earlier prepared 26.0 recipe and previous public 27.0 reference are retained separately. Runtime and cloud acceptance remain separate.",
+      "previous_prepared_reference_26_0": {
+        "bytes": 34912,
+        "normalized_sha256": "70cc44cee76573dd49c11c8a63ff3dc75ccefdd345e5fe4eeb090bd63f57f018",
+        "sha256": "7b0c2e0a037cbb069dc70ff637e57d693527d34ea51531036c332ef74267b02e"
+      },
+      "previous_release_reference": {
         "bytes": 34912,
         "normalized_sha256": "48a92ccb301bc2258ecbc4bb3ad2b01474ad8601f8ef8b0103340fd8539b9f97",
         "path": "MacRunner.app/Contents/Resources/engine/tools/macrunner-session",
         "sha256": "4e2fabc3d0e722b8717428756bb2248c55e994419e5ef854953d498102e9da9f"
       },
+      "reference": {
+        "bytes": 34912,
+        "normalized_sha256": "499689d4edaef784615df0ab6886547c8041bbeb59bd29dcf446884f6c5e0ee5",
+        "path": "MacRunner.app/Contents/Resources/engine/tools/macrunner-session",
+        "sha256": "75bd89a2b6d808c1bd2a5ed4e13d0c4d18ac29e4e000a902589f6d24a97aa093"
+      },
       "source": "engine-tools/macrunner-session.c",
       "source_sha256": "c7defd4d63d73fbd2ed35f410a1c1f549a285b23d8defc12cc5d25f8b425b863",
       "toolchain": {
         "apple_clang": "21.0.0 (clang-2100.3.34.2)",
-        "minos": "27.0",
+        "minos": "26.5",
         "xcode": "27.0",
         "xcode_build": "27A266a"
       }

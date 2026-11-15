@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-"""Build the two small engine tools of the 1.1.0 candidate (c12) from the snapshot sources.
+"""Build the two small engine tools from pinned snapshot sources.
 
-macrunner-job.exe      Windows x86_64 PE, llvm-mingw 20260505 (the archive pinned by the Wine recipe).
+macrunner-job.exe      Windows x86_64 PE, llvm-mingw 20260908 (LLVM 23.1.1) (the archive pinned by the Wine recipe).
 macrunner-session      macOS arm64, Apple clang of the selected Xcode.
 
-Both are compared with the files of the accepted composition by SHA-256: the PE must be byte-identical (the link timestamp is
-pinned to the accepted file's value); the Mach-O tool must be equal once the linker's ad-hoc signature is removed and the 16
-bytes of LC_UUID, which the linker derives from the build, are zeroed. Nothing is signed and nothing is installed here;
+Both are compared with the recipe's reference files by SHA-256: the PE must be byte-identical (the link timestamp is
+pinned); the Mach-O tool must be equal once the linker's ad-hoc signature is removed and the 16 bytes of LC_UUID are zeroed.
+Historical release references are retained separately in the lock. Matching recipe pins does not establish runtime acceptance.
+Nothing is signed and nothing is installed here;
 assemble_engine.py copies the two results into engine/tools.
 """
 import argparse
+import functools
 import hashlib
 import json
 import os
@@ -77,11 +79,25 @@ def normalized_macho_sha(path, work, run):
     return sha_bytes(data)
 
 
-def default_run(argv, label, cwd=None, timeout=1800):
-    done = subprocess.run(argv, cwd=cwd, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=timeout)
+def default_run(argv, label, cwd=None, timeout=1800, log_root=None):
+    def preserve(stdout, stderr, returncode, timed_out=False):
+        if log_root is not None:
+            root = Path(log_root)
+            (root / (label + '.stdout.log')).write_bytes(stdout or b'')
+            (root / (label + '.stderr.log')).write_bytes(stderr or b'')
+            (root / (label + '.command.json')).write_text(json.dumps(
+                dict(argv=[str(v) for v in argv], cwd=str(cwd) if cwd else None,
+                     timeout=timeout, returncode=returncode, timed_out=timed_out), indent=2) + '\n')
+    try:
+        done = subprocess.run(argv, cwd=cwd, stdin=subprocess.DEVNULL, capture_output=True, timeout=timeout)
+    except subprocess.TimeoutExpired as error:
+        preserve(error.stdout, error.stderr, None, timed_out=True)
+        raise
+    preserve(done.stdout, done.stderr, done.returncode)
     if done.returncode:
-        raise ValueError(label + ' failed rc=' + str(done.returncode) + ': ' + (done.stderr or done.stdout)[-600:])
-    return done.stdout
+        raise ValueError(label + ' failed rc=' + str(done.returncode) + ': ' +
+                         (done.stderr or done.stdout)[-600:].decode('utf-8', errors='replace'))
+    return done.stdout.decode('utf-8', errors='replace')
 
 
 def fetch_mingw(row, work, run=default_run):
@@ -126,10 +142,14 @@ def build(args, run=default_run):
     work.mkdir(parents=True)
     out = work / 'outputs/tools'
     out.mkdir(parents=True)
+    logs = work / 'logs'
+    logs.mkdir()
+    if run is default_run:
+        run = functools.partial(default_run, log_root=logs)
     result = dict(schema=1, status='STARTED', first_failure=None, tools=[], install='NOT_PERFORMED', signing='NOT_PERFORMED')
     phase = 'INPUTS'
     try:
-        mingw_bin = Path(args.mingw_bin) if args.mingw_bin else None
+        mingw_bin = Path(args.mingw_bin).resolve() if args.mingw_bin else None
         clang = run(['/usr/bin/xcrun', '--find', 'clang'], 'find-clang').strip() if sys.platform == 'darwin' else 'clang'
         sdk_text = run(['/usr/bin/xcrun', '--sdk', 'macosx', '--show-sdk-path'], 'find-sdk').strip() if sys.platform == 'darwin' else ''
         require(bool(sdk_text) and Path(sdk_text).is_absolute(), 'Selected macOS SDK is missing')
@@ -145,8 +165,11 @@ def build(args, run=default_run):
                 phase = row['name'] + ':COMPILER'
                 mingw_bin = fetch_mingw(row, work, run)
             if row['kind'] == 'pe-x86_64-mingw':
+                version = run([str(mingw_bin / row['driver']), '--version'], 'pe-compiler-version').strip()
+                require(version.startswith('clang version ' + row['compiler']['clang'] + ' '),
+                        'Selected llvm-mingw compiler version differs from the pin')
                 result['pe_toolchain'] = dict(bin=str(mingw_bin.resolve()), compiler=row['compiler'],
-                    provenance='SUPPLIED_BIN' if args.mingw_bin else 'PINNED_ARCHIVE')
+                    version=version, provenance='SUPPLIED_BIN' if args.mingw_bin else 'PINNED_ARCHIVE')
             phase = row['name'] + ':COMPILE'
             target = out / row['name']
             run(compile_argv(row, source, target, mingw_bin, clang, sdk), 'compile-' + row['name'], cwd=work)
@@ -154,15 +177,15 @@ def build(args, run=default_run):
             phase = row['name'] + ':COMPARE'
             ref = row['reference']
             if row['kind'] == 'pe-x86_64-mingw':
-                item['comparison'] = 'EXACT_ACCEPTED_BYTES' if item['sha256'] == ref['sha256'] else 'DIFFERENT_FROM_ACCEPTED_BYTES'
+                item['comparison'] = 'EXACT_RECIPE_BYTES' if item['sha256'] == ref['sha256'] else 'DIFFERENT_FROM_RECIPE_BYTES'
             else:
                 item['normalized_sha256'] = normalized_macho_sha(target, work, run)
-                item['comparison'] = ('EQUAL_EXCEPT_LC_UUID' if item['normalized_sha256'] == ref['normalized_sha256']
-                                      else 'DIFFERENT_FROM_ACCEPTED_BYTES')
+                item['comparison'] = ('EQUAL_RECIPE_EXCEPT_LC_UUID' if item['normalized_sha256'] == ref['normalized_sha256']
+                                      else 'DIFFERENT_FROM_RECIPE_BYTES')
             item['expected'] = row['expected']
             result['tools'].append(item)
         phase = 'FINAL'
-        result['status'] = ('ENGINE_TOOLS_BUILT_AS_ACCEPTED' if all(t['comparison'] == t['expected'] for t in result['tools'])
+        result['status'] = ('ENGINE_TOOLS_BUILT_AS_PINNED' if all(t['comparison'] == t['expected'] for t in result['tools'])
                             else 'ENGINE_TOOLS_BUILT_REPORT_DIFFERS')
     except Exception as error:
         result.update(status='FAILED', first_failure=dict(phase=phase, error=str(error)[:1200]))

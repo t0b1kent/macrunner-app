@@ -198,6 +198,9 @@ struct GameTechnicalDetails: View {
                 detailRow(L("GRAPHICS"), [app.graphicsAPI.flatMap(GraphicsAPI.init(rawValue:))?.title ?? L("Auto"),
                                            app.lastGraphicsSummary.map { loc.relocalize($0) }].compactMap { $0 }.joined(separator: " — "))
             }
+            if let mode = Self.accuracyText(app.lastCalculationAccuracy) {
+                detailRow(L("Calculation accuracy"), mode)
+            }
             if let ms = app.lastDurationMs {
                 detailRow(L("LAST RUN"), Self.durationText(ms))
             }
@@ -235,6 +238,17 @@ struct GameTechnicalDetails: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// Mode of the last launch in words; nil when the engine offered no choice or the game has not run yet.
+    static func accuracyText(_ mode: String?) -> String? {
+        switch mode {
+        case "auto": return L("Auto")
+        case "auto-exact": return L("Exact (game profile)")
+        case "fast": return L("Fast")
+        case "exact": return L("Exact")
+        default: return nil
+        }
     }
 
     static func durationText(_ ms: Int) -> String {

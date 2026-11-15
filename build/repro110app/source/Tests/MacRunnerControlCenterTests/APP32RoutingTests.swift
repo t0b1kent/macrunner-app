@@ -82,11 +82,19 @@ struct APP32RoutingTests {
             if strength == .profile { #expect(plan.emulateModeset == true) }
             #expect(plan.cdromDataFilename == (name == "Diablo.exe" ? "DIABDAT.MPQ" : nil))
         }
-        // Every exposed <=9 sibling must name the same complete builtin set.
-        for api in [GraphicsAPI.ddraw, .d3d8, .d3d9] {
+        // DirectDraw and D3D8 stay on the complete builtin GDI set (Heroes III / Diablo evidence).
+        // GOTHIC3 07.11: D3D9 x86 moves to wined3d -> OpenGL — on the GDI renderer CreateDevice
+        // fails with 8876086c (adapter without shaders), so the old route could not draw at all.
+        for api in [GraphicsAPI.ddraw, .d3d8] {
             #expect(engine.graphics.route(api: api, arch: .x86)?.layer == "wine-pe32-gdi")
         }
+        // GOTHIC3 07.11 (0007): which D3D9 x86 renderer is the package's choice (wined3d -> OpenGL, or HyperBridge
+        // DX9) — data of ENGINE.json; the route must name a complete layer that is not the GDI one.
+        let d3d9 = try #require(engine.graphics.route(api: .d3d9, arch: .x86)?.layer)
+        #expect(d3d9 != "wine-pe32-gdi")
+        #expect(engine.graphics.layer(d3d9) != nil)
         #expect(engine.incompleteLayers["wine-pe32-gdi"] == nil)
+        #expect(engine.incompleteLayers[d3d9] == nil)
         // Exact old catalogue control is tested by the application entry too.
         var old = engine
         old.graphics.architectures = [.init(arch: .x86, status: .unavailable, evidence: "old catalog")]

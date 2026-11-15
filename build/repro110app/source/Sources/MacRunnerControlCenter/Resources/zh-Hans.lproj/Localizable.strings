@@ -271,6 +271,8 @@
 "%@ Windows programs cannot run in this version of MacRunner yet." = "此版本的 MacRunner 暂时无法运行 Windows 程序（%@）。";
 "The game uses DXGI, but its Direct3D version could not be determined." = "游戏使用 DXGI，但无法确定其 Direct3D 版本。";
 "The graphics API could not be determined from the game files." = "无法从游戏文件确定图形 API。";
+"This game uses Direct3D effects (%@), but the DirectX files from its installer were not found next to it. The 3D picture may stay black. Put the game's DirectX folder (__redist/DirectX from its installer) next to the game and start it again." = "此游戏使用 Direct3D 效果（%@），但在游戏旁边未找到其安装程序中的 DirectX 文件。3D 画面可能保持黑色。请将游戏的 DirectX 文件夹（安装程序中的 __redist/DirectX）放到游戏旁边，然后重新启动游戏。";
+"The DirectX file %@ next to this game was not used: %@. The 3D picture may stay black." = "未使用此游戏旁边的 DirectX 文件 %@：%@。3D 画面可能保持黑色。";
 "The game files mention several graphics APIs (%@); the one the game uses could not be determined." = "游戏文件中提到了多个图形 API（%@）；无法确定游戏实际使用哪一个。";
 "The game may also use %@, which is not available for %@ games. If it chooses it, it will not start." = "游戏也可能使用 %@，而它不适用于（%@）游戏。如果游戏选择它，将无法启动。";
 "This game uses %@ (%@). This version of MacRunner has no support for it yet." = "此游戏使用 %@（%@）。此版本的 MacRunner 暂不支持。";
@@ -423,3 +425,18 @@
 "High resolution (Retina)" = "高分辨率 (Retina)";
 "The game sees the full list of this Mac's resolutions in real Retina pixels, including 1920×1080 and 2560×1440. Applies from the next launch; on a regular external monitor leave it off." = "游戏将以真实的 Retina 像素看到这台 Mac 的全部分辨率，包括 1920×1080 和 2560×1440。从下次启动起生效；在普通外接显示器上请保持关闭。";
 "Another program is still running in the same Windows environment with different settings. Close it and try again." = "同一 Windows 环境中仍有其他程序以不同设置在运行。请关闭它后重试。";
+
+/* Calculation accuracy: per-game advanced setting and the one-time offer (12.11.2026). */
+"Calculation accuracy" = "计算精度";
+"Automatic (recommended) — MacRunner picks what this game needs" = "自动(推荐)— 由 MacRunner 为这款游戏选择";
+"Fast — same approach as Windows on Arm" = "快速 — 与 Windows on Arm 相同的方式";
+"Exact — as on an Intel/AMD processor, noticeably slower" = "精确 — 与 Intel/AMD 处理器结果一致,明显更慢";
+"Change this only if the game misbehaves: crashes at launch, freezes, or has broken sound or physics. This mode does not improve speed or graphics — the game will run slower." = "仅在游戏运行异常时更改:启动时崩溃、卡死,或声音、物理效果出错。此模式不会提升速度或画面 — 游戏会变慢。";
+"This game uses Exact mode." = "此游戏使用精确模式。";
+"Did it help? Tell us and we'll turn it on for this game for everyone." = "有帮助吗?请告诉我们,我们会为所有人对这款游戏启用此模式。";
+"Advanced" = "高级";
+"The game closed right after launch twice. Try Exact calculation mode? It is slower." = "游戏连续两次在启动后立即关闭。要尝试精确计算模式吗?它会更慢。";
+"Try it" = "试一试";
+"Fast" = "快速";
+"Exact" = "精确";
+"Exact (game profile)" = "精确(游戏配置)";
