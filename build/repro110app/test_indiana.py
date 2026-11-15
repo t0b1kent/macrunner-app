@@ -96,6 +96,41 @@ class IndianaSources(unittest.TestCase):
         with mock.patch.dict(os.environ, {}, clear=True), self.assertRaisesRegex(ValueError, 'authorized ARM64 macOS cloud job'):
             step.cloud_guard()
 
+    def test_pinned_link_is_validated_before_regular_source_extraction(self):
+        path = self.root / 'pinned-link.tar.gz'
+        with tarfile.open(path, 'w:gz') as stream:
+            info = tarfile.TarInfo('root/header.hpp'); info.size = 4
+            stream.addfile(info, io.BytesIO(b'own\n'))
+            info = tarfile.TarInfo('root/include/header.hpp'); info.type = tarfile.SYMTYPE
+            info.linkname = '../header.hpp'; stream.addfile(info)
+        selected = self.root / 'selected'
+        step.select_archive(path, [('root/', selected, set())], {'root/include/header.hpp': '../header.hpp'})
+        self.assertFalse((selected / 'include').exists())
+        step.restore_links(selected, {'include/header.hpp': '../header.hpp'})
+        self.assertTrue((selected / 'include/header.hpp').is_symlink())
+        self.assertEqual((selected / 'include/header.hpp').read_bytes(), b'own\n')
+
+    def test_changed_pinned_link_refuses_before_writing_sources(self):
+        path = self.root / 'changed-link.tar.gz'
+        self.write_tar(path, {'root/safe.cpp': b'// own\n'}, unsafe_link='root/foreign.hpp')
+        with self.assertRaisesRegex(ValueError, 'Pinned source symlink differs'):
+            step.select_archive(path, [('root/', self.root / 'selected', set())],
+                                {'root/foreign.hpp': 'safe.cpp'})
+        self.assertFalse((self.root / 'selected').exists())
+
+    def test_missing_pinned_link_refuses_before_writing_sources(self):
+        path = self.root / 'missing-link.tar.gz'; self.write_tar(path, {'root/safe.cpp': b'// own\n'})
+        with self.assertRaisesRegex(ValueError, 'Pinned source symlink missing'):
+            step.select_archive(path, [('root/', self.root / 'selected', set())],
+                                {'root/header.hpp': 'safe.cpp'})
+        self.assertFalse((self.root / 'selected').exists())
+
+    def test_restored_link_escape_refuses_the_whole_link_set(self):
+        selected = self.root / 'selected'; selected.mkdir()
+        with self.assertRaisesRegex(ValueError, 'escapes source root'):
+            step.restore_links(selected, {'safe/header.hpp': '../header.hpp', 'bad': '../foreign'})
+        self.assertEqual(list(selected.iterdir()), [])
+
     def test_isolated_plan_runs_from_another_directory_without_archives(self):
         child = subprocess.run([sys.executable, '-I', '-B', str(Path(step.__file__).resolve()), '--stage', 'plan'],
             cwd=self.root, capture_output=True, text=True, timeout=10)

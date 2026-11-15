@@ -70,6 +70,18 @@
       "Package",
       "macrunner"
     ],
+    "core_symlinks": {
+      "Demos/Cube/include/cube": "../../../External/Vulkan-Tools/cube",
+      "Demos/Cube/include/volk": "../../../External/Volk",
+      "MoltenVK/include/MoltenVK": "../MoltenVK/API",
+      "MoltenVK/include/vk_video": "../../External/Vulkan-Headers/include/vk_video",
+      "MoltenVK/include/vulkan": "../../External/Vulkan-Headers/include/vulkan",
+      "MoltenVKShaderConverter/SPIRV-Cross": "../External/SPIRV-Cross",
+      "MoltenVKShaderConverter/SPIRV-Tools": "../External/SPIRV-Tools",
+      "MoltenVKShaderConverter/Tools": "../Package/Latest/MoltenVKShaderConverter/Tools",
+      "MoltenVKShaderConverter/include/MoltenVKShaderConverter/SPIRVConversion.h": "../../MoltenVKShaderConverter/SPIRVConversion.h",
+      "MoltenVKShaderConverter/include/MoltenVKShaderConverter/SPIRVToMSLConverter.h": "../../MoltenVKShaderConverter/SPIRVToMSLConverter.h"
+    },
     "postimages": [
       {
         "path": "MoltenVK/MoltenVK/GPUObjects/Cas64Capture/config_capture.hpp",
