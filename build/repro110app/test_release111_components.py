@@ -92,12 +92,45 @@ class CurrentComponentInputs(unittest.TestCase):
                 expected['fex/' + name.split('/engine/fex/', 1)[1]] = component.sha(path)
         return root, dict(files=expected)
 
-    def test_unified_fex_keeps_wines_separate_pe_bridge(self):
+    def test_unified_fex_consumes_only_the_verified_overlay(self):
         root, template = self.fex_fixture(); output = self.root / 'fex'
         detail = component.fex(root, template, output, composer.unpack, composer.merge_tree)
         self.assertEqual(detail['exact_files'], 2)
         self.assertEqual(len(detail['license_roots']), 2)
         self.assertFalse(any(p.name == 'libarm64ecfex.dll' for p in output.rglob('*')))
+
+    def test_wine_entry_names_use_current_translators_and_preserve_replaced_bytes(self):
+        overlay = self.root / 'overlay'; runtime = self.root / 'runtime'; backup = self.root / 'backup'
+        for arch, _, source in component.ALIASES:
+            self.write(overlay / arch / source, ('current ' + source).encode())
+        legacy = runtime / 'wine/lib/wine/aarch64-windows/libarm64ecfex.dll'
+        self.write(legacy, b'previous translator')
+        rows = component.install_aliases(runtime, overlay, backup)
+        self.assertEqual(len(rows), 8)
+        for arch, target, source in component.ALIASES:
+            self.assertEqual((runtime / 'wine/lib/wine' / arch / target).read_bytes(),
+                             (overlay / arch / source).read_bytes())
+        self.assertEqual((backup / 'aarch64-windows/libarm64ecfex.dll.BYLO').read_bytes(), b'previous translator')
+        self.assertEqual(component.install_aliases(runtime, overlay, backup), [dict(row, before_sha256=row['sha256']) for row in rows])
+
+    def test_missing_compatibility_entry_and_development_archives_refuse(self):
+        runtime = self.root / 'runtime'
+        name = 'wine/lib/wine/aarch64-windows/libwow64fex.dll'
+        template = dict(files={name: 'reference'})
+        with self.assertRaisesRegex(ValueError, 'runtime files are missing'):
+            component.validate_runtime_paths(runtime, template)
+        self.write(runtime / name, b'current translator')
+        self.assertEqual(component.validate_runtime_paths(runtime, template)['sdk_import_archives'], 0)
+        self.write(runtime / 'wine/lib/wine/i386-windows/ntdll.a', b'development import archive')
+        with self.assertRaisesRegex(ValueError, 'SDK import archives'):
+            component.validate_runtime_paths(runtime, template)
+
+    def test_native_static_dependency_notices_must_all_be_present(self):
+        names = ['llvm-llvm15_LICENSE.txt', 'llvm-libunwind15_LICENSE.txt', 'llvm-zstd_LICENSE.txt']
+        component.validate_native_notices([dict(name=name) for name in names])
+        for omitted in names:
+            with self.subTest(omitted=omitted), self.assertRaisesRegex(ValueError, 'static dependency license missing'):
+                component.validate_native_notices([dict(name=name) for name in names if name != omitted])
 
     def test_fex_must_match_the_complete_selected_overlay(self):
         root, template = self.fex_fixture()

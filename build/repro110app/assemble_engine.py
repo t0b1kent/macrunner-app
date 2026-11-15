@@ -65,7 +65,7 @@ def sha256(path):
     return h.hexdigest()
 
 
-def copy_tree(src, dst):
+def copy_tree(src, dst, skip_sdk_archives=False):
     """Copy with symlinks resolved; skip backups. Returns number of files."""
     src, dst, count = Path(src), Path(dst), 0
     for root, dirs, files in os.walk(src, followlinks=True):
@@ -73,7 +73,7 @@ def copy_tree(src, dst):
         rel = Path(root).relative_to(src)
         (dst / rel).mkdir(parents=True, exist_ok=True)
         for name in files:
-            if SKIP.search(name):
+            if SKIP.search(name) or (skip_sdk_archives and name.lower().endswith('.a')):
                 continue
             s = Path(root) / name
             if not s.exists():
@@ -496,7 +496,7 @@ def main(argv):
     (out / 'wine/bin').mkdir(parents=True)
     for name in wine_runtime['bin_programs']:
         shutil.copy2((wine / 'bin' / name).resolve(), out / 'wine/bin' / name)
-    report['counts']['wine/lib'] = copy_tree(wine / 'lib/wine', out / 'wine/lib/wine')
+    report['counts']['wine/lib'] = copy_tree(wine / 'lib/wine', out / 'wine/lib/wine', skip_sdk_archives=True)
     report['counts']['wine/share'] = copy_tree(wine / 'share/wine', out / 'wine/share/wine')
     report['sources']['wine'] = str(wine)
     mappings = config['dependencyPrefixMappings']

@@ -67,11 +67,56 @@ def fex(root, template, destination, unpack, merge_tree):
     actual = {p.relative_to(destination).as_posix(): sha(p) for p in destination.rglob('*') if p.is_file()}
     expected = {name.removeprefix('fex/'): value for name, value in template['files'].items() if name.startswith('fex/')}
     require(actual == expected, 'The complete translator overlay differs from the c33r reference')
-    # The producer also has a legacy Wine PE alias. The selected engine uses Wine's
-    # separately source-built libarm64ecfex.dll; only the fex/ overlay is consumed here.
+    # Select products from the verified overlay. The Wine-facing compatibility
+    # aliases are installed from these same current translators, not a second tree.
     licenses = license_roots(parts)
-    return dict(archive_sha256=sha(archive), exact_files=len(actual), legacy_wine_pe_alias='NOT_SELECTED',
+    return dict(archive_sha256=sha(archive), exact_files=len(actual), producer_extra_wine_tree='NOT_SELECTED',
                 license_roots=[dict(namespace=namespace, path=str(path)) for namespace, path in licenses])
+
+
+ALIASES = [('aarch64-windows', 'xtajit.dll', 'xtajit.dll'),
+           ('aarch64-windows', 'xtajit64.dll', 'xtajit64.dll'),
+           ('aarch64-windows', 'libwow64fex.dll', 'xtajit.dll'),
+           ('aarch64-windows', 'libarm64ecfex.dll', 'xtajit64.dll'),
+           *[('aarch64-unix', name, name) for name in
+             ['xtajit.so', 'libwow64fex.so', 'xtajit64.so', 'libarm64ecfex.so']]]
+
+
+def install_aliases(runtime, overlay, backup):
+    rows = []
+    for architecture, name, original in ALIASES:
+        source = overlay / architecture / original
+        target = runtime / 'wine/lib/wine' / architecture / name
+        require(source.is_file(), 'Current translator source alias is missing')
+        before = sha(target) if target.is_file() else None
+        after = sha(source)
+        if before is not None and before != after:
+            saved = backup / architecture / (name + '.BYLO')
+            saved.parent.mkdir(parents=True, exist_ok=True)
+            require(not saved.exists(), 'Translator alias backup must be fresh')
+            shutil.copy2(target, saved)
+            require(sha(saved) == before, 'Translator alias backup differs')
+        if before != after:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, target)
+        require(sha(target) == after, 'Translator alias changed during installation')
+        rows.append(dict(path=target.relative_to(runtime).as_posix(), source=source.relative_to(overlay).as_posix(),
+                         before_sha256=before, sha256=after))
+    return rows
+
+
+def validate_runtime_paths(runtime, template):
+    required = [name for name in template['files'] if not name.startswith('licenses/')]
+    missing = sorted(name for name in required if not (runtime / name).is_file())
+    require(not missing, 'Selected runtime files are missing: ' + ', '.join(missing))
+    require(not list((runtime / 'wine/lib/wine').rglob('*.a')), 'Wine SDK import archives are not runtime inputs')
+    return dict(required_files=len(required), missing=[], sdk_import_archives=0)
+
+
+def validate_native_notices(inputs):
+    names = [row['name'].lower() for row in inputs]
+    for required in ['llvm15', 'libunwind15', 'zstd']:
+        require(any(required in name for name in names), 'Native static dependency license missing: ' + required)
 
 
 GRAPHICS = [('graphics_x64', 'x64', 'x86_64-windows'),

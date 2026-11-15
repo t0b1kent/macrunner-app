@@ -22,6 +22,21 @@ def load_command(index, command, value):
     return f'Load command {index}\n          cmd {command}\n      cmdsize 96\n         {field} {value} (offset 24)\n'
 
 
+class RuntimeCopyTests(unittest.TestCase):
+    def test_wine_runtime_omits_import_archives_but_keeps_loadable_modules(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); source = root / 'sdk/aarch64-windows'
+            source.mkdir(parents=True)
+            for name in ['ntdll.dll', 'libarm64ecfex.dll', 'ntdll.a']:
+                (source / name).write_bytes(name.encode())
+            count = engine.copy_tree(root / 'sdk', root / 'runtime', skip_sdk_archives=True)
+            self.assertEqual(count, 2)
+            self.assertEqual((root / 'runtime/aarch64-windows/ntdll.dll').read_bytes(), b'ntdll.dll')
+            self.assertTrue((root / 'runtime/aarch64-windows/libarm64ecfex.dll').is_file())
+            self.assertFalse((root / 'runtime/aarch64-windows/ntdll.a').exists())
+            self.assertEqual(engine.copy_tree(root / 'sdk', root / 'development'), 3)
+
+
 class VulkanDriverTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
