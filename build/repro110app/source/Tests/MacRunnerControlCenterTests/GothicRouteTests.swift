@@ -70,7 +70,8 @@ struct GothicProbeFallbackTests {
     /// Release catalogue (APP32_ENGINE_ROOT = an engine root whose ENGINE.json carries the proposal): d3d9 x86 goes to
     /// the layer the PACKAGE names (0007: wined3d -> OpenGL or HyperBridge DX9 — data, not app code), ddraw/d3d8 stay
     /// on GDI, the D3DX load order is never part of a layer (it is the launcher's, per game, 0005/0006).
-    @Test func gothicLayoutUsesTheOpenGLLayer() throws {
+    @Test(.enabled(if: ProcessInfo.processInfo.environment["APP32_ENGINE_ROOT"] != nil))
+    func gothicLayoutUsesTheOpenGLLayer() throws {
         let root = try #require(ProcessInfo.processInfo.environment["APP32_ENGINE_ROOT"])
         let engine = try #require(BundledEngine.load(from: URL(fileURLWithPath: root)))
         let plan = GraphicsSelector.plan(detection: GraphicsProbe.detect(exe: try gothicLayout()), engine: engine)
@@ -114,7 +115,8 @@ struct GothicProbeFallbackTests {
     }
 
     /// Proposal B only (enabled when the catalogue routes d3d9 x86_64 to a layer): 64-bit D3D9 via wined3d -> GL.
-    @Test func sixtyFourBitD3D9ProposalRoute() throws {
+    @Test(.enabled(if: ProcessInfo.processInfo.environment["APP32_ENGINE_ROOT"] != nil))
+    func sixtyFourBitD3D9ProposalRoute() throws {
         let root = try #require(ProcessInfo.processInfo.environment["APP32_ENGINE_ROOT"])
         let engine = try #require(BundledEngine.load(from: URL(fileURLWithPath: root)))
         guard engine.graphics.route(api: .d3d9, arch: .x86_64)?.layer != nil else { return }
