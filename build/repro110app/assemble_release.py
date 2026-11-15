@@ -244,7 +244,7 @@ def source_inputs(args):
     selected = [args.transport, args.wine / 'build/repro110wine/build_wine.py',
                 args.wine / 'build/repro110wine/full.lock.json',
                 args.dxmt / 'build/repro109dxmt/repro109_dxmt_after_wine27.py',
-                args.hyperbridge / 'build/repro110fex/c32/ENGINE.json']
+                args.hyperbridge / 'build/repro110fex/c33r/ENGINE.json']
     missing = [str(path) for path in selected if not path.is_file()]
     if missing:
         raise ValueError('Required source recipe inputs missing: ' + ', '.join(missing))
@@ -280,7 +280,8 @@ def build(args):
             raise ValueError(name + ' failed; complete raw log retained')
     try:
         pins = json.loads(args.pins.read_text())
-        names = ['app', 'helpers', 'inno', 'fex64', 'fex32', 'graphics_x64', 'graphics_ec', 'graphics_native']
+        current = load_module('release111_components', HERE / 'release111_components.py')
+        names = ['app', 'helpers', 'inno', 'fex', 'indiana', *[row[0] for row in current.GRAPHICS]]
         if set(pins) != set(names + ['wine']):
             raise ValueError('Exactly the selected release source components are required')
         transport = load_module('release_source_transport', args.transport)
@@ -323,26 +324,13 @@ def build(args):
             raise ValueError('Installer product tar differs')
         installer = args.work / 'installer'; unpack(archive, installer)
         shutil.copytree(installer / 'innoextract', resources / 'tools/innoextract')
+        template = json.loads((args.hyperbridge / 'build/repro110fex/c33r/ENGINE.json').read_text())
         fex = args.work / 'fex'
-        for name in ['fex64', 'fex32']:
-            merge_tree(roots[name] / ('build/' + name + '/engine/fex'), fex)
-        template = json.loads((args.hyperbridge / 'build/repro110fex/c32/ENGINE.json').read_text())
-        for name in ['xtajit.dll', 'xtajit64.dll']:
-            path = fex / 'aarch64-windows' / name
-            if sha(path) != template['files']['fex/aarch64-windows/' + name]:
-                raise ValueError('Translator output differs from the accepted c32 bytes: ' + name)
-        graphics = args.work / 'graphics'; graphics.mkdir()
-        for name, architecture in [('graphics_x64', 'x86_64-windows'), ('graphics_ec', 'aarch64-windows'),
-                                    ('graphics_native', 'aarch64-unix')]:
-            detail = receipt(roots[name] / 'release110-graphics-build/reports/RESULT.json',
-                             'GRAPHICS_SOURCE_BUILT_NOT_RELEASE_ACCEPTED')
-            archive = roots[name] / ('graphics-' + ('native' if name.endswith('native') else 'ec' if name.endswith('ec') else 'x64') + '.tar.gz')
-            if sha(archive) != Path(str(archive) + '.sha256').read_text().split()[0]:
-                raise ValueError('Graphics output tar differs')
-            unpack(archive, graphics / architecture)
-            for row in detail['outputs']:
-                if sha(graphics / architecture / row['path']) != row['sha256']:
-                    raise ValueError('Graphics source output identity differs')
+        result['translator_components'] = current.fex(roots['fex'], template, fex, unpack, merge_tree)
+        graphics = args.work / 'graphics'
+        result['graphics_components'] = current.graphics(roots, graphics, unpack)
+        indiana = current.indiana(roots['indiana'], args.work / 'indiana', unpack)
+        result['indiana_component'] = indiana
         # The converter CLI is retained in diagnostic outputs, outside the shipping graphics tree.
         cli = graphics / 'aarch64-unix/airconv'
         diagnostics = args.work / 'diagnostic-tools'; diagnostics.mkdir()
@@ -370,34 +358,43 @@ def build(args):
                                      [root / 'lib' for root in source_roots] + [fex / 'aarch64-unix'])
         licenses = license_inputs([('deps', Path(paths['deps']) / 'share/licenses'),
                                    ('moltenvk', Path(paths['moltenvk']) / 'share/licenses')])
+        licenses.append(indiana['license'])
+        licenses += license_inputs([(row['namespace'], Path(row['path']))
+                                    for row in result['translator_components']['license_roots']])
         for namespace, root in [('wine', args.wine), ('dxmt', args.dxmt), ('fex', args.hyperbridge)]:
             for name in ['LICENSE', 'COPYING.LIB', 'LICENSE.OLD']:
                 path = root / name
                 if path.is_file():
                     licenses.append(dict(name=namespace + '-' + name, path=str(path), sha256=sha(path)))
         intent = HERE / 'wine-loader.entitlements.plist'
-        config = dict(name='MacRunner 1.1.1 c32r - GitHub source build', wine=paths['wine'], fex=str(fex),
+        config = dict(name='MacRunner 1.1.1 c33r - GitHub source build', wine=paths['wine'], fex=str(fex),
                       graphics=str(graphics), dependencyRoots=[str(x) for x in source_roots] + [paths['wine']],
                       dlopenLibraries=libraries, licenseInputs=licenses,
+                      vulkanDriver=indiana['driver'],
+                      stripTool=str(helper_compiler / 'llvm-strip'),
+                      stripToolSHA256=sha(helper_compiler / 'llvm-strip'),
                       wineEntitlements=str(intent), wineEntitlementsSHA256=sha(intent),
                       environment=template['environment'], graphicsMatrix=template['graphics'],
                       tools=[dict(name=row['name'], path=str(tools_work / 'outputs/tools' / row['name']),
                                   sha256=row['sha256']) for row in tools['tools']])
         selected = args.work / 'engine-inputs.json'; selected.write_text(json.dumps(config, indent=2) + '\n')
         run('assemble-engine', [sys.executable, '-I', '-B', HERE / 'assemble_engine.py', selected,
-                                resources / 'engine', '--defer-signing'])
+                                resources / 'engine', '--strip-pe', '--defer-signing'])
         runtime = resources / 'engine'
         result['wine_loader'] = stage_wine_loader(app, args.work / 'original-wine-loaders')
         # Keep Wine's separately source-built bridge DLLs. Only the actual translator aliases are installed.
-        for name in ['xtajit.dll', 'xtajit64.dll']:
-            target = runtime / 'wine/lib/wine/aarch64-windows' / name
-            if target.exists() and sha(target) != sha(fex / 'aarch64-windows' / name):
+        aliases = [('aarch64-windows', name) for name in ['xtajit.dll', 'xtajit64.dll']]
+        aliases += [('aarch64-unix', name) for name in ['xtajit.so', 'libwow64fex.so', 'xtajit64.so', 'libarm64ecfex.so']]
+        for architecture, name in aliases:
+            source = fex / architecture / name
+            target = runtime / 'wine/lib/wine' / architecture / name
+            if target.exists() and sha(target) != sha(source):
                 backups = args.work / 'replaced-wine-aliases'; backups.mkdir(exist_ok=True)
                 backup = backups / (name + '.BYLO-' + time.strftime('%H%M%S', time.gmtime()))
                 shutil.copy2(target, backup)
                 result.setdefault('replaced_wine_aliases', []).append(dict(path=name, before_sha256=sha(target),
                                                                            backup=str(backup)))
-            shutil.copy2(fex / 'aarch64-windows' / name, target)
+            shutil.copy2(source, target)
         mapped = map_ci_paths(app, args.work / 'original-build-prefix-files')
         (reports / 'build-path-map.json').write_text(json.dumps(mapped, indent=2) + '\n')
         result['build_prefix_mapping'] = dict(files=len(mapped), code_equal=all(row['code_equal'] for row in mapped))
