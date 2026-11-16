@@ -332,7 +332,7 @@ struct HomeView: View {
                 onBack: closeGame,
                 onSetHighResolution: { enabled in
                     var entry = vm.apps.first { $0.id == app.id } ?? app
-                    entry.highResolution = enabled ? true : nil
+                    entry.highResolution = enabled
                     vm.update(entry)
                 },
                 onSetCalculationAccuracy: { choice in
