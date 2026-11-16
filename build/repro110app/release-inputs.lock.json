@@ -24,11 +24,10 @@
   },
   "inno": {
     "repo": "t0b1kent/macrunner-app",
-    "run": 41929243830,
-    "revision": "7e45ca9daa9424a0170992a1b670083ce2812c8b",
-    "artifact": 13370434761,
-    "sha256": "90933e6f48978f0dea4d63dd175f3b390818458dd1d1a90b2da0ed2caf483e21",
-    "artifact_name": "release110-inno-7e45ca9daa9424a0170992a1b670083ce2812c8b"
+    "run": 43779403212,
+    "revision": "2cd0831ac794f4c7e896c3ae84f4152a535e9ace",
+    "artifact": 14188565256,
+    "sha256": "6531a57c191303244a082c0a8a24e8c20a00ee661caf0f11ebbbef7fcf1c62e1"
   },
   "fex": {
     "repo": "t0b1kent/macrunner-wine",
