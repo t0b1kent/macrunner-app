@@ -23,8 +23,19 @@ import assemble_engine as assembly
 BUILD_NAMES = ['xz', 'icu', 'boost', 'innoextract']
 
 
+def verify_packaged_tool(output, log):
+    """Run the relocated product without build-host dynamic-library overrides."""
+    environment = {name: value for name, value in os.environ.items() if not name.startswith('DYLD_')}
+    with log.open('xb') as stream:
+        child = subprocess.run([str(output / 'innoextract'), '--version'], cwd=output, env=environment,
+                               stdin=subprocess.DEVNULL, stdout=stream, stderr=subprocess.STDOUT, timeout=30)
+    if child.returncode:
+        raise ValueError('Packaged installer cannot run independently; raw version log retained')
+    return dict(status='PACKAGED_TOOL_VERSION_PASS', rc=child.returncode, log_sha256=sha(log))
+
+
 def require_tools(stage):
-    names = ['git'] + (['make', 'xcrun', 'xcodebuild', 'install_name_tool'] if stage == 'build' else [])
+    names = ['git'] + (['make', 'xcrun', 'xcodebuild', 'install_name_tool', 'otool', 'codesign'] if stage == 'build' else [])
     for name in names:
         if shutil.which(name) is None:
             raise ValueError('Required installer build tool missing: ' + name)
@@ -113,7 +124,8 @@ def main(args):
     args.work.mkdir(parents=True, exist_ok=False)
     reports = args.work / 'reports'; reports.mkdir()
     result = dict(status='STARTED', first_failure=None, install_skipped=0, stage=args.stage, sources=[], commands=[],
-                  signing='NOT_ENABLED', games='NOT_ENABLED', lock_sha256=sha(HERE / 'innoextract.lock.json'))
+                  signing='AD_HOC_RUNTIME_SELFTEST_ONLY', distribution_signing='DEFERRED',
+                  games='NOT_ENABLED', lock_sha256=sha(HERE / 'innoextract.lock.json'))
     env = None
     def run(name, argv, cwd=args.work):
         log = reports / (name + '.log')
@@ -167,7 +179,11 @@ def main(args):
             arguments = assembly.relocation_args(info, path, libdir, bundled)
             if arguments:
                 run('relocate-' + path.name, ['install_name_tool', *arguments, path])
+            # Relocation changes Mach-O load commands. Restore a local ad-hoc
+            # signature for the ARM64 runtime self-test; Developer ID is deferred.
+            run('adhoc-' + path.name, ['codesign', '--force', '--sign', '-', path])
         shutil.copytree(prefix / 'share/licenses', output / 'licenses')
+        result['packaged_runtime'] = verify_packaged_tool(output, reports / 'packaged-inno-version.log')
         result['outputs'] = [dict(path=str(p.relative_to(output)), bytes=p.stat().st_size, sha256=sha(p))
                              for p in sorted(output.rglob('*')) if p.is_file()]
         result['status'] = 'INNOEXTRACT_SOURCE_BUILT_SIGNING_DEFERRED'

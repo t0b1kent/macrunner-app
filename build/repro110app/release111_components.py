@@ -122,6 +122,16 @@ def validate_native_notices(inputs):
         require(any(required in name for name in names), 'Native static dependency license missing: ' + required)
 
 
+def installer_runtime(detail):
+    runtime = detail.get('packaged_runtime', {})
+    require(runtime.get('status') == 'PACKAGED_TOOL_VERSION_PASS' and runtime.get('rc') == 0,
+            'Installer component has no successful packaged runtime check')
+    digest = runtime.get('log_sha256', '')
+    require(isinstance(digest, str) and len(digest) == 64 and all(c in '0123456789abcdef' for c in digest),
+            'Installer runtime log is not pinned')
+    return runtime
+
+
 GRAPHICS = [('graphics_x64', 'x64', 'x86_64-windows'),
             ('graphics_ec', 'ec', 'aarch64-windows'),
             ('graphics_native', 'native', 'aarch64-unix'),

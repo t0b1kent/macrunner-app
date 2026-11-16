@@ -133,6 +133,14 @@ class CurrentComponentInputs(unittest.TestCase):
             with self.subTest(omitted=omitted), self.assertRaisesRegex(ValueError, 'static dependency license missing'):
                 component.validate_native_notices([dict(name=name) for name in names if name != omitted])
 
+    def test_installer_without_a_packaged_runtime_check_cannot_be_shipped(self):
+        runtime = dict(status='PACKAGED_TOOL_VERSION_PASS', rc=0, log_sha256='a' * 64)
+        self.assertEqual(component.installer_runtime(dict(packaged_runtime=runtime)), runtime)
+        for value in [{}, dict(packaged_runtime=dict(runtime, rc=-6)),
+                      dict(packaged_runtime=dict(runtime, log_sha256='unbound'))]:
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                component.installer_runtime(value)
+
     def test_fex_must_match_the_complete_selected_overlay(self):
         root, template = self.fex_fixture()
         template['files']['fex/aarch64-windows/xtajit.dll'] = '0' * 64

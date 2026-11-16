@@ -26,7 +26,7 @@ class InstallerSourceTests(unittest.TestCase):
         self.assertEqual(child.returncode, 0, child.stderr)
 
     def test_each_missing_platform_tool_refuses_before_source_work(self):
-        for name in ['git', 'make', 'xcrun', 'xcodebuild', 'install_name_tool']:
+        for name in ['git', 'make', 'xcrun', 'xcodebuild', 'install_name_tool', 'otool', 'codesign']:
             with self.subTest(name=name), patch.object(producer.shutil, 'which',
                     side_effect=lambda value: None if value == name else '/own/tool'):
                 with self.assertRaisesRegex(ValueError, 'tool missing'):
@@ -50,6 +50,26 @@ class InstallerSourceTests(unittest.TestCase):
         self.assertIn('-j2', boost[1])
         self.assertIn('architecture=arm', boost[1])
         self.assertIn('address-model=64', boost[1])
+
+    def test_relocated_product_must_run_without_host_library_overrides(self):
+        tool = self.root / 'innoextract'
+        tool.write_text('#!/bin/sh\nif [ -n "${DYLD_LIBRARY_PATH:-}" ]; then exit 0; fi\necho missing-own-library\nexit 71\n')
+        tool.chmod(0o755)
+        log = self.root / 'missing-library.log'
+        with patch.dict(os.environ, {'DYLD_LIBRARY_PATH': str(self.root / 'host-libraries')}), \
+                patch.object(producer.subprocess, 'run', wraps=subprocess.run) as execute:
+            with self.assertRaisesRegex(ValueError, 'cannot run independently'):
+                producer.verify_packaged_tool(self.root, log)
+        self.assertFalse(any(name.startswith('DYLD_') for name in execute.call_args.kwargs['env']))
+        self.assertIn('missing-own-library', log.read_text())
+
+    def test_relocated_product_keeps_a_successful_native_runtime_receipt(self):
+        tool = self.root / 'innoextract'
+        tool.write_text('#!/bin/sh\nprintf "own inert tool\\n"\n'); tool.chmod(0o755)
+        log = self.root / 'own-version.log'
+        result = producer.verify_packaged_tool(self.root, log)
+        self.assertEqual(result['status'], 'PACKAGED_TOOL_VERSION_PASS')
+        self.assertEqual(result['log_sha256'], producer.sha(log))
 
 
 if __name__ == '__main__':
