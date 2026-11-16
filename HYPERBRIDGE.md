@@ -1,5 +1,8 @@
 # HyperBridge
 
+The current [MacRunner 1.1.2 application](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.2) uses the unchanged [HyperBridge translator 1.1.1](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.1) plus repaired graphics and display/input handling. [Current game status](docs/RELEASE-1.1.2-EN.md).
+
+
 **MacRunner's x86-64 / x86 → ARM64 CPU engine for Windows software on Apple Silicon.**
 
 HyperBridge is built on **[FEX-Emu](https://github.com/FEX-Emu/FEX)** (MIT) and carries MacRunner's own patch series on top of it. Its source, build script, releases, status and measurements are public under the MIT license at **[t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge)**. FEX-Emu has not reviewed or endorsed these modifications, and they are not contributions to FEX-Emu. [License terms and third-party scope →](HYPERBRIDGE_LICENSE.md)

@@ -4,7 +4,13 @@
 
 This page records what has actually been observed while developing MacRunner. A title in the library or launch-profile catalog is not automatically a tested game. Results apply to the configurations used for those sessions.
 
-## Current release · 1.1.1 · owner checks on November 16
+## Current release · 1.1.2 · gameplay confirmation pending
+
+MacRunner 1.1.2 fixes an ARM64EC graphics startup regression, adds the complete DX9 display-mode catalogue, persists an explicit Retina-off choice and stops automatically enabling the experimental hidden-cursor relative mouse path. Adapter enumeration, DirectX 12 device creation and DX9 mode-query checks passed on the signed full package without launching games. The owner will download and test games after publication. Gothic 3 first-start behavior, Retina-on menu input and full Elden Ring startup still require that gameplay confirmation. The previously documented rare shutdown failure remains under investigation.
+
+[Current release notes and comparison scope](docs/RELEASE-1.1.2-EN.md).
+
+## Historical 1.1.1 owner checks on November 16
 
 Gothic 3 launches through the 32-bit Direct3D 9 path. Owner testing of the downloaded 1.1.1 package on November 16 found two problems: the first launch can show `g_App::Create failed`, while a retry starts; and the cursor can jump to a corner when clicking with Retina enabled. Explicitly disabling Retina in the saved per-game setting removed the cursor jump in the owner's test. The 1.1.1 switch incorrectly turns an off choice back into Automatic; its source fix is prepared but is not in the published package.
 
