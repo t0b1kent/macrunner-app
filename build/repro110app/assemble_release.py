@@ -318,7 +318,8 @@ def build(args):
                 raise ValueError('Source helper lost executable mode: ' + name)
             shutil.copy2(helpers / name, resources / 'tools' / name)
         shutil.copytree(helpers / 'licenses', resources / 'licenses/python-helpers')
-        receipt(roots['inno'] / 'release110-inno/reports/RESULT.json', 'INNOEXTRACT_SOURCE_BUILT_SIGNING_DEFERRED')
+        installer_receipt = receipt(roots['inno'] / 'release110-inno/reports/RESULT.json', 'INNOEXTRACT_SOURCE_BUILT_SIGNING_DEFERRED')
+        result['installer_runtime'] = current.installer_runtime(installer_receipt)
         archive = roots['inno'] / 'innoextract.tar.gz'
         if sha(archive) != Path(str(archive) + '.sha256').read_text().split()[0]:
             raise ValueError('Installer product tar differs')
