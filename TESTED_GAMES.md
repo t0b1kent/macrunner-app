@@ -1,10 +1,22 @@
 # Tested games & engines
 
-**Last updated: November 5, 2026**
+**Last updated: November 16, 2026**
 
 This page records what has actually been observed while developing MacRunner. A title in the library or launch-profile catalog is not automatically a tested game. Results apply to the configurations used for those sessions.
 
-**Current ordinary release: [MacRunner 1.1.0, build 119](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.0).** The owner recorded Elden Ring and Hollow Knight on the c32r candidate on November 4. No live games were launched for final release packaging. These recordings are distinct from the historical observations below. [Full performance tables and methodology](docs/PERFORMANCE-1.1.0-EN.md).
+## Current release · 1.1.1 · owner checks on November 16
+
+Gothic 3 launches through the 32-bit Direct3D 9 path. Owner testing of the downloaded 1.1.1 package on November 16 found two problems: the first launch can show `g_App::Create failed`, while a retry starts; and the cursor can jump to a corner when clicking with Retina enabled. Explicitly disabling Retina in the saved per-game setting removed the cursor jump in the owner's test. The 1.1.1 switch incorrectly turns an off choice back into Automatic; its source fix is prepared but is not in the published package.
+
+Elden Ring currently exits at startup in the owner's 1.1.1 tests. The cause remains under investigation. Earlier Elden Ring recordings describe the older c32r/1.1.0 configuration and do not establish compatibility of 1.1.1. Hollow Knight and Horde of Distraction launched and closed in the owner's November 16 checks; these were short checks, not long-session certification.
+
+A rare abnormal shutdown seen in synthetic testing remains unresolved. It is distinct from the newly reported startup and cursor problems. The owner approved publishing 1.1.1 before new live-game acceptance of the final package.
+
+[Gothic 3 owner-reported 78 versus 30 FPS comparison and its limits](docs/RELEASE-1.1.1-EN.md#gothic-3-comparison).
+
+## Historical observations
+
+**Historical 1.1.0 recording: [MacRunner 1.1.0, build 119](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.0).** The owner recorded Elden Ring and Hollow Knight on the c32r candidate on November 4. No live games were launched for final release packaging. These recordings are distinct from the historical observations below. [Full performance tables and methodology](docs/PERFORMANCE-1.1.0-EN.md).
 
 | November 4 recording | MacRunner mean FPS | Reference |
 |---|---:|---|
