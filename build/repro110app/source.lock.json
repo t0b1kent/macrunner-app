@@ -41,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 5926531,
+  "source_bytes": 5926518,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -50,7 +50,7 @@
     "Tests/Fixtures/test-pe.exe"
   ],
   "source_files": 410,
-  "source_inventory_sha256": "2dd10c88c9ff88451eaac51218ab9baf5ac92da566ebac56f3b5d8376d9f043c",
+  "source_inventory_sha256": "1450ef2abc3bbbed33d03267bc43156132cd67e69c2749ebeef81f019135094b",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,
@@ -68,7 +68,8 @@
     "OS-selected home and synthetic mailbox in privacy self-tests; sanitizer unchanged",
     "APP32 selects complete checkout through MACRUNNER_ROOT",
     "Base64 image source restored to exact pinned PNG/ICNS bytes",
-    "Two Gothic routing integration tests require APP32_ENGINE_ROOT, consistently with the existing complete-engine test suites. Component-only CI reports them skipped; final whole-engine acceptance must enable them. Product sources and the frozen local candidate are unchanged by this test-scope correction."
+    "Two Gothic routing integration tests require APP32_ENGINE_ROOT, consistently with the existing complete-engine test suites. Component-only CI reports them skipped; final whole-engine acceptance must enable them. Product sources and the frozen local candidate are unchanged by this test-scope correction.",
+    "Retina switch preserves both explicit Boolean choices. Turning it off stores false; an absent choice remains the automatic display default for untouched games."
   ],
   "release110_delta": {
     "base": "Published 1.0.9 recipe source snapshot; byte-exact preimages below",
@@ -469,8 +470,8 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/Views/Home/HomeView.swift",
-        "bytes": 60917,
-        "sha256": "a77f346c724052c7aaade68d6294f64a6d7fc38e6dfc5b86ae4d10c0c49740da",
+        "bytes": 60904,
+        "sha256": "5e7505e5212b605c90efe92e396a6ddc178f65408873a73bcf94136dc013ee5f",
         "executable": false,
         "base_sha256": "d621d534c4bacf243587f54c29a4557a253e4b3afda08c19df76ff3d75b030be"
       },
