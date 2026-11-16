@@ -41,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 5926518,
+  "source_bytes": 5926365,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -50,7 +50,7 @@
     "Tests/Fixtures/test-pe.exe"
   ],
   "source_files": 410,
-  "source_inventory_sha256": "1450ef2abc3bbbed33d03267bc43156132cd67e69c2749ebeef81f019135094b",
+  "source_inventory_sha256": "45ddc5e84c1bdb833382a84761684dcd11ecccf1ebf74571a2f7a7ae724f6ff5",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,
@@ -69,7 +69,8 @@
     "APP32 selects complete checkout through MACRUNNER_ROOT",
     "Base64 image source restored to exact pinned PNG/ICNS bytes",
     "Two Gothic routing integration tests require APP32_ENGINE_ROOT, consistently with the existing complete-engine test suites. Component-only CI reports them skipped; final whole-engine acceptance must enable them. Product sources and the frozen local candidate are unchanged by this test-scope correction.",
-    "Retina switch preserves both explicit Boolean choices. Turning it off stores false; an absent choice remains the automatic display default for untouched games."
+    "Retina switch preserves both explicit Boolean choices. Turning it off stores false; an absent choice remains the automatic display default for untouched games.",
+    "Retina no longer forces the experimental hidden-cursor relative mouse path. Wine keeps absolute coordinates for custom game cursors; MOUSE_1X remains an explicit game override."
   ],
   "release110_delta": {
     "base": "Published 1.0.9 recipe source snapshot; byte-exact preimages below",
@@ -428,8 +429,8 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/ViewModels/RunAppViewModel.swift",
-        "bytes": 12458,
-        "sha256": "ee2c7ba9b3114be8adcbbda4ca1a9b6760fd53da13b7e79ccae7494b5f2e6f82",
+        "bytes": 12305,
+        "sha256": "c4c6f6a539d220927ffa1e3166732f63c4f28ecfb68b8f1f55d8516e0c5fdae2",
         "executable": false,
         "base_sha256": "536fb0f650fe5dd9657673a56c2202d4eec4660e7de405942102ff1267bc45f2"
       },

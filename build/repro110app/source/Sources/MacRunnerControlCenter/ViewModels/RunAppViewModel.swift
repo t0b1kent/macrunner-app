@@ -186,10 +186,10 @@ final class RunAppViewModel: ObservableObject {
             let detection = GraphicsProbe.detect(exe: exe)
             var plan = GraphicsSelector.plan(detection: detection, engine: engine, override: override)
             plan.highResolution = highResolution
-            // Мышь и курсор как без Retina (winemac, ключи по умолчанию 0): камера не вдвое быстрее, курсор не вдвое
-            // меньше. Ключи записи игры (`env`) главнее — ими рука испытания может их снять.
+            // Keep Wine's absolute Retina coordinates. A hidden system cursor also
+            // occurs in game menus, so it cannot safely select relative mouse input.
+            // The experimental MOUSE_1X path remains an explicit per-game override.
             if highResolution {
-                plan.environment["MACRUNNER_MAC_RETINA_MOUSE_1X"] = "1"
                 plan.environment["MACRUNNER_MAC_RETINA_CURSOR_1X"] = "1"
             }
             if case .launch = plan.decision {
