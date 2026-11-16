@@ -1,8 +1,18 @@
 # Release status
 
-**MacRunner 1.1.0 development preview · Updated November 5, 2026**
+**Current: MacRunner 1.1.1, build 120 · November 16, 2026**
 
-MacRunner is a standalone native Mac application. Its CPU engine is **HyperBridge**: FEX-Emu with MacRunner's patch series, public under MIT at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). The current ordinary preview is 1.1.0; the 1.0.6-indiana experimental preview remains a separate configuration.
+[Download](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.1) · [HyperBridge 1.1.1](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.1) · [DX9 1.1.1](https://github.com/t0b1kent/dxmt/releases/tag/v1.1.1) · [Full release notes](docs/RELEASE-1.1.1-EN.md).
+
+All three releases are published as ordinary releases. MacRunner is signed and notarized by Apple. The release was composed from recorded GitHub source-build outputs. Sources and build information identify the selected producer revisions; component package licenses remain separate.
+
+Gothic 3 launches through the 32-bit Direct3D 9 path. Owner testing of the downloaded 1.1.1 package on November 16 found two problems: the first launch can show `g_App::Create failed`, while a retry starts; and the cursor can jump to a corner when clicking with Retina enabled. Explicitly disabling Retina in the saved per-game setting removed the cursor jump in the owner's test. The 1.1.1 switch incorrectly turns an off choice back into Automatic; its source fix is prepared but is not in the published package.
+
+Elden Ring currently exits at startup in the owner's 1.1.1 tests. The cause remains under investigation. Earlier Elden Ring recordings describe the older c32r/1.1.0 configuration and do not establish compatibility of 1.1.1. Hollow Knight and Horde of Distraction launched and closed in the owner's November 16 checks; these were short checks, not long-session certification.
+
+A rare abnormal shutdown seen in synthetic testing remains unresolved. It is distinct from the newly reported startup and cursor problems. The owner approved publishing 1.1.1 before new live-game acceptance of the final package.
+
+## Historical release descriptions
 
 ## MacRunner 1.1.0 · build 119
 
@@ -13,8 +23,6 @@ This release updates Wine memory allocation and asynchronous exceptions, includi
 The package was built locally under a one-time exception approved by the owner. Clean GitHub builds and convergence continue separately. Final packaging did not launch live games. Owner recordings of the c32r candidate show ER 44.81 vs 24.84 FPS (CrossOver Rosetta), and HK 118.66 vs 119.71 FPS (native Mac); see the [full measurement limits](docs/PERFORMANCE-1.1.0-EN.md).
 
 On a game's first launch, bottle preparation can take several minutes and shader compilation can cause stuttering. Subsequent launches use the prepared bottle and cached shaders; an engine update may require preparation again because 1.1.0 does not migrate shader caches.
-
-## Historical releases
 
 ## MacRunner 1.0.9 development preview
 

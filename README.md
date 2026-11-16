@@ -24,7 +24,11 @@ MacRunner is built around a simple idea: **choose an app or game, add it to your
 
 **HyperBridge is MacRunner's CPU engine:** an **x86-64 / x86 → ARM64 engine for Windows software on Apple Silicon**, built on [FEX-Emu](https://github.com/FEX-Emu/FEX) with MacRunner's own patch series. Its source is public under MIT at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). Wine provides Windows API compatibility, and Metal handles graphics through the relevant translation components. [Explore the engine, its current scope and roadmap →](HYPERBRIDGE.md)
 
-**Development preview: [MacRunner 1.1.0](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.0), build 119, November 5, 2026**, for Apple Silicon Macs. This release improves Wine memory allocation and asynchronous exception handling (including IsBad*), speeds up QueryPerformanceCounter and D3D11 → Metal, and adds a Retina toggle on each game's page. It was built locally under a one-time exception approved by the owner; the clean GitHub build and package convergence remain in progress. [Release notes: English](docs/RELEASE-1.1.0-EN.md).
+**Current release: [MacRunner 1.1.1](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.1), build 120, November 16, 2026.** Apple Silicon, declared minimum macOS 26.5. Signed with a Developer ID and notarized by Apple; assembled from recorded GitHub source builds. Includes the c33r runtime, 32-bit Gothic 3 / DX9 work, automatic Retina selection, shader-cache migration and per-game calculation accuracy. [Release notes and known problems](docs/RELEASE-1.1.1-EN.md).
+
+**Current testing:** Gothic 3 starts, but a first-launch error and a Retina cursor problem have been reported; the owner confirmed that explicit Retina-off removes the cursor jump. The 1.1.1 off switch itself needs a fix. Elden Ring currently fails to start in the owner's 1.1.1 tests. Earlier performance recordings below concern 1.1.0, not the current package. [Current observations](TESTED_GAMES.md).
+
+**Gothic 3 comparison:** the owner reports about 78 versus 30 FPS with Windows on Arm / Prism, or 2.6 times the frame rate. Test conditions are not fully archived; this is an owner report, not a controlled benchmark. [Comparison scope](docs/RELEASE-1.1.1-EN.md#gothic-3-comparison).
 
 ### 1.1.0: recorded performance
 
