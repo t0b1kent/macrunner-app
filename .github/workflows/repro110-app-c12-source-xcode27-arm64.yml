@@ -1,4 +1,4 @@
-name: MacRunner 1.1.1 application source stages Xcode27 ARM64
+name: MacRunner 1.1.2 application repair stages Xcode27 ARM64
 # Build the selected c33r application and helpers from their public source recipe.
 # Whole-application assembly is dispatched only after its new component inputs are pinned.
 on:
@@ -109,7 +109,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: t0b1kent/dxmt
-          ref: 62ccf073f5e410ec41e608c108fb92babf057037
+          ref: 6618953b16d30cd3388adf0c9cee9830d3120fee
           path: dxmt
           fetch-depth: 0
           persist-credentials: false
@@ -139,13 +139,13 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: release111-whole-app-${{ github.sha }}
+          name: release112-whole-app-${{ github.sha }}
           path: |
             ${{ runner.temp }}/release111-package/reports
             ${{ runner.temp }}/release111-package/source-runtime/reports
             ${{ runner.temp }}/release111-package/engine-inputs.json
             ${{ runner.temp }}/release111-package/diagnostic-tools
-            ${{ runner.temp }}/release111-package/MacRunner-1.1.1-unsigned-source-built.tar.gz
+            ${{ runner.temp }}/release111-package/MacRunner-1.1.2-unsigned-source-built.tar.gz
           if-no-files-found: error
           retention-days: 90
   steps:
