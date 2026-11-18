@@ -1,6 +1,12 @@
 # Release status
 
-## Current · MacRunner 1.1.2 · build 121
+## Current · MacRunner 1.1.3 · build 122
+
+[MacRunner](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.3) · [DX9 1.1.3](https://github.com/t0b1kent/dxmt/releases/tag/v1.1.3) · [Release notes](docs/RELEASE-1.1.3-EN.md).
+
+MacRunner 1.1.3 fixes Retina fullscreen for 32-bit Direct3D 9 and the light edges seen in Direct3D 12 fullscreen. It also recovers Direct3D 9 pipeline archives and installs supported DirectX 9 files from the game's installer. The maintainer verified Gothic 3 fullscreen and first launch, and Elden Ring fullscreen without light edges, on the build 122 candidate.
+
+## Historical · MacRunner 1.1.2 · build 121
 
 [MacRunner](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.2) · [DX9 1.1.2](https://github.com/t0b1kent/dxmt/releases/tag/v1.1.2) · [HyperBridge 1.1.1](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.1) · [Notes](docs/RELEASE-1.1.2-EN.md).
 

@@ -24,11 +24,9 @@ MacRunner is built around a simple idea: **choose an app or game, add it to your
 
 **HyperBridge is MacRunner's CPU engine:** an **x86-64 / x86 → ARM64 engine for Windows software on Apple Silicon**, built on [FEX-Emu](https://github.com/FEX-Emu/FEX) with MacRunner's own patch series. Its source is public under MIT at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). Wine provides Windows API compatibility, and Metal handles graphics through the relevant translation components. [Explore the engine, its current scope and roadmap →](HYPERBRIDGE.md)
 
-**Current release: [MacRunner 1.1.2](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.2), build 121, November 16, 2026.** Apple Silicon, macOS 26.5 or later. Signed with Developer ID and notarized by Apple. [Release notes and current game status](docs/RELEASE-1.1.2-EN.md).
+**Current release: [MacRunner 1.1.3](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.3), build 122, November 18, 2026.** Apple Silicon, macOS 26.5 or later. Signed with Developer ID and notarized by Apple. [Release notes and known issues](docs/RELEASE-1.1.3-EN.md).
 
-MacRunner 1.1.2 fixes an ARM64EC graphics startup regression, adds the complete DX9 display-mode catalogue, persists an explicit Retina-off choice and stops automatically enabling the experimental hidden-cursor relative mouse path. Adapter enumeration, DirectX 12 device creation and DX9 mode-query checks passed on the signed full package without launching games. The owner will download and test games after publication. Gothic 3 first-start behavior, Retina-on menu input and full Elden Ring startup still require that gameplay confirmation. The previously documented rare shutdown failure remains under investigation.
-
-**Gothic 3 comparison:** the owner reports about 78 versus 30 FPS with Windows on Arm / Prism, or 2.6 times the frame rate. Matching test conditions are not fully archived; this is an owner report, not a controlled benchmark of 1.1.2.
+MacRunner 1.1.3 fixes Retina fullscreen for 32-bit Direct3D 9 and the light edges seen in Direct3D 12 fullscreen. It also recovers Direct3D 9 pipeline archives and installs supported DirectX 9 files from the game's installer. The maintainer verified Gothic 3 fullscreen and first launch, and Elden Ring fullscreen without light edges, on the build 122 candidate.
 
 ### 1.1.0: recorded performance
 
