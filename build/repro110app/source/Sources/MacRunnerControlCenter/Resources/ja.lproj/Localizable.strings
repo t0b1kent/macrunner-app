@@ -271,7 +271,7 @@
 "%@ Windows programs cannot run in this version of MacRunner yet." = "Windows プログラム（%@）はこのバージョンの MacRunner ではまだ動きません。";
 "The game uses DXGI, but its Direct3D version could not be determined." = "このゲームは DXGI を使いますが、Direct3D のバージョンを特定できませんでした。";
 "The graphics API could not be determined from the game files." = "ゲームのファイルからグラフィックス API を特定できませんでした。";
-"This game uses Direct3D effects (%@), but the DirectX files from its installer were not found next to it. The 3D picture may stay black. Put the game's DirectX folder (__redist/DirectX from its installer) next to the game and start it again." = "このゲームは Direct3D エフェクト（%@）を使用しますが、インストーラーの DirectX ファイルがゲームの横に見つかりませんでした。3D 画面が黒いままになる可能性があります。ゲームの DirectX フォルダー（インストーラーの __redist/DirectX）をゲームの横に置いて、もう一度起動してください。";
+"This game uses Direct3D effects (%@), but the DirectX files from its installer are missing, so the 3D picture will be black. Add the game from its installer (Add game, then choose the installer) so MacRunner can install them." = "This game uses Direct3D effects (%@), but the DirectX files from its installer are missing, so the 3D picture will be black. Add the game from its installer (Add game, then choose the installer) so MacRunner can install them.";
 "The DirectX file %@ next to this game was not used: %@. The 3D picture may stay black." = "このゲームの横にある DirectX ファイル %@ は使用されませんでした: %@。3D 画面が黒いままになる可能性があります。";
 "The game files mention several graphics APIs (%@); the one the game uses could not be determined." = "ゲームのファイルに複数のグラフィックス API（%@）が現れます。どれを使うかは特定できませんでした。";
 "The game may also use %@, which is not available for %@ games. If it chooses it, it will not start." = "このゲームは %@ も使う可能性がありますが、（%@）のゲームでは利用できません。それを選ぶと起動しません。";

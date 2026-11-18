@@ -41,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 5926365,
+  "source_bytes": 5938333,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -49,8 +49,8 @@
     "Sources/MacRunnerControlCenter/Resources/tools/legendary",
     "Tests/Fixtures/test-pe.exe"
   ],
-  "source_files": 410,
-  "source_inventory_sha256": "45ddc5e84c1bdb833382a84761684dcd11ecccf1ebf74571a2f7a7ae724f6ff5",
+  "source_files": 412,
+  "source_inventory_sha256": "c53e3ac7a9ded6ab0499b6efceb767a960b08ccaa88a1e5ccd55cd53edff6170",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,

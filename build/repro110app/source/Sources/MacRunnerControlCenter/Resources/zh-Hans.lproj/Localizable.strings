@@ -271,7 +271,7 @@
 "%@ Windows programs cannot run in this version of MacRunner yet." = "此版本的 MacRunner 暂时无法运行 Windows 程序（%@）。";
 "The game uses DXGI, but its Direct3D version could not be determined." = "游戏使用 DXGI，但无法确定其 Direct3D 版本。";
 "The graphics API could not be determined from the game files." = "无法从游戏文件确定图形 API。";
-"This game uses Direct3D effects (%@), but the DirectX files from its installer were not found next to it. The 3D picture may stay black. Put the game's DirectX folder (__redist/DirectX from its installer) next to the game and start it again." = "此游戏使用 Direct3D 效果（%@），但在游戏旁边未找到其安装程序中的 DirectX 文件。3D 画面可能保持黑色。请将游戏的 DirectX 文件夹（安装程序中的 __redist/DirectX）放到游戏旁边，然后重新启动游戏。";
+"This game uses Direct3D effects (%@), but the DirectX files from its installer are missing, so the 3D picture will be black. Add the game from its installer (Add game, then choose the installer) so MacRunner can install them." = "This game uses Direct3D effects (%@), but the DirectX files from its installer are missing, so the 3D picture will be black. Add the game from its installer (Add game, then choose the installer) so MacRunner can install them.";
 "The DirectX file %@ next to this game was not used: %@. The 3D picture may stay black." = "未使用此游戏旁边的 DirectX 文件 %@：%@。3D 画面可能保持黑色。";
 "The game files mention several graphics APIs (%@); the one the game uses could not be determined." = "游戏文件中提到了多个图形 API（%@）；无法确定游戏实际使用哪一个。";
 "The game may also use %@, which is not available for %@ games. If it chooses it, it will not start." = "游戏也可能使用 %@，而它不适用于（%@）游戏。如果游戏选择它，将无法启动。";

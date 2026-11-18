@@ -879,6 +879,9 @@ struct HomeView: View {
                 try await InstallerUnpacker.unpack(installer, to: destination, language: language, handle: handle) { value in
                     Task { @MainActor in unpackProgress = value }
                 }
+                // D3DX-REDIST: the installer's own DirectX files are installed now, as it would on Windows.
+                let redist = await Task.detached { GameRedist.installFromPayload(folder: destination, store: GameRedist.defaultStore) }.value
+                if !redist.rejected.isEmpty { NSLog("[macrunner-app] redist import: rejected %@", redist.rejected.joined(separator: "; ")) }
                 let found = await Task.detached { InstallerUnpacker.foundGames(in: destination) }.value
                     .filter { found in !vm.apps.contains { $0.exePath == found.url.path } }
                 unpackRun = nil

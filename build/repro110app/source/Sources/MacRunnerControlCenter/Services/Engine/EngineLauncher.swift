@@ -353,7 +353,8 @@ final class EngineLauncher: @unchecked Sendable {
         if appEnvironment["MACRUNNER_GAME_REDIST"] == "0" {
             return GameRedist.Resolution(notes: ["redist: switched off by MACRUNNER_GAME_REDIST=0"])
         }
-        return GameRedist.resolve(exe: exe, bits: arch == .x86 ? 32 : 64, store: store ?? GameRedist.defaultStore)
+        return GameRedist.resolve(exe: exe, bits: arch == .x86 ? 32 : 64, store: store ?? GameRedist.defaultStore,
+                                  knownRoots: [InstallerUnpacker.baseFolder])
     }
 
     // MARK: - Пути

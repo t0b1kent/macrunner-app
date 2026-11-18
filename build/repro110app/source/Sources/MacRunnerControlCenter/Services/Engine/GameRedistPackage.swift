@@ -346,12 +346,21 @@ extension GameRedist {
 
     // MARK: - One launch
 
+    /// An `Install` for a pinned release whose validated copy is already in `store` (hash re-checked on read).
+    static func storedInstall(dll: String, bits: Int, store: URL) -> Install? {
+        guard let known = microsoftReleases["\(dll.lowercased())#\(bits)"],
+              storedCopy(dll: dll, bits: bits, in: store) != nil else { return nil }
+        return Install(dll: dll.lowercased(), bits: bits, sha256: known.sha256, version: known.version, cabinet: "validated store")
+    }
+
     struct Resolution: Sendable, Equatable {
         var installs: [Install] = []
         /// For the player (tile/result): what is missing and what it means.
         var warnings: [String] = []
         /// For the engine log.
         var notes: [String] = []
+        /// D3DX-REDIST 17.11: d3dx9 DLLs the game needs that neither its own folder nor the store could supply.
+        var missing: [String] = []
     }
 
     /// Import names of the exe and of its local import closure (depth 2, as GraphicsProbe follows it).
@@ -364,15 +373,33 @@ extension GameRedist {
 
     /// What this game needs (d3dx9 imports of its own modules) from what it ships (cabinets near the exe).
     /// Needed but not found, or found but not a Microsoft release → a warning the player sees; never a guess.
-    static func resolve(exe: URL, bits: Int, store: URL, importNames names: [String]? = nil, tool: URL = bsdtar) -> Resolution {
+    static func resolve(exe: URL, bits: Int, store: URL, importNames names: [String]? = nil, tool: URL = bsdtar,
+                        knownRoots: [URL] = []) -> Resolution {
         var resolution = Resolution()
         let needed = neededD3DX(importNames: names ?? importNames(of: exe)).sorted()
         guard !needed.isEmpty else { return resolution }
         let found = cabinets(near: exe).filter { $0.bits == bits }
+        var adopted = false
         for dll in needed {
             guard let cabinet = found.first(where: { $0.dll == dll }) else {
+                // D3DX-REDIST: the same game unpacked earlier by the app (installer extraction) still has its cabinets.
+                if !adopted, !knownRoots.isEmpty, storedInstall(dll: dll, bits: bits, store: store) == nil {
+                    adopted = true
+                    let part = adoptKnownCabinets(for: exe, roots: knownRoots, store: store, tool: tool)
+                    if part.cabinetsSeen > 0 {
+                        resolution.notes.append("redist: adopted \(part.installs.count) of \(part.cabinetsSeen) cabinets of the same game from its earlier extraction")
+                    }
+                }
+                // D3DX-REDIST 17.11: a copy validated earlier (from any game's cabinet or from Microsoft's own
+                // DirectX redistributable, DirectXRedist) serves a game that ships no cabinet.
+                if let item = storedInstall(dll: dll, bits: bits, store: store) {
+                    resolution.installs.append(item)
+                    resolution.notes.append("redist: \(dll) \(bits)-bit \(item.version) sha256=\(item.sha256) from the validated store (\(item.cabinet))")
+                    continue
+                }
+                resolution.missing.append(dll)
                 resolution.notes.append("redist: \(dll) \(bits)-bit needed by \(exe.lastPathComponent): no Microsoft cabinet near the game")
-                resolution.warnings.append(String(format: L("This game uses Direct3D effects (%@), but the DirectX files from its installer were not found next to it. The 3D picture may stay black. Put the game's DirectX folder (__redist/DirectX from its installer) next to the game and start it again."), dll))
+                resolution.warnings.append(missingWarning(dll: dll))
                 continue
             }
             do {
