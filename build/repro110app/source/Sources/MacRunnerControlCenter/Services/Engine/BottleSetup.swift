@@ -249,6 +249,8 @@ struct BottleSetup {
         if readMarker()?["wicRegistration"] as? [String: String] != registration {
             try refreshWICRegistration()
             try writeMarker(layers: installedLayers, wicRegistration: registration, stamp: stamp)
+        } else {
+            log.note("bottle: WIC registration current codec=\(codec)")
         }
         // Record installation identity only for files copied from this package.
         // An unchanged legacy Ready marker cannot attest its mutable DLLs.
@@ -1275,13 +1277,16 @@ struct BottleSetup {
     /// Смена набора под маршрут. Под идущей программой — нельзя: она держит старые модули.
     private func switchTo(_ layer: GraphicsLayer) throws {
         guard !isBusy() else { throw SetupError.busy(layer.title) }
+        // Keep the registration evidence across graphics-only staging. The
+        // preparation step rechecks the engine, package path and codec bytes.
+        let wicRegistration = readMarker()?["wicRegistration"] as? [String: String]
         var keep: [String] = []
         for id in installedLayers {
             guard let other = engine.graphics.layer(id) else { continue }
             if engine.graphics.conflicts(other, layer) { try uninstall(other) } else { keep.append(id) }
         }
         try install(layer)
-        try writeMarker(layers: keep + [layer.id])
+        try writeMarker(layers: keep + [layer.id], wicRegistration: wicRegistration)
     }
 
     // MARK: - Модули (перенос sync-prefix-from-dist.sh, ветка FEX)

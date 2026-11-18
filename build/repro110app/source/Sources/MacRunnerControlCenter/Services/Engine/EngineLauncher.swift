@@ -80,17 +80,18 @@ final class EngineLauncher: @unchecked Sendable {
         defer { updateGate.endActivity(activity) }
         let started = Date()
         let fullArguments = Self.launchArguments(for: exe, arguments + plan.extraArguments)
+        let isolatedAppEntry = CommandLine.arguments.dropFirst().first == "--run-app-entry"
         // Bottle services register the whole Wine installation. Game routes may
         // disable Wine modules (for example winevulkan); those overrides belong
         // only to the program, never to wineboot, registration or its server.
-        let preparationEnvironment = makeEnvironment(extra: [:])
+        let preparationDebug = isolatedAppEntry ? extraEnvironment["WINEDEBUG"] : nil
+        let preparationEnvironment = makeEnvironment(extra: preparationDebug.map { ["WINEDEBUG": $0] } ?? [:])
         // Окружение: движок → маршрут графики → поправки записи игры (они главнее: это
         // ручная настройка). Нативные библиотечные пути остаются за ENGINE.json.
         // В журнал — загрузки модулей, чтобы видеть, ЧЬЯ графика пришла.
         var env = makeEnvironment(extra: plan.environment.merging(extraEnvironment) { _, own in own })
         // Журналы DXMT — в каталог запуска, а не в папку игры: `dxmt-instr.log` по умолчанию
         // пишется в текущий каталог (engine/dxmt/src/util/instr.cpp), то есть рядом с игрой.
-        let isolatedAppEntry = CommandLine.arguments.dropFirst().first == "--run-app-entry"
         if !isolatedAppEntry, env["DXMT_INSTR_LOG"] == nil {
             env["DXMT_INSTR_LOG"] = "Z:" + runDirectory.appendingPathComponent("dxmt-instr.log").path
                 .replacingOccurrences(of: "/", with: "\\")

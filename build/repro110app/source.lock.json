@@ -41,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 5945155,
+  "source_bytes": 5945649,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -50,7 +50,7 @@
     "Tests/Fixtures/test-pe.exe"
   ],
   "source_files": 412,
-  "source_inventory_sha256": "a4d44efcd34ae42774757fcbfce7885e14879d309074f02a541e9685eb3850de",
+  "source_inventory_sha256": "12fc8d34da4c78050e3b101e5e115584a7b374e9833035fdb7e0ba1748604285",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,
@@ -72,7 +72,8 @@
     "Retina switch preserves both explicit Boolean choices. Turning it off stores false; an absent choice remains the automatic display default for untouched games.",
     "Retina no longer forces the experimental hidden-cursor relative mouse path. Wine keeps absolute coordinates for custom game cursors; MOUSE_1X remains an explicit game override.",
     "Steam CEF launch arguments and crash settings for newly initialized or cloned Wine bottles. Template creation accepts a setup server that already drained.",
-    "Classify Windows program completion using startup and crash evidence."
+    "Classify Windows program completion using startup and crash evidence.",
+    "Keep the WIC registration receipt across graphics-layer staging."
   ],
   "release110_delta": {
     "base": "Published 1.0.9 recipe source snapshot; byte-exact preimages below",
@@ -291,8 +292,8 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/Services/Engine/BottleSetup.swift",
-        "bytes": 89045,
-        "sha256": "b67a6b03dc70b5db3ab853e251d605e8970dec595b1bb42bc8ed7c06ddc52bc2",
+        "bytes": 89407,
+        "sha256": "b12e115cabdd680660c945a9fcac7cbe1e6038c6cea11755ef96cad28822e037",
         "executable": false,
         "base_sha256": "b191c23772b10070a696ecc66bcfaae2d16cdd7fb58fe062b47da8ea5ed2e3f6"
       },
@@ -326,8 +327,8 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/Services/Engine/EngineLauncher.swift",
-        "bytes": 48667,
-        "sha256": "a0c98d233538eb038d5aa369449c87428442f76c279a1a30b3e463d8db03603b",
+        "bytes": 48799,
+        "sha256": "da05d23f8c3aa940c6491eb839d2ddee25fcc17df606cb3f25285b5e6a18c8ea",
         "executable": false,
         "base_sha256": "d038068cf3371156828a9a440e271d920a2979339694e79e3e367a896d7137cf"
       },
