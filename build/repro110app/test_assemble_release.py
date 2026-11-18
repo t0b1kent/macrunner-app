@@ -58,6 +58,32 @@ class ReleaseCompositionTests(unittest.TestCase):
             ['libdependency.dylib', companion.name], [deps, fex]),
             [str(deps / 'libdependency.dylib'), str(companion)])
 
+    def test_winemac_overlay_replaces_only_the_mac_driver(self):
+        relative = 'lib/wine/aarch64-unix/'
+        base = self.root / 'base'
+        driver = base / relative / 'winemac.so'
+        driver.parent.mkdir(parents=True)
+        driver.write_bytes(b'published driver')
+        other = driver.with_name('ntdll.so')
+        other.write_bytes(b'published translator')
+        component = self.root / 'component'
+        built = component / 'repro110-wine-c12-results'
+        (built / 'reports').mkdir(parents=True)
+        (built / 'reports/RESULT.json').write_text(
+            '{"status":"FULL_WINE_SOURCE_BUILT_NOT_ACCEPTED","install_skipped":0}')
+        archive = built / 'wine-dist.tar.gz'
+        with tarfile.open(archive, 'w:gz') as stream:
+            for name, data in [('winemac.so', b'fixed driver'), ('ntdll.so', b'rebuilt translator')]:
+                entry = tarfile.TarInfo('./' + relative + name)
+                entry.size = len(data)
+                stream.addfile(entry, io.BytesIO(data))
+        Path(str(archive) + '.sha256').write_text(producer.sha(archive) + '\n')
+        backup = self.root / 'saved-winemac.so'
+        producer.install_winemac_patch(component, base, backup)
+        self.assertEqual(driver.read_bytes(), b'fixed driver')
+        self.assertEqual(other.read_bytes(), b'published translator')
+        self.assertEqual(backup.read_bytes(), b'published driver')
+
     def test_missing_and_conflicting_source_libraries_are_refused(self):
         first = self.root / 'first'; first.mkdir()
         second = self.root / 'second'; second.mkdir()

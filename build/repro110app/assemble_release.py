@@ -5,7 +5,7 @@ import hashlib
 import importlib.util
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import platform
 import plistlib
 import re
@@ -258,6 +258,28 @@ def select_wine_source(transport, pin):
     transport.INPUTS = dict(transport.INPUTS, wine=dict(pin))
 
 
+def install_winemac_patch(component, wine, backup):
+    """Select only the new macOS driver from the separately built Wine install."""
+    build = component / 'repro110-wine-c12-results'
+    receipt(build / 'reports/RESULT.json', 'FULL_WINE_SOURCE_BUILT_NOT_ACCEPTED')
+    archive = build / 'wine-dist.tar.gz'
+    digest = sha(archive)
+    if digest != Path(str(archive) + '.sha256').read_text().split()[0]:
+        raise ValueError('Winemac source archive digest differs')
+    target = Path(wine) / 'lib/wine/aarch64-unix/winemac.so'
+    if not target.is_file() or target.is_symlink():
+        raise ValueError('Base Wine macOS driver is missing')
+    shutil.copy2(target, backup)
+    with tarfile.open(archive, 'r:gz') as stream:
+        matches = [row for row in stream if PurePosixPath(row.name).as_posix() == 'lib/wine/aarch64-unix/winemac.so']
+        if len(matches) != 1 or not matches[0].isfile():
+            raise ValueError('Winemac source archive must contain a single native driver')
+        source = stream.extractfile(matches[0])
+        with source, target.open('wb') as output:
+            shutil.copyfileobj(source, output)
+    return dict(archive_sha256=digest, base_sha256=sha(backup), selected_sha256=sha(target))
+
+
 def build(args):
     if os.environ.get('GITHUB_ACTIONS') != 'true' or platform.system() != 'Darwin' or platform.machine() != 'arm64':
         raise ValueError('Whole release composition requires the native ARM64 GitHub builder')
@@ -281,7 +303,7 @@ def build(args):
     try:
         pins = json.loads(args.pins.read_text())
         current = load_module('release111_components', HERE / 'release111_components.py')
-        names = ['app', 'helpers', 'inno', 'fex', 'indiana', *[row[0] for row in current.GRAPHICS]]
+        names = ['app', 'helpers', 'inno', 'fex', 'indiana', 'wine_winmac', *[row[0] for row in current.GRAPHICS]]
         if set(pins) != set(names + ['wine']):
             raise ValueError('Exactly the selected release source components are required')
         transport = load_module('release_source_transport', args.transport)
@@ -294,6 +316,8 @@ def build(args):
         components = args.work / 'components'; components.mkdir()
         roots = {name: artifact(pins[name], components / name, transport, reports) for name in names}
         result['inputs'] = pins
+        result['wine_winmac'] = install_winemac_patch(roots['wine_winmac'], paths['wine'],
+                                                     args.work / 'original-winemac.so')
         app_report = receipt(roots['app'] / 'repro110-app-results/APP-RESULT.json',
                              'APP_SOURCE_COMPILED_TESTED_NOT_WHOLE_BUNDLE')
         if app_report['swift_tests'].get('unexplained_failures'):
