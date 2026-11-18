@@ -102,6 +102,11 @@ final class EngineLauncher: @unchecked Sendable {
            let debug = env["WINEDEBUG"], !debug.contains("loaddll") {
             env["WINEDEBUG"] = debug.isEmpty ? "+loaddll" : debug + ",+loaddll"
         }
+        // A Unix wait status keeps only eight bits of Wine's Windows exit code.
+        // The existing exit record carries all 32 bits, even with WINEDEBUG=-all.
+        env["MACRUNNER_TRACE_PROCESS_EXIT"] = "1"
+        env["WINEDEBUG"] = [env["WINEDEBUG"], "err+seh,err+module"].compactMap { $0 }
+            .filter { !$0.isEmpty }.joined(separator: ",")
         lock.lock(); environment = env; lock.unlock()
 
         var result = LauncherResult()
@@ -286,6 +291,7 @@ final class EngineLauncher: @unchecked Sendable {
         defer { BottleSetup.endRun(prefix: prefix) }
         do {
             onProgress(.starting)
+            log.beginProgram()
             let command = warmSession == nil ? [target] + fullArguments
                 : [Self.windowsPath(for: engine.programJobLauncher, prefix: prefix), target] + fullArguments
             outcome = try EngineProcess.run(engine.wine, command, environment: env,
@@ -299,21 +305,34 @@ final class EngineLauncher: @unchecked Sendable {
         log.note("run: exit=\(outcome.status) signaled=\(outcome.signaled)")
         let processLifetime = ProcessInfo.processInfo.systemUptime - executionStarted
         result.processLifetimeMs = Int(processLifetime * 1000)
-        let earlyExit = Self.exitedTooSoon(elapsed: processLifetime, minimum: minimumProcessLifetime)
-        result.launchAchievement = earlyExit ? "EARLY_EXIT" : minimumProcessLifetime == nil
-            ? "PROCESS_COMPLETED" : "PROCESS_LIVED_AT_LEAST_MINIMUM"
-
+        // Short exits often occur between two polls. Drain the final bytes
+        // before reading crash evidence or window milestones.
+        log.close()
         let rc = Int(outcome.status)
+        let minimum = minimumProcessLifetime ?? (rc == 0 ? nil : Self.startupGrace)
+        let earlyExit = log.milestones["gameWindow"] == nil
+            && Self.exitedTooSoon(elapsed: processLifetime, minimum: minimum)
+        result.launchAchievement = earlyExit ? "EARLY_EXIT" : minimumProcessLifetime.map { processLifetime >= $0 } == true
+            ? "PROCESS_LIVED_AT_LEAST_MINIMUM" : "PROCESS_COMPLETED"
+
         if isStopRequested { return finish("STOPPED", rc: rc, log: log) }
         if let crash = log.crashMessage { return finish("CRASH", rc: rc, error: crash, log: log) }
         if outcome.signaled {
             return finish("CRASH", rc: rc, error: String(format: L("The engine was terminated by signal %d."), rc), log: log)
         }
-        if rc == 0, earlyExit {
+        if let status = log.failedWindowsExitCodes[outcome.pid] {
+            return finish("CRASH", rc: rc, error: String(format: L("The Windows process exited with status 0x%08X."), status), log: log)
+        }
+        if rc != 0, let failure = log.engineMessage {
+            return finish("FAIL", rc: rc, error: failure, log: log)
+        }
+        if rc != 0, warmSession != nil, !log.programTreeCompleted {
+            return finish("FAIL", rc: rc, log: log)
+        }
+        if earlyExit {
             return finish("EARLY_EXIT", rc: rc, error: L("The game closed immediately after launch."), log: log)
         }
-        if rc == 0 { return finish("PASS", rc: rc, log: log) }
-        return finish("FAIL", rc: rc, error: log.engineMessage, log: log)
+        return finish("PASS", rc: rc, log: log)
     }
 
     /// Остановить всё, что запущено в этой бутылке. Чужие бутылки и чужие прогоны
@@ -358,6 +377,8 @@ final class EngineLauncher: @unchecked Sendable {
     }
 
     // MARK: - Пути
+
+    static let startupGrace: TimeInterval = 10
 
     static func exitedTooSoon(elapsed: TimeInterval, minimum: TimeInterval?) -> Bool {
         guard let minimum else { return false }
@@ -466,6 +487,7 @@ enum EngineProcess {
     struct Outcome {
         let status: Int32
         let signaled: Bool
+        let pid: Int32
     }
 
     /// Запускает процесс движка; его вывод идёт прямо в файл журнала (`EngineLog`).
@@ -486,7 +508,8 @@ enum EngineProcess {
         log.note("owned-process pid=\(process.processIdentifier) executable=\(executable.path) argv=\(arguments)")
         onStarted()
         process.waitUntilExit()
-        return Outcome(status: process.terminationStatus, signaled: process.terminationReason == .uncaughtSignal)
+        return Outcome(status: process.terminationStatus, signaled: process.terminationReason == .uncaughtSignal,
+                       pid: process.processIdentifier)
     }
 
     /// Ждёт, пока в бутылке не останется процессов (`wineserver -w`).
@@ -534,6 +557,8 @@ final class EngineLog: @unchecked Sendable {
     private var timer: DispatchSourceTimer?
     private(set) var crashMessage: String?
     private(set) var engineMessage: String?
+    private(set) var failedWindowsExitCodes: [Int32: UInt32] = [:]
+    private(set) var programTreeCompleted = false
     /// Загруженные графические модули: имя, путь, «builtin»/«native» (`trace:loaddll`).
     private(set) var graphicsModules: [(name: String, path: String, kind: String)] = []
     /// Когда журнал впервые увидел этап запуска, секунды от открытия журнала.
@@ -605,11 +630,23 @@ final class EngineLog: @unchecked Sendable {
         return milestones
     }
 
+    func beginProgram() {
+        lock.lock(); defer { lock.unlock() }
+        readNew(all: true)
+        carry.removeAll()
+        crashMessage = nil
+        engineMessage = nil
+        failedWindowsExitCodes.removeAll()
+        programTreeCompleted = false
+        milestones.removeValue(forKey: "gameWindow")
+    }
+
     func close() {
         lock.lock(); defer { lock.unlock() }
         guard !closed else { return }
         timer?.cancel()
         readNew(all: true)
+        if !carry.isEmpty { scan(Data([0x0A])) }
         if droppedBytes > 0 {
             writeAll(Data("\n[macrunner-app] \(droppedBytes) bytes dropped; the start of the log is in engine.head.log\n".utf8))
         }
@@ -712,6 +749,15 @@ final class EngineLog: @unchecked Sendable {
         milestones["gameWindow"] = elapsed
     }
 
+    private func recordWindowsExit(_ line: String) {
+        let fields = line.split(separator: " ")
+        guard fields.count >= 6, fields[2].hasPrefix("pid="), fields[4].hasPrefix("status=0x"),
+              let pid = Int32(fields[2].dropFirst(4)),
+              let status = UInt32(fields[4].dropFirst(9), radix: 16),
+              status & 0xF000_0000 == 0xC000_0000 else { return }
+        failedWindowsExitCodes[pid] = status
+    }
+
     /// Сообщения самого Wine: `wine: Unhandled page fault …` — падение программы,
     /// прочие `wine: …` с отказом — причина, если программа не запустилась.
     private func scan(_ data: Data) {
@@ -723,6 +769,16 @@ final class EngineLog: @unchecked Sendable {
                 recordModuleLoad(String(decoding: line, as: UTF8.self))
             } else if milestones["gameWindow"] == nil, line.starts(with: Data("macrunner-createwnd:".utf8)) {
                 noteWindow(String(decoding: line, as: UTF8.self))
+            } else if line.starts(with: Data("macrunner-process-exit: stage=exit_process ".utf8)) {
+                recordWindowsExit(String(decoding: line, as: UTF8.self))
+            } else if line.elementsEqual("MACRUNNER_PROGRAM_TREE_EMPTY".utf8) ||
+                      line.elementsEqual("MACRUNNER_PROGRAM_TREE_EMPTY\r".utf8) {
+                programTreeCompleted = true
+            } else if line.range(of: Data(":err:seh:NtRaiseException ".utf8)) != nil ||
+                      line.starts(with: Data("macrunner-process-exit: stage=NtRaiseException_unhandled ".utf8)) {
+                if crashMessage == nil { crashMessage = String(decoding: line, as: UTF8.self) }
+            } else if line.range(of: Data(":err:module:loader_init Importing dlls for ".utf8)) != nil {
+                if engineMessage == nil { engineMessage = String(decoding: line, as: UTF8.self) }
             } else if line.count > 6, line.starts(with: Data("wine: ".utf8)) {
                 let text = String(decoding: line, as: UTF8.self)
                 if text.contains("Unhandled") {

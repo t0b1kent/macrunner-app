@@ -72,6 +72,22 @@ struct BundledEngineTests {
         #expect(log.engineMessage == "wine: failed to open L\"C:\\\\a.exe\": c0000135")
     }
 
+    @Test func programExitEvidenceIncludesFinalLinesOnlyFromProgramPhase() throws {
+        let log = try EngineLog(url: try tempDir().appendingPathComponent("engine.log"))
+        log.append(Data("wine: Unhandled setup failure\n".utf8))
+        log.beginProgram()
+        log.append(Data("""
+        macrunner-process-exit: stage=exit_process pid=42 tid=34 status=0xc0000005 unix=0xc0000005
+        macrunner-process-exit: stage=exit_process pid=43 tid=34 status=0x1 unix=0x1
+        MACRUNNER_PROGRAM_TREE_EMPTY
+
+        """.utf8))
+        log.close()
+        #expect(log.crashMessage == nil)
+        #expect(log.failedWindowsExitCodes == [42: 0xC000_0005])
+        #expect(log.programTreeCompleted)
+    }
+
     @Test func syncFillsSyswow64AndInstallsGraphicsSet() throws {
         let engine = try fakeEngine(graphics: ["d3d10core.dll", "d3d11.dll", "dxgi.dll", "winemetal.dll"])
         let prefix = try tempDir()

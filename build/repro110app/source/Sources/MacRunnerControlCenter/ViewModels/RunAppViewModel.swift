@@ -197,7 +197,8 @@ final class RunAppViewModel: ObservableObject {
             }
             var result = launcher.run(exe: exe, arguments: arguments, workdir: workdir,
                                       extraEnvironment: extra, runDirectory: runDirectory, graphics: plan,
-                                      minimumProcessLifetime: detection.profile != nil && !(app.tags ?? []).contains("acceptance-probe") ? 10 : nil,
+                                      minimumProcessLifetime: detection.profile != nil && !(app.tags ?? []).contains("acceptance-probe")
+                                          ? EngineLauncher.startupGrace : nil,
                                       onProgress: { phase in
                 Task { @MainActor in self.advance(to: phase, runID: runID) }
             })
