@@ -41,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 5945649,
+  "source_bytes": 5948686,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -50,7 +50,7 @@
     "Tests/Fixtures/test-pe.exe"
   ],
   "source_files": 412,
-  "source_inventory_sha256": "12fc8d34da4c78050e3b101e5e115584a7b374e9833035fdb7e0ba1748604285",
+  "source_inventory_sha256": "6ca4fb4bfeb4b657c881a76997703227896ba807ea27e095787c1714b67b74a3",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,
@@ -73,7 +73,8 @@
     "Retina no longer forces the experimental hidden-cursor relative mouse path. Wine keeps absolute coordinates for custom game cursors; MOUSE_1X remains an explicit game override.",
     "Steam CEF launch arguments and crash settings for newly initialized or cloned Wine bottles. Template creation accepts a setup server that already drained.",
     "Classify Windows program completion using startup and crash evidence.",
-    "Keep the WIC registration receipt across graphics-layer staging."
+    "Keep the WIC registration receipt across graphics-layer staging.",
+    "Automatic Retina skips programs without a declared graphics-API import."
   ],
   "release110_delta": {
     "base": "Published 1.0.9 recipe source snapshot; byte-exact preimages below",
@@ -446,8 +447,8 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/ViewModels/RunAppViewModel.swift",
-        "bytes": 12372,
-        "sha256": "cd32fb411fc84d2c54ca0e8cc87445a14e9517aa80271abd5fc7c8d42a499fbd",
+        "bytes": 13532,
+        "sha256": "8ad6c939661455b0ff40514eb4faf0f573a2acdba620e18dffb1da832b9cf6ec",
         "executable": false,
         "base_sha256": "536fb0f650fe5dd9657673a56c2202d4eec4660e7de405942102ff1267bc45f2"
       },
@@ -670,8 +671,8 @@
       },
       {
         "path": "Tests/MacRunnerControlCenterTests/RetinaDefaultTests.swift",
-        "bytes": 1159,
-        "sha256": "2adbb85b1a8524f4b319336fd29b134ea345fae36527b28aaaaa916c3674ea34",
+        "bytes": 3036,
+        "sha256": "80c896427c791c139441a7037dc3356b09eeada7048030f6078097255086bc3f",
         "executable": false,
         "base_sha256": null
       },

@@ -185,6 +185,13 @@ final class RunAppViewModel: ObservableObject {
             // и до 96 МБ строк, но на больших играх это заметно — не на главном потоке.
             let detection = GraphicsProbe.detect(exe: exe)
             var plan = GraphicsSelector.plan(detection: detection, engine: engine, override: override)
+            // Automatic Retina is meant for games. A program with no graphics-API
+            // import (a Steam sign-in window, an installer) would be drawn at half
+            // size, because Wine counts Retina pixels at 96 DPI. A saved choice or
+            // MACRUNNER_RETINA_AUTO still wins.
+            let highResolution = RetinaDefault.afterDetection(
+                resolved: highResolution, choice: app.highResolution,
+                override: ProcessInfo.processInfo.environment["MACRUNNER_RETINA_AUTO"], detection: detection)
             plan.highResolution = highResolution
             // Keep Wine's absolute Retina coordinates. A hidden system cursor also
             // occurs in game menus, so it cannot safely select relative mouse input.
@@ -265,4 +272,13 @@ enum RetinaDefault {
     }
 
     static var automatic: Bool { forGame(nil) }
+
+    /// Window-only programs stay at one pixel per point. Only the automatic
+    /// default is narrowed: a saved choice or an explicit override is final, and
+    /// anything with a game profile or a declared graphics-API import keeps the
+    /// 1.1.3 behavior (full-screen surface, complete mode list).
+    static func afterDetection(resolved: Bool, choice: Bool?, override: String?, detection: GraphicsDetection) -> Bool {
+        guard resolved, choice == nil, override == nil else { return resolved }
+        return detection.profile != nil || detection.candidates.values.contains { $0 >= .delayImport }
+    }
 }
