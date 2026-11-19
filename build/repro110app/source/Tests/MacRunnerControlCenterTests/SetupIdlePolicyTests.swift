@@ -45,7 +45,8 @@ struct SetupIdlePolicyTests {
         try setup.prepareIfNeeded()
         calls = try String(contentsOf: prefix.appendingPathComponent("calls"), encoding: .utf8).split(separator:"\n")
         #expect(calls.filter { $0 == "server -p0" }.count == 4)
-        #expect(calls.contains("wine wineboot -u"))
+        #expect(calls.contains("wine wineboot -u -r"))
+        #expect(!calls.contains("wine wineboot -u"))
     }
     @Test func failedServerDoesNotStartWineOrStampReady() throws {
         let (root,prefix,engine,log) = try fixture()

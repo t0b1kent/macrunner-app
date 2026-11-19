@@ -41,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 5949057,
+  "source_bytes": 5949113,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -50,7 +50,7 @@
     "Tests/Fixtures/test-pe.exe"
   ],
   "source_files": 412,
-  "source_inventory_sha256": "c132ea071d9846d813074183afb3909401b4e7088f58427cc51d2fdd54834ba7",
+  "source_inventory_sha256": "cf2f13fdbed64e05d8e008748d060212a5af47327edbe8acade8bb95abe3ee49",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,
@@ -685,8 +685,8 @@
       },
       {
         "path": "Tests/MacRunnerControlCenterTests/SetupIdlePolicyTests.swift",
-        "bytes": 5861,
-        "sha256": "2753a4c5b35f961b70dffbae8ac35b7a77d1bd896cd99811ff09f93f3c91cfb9",
+        "bytes": 5917,
+        "sha256": "2fb3ba92de8dc4725941988d585526fe83ae46a6623121678461981766421ad5",
         "executable": false,
         "base_sha256": null
       },
