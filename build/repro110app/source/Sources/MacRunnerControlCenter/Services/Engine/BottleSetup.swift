@@ -943,10 +943,18 @@ struct BottleSetup {
     }
 
     private func drainOwnedSetup(_ env: [String: String]) throws {
+        let ownedPrefix = URL(fileURLWithPath: env["WINEPREFIX"]!)
+        // A zero-idle setup server may already have stopped after registration.
+        guard WineServerProbe.mayBeAlive(prefix: ownedPrefix, environment: env) else { return }
         let outcome = try EngineProcess.run(engine.wineserver, ["-k"], environment: env, log: log)
-        guard outcome.status == 0, !outcome.signaled else { throw SetupError.setupServerFailed(outcome.status) }
+        if outcome.status != 0 || outcome.signaled {
+            guard !WineServerProbe.mayBeAlive(prefix: ownedPrefix, environment: env) else {
+                throw SetupError.setupServerFailed(outcome.status)
+            }
+            return
+        }
         EngineProcess.waitForServer(engine: engine, environment: env, log: log)
-        guard !WineServerProbe.mayBeAlive(prefix: URL(fileURLWithPath: env["WINEPREFIX"]!), environment: env) else {
+        guard !WineServerProbe.mayBeAlive(prefix: ownedPrefix, environment: env) else {
             throw SetupError.busy(engine.name)
         }
     }
@@ -1017,6 +1025,7 @@ struct BottleSetup {
             let setup = BottleSetup(engine: engine, prefix: staged, environment: environment, log: log)
             try setup.applyModeset(emulateModeset)
             try setup.applyRetina(retinaMode, profileModeset: emulateModeset)
+            try setup.applyInitialCrashSettings()
             if let filename = cdromDataFilename, let directory = gameDirectory {
                 try setup.prepareCDROM(gameDirectory: directory, filename: filename)
             }
@@ -1093,6 +1102,12 @@ struct BottleSetup {
         if !fm.fileExists(atPath: prefix.path) {
             try fm.createDirectory(at: prefix, withIntermediateDirectories: false, attributes: [.posixPermissions: 0o700])
         }
+        if fresh {
+            // Keep this pending until the regular bottle marker commits the setup.
+            try Data(#"{"initialCrashSettingsPending":true}"#.utf8).write(to: markerURL, options: .atomic)
+            try disableCrashDialogOffline()
+        }
+        let initialCrashSettingsPending = readMarker()?["initialCrashSettingsPending"] as? Bool == true
         log.note("bottle: \(fresh ? "create" : "update") \(prefix.path) engine=\(engine.name)")
 
         // Both architecture sets must exist BEFORE the INF registers them.
@@ -1155,6 +1170,7 @@ struct BottleSetup {
         launchPhase("bottleMarkerBegin")
         let layers = installed.map(\.id)
         let manifest = try Data(contentsOf: engine.root.appendingPathComponent("ENGINE.json"))
+        let registration: [String: String]?
         if let catalogue = try currentCatalogue(layers: layers, manifest: manifest) {
             let beforeSetup = try catalogue.recordingInstallation(prefix: prefix)
             try refreshDeltaRegistration()
@@ -1165,15 +1181,46 @@ struct BottleSetup {
             try normaliseShell32(strategy: .text)
             _ = try catalogue.repairSetupChanges(from: beforeSetup, prefix: prefix, package: engine.root)
             let codec = try BottleUpdateCatalogue.digest(windows.appendingPathComponent("system32/windowscodecs.dll"))
-            let registration = ["engine": engineStamp, "engineRoot": engineRootPath, "codec": codec]
-            try writeMarker(layers: layers, wicRegistration: registration)
+            registration = ["engine": engineStamp, "engineRoot": engineRootPath, "codec": codec]
         } else {
             // Older unclassified packages keep their full path, without a
             // checked-registration receipt to authorize later skipping.
-            try writeMarker(layers: layers)
+            registration = nil
         }
+        if initialCrashSettingsPending { try applyInitialCrashSettings() }
+        try writeMarker(layers: layers, wicRegistration: registration)
         launchPhase("bottleMarkerEnd")
         log.note("bottle: ready layers=\(installed.map(\.id))")
+    }
+
+    /// Apply the defaults while the new or staged prefix's server is stopped.
+    private func applyInitialCrashSettings() throws {
+        guard !isBusy(), !WineServerProbe.mayBeAlive(prefix: prefix, environment: environment) else {
+            throw SetupError.busy(engine.name)
+        }
+        let system = prefix.appendingPathComponent("system.reg")
+        let previousSystem = try String(contentsOf: system, encoding: .utf8)
+        var systemText = previousSystem
+        for section in [#"[Software\\Microsoft\\Windows NT\\CurrentVersion\\AeDebug]"#,
+                        #"[Software\\Wow6432Node\\Microsoft\\Windows NT\\CurrentVersion\\AeDebug]"#] {
+            systemText = Self.registryValue(systemText, section: section, name: "Auto", line: #""Auto"="0""#)
+            systemText = Self.registryValue(systemText, section: section, name: "Debugger", line: #""Debugger"="""#)
+        }
+        if systemText != previousSystem {
+            try Data(systemText.utf8).write(to: system, options: .atomic)
+        }
+        try disableCrashDialogOffline()
+    }
+
+    private func disableCrashDialogOffline() throws {
+        let user = prefix.appendingPathComponent("user.reg")
+        let previousUser = FileManager.default.fileExists(atPath: user.path)
+            ? try String(contentsOf: user, encoding: .utf8) : ""
+        let userText = Self.registryValue(previousUser, section: #"[Software\\Wine\\WineDbg]"#,
+                                          name: "ShowCrashDialog", line: #""ShowCrashDialog"=dword:00000000"#)
+        if userText != previousUser {
+            try Data(userText.utf8).write(to: user, options: .atomic)
+        }
     }
 
     /// Module staging drains Wine before copying DLLs. Use stock zero-idle for

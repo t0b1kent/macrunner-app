@@ -79,6 +79,7 @@ final class EngineLauncher: @unchecked Sendable {
         }
         defer { updateGate.endActivity(activity) }
         let started = Date()
+        let fullArguments = Self.launchArguments(for: exe, arguments + plan.extraArguments)
         // Bottle services register the whole Wine installation. Game routes may
         // disable Wine modules (for example winevulkan); those overrides belong
         // only to the program, never to wineboot, registration or its server.
@@ -110,7 +111,7 @@ final class EngineLauncher: @unchecked Sendable {
         result.exe = exe.lastPathComponent
         result.exePath = exe.path
         result.executionLane = "bundled-\(engine.name)"
-        result.args = arguments + plan.extraArguments
+        result.args = fullArguments
         result.arch = plan.arch?.rawValue
         result.graphicsSummary = plan.summary
         result.graphicsRoute = [plan.api?.rawValue ?? "unknown", plan.arch?.rawValue ?? "unknown",
@@ -228,7 +229,7 @@ final class EngineLauncher: @unchecked Sendable {
             "privateEnvironmentKeys": ["HOME", "USER", "LOGNAME", "__CF_USER_TEXT_ENCODING"].filter { env[$0] != nil },
             "engineManifestSHA256": BottleSetup.engineStamp(engine),
             "selectedBinaries": binaries,
-            "exe": exe.path, "arguments": arguments + plan.extraArguments,
+            "exe": exe.path, "arguments": fullArguments,
             "prefix": prefix.path, "graphicsRoute": result.graphicsRoute ?? "unknown",
             "gameRedist": redist.installs.map(\.identity),
             "highResolution": plan.highResolution.map { $0 ? "on" : "off" } ?? "unchanged"
@@ -278,7 +279,6 @@ final class EngineLauncher: @unchecked Sendable {
         }
         let target = Self.windowsPath(for: exe, prefix: prefix)
         let directory = workdir ?? exe.deletingLastPathComponent()
-        let fullArguments = arguments + plan.extraArguments
         log.note("run: \(target) args=\(fullArguments) cwd=\(directory.path)")
         let outcome: EngineProcess.Outcome
         let executionStarted = ProcessInfo.processInfo.systemUptime
@@ -362,6 +362,20 @@ final class EngineLauncher: @unchecked Sendable {
     static func exitedTooSoon(elapsed: TimeInterval, minimum: TimeInterval?) -> Bool {
         guard let minimum else { return false }
         return elapsed < minimum
+    }
+
+    static func launchArguments(for exe: URL, _ arguments: [String]) -> [String] {
+        let flag: String
+        switch exe.lastPathComponent.lowercased() {
+        case "steam.exe":
+            // Steam forwards this setting to its CEF child as --no-sandbox.
+            flag = "-no-cef-sandbox"
+        case "steamwebhelper.exe":
+            flag = "--no-sandbox"
+        default:
+            return arguments
+        }
+        return arguments.contains(flag) ? arguments : arguments + [flag]
     }
 
     /// Путь для Wine. Внутри бутылки — `C:\…` (некоторые игры проверяют, что стоят

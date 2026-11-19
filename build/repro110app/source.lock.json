@@ -41,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 5938333,
+  "source_bytes": 5941371,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -50,7 +50,7 @@
     "Tests/Fixtures/test-pe.exe"
   ],
   "source_files": 412,
-  "source_inventory_sha256": "c53e3ac7a9ded6ab0499b6efceb767a960b08ccaa88a1e5ccd55cd53edff6170",
+  "source_inventory_sha256": "adebd657e4cb5240f002afa81a3f398daa3855d6977638a822ca8d1e3850a42c",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,
@@ -70,7 +70,8 @@
     "Base64 image source restored to exact pinned PNG/ICNS bytes",
     "Two Gothic routing integration tests require APP32_ENGINE_ROOT, consistently with the existing complete-engine test suites. Component-only CI reports them skipped; final whole-engine acceptance must enable them. Product sources and the frozen local candidate are unchanged by this test-scope correction.",
     "Retina switch preserves both explicit Boolean choices. Turning it off stores false; an absent choice remains the automatic display default for untouched games.",
-    "Retina no longer forces the experimental hidden-cursor relative mouse path. Wine keeps absolute coordinates for custom game cursors; MOUSE_1X remains an explicit game override."
+    "Retina no longer forces the experimental hidden-cursor relative mouse path. Wine keeps absolute coordinates for custom game cursors; MOUSE_1X remains an explicit game override.",
+    "Steam CEF launch arguments and crash settings for newly initialized or cloned Wine bottles. Template creation accepts a setup server that already drained."
   ],
   "release110_delta": {
     "base": "Published 1.0.9 recipe source snapshot; byte-exact preimages below",
@@ -282,8 +283,8 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/Services/Engine/BottleSetup.swift",
-        "bytes": 86508,
-        "sha256": "5e502df6cd3373af7418e38e9b8025cc3f1ea4edd8027a127f437dc29224f1e2",
+        "bytes": 89045,
+        "sha256": "b67a6b03dc70b5db3ab853e251d605e8970dec595b1bb42bc8ed7c06ddc52bc2",
         "executable": false,
         "base_sha256": "b191c23772b10070a696ecc66bcfaae2d16cdd7fb58fe062b47da8ea5ed2e3f6"
       },
@@ -317,8 +318,8 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/Services/Engine/EngineLauncher.swift",
-        "bytes": 45158,
-        "sha256": "5db597646bb4a444753cd8b32d636ca170373d0ee567239a7cbd44384af9e9ab",
+        "bytes": 45659,
+        "sha256": "c658594be04411e2dd4d17d9be4610bce5e6563cdabddc5acfdc9b8d51745246",
         "executable": false,
         "base_sha256": "d038068cf3371156828a9a440e271d920a2979339694e79e3e367a896d7137cf"
       },
