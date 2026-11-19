@@ -41,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 5949113,
+  "source_bytes": 5950902,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -50,7 +50,7 @@
     "Tests/Fixtures/test-pe.exe"
   ],
   "source_files": 412,
-  "source_inventory_sha256": "cf2f13fdbed64e05d8e008748d060212a5af47327edbe8acade8bb95abe3ee49",
+  "source_inventory_sha256": "282bde8afd6729f3e11e53a4082c13e652e463bbd920b888ff054de52e5441cd",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,
@@ -167,8 +167,8 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/Resources/graphics-profiles.json",
-        "bytes": 20228,
-        "sha256": "27db0ee4378c65c997f95536cdc8f95b59767aac8c36019c0cb4ce20d24b9829",
+        "bytes": 20737,
+        "sha256": "e7055650b0f309b2247702bdb98c751981d0850999ab3aa50ea4400db4c384f6",
         "executable": false,
         "base_sha256": "0c7cce563d1cc33e000e0aedee32d8b559dd891b592e1f39c8a6b3f9dd506488"
       },
@@ -622,8 +622,8 @@
       },
       {
         "path": "Tests/MacRunnerControlCenterTests/GothicRouteTests.swift",
-        "sha256": "ce9a25e2b8759c972728d76e33419245d57549d2251cbcdf3afc56d3db94ddd5",
-        "bytes": 8567,
+        "sha256": "5d68a6cd76efc3481070c74b866cf3bed36c2d3b5c324e74f448777b0f6d6f8b",
+        "bytes": 9370,
         "executable": false,
         "base_sha256": null
       },
@@ -734,8 +734,8 @@
       },
       {
         "path": "graphics-profile-routes.json",
-        "bytes": 4865,
-        "sha256": "44c54cc56b146f8dac0cede42b2d65ebd4ed0779ee7f11999872fcf4a7821284",
+        "bytes": 5342,
+        "sha256": "24c33da4af1ac6fc8f8881af62afb299feb3ee870238489a3cc0eba9031533b1",
         "executable": false,
         "base_sha256": "92777ce734799fccab126158a00965eba58278f98e045299f20db0fab77b0c3c"
       }

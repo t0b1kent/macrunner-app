@@ -273,6 +273,20 @@
       "evidence": "the GOG build ships CryRenderD3D9.dll and CryRenderD3D10.dll (artifacts/crysis-20260915/EXTRACTION.md)"
     },
     {
+      "id": "gothic-3",
+      "name": "Gothic 3",
+      "exe": [
+        "Gothic3.exe"
+      ],
+      "apis": [
+        "d3d9"
+      ],
+      "environment": {
+        "MACRUNNER_THREAD_AFFINITY_FAST": "1"
+      },
+      "evidence": "Gothic 3 (unpatched GOG build) reads and sets the thread affinity mask about 800 times per frame through a safe-timer routine; MACRUNNER_THREAD_AFFINITY_FAST answers those calls for the calling thread without a wineserver round trip. Enabled only for this game."
+    },
+    {
       "id": "heroes-iii",
       "name": "Heroes III",
       "exe": [

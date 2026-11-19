@@ -133,3 +133,20 @@ struct GothicProbeFallbackTests {
         }
     }
 }
+
+/// RELEASE114 (1.1.4): only Gothic 3 gets the thread-affinity fast path, through its bundled game profile.
+struct GothicAffinityProfileTests {
+    @Test func gothicProfileTurnsTheAffinityFastPathOn() throws {
+        let exe = URL(fileURLWithPath: "/games/Gothic 3/Gothic3.exe")
+        let profile = try #require(GraphicsProfile.match(exe: exe, in: GraphicsProfile.bundled))
+        #expect(profile.id == "gothic-3")
+        #expect(profile.apis == [.d3d9])
+        #expect(profile.environment == ["MACRUNNER_THREAD_AFFINITY_FAST": "1"])
+    }
+
+    @Test func otherProfilesDoNotCarryTheAffinityKey() {
+        for profile in GraphicsProfile.bundled where profile.id != "gothic-3" {
+            #expect(profile.environment?["MACRUNNER_THREAD_AFFINITY_FAST"] == nil, "\(profile.id)")
+        }
+    }
+}
