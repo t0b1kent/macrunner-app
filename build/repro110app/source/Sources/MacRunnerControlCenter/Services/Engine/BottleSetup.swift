@@ -1126,10 +1126,13 @@ struct BottleSetup {
         launchPhase("winebootBegin")
         // A fresh standalone command waits for the loader's automatic wineboot.
         // Explicit --init would reset that event and start services a second time.
-        // Keep explicit -u for an existing bottle whose engine generation changed.
+        // Update an existing bottle in restart mode. Wine still installs its INF
+        // and runs RunOnce, but skips logon Run entries and the Startup folder.
+        // Otherwise programs such as Steam start before the managed launch and
+        // keep the setup server alive.
         let bootstrapArguments = fresh
             ? ["C:\\windows\\system32\\cmd.exe", "/d", "/c", "exit", "0"]
-            : ["wineboot", "-u"]
+            : ["wineboot", "-u", "-r"]
         let boot = try EngineProcess.run(engine.wine, bootstrapArguments,
                                          environment: environment, log: log)
         launchPhase("winebootEnd")

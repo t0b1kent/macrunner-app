@@ -41,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 5948686,
+  "source_bytes": 5948891,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -50,7 +50,7 @@
     "Tests/Fixtures/test-pe.exe"
   ],
   "source_files": 412,
-  "source_inventory_sha256": "6ca4fb4bfeb4b657c881a76997703227896ba807ea27e095787c1714b67b74a3",
+  "source_inventory_sha256": "963c04aed00ee672806b2c2281c6e4df639b91d50cad4a4c52f25aef79bb555c",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,
@@ -293,8 +293,8 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/Services/Engine/BottleSetup.swift",
-        "bytes": 89407,
-        "sha256": "b12e115cabdd680660c945a9fcac7cbe1e6038c6cea11755ef96cad28822e037",
+        "bytes": 89612,
+        "sha256": "e4cd73e0eb310a332f731f979013f4cf1293210254214ea9bd3d712ae709a7db",
         "executable": false,
         "base_sha256": "b191c23772b10070a696ecc66bcfaae2d16cdd7fb58fe062b47da8ea5ed2e3f6"
       },
