@@ -301,9 +301,10 @@ final class EngineLauncher: @unchecked Sendable {
         } catch {
             return finish("FAIL", error: error.localizedDescription, log: log)
         }
+        log.note("run: launcher exited pid=\(outcome.pid) uptime_ns=\(clock_gettime_nsec_np(CLOCK_UPTIME_RAW))")
         // Лаунчеры и установщики уходят раньше настоящей программы — ждём всю бутылку.
         if warmSession == nil { EngineProcess.waitForServer(engine: engine, environment: env, log: log) }
-        log.note("run: exit=\(outcome.status) signaled=\(outcome.signaled)")
+        log.note("run: exit=\(outcome.status) signaled=\(outcome.signaled) uptime_ns=\(clock_gettime_nsec_np(CLOCK_UPTIME_RAW))")
         let processLifetime = ProcessInfo.processInfo.systemUptime - executionStarted
         result.processLifetimeMs = Int(processLifetime * 1000)
         // Short exits often occur between two polls. Drain the final bytes

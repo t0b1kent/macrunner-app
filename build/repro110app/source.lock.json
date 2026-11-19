@@ -41,7 +41,7 @@
     "transformation": "Select complete checkout via MACRUNNER_ROOT; input already portable"
   },
   "schema": 1,
-  "source_bytes": 5948891,
+  "source_bytes": 5949057,
   "source_exclusions": [
     "Frameworks/**",
     "Vendor/**",
@@ -50,7 +50,7 @@
     "Tests/Fixtures/test-pe.exe"
   ],
   "source_files": 412,
-  "source_inventory_sha256": "963c04aed00ee672806b2c2281c6e4df639b91d50cad4a4c52f25aef79bb555c",
+  "source_inventory_sha256": "c132ea071d9846d813074183afb3909401b4e7088f58427cc51d2fdd54834ba7",
   "source_origin": {
     "source_bytes": 3789786,
     "source_files": 375,
@@ -328,8 +328,8 @@
       },
       {
         "path": "Sources/MacRunnerControlCenter/Services/Engine/EngineLauncher.swift",
-        "bytes": 48799,
-        "sha256": "da05d23f8c3aa940c6491eb839d2ddee25fcc17df606cb3f25285b5e6a18c8ea",
+        "bytes": 48965,
+        "sha256": "c7e561f0c393981781fbc4b29a1cce4d572d2af81724da4ef10e97eefa4910eb",
         "executable": false,
         "base_sha256": "d038068cf3371156828a9a440e271d920a2979339694e79e3e367a896d7137cf"
       },
