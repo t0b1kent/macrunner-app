@@ -1,6 +1,12 @@
 # Release status
 
-## Current · MacRunner 1.1.3 · build 122
+## Current · MacRunner 1.1.4 · build 123
+
+[MacRunner](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.4) · [Release notes](docs/RELEASE-1.1.4-EN.md).
+
+MacRunner 1.1.4 speeds up 32-bit games: Gothic 3 (unpatched GOG version) went from about 32 to about 100 fps in one test scene on a MacBook Pro with an M1 Pro. It removes the false error message after a normal Gothic 3 quit, stops the Wine window flash when switching between games with different graphics layers, limits automatic Retina scaling to games, and fixes Steam bottle preparation and networking. Elden Ring and Crysis were not run live on this build.
+
+## Historical · MacRunner 1.1.3 · build 122
 
 [MacRunner](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.3) · [DX9 1.1.3](https://github.com/t0b1kent/dxmt/releases/tag/v1.1.3) · [Release notes](docs/RELEASE-1.1.3-EN.md).
 

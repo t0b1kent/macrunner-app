@@ -1,14 +1,20 @@
 # Tested games & engines
 
-**Last updated: November 18, 2026**
+**Last updated: November 20, 2026**
 
 This page records what has actually been observed while developing MacRunner. A title in the library or launch-profile catalog is not automatically a tested game. Results apply to the configurations used for those sessions.
 
-## Current release · 1.1.3 · maintainer checks
+## Current release · 1.1.4 · measured
+
+MacRunner 1.1.4 speeds up 32-bit games: Gothic 3 (unpatched GOG version) went from about 32 to about 100 fps in one test scene on a MacBook Pro with an M1 Pro. It removes the false error message after a normal Gothic 3 quit, stops the Wine window flash when switching between games with different graphics layers, limits automatic Retina scaling to games, and fixes Steam bottle preparation and networking. Elden Ring and Crysis were not run live on this build.
+
+[Current release notes and known issues](docs/RELEASE-1.1.4-EN.md).
+
+## Historical · 1.1.3 · maintainer checks
 
 MacRunner 1.1.3 fixes Retina fullscreen for 32-bit Direct3D 9 and the light edges seen in Direct3D 12 fullscreen. It also recovers Direct3D 9 pipeline archives and installs supported DirectX 9 files from the game's installer. The maintainer verified Gothic 3 fullscreen and first launch, and Elden Ring fullscreen without light edges, on the build 122 candidate.
 
-[Current release notes and known issues](docs/RELEASE-1.1.3-EN.md).
+[Release notes](docs/RELEASE-1.1.3-EN.md).
 
 ## Historical 1.1.1 owner checks on November 16
 

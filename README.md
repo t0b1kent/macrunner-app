@@ -24,9 +24,9 @@ MacRunner is built around a simple idea: **choose an app or game, add it to your
 
 **HyperBridge is MacRunner's CPU engine:** an **x86-64 / x86 → ARM64 engine for Windows software on Apple Silicon**, built on [FEX-Emu](https://github.com/FEX-Emu/FEX) with MacRunner's own patch series. Its source is public under MIT at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). Wine provides Windows API compatibility, and Metal handles graphics through the relevant translation components. [Explore the engine, its current scope and roadmap →](HYPERBRIDGE.md)
 
-**Current release: [MacRunner 1.1.3](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.3), build 122, November 18, 2026.** Apple Silicon, macOS 26.5 or later. Signed with Developer ID and notarized by Apple. [Release notes and known issues](docs/RELEASE-1.1.3-EN.md).
+**Current release: [MacRunner 1.1.4](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.4), build 123, November 20, 2026.** Apple Silicon, macOS 26.5 or later. Signed with Developer ID and notarized by Apple. [Release notes and known issues](docs/RELEASE-1.1.4-EN.md).
 
-MacRunner 1.1.3 fixes Retina fullscreen for 32-bit Direct3D 9 and the light edges seen in Direct3D 12 fullscreen. It also recovers Direct3D 9 pipeline archives and installs supported DirectX 9 files from the game's installer. The maintainer verified Gothic 3 fullscreen and first launch, and Elden Ring fullscreen without light edges, on the build 122 candidate.
+MacRunner 1.1.4 speeds up 32-bit games: Gothic 3 (unpatched GOG version) went from about 32 to about 100 fps in one test scene on a MacBook Pro with an M1 Pro. It removes the false error message after a normal Gothic 3 quit, stops the Wine window flash when switching between games with different graphics layers, limits automatic Retina scaling to games, and fixes Steam bottle preparation and networking. Elden Ring and Crysis were not run live on this build.
 
 ### 1.1.0: recorded performance
 
