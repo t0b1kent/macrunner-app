@@ -339,6 +339,11 @@ struct HomeView: View {
                     var entry = vm.apps.first { $0.id == app.id } ?? app
                     entry.calculationAccuracy = choice.stored
                     vm.update(entry)
+                },
+                onSetDirectDraw: { enabled in
+                    var entry = vm.apps.first { $0.id == app.id } ?? app
+                    entry.cncDirectDraw = enabled
+                    vm.update(entry)
                 }
             )
         } else {
@@ -824,6 +829,7 @@ struct HomeView: View {
                 let current = libraryVM.apps.first { $0.id == app.id } ?? app
                 updated.calculationAccuracy = current.calculationAccuracy
                 updated.highResolution = current.highResolution
+                updated.cncDirectDraw = current.cncDirectDraw
                 var offer = EarlyFailureOffer(streak: current.earlyFailureStreak ?? 0, offered: current.accuracyOfferShown ?? false)
                 let ask = offer.record(result: result,
                                        choice: CalculationAccuracy.applicable(stored: app.calculationAccuracy,

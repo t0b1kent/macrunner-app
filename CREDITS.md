@@ -19,6 +19,7 @@ These acknowledgements do not imply affiliation or endorsement.
 | [FEX-Emu](https://github.com/FEX-Emu/FEX) | The x86 → ARM64 emulator HyperBridge is built on (MIT) |
 | [Wine](https://www.winehq.org/) | Windows API compatibility |
 | [DXMT](https://github.com/3Shain/dxmt) | Direct3D 10/11 translation to Metal |
+| [cnc-ddraw](https://github.com/FunkyFr3sh/cnc-ddraw) | Compatibility layer for legacy 32-bit DirectDraw games ([MIT license](licenses/cnc-ddraw-MIT.txt)) |
 | [Sparkle](https://sparkle-project.org/) | The macOS update framework used by the application |
 | [PLCrashReporter](https://github.com/microsoft/plcrashreporter) | Crash-reporting support |
 | Swift, SwiftUI, and Apple's macOS/Metal technologies | The native interface and platform foundations |

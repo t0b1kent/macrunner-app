@@ -7,8 +7,8 @@ import Foundation
 ///   * Лимита времени НЕТ. Сценарий гасил прогон через 45 с — для замеров это верно,
 ///     для игрока это «игра закрылась сама». Игра идёт, пока человек играет; остановить
 ///     её можно кнопкой, и это `wineserver -k` ТОЛЬКО своей бутылки.
-///   * Итог ждёт ВСЕ процессы бутылки (`wineserver -w`), а не первый: лаунчеры и
-///     установщики запускают настоящую программу и выходят сами.
+///   * Лаунчеры и установщики могут выйти раньше дочерней программы. Сессия
+///     ждёт её завершения и даёт фоновым службам время на запись перед остановкой.
 ///   * Причина отказа — только текст движка (`wine: Unhandled …` и т. п.) из журнала.
 ///     Код выхода Wine усечён до байта: 0xc0000005 превращается в 5, и по нему одному
 ///     падение от обычной ошибки не отличить.
@@ -78,6 +78,8 @@ final class EngineLauncher: @unchecked Sendable {
             return LauncherResult(status: "FAIL", error: L("Finish or cancel the update before starting a program."))
         }
         defer { updateGate.endActivity(activity) }
+        let launchKey = WineBackgroundProcesses.beginLaunch(prefix)
+        defer { WineBackgroundProcesses.endLaunch(launchKey) }
         let started = Date()
         let fullArguments = Self.launchArguments(for: exe, arguments + plan.extraArguments)
         let isolatedAppEntry = CommandLine.arguments.dropFirst().first == "--run-app-entry"
@@ -184,6 +186,15 @@ final class EngineLauncher: @unchecked Sendable {
             log.note("redist: program WINEDLLOVERRIDES=\(merged)")
             lock.lock(); environment = env; lock.unlock()
         }
+        // Retire an old service-only namespace before bottle preparation. A
+        // warm server managed by this instance is handled by its own lifecycle.
+        let namespaces = env["TMPDIR"] == preparationEnvironment["TMPDIR"]
+            ? [preparationEnvironment] : [preparationEnvironment, env]
+        for namespace in namespaces where !WarmBottleSessions.manages(prefix: prefix, environment: namespace) {
+            WineBackgroundProcesses.cleanIdle(key: launchKey, engine: engine, environment: namespace,
+                log: log, requireLauncherHelper: false, cancelled: { self.isStopRequested })
+        }
+
         // Before Wine/bottle preparation: a warm server or an external process
         // prevents cache mutation. Never rebuild with an unverified compiler.
         let cache = GothicShaderCache.prepare(executable: exe, prefix: prefix, layer: plan.layer?.id,
@@ -291,6 +302,38 @@ final class EngineLauncher: @unchecked Sendable {
         BottleSetup.beginRun(prefix: prefix)
         defer { BottleSetup.endRun(prefix: prefix) }
         do {
+            if let enabled = plan.cncDirectDraw {
+                let deployment = try DirectDrawCompatibility.deploy(
+                    exe: exe, payload: DirectDrawCompatibility.payload(in: engine.root), enabled: enabled)
+                log.note("cnc-ddraw: \(deployment) for \(exe.lastPathComponent)")
+                var usesBundledWrapper = false
+                if deployment == .enabled || deployment == .disabled {
+                    let helper = Self.windowsPath(for: engine.programJobLauncher, prefix: prefix)
+                    let registry = try EngineProcess.run(engine.wine,
+                        [helper, "--configure-directdraw", exe.lastPathComponent, deployment == .enabled ? "on" : "off"],
+                        environment: env, log: log)
+                    log.note("cnc-ddraw: AppDefaults command exit=\(registry.status)")
+                    if registry.signaled || (registry.status != 0 && registry.status != 2) {
+                        return finish("FAIL", error: L("Could not configure cnc-ddraw for this game."), log: log)
+                    }
+                    usesBundledWrapper = deployment == .enabled && registry.status == 0
+                }
+                // Launchers such as MM7.exe hand off to a different EXE.
+                // Pass the load order to the whole process tree.
+                if usesBundledWrapper {
+                    env["WINEDLLOVERRIDES"] = DirectDrawCompatibility.withNativeDirectDrawOverride(env["WINEDLLOVERRIDES"])
+                    log.note("cnc-ddraw: program WINEDLLOVERRIDES=\(env["WINEDLLOVERRIDES"] ?? "(unset)")")
+                    result.graphicsSummary = [result.graphicsSummary ?? plan.summary, "cnc-ddraw"].joined(separator: " · ")
+                } else if enabled {
+                    let manualOverrides = extraEnvironment["WINEDLLOVERRIDES"]
+                    if manualOverrides == DirectDrawCompatibility.withoutDirectDrawOverride(manualOverrides) {
+                        // Existing wrappers retain their AppDefaults.
+                        env["WINEDLLOVERRIDES"] = DirectDrawCompatibility.withoutDirectDrawOverride(env["WINEDLLOVERRIDES"])
+                        log.note("cnc-ddraw: program WINEDLLOVERRIDES=\(env["WINEDLLOVERRIDES"] ?? "(unset)")")
+                    }
+                }
+                if isStopRequested { return finish("STOPPED", log: log) }
+            }
             onProgress(.starting)
             log.beginProgram()
             let command = warmSession == nil ? [target] + fullArguments
@@ -302,8 +345,13 @@ final class EngineLauncher: @unchecked Sendable {
             return finish("FAIL", error: error.localizedDescription, log: log)
         }
         log.note("run: launcher exited pid=\(outcome.pid) uptime_ns=\(clock_gettime_nsec_np(CLOCK_UPTIME_RAW))")
-        // Лаунчеры и установщики уходят раньше настоящей программы — ждём всю бутылку.
-        if warmSession == nil { EngineProcess.waitForServer(engine: engine, environment: env, log: log) }
+        if warmSession == nil {
+            WineBackgroundProcesses.waitForColdRun(key: launchKey, engine: engine, environment: env,
+                log: log, cancelled: { self.isStopRequested })
+        } else {
+            WineBackgroundProcesses.cleanIdle(key: launchKey, engine: engine, environment: env,
+                log: log, requireLauncherHelper: true, cancelled: { self.isStopRequested })
+        }
         log.note("run: exit=\(outcome.status) signaled=\(outcome.signaled) uptime_ns=\(clock_gettime_nsec_np(CLOCK_UPTIME_RAW))")
         let processLifetime = ProcessInfo.processInfo.systemUptime - executionStarted
         result.processLifetimeMs = Int(processLifetime * 1000)

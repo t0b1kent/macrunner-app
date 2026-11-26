@@ -440,3 +440,5 @@
 "Fast" = "빠름";
 "Exact" = "정확";
 "Exact (game profile)" = "정확(게임 프로필)";
+"DirectDraw compatibility (cnc-ddraw)" = "DirectDraw 호환성(cnc-ddraw)";
+"Could not configure cnc-ddraw for this game." = "이 게임에 cnc-ddraw를 설정할 수 없습니다.";

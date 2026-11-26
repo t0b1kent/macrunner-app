@@ -28,6 +28,7 @@ struct GraphicsPlan: Sendable, Equatable {
     /// RetinaMode бутылки для этого запуска (переключатель игры): true — включить,
     /// false — снять, nil — не трогать. Ставит RunAppViewModel из записи игры, не профиль.
     var highResolution: Bool? = nil
+    var cncDirectDraw: Bool? = nil
     var cdromDataFilename: String? = nil
     var overridden = false
     /// Для человека: предупреждения (другие API игры недоступны, маршрут не проверен).

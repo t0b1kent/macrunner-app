@@ -440,3 +440,5 @@
 "Fast" = "Hızlı";
 "Exact" = "Tam";
 "Exact (game profile)" = "Tam (oyun profili)";
+"DirectDraw compatibility (cnc-ddraw)" = "DirectDraw uyumluluğu (cnc-ddraw)";
+"Could not configure cnc-ddraw for this game." = "Bu oyun için cnc-ddraw yapılandırılamadı.";

@@ -32,6 +32,7 @@ struct AppEntry: Codable, Sendable, Identifiable, Hashable {
     /// Настройка Wine общая на бутылку (winemac читает её без AppDefaults), поэтому пишется
     /// при каждом запуске, до Wine, — см. `BottleSetup.applyRetina`.
     var highResolution: Bool? = nil
+    var cncDirectDraw: Bool? = nil
     /// "Calculation accuracy": nil — Automatic (the game's profile and the engine defaults decide),
     /// otherwise `CalculationAccuracy.rawValue` ("fast" / "exact") chosen by the player for this game.
     var calculationAccuracy: String? = nil

@@ -25,6 +25,7 @@ struct GraphicsDetection: Sendable, Equatable {
     }
 
     var arch: GuestArch?
+    var recommendsDirectDrawCompatibility = false
     var evidence: [Evidence] = []
     /// Только DXGI без d3d1x — версия Direct3D не определена.
     var dxgiOnly = false
@@ -80,7 +81,11 @@ enum GraphicsProbe {
                 if index == 0 { detection.notes.append("not a readable PE file") }
                 continue
             }
-            if index == 0 { detection.arch = GuestArch(machine: pe.machine) }
+            if index == 0 {
+                detection.arch = GuestArch(machine: pe.machine)
+                detection.recommendsDirectDrawCompatibility =
+                    DirectDrawCompatibility.recommends(executableName: exe.lastPathComponent, imports: pe)
+            }
             let label = file.lastPathComponent
             for dll in pe.imports {
                 if dll == "dxgi.dll" { sawDXGI = true }

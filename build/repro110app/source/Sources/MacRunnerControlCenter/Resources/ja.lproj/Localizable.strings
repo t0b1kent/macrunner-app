@@ -440,3 +440,5 @@
 "Fast" = "高速";
 "Exact" = "正確";
 "Exact (game profile)" = "正確(ゲームのプロファイル)";
+"DirectDraw compatibility (cnc-ddraw)" = "DirectDraw 互換モード（cnc-ddraw）";
+"Could not configure cnc-ddraw for this game." = "このゲームの cnc-ddraw を設定できませんでした。";

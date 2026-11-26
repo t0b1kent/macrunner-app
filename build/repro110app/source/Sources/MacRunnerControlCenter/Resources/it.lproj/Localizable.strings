@@ -440,3 +440,5 @@
 "Fast" = "Veloce";
 "Exact" = "Esatto";
 "Exact (game profile)" = "Esatto (profilo del gioco)";
+"DirectDraw compatibility (cnc-ddraw)" = "Compatibilità con DirectDraw (cnc-ddraw)";
+"Could not configure cnc-ddraw for this game." = "Impossibile configurare cnc-ddraw per questo gioco.";

@@ -39,8 +39,27 @@ enum WineServerProbe {
         guard fcntl(fd, F_SETFL, O_NONBLOCK) == 0 else { return nil }
         var address = sockaddr_un()
         address.sun_family = sa_family_t(AF_UNIX)
-        let bytes = Array(path.utf8)
-        guard bytes.count < MemoryLayout.size(ofValue: address.sun_path) else { return nil }
+        let capacity = MemoryLayout.size(ofValue: address.sun_path)
+        var connectionPath = path
+        var aliasDirectory: URL?
+        defer {
+            if let aliasDirectory { try? FileManager.default.removeItem(at: aliasDirectory) }
+        }
+        if path.utf8.count >= capacity {
+            // Wine binds "socket" from inside the server directory. Its
+            // absolute path can exceed sockaddr_un even though the socket works.
+            let directory = URL(fileURLWithPath: "/tmp/.macrunner-wine-" + UUID().uuidString)
+            let alias = directory.appendingPathComponent("socket")
+            do {
+                try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false,
+                                                        attributes: [.posixPermissions: 0o700])
+                aliasDirectory = directory
+                try FileManager.default.createSymbolicLink(at: alias, withDestinationURL: URL(fileURLWithPath: path))
+                connectionPath = alias.path
+            } catch { return nil }
+        }
+        let bytes = Array(connectionPath.utf8)
+        guard bytes.count < capacity else { return nil }
         withUnsafeMutableBytes(of: &address.sun_path) { raw in
             raw.copyBytes(from: bytes)
             raw[bytes.count] = 0

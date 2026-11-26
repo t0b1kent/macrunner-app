@@ -247,6 +247,12 @@ enum WarmBottleSessions {
         catch { state.endProgram(); throw error }
         return state
     }
+    static func manages(prefix: URL, environment: [String: String]) -> Bool {
+        let key = namespace(prefix: prefix, environment: environment)
+        lock.lock(); defer { lock.unlock() }
+        return entries[key] != nil
+    }
+
     static func discard(prefix: URL, environment: [String: String]) {
         let key = namespace(prefix: prefix, environment: environment)
         lock.lock(); let entry = entries[key]; lock.unlock()

@@ -22,9 +22,11 @@ struct GamePageView: View {
     var onSetHighResolution: ((Bool) -> Void)? = nil
     /// "Calculation accuracy" under Advanced; nil — do not show.
     var onSetCalculationAccuracy: ((CalculationAccuracy) -> Void)? = nil
+    var onSetDirectDraw: ((Bool) -> Void)? = nil
 
     @State private var showDetails = false
     @State private var showAdvanced = false
+    @State private var directDrawDetection: GraphicsDetection?
 
     var body: some View {
         ScrollView {
@@ -171,6 +173,7 @@ struct GamePageView: View {
                 if let ms = app.lastDurationMs { fact(L("LAST RUN"), GameTechnicalDetails.durationText(ms)) }
             }
             highResolutionToggle
+            directDrawToggle
             advancedSettings
             Button { showDetails.toggle() } label: {
                 HStack(spacing: 6) {
@@ -188,6 +191,19 @@ struct GamePageView: View {
         .padding(.horizontal, 22)
         .frame(maxWidth: .infinity, alignment: .leading)
         .glass(cornerRadius: 18)
+        .task(id: app.exePath) {
+            directDrawDetection = nil
+            let path = app.exePath
+            guard let engine = BundledEngine.current, DirectDrawCompatibility.isAvailable(in: engine.root),
+                  !path.isEmpty else { return }
+            let detection = await Task.detached(priority: .utility) {
+                let executable = URL(fileURLWithPath: path)
+                guard let pe = try? PEImportReader.read(executable),
+                      GuestArch(machine: pe.machine) == .x86 else { return nil as GraphicsDetection? }
+                return GraphicsProbe.detect(exe: executable)
+            }.value
+            if !Task.isCancelled { directDrawDetection = detection }
+        }
     }
 
     /// ★ Как «High Resolution Mode» у CrossOver: игра получает экран в пикселях Retina, а не
@@ -205,6 +221,22 @@ struct GamePageView: View {
                         .foregroundColor(Theme.Palette.textSecondary(scheme))
                         .fixedSize(horizontal: false, vertical: true)
                 }
+            }
+            .toggleStyle(.switch)
+            .disabled(isRunning)
+        }
+    }
+
+    @ViewBuilder
+    private var directDrawToggle: some View {
+        if let onSetDirectDraw, let detection = directDrawDetection,
+           DirectDrawCompatibility.supports(detection),
+           app.graphicsAPI.flatMap(GraphicsAPI.init(rawValue:)).map({ $0 == .ddraw }) ?? true {
+            Toggle(isOn: Binding(get: { app.cncDirectDraw ?? detection.recommendsDirectDrawCompatibility },
+                                 set: onSetDirectDraw)) {
+                Text(L("DirectDraw compatibility (cnc-ddraw)"))
+                    .font(.system(size: 14.5, weight: .medium))
+                    .foregroundColor(Theme.Palette.textPrimary(scheme))
             }
             .toggleStyle(.switch)
             .disabled(isRunning)

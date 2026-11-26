@@ -440,3 +440,5 @@
 "Fast" = "快速";
 "Exact" = "精确";
 "Exact (game profile)" = "精确(游戏配置)";
+"DirectDraw compatibility (cnc-ddraw)" = "DirectDraw 兼容性（cnc-ddraw）";
+"Could not configure cnc-ddraw for this game." = "无法为此游戏配置 cnc-ddraw。";

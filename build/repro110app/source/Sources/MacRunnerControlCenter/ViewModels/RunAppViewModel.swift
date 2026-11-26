@@ -184,7 +184,18 @@ final class RunAppViewModel: ObservableObject {
             // Графику подбираем по файлам игры до запуска: разбор читает только заголовки
             // и до 96 МБ строк, но на больших играх это заметно — не на главном потоке.
             let detection = GraphicsProbe.detect(exe: exe)
-            var plan = GraphicsSelector.plan(detection: detection, engine: engine, override: override)
+            let useDirectDraw = DirectDrawCompatibility.supports(detection)
+                && (override == nil || override == .ddraw)
+                && (app.cncDirectDraw ?? detection.recommendsDirectDrawCompatibility)
+                && DirectDrawCompatibility.isAvailable(in: engine.root)
+            var plan = GraphicsSelector.plan(detection: detection, engine: engine,
+                                             override: useDirectDraw ? .ddraw : override)
+            if useDirectDraw {
+                plan.overridden = app.cncDirectDraw == true || override == .ddraw
+                plan.cncDirectDraw = true
+            } else if DirectDrawCompatibility.hasManagedOverride(for: exe) {
+                plan.cncDirectDraw = false
+            }
             // Automatic Retina is meant for games. A program with no graphics-API
             // import (a Steam sign-in window, an installer) would be drawn at half
             // size, because Wine counts Retina pixels at 96 DPI. A saved choice or
