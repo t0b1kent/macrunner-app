@@ -32,7 +32,18 @@ MacRunner 1.1.5 adds automatic [cnc-ddraw](https://github.com/FunkyFr3sh/cnc-ddr
 
 Previous release, [1.1.4](docs/RELEASE-1.1.4-EN.md): MacRunner 1.1.4 speeds up 32-bit games: Gothic 3 (unpatched GOG version) went from about 32 to about 100 fps in one test scene on a MacBook Pro with an M1 Pro. It removes the false error message after a normal Gothic 3 quit, stops the Wine window flash when switching between games with different graphics layers, limits automatic Retina scaling to games, and fixes Steam bottle preparation and networking. Elden Ring and Crysis were not run live on this build.
 
-### 1.1.0: recorded performance
+### 1.1.5: recorded performance
+
+Owner runs, November 26, MacBook Pro M1 Pro, macOS 27.0; Metal HUD log:
+
+| Game | Result | Conditions |
+|---|---|---|
+| Gothic 3 (GOG), busy town scene with combat | **66.5 FPS** mean; 51.2 with early GPU-query submission turned off | Same build and save, about 5 minutes per run; GPU median 11.3 ms per frame. The scene changes during combat, so expect some variation. |
+| Elden Ring | **about 40 FPS** with an external display connected; the game's **60 FPS** cap on the built-in display alone | GPU-limited: 24.5 ms of GPU time per frame at 40 FPS, the same on 1.1.4 and on the 1.1.5 engine. |
+| Hollow Knight | Acceptance run of 43 s, no crashes in the log | Build-124 candidate with the same engine as 125; FPS not measured on 1.1.5. |
+| Might and Magic VII | Plays with automatic cnc-ddraw | FPS not measured. |
+
+### 1.1.0: recorded performance (earlier build)
 
 Owner recordings, November 4, M1 Pro, macOS 27.0; gameplay HUD sampled every 0.5 s:
 
@@ -48,7 +59,7 @@ These are individual c32r recordings with different routes and pause durations; 
 On the first game launch after installation, MacRunner prepares the bottle for several minutes. The game compiles shaders during its first few minutes, which can cause stuttering. On the second launch, preparation is complete and cached shaders allow smoother play; new scenes may still compile shaders. For the best frame rates, close demanding background apps and disconnect your second monitor; both remained active in the owner's recordings.
 
 
-Retina is a per-game toggle. Automatic Retina, fullscreen EmulateModeset, shader-cache migration between engine versions and faster bottle updates are planned for 1.1.1 and are not included in 1.1.0. Updating the engine may repeat preparation and shader compilation. HEADER_BY_PC, RET_NOPOLL, CMP_ZC, RIP_LITERAL and QPC_INLINE are disabled by default; the benchmark result “on par with Rosetta” uses experimental configuration M.
+Retina is a per-game toggle. Since 1.1.1, MacRunner selects Retina automatically (for games only since 1.1.4), supports fullscreen display modes and migrates the shader cache between engine versions. Updating the engine may still repeat bottle preparation and some shader compilation.
 
 
 ### DirectX 12 without Rosetta
@@ -62,11 +73,14 @@ A separate [1.0.6-indiana experimental preview](https://github.com/t0b1kent/macr
 
 **Test Mac:** MacBook Pro · **Apple M1 Pro** (8-core CPU / 14-core GPU) · **32 GB unified memory** · **macOS 27.0**. [Full machine details below.](#development-mac)
 
-**On the final 1.0.8 build (October 5), Hollow Knight, ABZU, Divinity: Original Sin — Enhanced Edition, Stardew Valley and Heroes of Might and Magic III reached their main menus in unattended checks.** Hollow Knight's gameplay and FPS results below remain the September 29 checks on 1.0.3; gameplay was not re-verified for 1.0.8. 1.0.9 (October 7) changes only the CPU translator and was accepted on test stands; games were not replayed on it. The other rows are earlier runtime results that establish MacRunner's development baseline. The game engine is the technology the game itself was built with; the graphics column shows the path used during each check. [Exact test configurations →](TESTED_GAMES.md)
+**On 1.1.5 (November 26), the owner checked Gothic 3, Might and Magic VII and Hollow Knight; Elden Ring was measured on the same 64-bit engine.** Heroes of Might and Magic III Remake starts only in a development build so far. The remaining rows come from earlier builds, 1.0.3–1.0.8. **On the final 1.0.8 build (October 5), Hollow Knight, ABZU, Divinity: Original Sin — Enhanced Edition, Stardew Valley and Heroes of Might and Magic III reached their main menus in unattended checks.** Hollow Knight's gameplay and FPS results below remain the September 29 checks on 1.0.3; gameplay was not re-verified for 1.0.8. 1.0.9 (October 7) changes only the CPU translator and was accepted on test stands; games were not replayed on it. The other rows are earlier runtime results that establish MacRunner's development baseline. The game engine is the technology the game itself was built with; the graphics column shows the path used during each check. [Exact test configurations →](TESTED_GAMES.md)
 
 | Game | Game engine | Graphics path | Recorded result | FPS |
 | --- | --- | --- | --- | --- |
-| **Hollow Knight** | Unity | DXMT → Metal | **Working on 1.0.3 (HyperBridge)** | **107–117** at a 120 Hz limit |
+| **Gothic 3** | Genome (Piranha Bytes) | Direct3D 9 → HyperBridge DX9 → Metal | **Working on 1.1.5** | **66.5** mean in a busy town with combat (51.2 without early GPU-query submission) |
+| **Might and Magic VII** | In-house, 16-bit DirectDraw | DirectDraw → cnc-ddraw → OpenGL → Metal (Apple driver) | **Working on 1.1.5** | Not measured |
+| **Heroes of Might and Magic III Remake** | Not recorded | DXMT-based DirectX 12 → Metal | **Starts in a development build**; graphics flicker, not in 1.1.5 | Not measured |
+| **Hollow Knight** | Unity | DXMT → Metal | **Working**; 1.1.5 acceptance run (43 s) | **118.66** mean at 3024×1964 (1.1.0, November 4); **107–117** at a 120 Hz limit (1.0.3) |
 | **Divinity: Original Sin — Enhanced Edition** | Divinity Engine | DXMT → Metal | **Working** | **100** |
 | **Factorio** | Custom engine (Wube) | DXMT → Metal | **Working** | Not measured |
 | **Vampire Survivors** | Unity (IL2CPP) | DXMT → Metal | **Working** | Not measured |
@@ -75,14 +89,14 @@ A separate [1.0.6-indiana experimental preview](https://github.com/t0b1kent/macr
 | **Ion Fury** | Build / EDuke32 | Software rendering | **Working** | Not measured |
 | **Dome Keeper** | Godot | OpenGL → Metal (Apple driver) | **Working** | Not measured |
 | **WRATH: Aeon of Ruin** | DarkPlaces (Quake-derived) | OpenGL → Metal (Apple driver) | **Working** | Not measured |
-| **Elden Ring** | FromSoftware in-house engine | DXMT-based DirectX 12 → Metal | **Working** | Not measured |
+| **Elden Ring** | FromSoftware in-house engine | DXMT-based DirectX 12 → Metal | **Working** on the 1.1.5 engine | **about 40** with an external display, **60** (game cap) on the built-in display; **44.81** mean at 1920×1200 High (1.1.0) |
 | **Indiana Jones and the Great Circle** | MachineGames Motor (id Tech-based) | Vulkan → MoltenVK → Metal | **Experimental preview ([1.0.6-indiana](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.6-indiana)): played in a level** | **about 10–12** at minimum settings |
 
 **OpenGL → Metal** means the game uses OpenGL through Wine and Apple's Metal-backed OpenGL driver on the test Mac. This is a separate path from DXMT and D3DMetal. [How to read the graphics paths →](TESTED_GAMES.md#reading-the-graphics-paths)
 
 **Working** means gameplay works in the tested configuration. **Indiana Jones and the Great Circle** is listed from the separate experimental 1.0.6-indiana preview (October 1, M1 Pro): launched from MacRunner and played in a level at about 10–12 FPS on minimum settings; ray tracing does not work, split frames and sky artifacts remain, and firing a weapon hung the GPU — [details and limits](TESTED_GAMES.md#indiana-jones--106-indiana-experimental-preview). Hollow Knight was checked on MacRunner 1.0.3 with HyperBridge engine 0015 on September 29; the other rows record checks of specific development configurations. **[Test dates, verified functions and remaining issues →](TESTED_GAMES.md)**
 
-**Hollow Knight's FPS was measured** on September 29, 2026 (1280×720, V-Sync on, King's Pass, Metal HUD log; [details](TESTED_GAMES.md#macrunner-103--hyperbridge-engine-0015)). **The other FPS values are maintainer-reported gameplay observations on the test Mac**, reported on September 24, 2026; resolution, graphics settings, scene and sample duration have not yet been recorded for them. “Not measured” means a result is still pending, not zero FPS.
+**The 1.1.5 FPS values for Gothic 3 and Elden Ring** come from the owner's November 26 runs with the Metal HUD log ([conditions above](#115-recorded-performance)). Hollow Knight's 1.0.3 FPS was measured on September 29, 2026 (1280×720, V-Sync on, King's Pass, Metal HUD log; [details](TESTED_GAMES.md#macrunner-103--hyperbridge-engine-0015)). **The remaining earlier FPS values are maintainer-reported gameplay observations on the test Mac**, reported on September 24, 2026; resolution, graphics settings, scene and sample duration have not yet been recorded for them. “Not measured” means a result is still pending, not zero FPS.
 
 **Other dated observations, not gameplay-verified:** on 1.0.8 (October 5), ABZU, Stardew Valley and the 32-bit Heroes of Might and Magic III reach their main menus, and Heroes III's music plays. [What was and was not checked →](TESTED_GAMES.md#macrunner-108--october-5-checks)
 
@@ -125,7 +139,7 @@ These credits recognise people, development tools and upstream projects. GitHub'
 | Milestone | What it means |
 | --- | --- |
 | **HyperBridge engine in 1.0.9** | FEX-Emu `fd141ed6d` with MacRunner's patch series: 87 patches for the 64-bit translator, public in the [HyperBridge repository](https://github.com/t0b1kent/hyperbridge) and shipped in the release's source archive. This build was compiled on our own Mac; rebuilding it from the public repositories on a clean cloud machine is in progress (for 1.0.8 both translator modules had been rebuilt there and matched byte for byte). The loop comparison on the HyperBridge page is measured on this package. |
-| **Native Mac app** | Development preview 1.1.0, build 119; local release exception, with the GitHub source-build work continuing. [Release notes](docs/RELEASE-1.1.0-EN.md). |
+| **Native Mac app** | Release 1.1.5, build 125 (November 26): signed with Developer ID, notarized by Apple, with in-app updates. [Release notes](docs/RELEASE-1.1.5-EN.md). |
 | **Compatibility fixes since 1.0.3** | 1.0.4 fixes a Wine-server mapping failure; 1.0.5 exposes crypto CPU features and fixes L3 reporting and executable loading; 1.0.6 updates exception handling, the x18 transition path and Hedon's graphics profile; 1.0.7 adds notarization, the 32-bit runtime and .NET 6 startup; 1.0.8 enables hardware memory ordering and faster startup defaults, fixes sound in two titles and lets the app start 32-bit programs; 1.0.9 makes integer division and scalar SSE arithmetic faster in the 64-bit translator and unaligned `lock` operations exact. [Release details →](RELEASE_STATUS.md) |
 | **Automated application checks** | Launch status, installation, localization, packaging and update coordination are covered by passing checks. |
 | **45,998 shaders** | The separate DirectX 12 development path passes native loading and parsing/reflection checks for this shader corpus. |
