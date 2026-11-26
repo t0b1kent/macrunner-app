@@ -4,7 +4,20 @@
 
 This page records what has actually been observed while developing MacRunner. A title in the library or launch-profile catalog is not automatically a tested game. Results apply to the configurations used for those sessions.
 
-## Current release · 1.1.4 · measured
+## Current release · 1.1.5 · owner checks, November 26
+
+Test Mac: MacBook Pro, Apple M1 Pro, macOS 27.
+
+| Game | Result | Notes |
+| --- | --- | --- |
+| Gothic 3 (GOG) | Town scene with combat: **66.5 FPS** average with early GPU-query submission, 51.2 without it | 1.1.5 release-candidate engine, same save, option off vs on, about 5 minutes per run; Metal HUD log. Acceptance run of the build-124 candidate (same engine as 125): 89 s without errors. |
+| Might and Magic VII (Russian CD release, community patch 1.21 executable) | Launches and plays on build 125 with automatic cnc-ddraw, no manual DLL | The disc check needed the second disc mapped as a CD drive; disc-image support in the app is planned. CD-audio music is silent. |
+| Hollow Knight | Ran 43 s on the build-124 candidate (same engine as 125), no crashes in the log | Short acceptance run (D3D11). |
+| Elden Ring | Runs; GPU-limited (about 40 FPS with an external display, the game's 60 FPS cap on the built-in display) | Measured on the same 64-bit engine during development. |
+| Heroes of Might and Magic III Remake (Ubisoft Connect, DX12) | Starts and runs in a **development build only** | Graphics flickering is being fixed; not in 1.1.5. |
+| Dark Souls III | Not run on 1.1.5 | — |
+
+## Historical · 1.1.4 · measured
 
 MacRunner 1.1.4 speeds up 32-bit games: Gothic 3 (unpatched GOG version) went from about 32 to about 100 fps in one test scene on a MacBook Pro with an M1 Pro. It removes the false error message after a normal Gothic 3 quit, stops the Wine window flash when switching between games with different graphics layers, limits automatic Retina scaling to games, and fixes Steam bottle preparation and networking. Elden Ring and Crysis were not run live on this build.
 

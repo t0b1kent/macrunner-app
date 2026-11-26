@@ -24,9 +24,13 @@ MacRunner is built around a simple idea: **choose an app or game, add it to your
 
 **HyperBridge is MacRunner's CPU engine:** an **x86-64 / x86 → ARM64 engine for Windows software on Apple Silicon**, built on [FEX-Emu](https://github.com/FEX-Emu/FEX) with MacRunner's own patch series. Its source is public under MIT at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). Wine provides Windows API compatibility, and Metal handles graphics through the relevant translation components. [Explore the engine, its current scope and roadmap →](HYPERBRIDGE.md)
 
-**Current release: [MacRunner 1.1.4](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.4), build 123, November 20, 2026.** Apple Silicon, macOS 26.5 or later. Signed with Developer ID and notarized by Apple. [Release notes and known issues](docs/RELEASE-1.1.4-EN.md).
+**Current release: [MacRunner 1.1.5](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.5), build 125, November 26, 2026.** Apple Silicon, macOS 26.5 or later. Signed with Developer ID and notarized by Apple. [Release notes and known issues](docs/RELEASE-1.1.5-EN.md).
 
-MacRunner 1.1.4 speeds up 32-bit games: Gothic 3 (unpatched GOG version) went from about 32 to about 100 fps in one test scene on a MacBook Pro with an M1 Pro. It removes the false error message after a normal Gothic 3 quit, stops the Wine window flash when switching between games with different graphics layers, limits automatic Retina scaling to games, and fixes Steam bottle preparation and networking. Elden Ring and Crysis were not run live on this build.
+MacRunner 1.1.5 adds automatic [cnc-ddraw](https://github.com/FunkyFr3sh/cnc-ddraw) (MIT) for older 32-bit DirectDraw games: Might and Magic VII now runs, with profiles for Might and Magic VI and VIII. It updates the 32-bit and 64-bit HyperBridge engines (faster 32-bit code paths, no idle CPU spinning, Ubisoft Connect startup and shutdown hangs fixed) and the Direct3D 9 layer. Early GPU-query submission (new in 1.1.5) raised the average frame rate in a busy Gothic 3 town scene with combat from **51.2 to 66.5 FPS** on a MacBook Pro with an M1 Pro (same build and save, option off vs on, about 5 minutes each; the scene changes during combat, so expect some variation). A brief white flash can still appear when some games start or quit.
+
+**In development:** Heroes of Might and Magic III Remake (Ubisoft Connect, DirectX 12) already starts and runs in our development build. Graphics flickering is still being fixed, so it is not part of 1.1.5 yet.
+
+Previous release, [1.1.4](docs/RELEASE-1.1.4-EN.md): MacRunner 1.1.4 speeds up 32-bit games: Gothic 3 (unpatched GOG version) went from about 32 to about 100 fps in one test scene on a MacBook Pro with an M1 Pro. It removes the false error message after a normal Gothic 3 quit, stops the Wine window flash when switching between games with different graphics layers, limits automatic Retina scaling to games, and fixes Steam bottle preparation and networking. Elden Ring and Crysis were not run live on this build.
 
 ### 1.1.0: recorded performance
 

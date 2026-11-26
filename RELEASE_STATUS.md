@@ -1,6 +1,14 @@
 # Release status
 
-## Current · MacRunner 1.1.4 · build 123
+## Current · MacRunner 1.1.5 · build 125
+
+[MacRunner](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.5) · [Release notes](docs/RELEASE-1.1.5-EN.md) · [HyperBridge source v1.1.5](https://github.com/t0b1kent/hyperbridge/tree/v1.1.5) · [DX9 source v1.1.5](https://github.com/t0b1kent/dxmt/tree/v1.1.5).
+
+Automatic cnc-ddraw for older DirectDraw games (Might and Magic VII verified by the owner; profiles for VI and VIII), updated HyperBridge 32-bit and 64-bit engines, Ubisoft Connect hang fixes and earlier GPU-query submission in Direct3D 9. Early GPU-query submission (new in 1.1.5) raised the average frame rate in a busy Gothic 3 town scene with combat from **51.2 to 66.5 FPS** on a MacBook Pro with an M1 Pro (same build and save, option off vs on, about 5 minutes each; the scene changes during combat, so expect some variation).
+
+**In development:** Heroes of Might and Magic III Remake (Ubisoft Connect, DirectX 12) already starts and runs in our development build. Graphics flickering is still being fixed, so it is not part of 1.1.5 yet.
+
+## Historical · MacRunner 1.1.4 · build 123
 
 [MacRunner](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.4) · [Release notes](docs/RELEASE-1.1.4-EN.md).
 
