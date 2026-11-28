@@ -1,6 +1,6 @@
 # HyperBridge
 
-The current [MacRunner 1.1.2 application](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.2) uses the unchanged [HyperBridge translator 1.1.1](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.1) plus repaired graphics and display/input handling. [Current game status](docs/RELEASE-1.1.2-EN.md).
+The current [MacRunner 1.1.2 application](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.1.2) uses the unchanged [HyperBridge translator 1.1.1](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.1) plus repaired graphics and display/input handling. [Current game status](docs/RELEASE-1.1.2-EN.md).
 
 
 **MacRunner's x86-64 / x86 → ARM64 CPU engine for Windows software on Apple Silicon.**

@@ -17,8 +17,8 @@ Download **MacRunner-1.1.2-arm64.zip**, unpack it and replace the previous MacRu
 
 The owner reports approximately **78 FPS in MacRunner versus 30 FPS in Windows on Arm / Prism for Gothic 3**: **2.6 times the reported frame rate**, or about 160% higher. The retained report does not yet identify all matching scene, resolution, graphics-setting, game-version and VM details. Treat these as owner-reported observations, not a reproducible benchmark of the final signed 1.1.1 package or a measurement of the CPU translator alone.
 
-The owner also reports that Gothic 3 did not launch in the CrossOver/Rosetta configurations they tried. This is a result for those configurations, not a general incompatibility claim: a community reporter describes running Gothic 3 through a Rosetta-based Wine lane in [issue #2](https://github.com/t0b1kent/macrunner-app/issues/2).
+The owner also reports that Gothic 3 did not launch in the CrossOver/Rosetta configurations they tried. This is a result for those configurations, not a general incompatibility claim: a community reporter describes running Gothic 3 through a Rosetta-based Wine lane in [issue #2](https://github.com/MacRunnerApp/macrunner-app/issues/2).
 
 ## Downloads
 
-[MacRunner](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.2) · [DX9 1.1.2](https://github.com/t0b1kent/dxmt/releases/tag/v1.1.2) · [unchanged HyperBridge 1.1.1](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.1).
+[MacRunner](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.1.2) · [DX9 1.1.2](https://github.com/t0b1kent/dxmt/releases/tag/v1.1.2) · [unchanged HyperBridge 1.1.1](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.1).

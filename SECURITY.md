@@ -4,7 +4,7 @@ MacRunner is a free macOS app for running Windows games on Apple Silicon. It is 
 
 ## Supported versions
 
-Only the latest release on the [Releases page](https://github.com/t0b1kent/macrunner-app/releases) receives security fixes. Please check that a problem still occurs in the current release before reporting it. MacRunner can update itself from inside the app.
+Only the latest release on the [Releases page](https://github.com/MacRunnerApp/macrunner-app/releases) receives security fixes. Please check that a problem still occurs in the current release before reporting it. MacRunner can update itself from inside the app.
 
 ## Reporting a vulnerability
 
@@ -12,7 +12,7 @@ Only the latest release on the [Releases page](https://github.com/t0b1kent/macru
 
 Report privately in one of these ways:
 
-1. **GitHub private vulnerability reporting (preferred):** open the [Security tab](https://github.com/t0b1kent/macrunner-app/security) and choose **Report a vulnerability**, or go straight to [this form](https://github.com/t0b1kent/macrunner-app/security/advisories/new). Only you and the maintainer can see the report.
+1. **GitHub private vulnerability reporting (preferred):** open the [Security tab](https://github.com/MacRunnerApp/macrunner-app/security) and choose **Report a vulnerability**, or go straight to [this form](https://github.com/MacRunnerApp/macrunner-app/security/advisories/new). Only you and the maintainer can see the report.
 2. **Email:** zaryadradostitobi@gmail.com, subject starting with `MacRunner security`.
 
 Please include:

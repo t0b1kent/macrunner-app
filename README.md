@@ -13,7 +13,7 @@
   <a href="HYPERBRIDGE.md">HyperBridge engine</a> ·
   <a href="#tested-games--engines">Tested games &amp; engines</a> ·
   <a href="#progress">Progress</a> ·
-  <a href="https://github.com/t0b1kent/macrunner-app/issues/1">Vote for the next title</a> ·
+  <a href="https://github.com/MacRunnerApp/macrunner-app/issues/1">Vote for the next title</a> ·
   <a href="RELEASE_STATUS.md">Release status</a> ·
   <a href="#contributors--credits">Contributors &amp; credits</a>
 </p>
@@ -24,7 +24,7 @@ MacRunner is built around a simple idea: **choose an app or game, add it to your
 
 **HyperBridge is MacRunner's CPU engine:** an **x86-64 / x86 → ARM64 engine for Windows software on Apple Silicon**, built on [FEX-Emu](https://github.com/FEX-Emu/FEX) with MacRunner's own patch series. Its source is public under MIT at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). Wine provides Windows API compatibility, and Metal handles graphics through the relevant translation components. [Explore the engine, its current scope and roadmap →](HYPERBRIDGE.md)
 
-**Current release: [MacRunner 1.1.5](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.5), build 125, November 26, 2026.** Apple Silicon, macOS 26.5 or later. Signed with Developer ID and notarized by Apple. [Release notes and known issues](docs/RELEASE-1.1.5-EN.md).
+**Current release: [MacRunner 1.1.5](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.1.5), build 125, November 26, 2026.** Apple Silicon, macOS 26.5 or later. Signed with Developer ID and notarized by Apple. [Release notes and known issues](docs/RELEASE-1.1.5-EN.md).
 
 MacRunner 1.1.5 adds automatic [cnc-ddraw](https://github.com/FunkyFr3sh/cnc-ddraw) (MIT) for older 32-bit DirectDraw games: Might and Magic VII now runs, with profiles for Might and Magic VI and VIII. It updates the 32-bit and 64-bit HyperBridge engines (faster 32-bit code paths, no idle CPU spinning, Ubisoft Connect startup and shutdown hangs fixed) and the Direct3D 9 layer. Early GPU-query submission (new in 1.1.5) raised the average frame rate in a busy Gothic 3 town scene with combat from **51.2 to 66.5 FPS** on a MacBook Pro with an M1 Pro (same build and save, option off vs on, about 5 minutes each; the scene changes during combat, so expect some variation). A brief white flash can still appear when some games start or quit.
 
@@ -67,7 +67,7 @@ Retina is a per-game toggle. Since 1.1.1, MacRunner selects Retina automatically
 Elden Ring (DirectX 12) runs on Apple Silicon without Rosetta — our own x86 translator (HyperBridge) and our own DX12 → Metal layer. As far as we know, this is a first: CrossOver Preview (FEX, no Rosetta) does not start Elden Ring. This was checked by the owner; its FEX bottles include only D3D10/11.
 
 
-A separate [1.0.6-indiana experimental preview](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.6-indiana) adds Indiana Jones and the Great Circle (GOG) through MoltenVK. Its M1 Pro check reported about 10–12 FPS at minimum settings, with rendering issues and a GPU hang that restarted the macOS session when firing a weapon. Save your work before trying it. It is based on 1.0.6 and is separate from the ordinary releases, including 1.0.9. [Test scope →](TESTED_GAMES.md#indiana-jones--106-indiana-experimental-preview)
+A separate [1.0.6-indiana experimental preview](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.0.6-indiana) adds Indiana Jones and the Great Circle (GOG) through MoltenVK. Its M1 Pro check reported about 10–12 FPS at minimum settings, with rendering issues and a GPU hang that restarted the macOS session when firing a weapon. Save your work before trying it. It is based on 1.0.6 and is separate from the ordinary releases, including 1.0.9. [Test scope →](TESTED_GAMES.md#indiana-jones--106-indiana-experimental-preview)
 
 ## Tested games & engines
 
@@ -90,7 +90,7 @@ A separate [1.0.6-indiana experimental preview](https://github.com/t0b1kent/macr
 | **Dome Keeper** | Godot | OpenGL → Metal (Apple driver) | **Working** | Not measured |
 | **WRATH: Aeon of Ruin** | DarkPlaces (Quake-derived) | OpenGL → Metal (Apple driver) | **Working** | Not measured |
 | **Elden Ring** | FromSoftware in-house engine | DXMT-based DirectX 12 → Metal | **Working** on the 1.1.5 engine | **about 40** with an external display, **60** (game cap) on the built-in display; **44.81** mean at 1920×1200 High (1.1.0) |
-| **Indiana Jones and the Great Circle** | MachineGames Motor (id Tech-based) | Vulkan → MoltenVK → Metal | **Experimental preview ([1.0.6-indiana](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.6-indiana)): played in a level** | **about 10–12** at minimum settings |
+| **Indiana Jones and the Great Circle** | MachineGames Motor (id Tech-based) | Vulkan → MoltenVK → Metal | **Experimental preview ([1.0.6-indiana](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.0.6-indiana)): played in a level** | **about 10–12** at minimum settings |
 
 **OpenGL → Metal** means the game uses OpenGL through Wine and Apple's Metal-backed OpenGL driver on the test Mac. This is a separate path from DXMT and D3DMetal. [How to read the graphics paths →](TESTED_GAMES.md#reading-the-graphics-paths)
 
@@ -176,7 +176,7 @@ HyperBridge handles **CPU translation**; Wine and the graphics components perfor
 
 MacRunner is intended for **Macs with Apple Silicon**. MacRunner 1.0.9 declares **macOS 26.5** as its minimum; our checks ran on **macOS 27.0**, and a broader macOS range has not been validated. The app is notarized, so it opens on Macs with standard security settings.
 
-**HyperBridge's source is public under MIT** at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). This repository contains the project presentation, [engine license information](HYPERBRIDGE_LICENSE.md), progress reports and the app's [releases](https://github.com/t0b1kent/macrunner-app/releases); the application source is not published here. MacRunner 1.0.9 is a development preview: Developer ID-signed and notarized, automatic updates off.
+**HyperBridge's source is public under MIT** at [t0b1kent/hyperbridge](https://github.com/t0b1kent/hyperbridge). This repository contains the project presentation, [engine license information](HYPERBRIDGE_LICENSE.md), progress reports and the app's [releases](https://github.com/MacRunnerApp/macrunner-app/releases); the application source is not published here. MacRunner 1.0.9 is a development preview: Developer ID-signed and notarized, automatic updates off.
 
 Next: engine speed (calls and returns, ordinary arithmetic, a persistent translation cache), shorter startup, then title-by-title work and real update delivery. [HyperBridge →](https://github.com/t0b1kent/hyperbridge) · [App release status →](RELEASE_STATUS.md)
 
@@ -184,7 +184,7 @@ Next: engine speed (calls and returns, ordinary arithmetic, a persistent transla
 
 Help choose which **games and apps to validate and optimize on HyperBridge next**: add a 👍 reaction to an existing title, or suggest one title per comment. Elden Ring remains a graphics-development priority.
 
-**[Vote or suggest a title →](https://github.com/t0b1kent/macrunner-app/issues/1)**
+**[Vote or suggest a title →](https://github.com/MacRunnerApp/macrunner-app/issues/1)**
 
 A vote guides priorities; it is not a promise of compatibility or a release date.
 

@@ -1,6 +1,6 @@
 # MacRunner 1.1.1 · build 120
 
-Released November 16, 2026. Apple Silicon; declared minimum macOS 26.5. [Download MacRunner](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.1) · [HyperBridge](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.1) · [HyperBridge DX9](https://github.com/t0b1kent/dxmt/releases/tag/v1.1.1). These are ordinary releases, not prereleases. Game compatibility remains experimental.
+Released November 16, 2026. Apple Silicon; declared minimum macOS 26.5. [Download MacRunner](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.1.1) · [HyperBridge](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.1) · [HyperBridge DX9](https://github.com/t0b1kent/dxmt/releases/tag/v1.1.1). These are ordinary releases, not prereleases. Game compatibility remains experimental.
 
 ## What changed
 
@@ -26,13 +26,13 @@ A rare abnormal shutdown seen in synthetic testing remains unresolved. It is dis
 
 The owner reports approximately **78 FPS in MacRunner versus 30 FPS in Windows on Arm / Prism for Gothic 3**: **2.6 times the reported frame rate**, or about 160% higher. The retained report does not yet identify all matching scene, resolution, graphics-setting, game-version and VM details. Treat these as owner-reported observations, not a reproducible benchmark of the final signed 1.1.1 package or a measurement of the CPU translator alone.
 
-The owner also reports that Gothic 3 did not launch in the CrossOver/Rosetta configurations they tried. This is a result for those configurations, not a general incompatibility claim: a community reporter describes running Gothic 3 through a Rosetta-based Wine lane in [issue #2](https://github.com/t0b1kent/macrunner-app/issues/2).
+The owner also reports that Gothic 3 did not launch in the CrossOver/Rosetta configurations they tried. This is a result for those configurations, not a general incompatibility claim: a community reporter describes running Gothic 3 through a Rosetta-based Wine lane in [issue #2](https://github.com/MacRunnerApp/macrunner-app/issues/2).
 
 ## Downloads and corresponding source
 
 The MacRunner ZIP contains the application and bundled runtime. The separate HyperBridge and DX9 ZIPs are component packages, not standalone game launchers. Each release includes BUILDINFO and SHA256SUMS files.
 
-- [Application source at v1.1.1](https://github.com/t0b1kent/macrunner-app/tree/v1.1.1)
+- [Application source at v1.1.1](https://github.com/MacRunnerApp/macrunner-app/tree/v1.1.1)
 - [HyperBridge source at v1.1.1](https://github.com/t0b1kent/hyperbridge/tree/v1.1.1)
 - [Graphics source at v1.1.1](https://github.com/t0b1kent/dxmt/tree/v1.1.1)
 - [Wine build sources](https://github.com/t0b1kent/macrunner-wine/tree/release/1.1.1-c33r); the exact producer revision is recorded in the application's build information.

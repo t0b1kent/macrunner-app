@@ -41,7 +41,7 @@ A rare abnormal shutdown seen in synthetic testing remains unresolved. It is dis
 
 ## Historical observations
 
-**Historical 1.1.0 recording: [MacRunner 1.1.0, build 119](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.0).** The owner recorded Elden Ring and Hollow Knight on the c32r candidate on November 4. No live games were launched for final release packaging. These recordings are distinct from the historical observations below. [Full performance tables and methodology](docs/PERFORMANCE-1.1.0-EN.md).
+**Historical 1.1.0 recording: [MacRunner 1.1.0, build 119](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.1.0).** The owner recorded Elden Ring and Hollow Knight on the c32r candidate on November 4. No live games were launched for final release packaging. These recordings are distinct from the historical observations below. [Full performance tables and methodology](docs/PERFORMANCE-1.1.0-EN.md).
 
 | November 4 recording | MacRunner mean FPS | Reference |
 |---|---:|---|
@@ -52,7 +52,7 @@ M1 Pro, macOS 27.0, HUD every 0.5 s, gameplay only. Routes and pause durations d
 
 ## MacRunner 1.0.8 · October 5 checks
 
-These checks were made on [MacRunner 1.0.8](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.8), the previous pre-release. They are unattended startup checks without any input: each game was stopped a few seconds after the screen in the table appeared. They do not establish gameplay, input, saving or long-session results.
+These checks were made on [MacRunner 1.0.8](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.0.8), the previous pre-release. They are unattended startup checks without any input: each game was stopped a few seconds after the screen in the table appeared. They do not establish gameplay, input, saving or long-session results.
 
 | Game | Reached in the check | Build | FPS from one screenshot |
 | --- | --- | --- | --- |
@@ -80,7 +80,7 @@ Elden Ring, the Indiana Jones preview, DirectX 12 and ray tracing are outside th
 
 ## MacRunner 1.0.7 · October 3 checks
 
-[MacRunner 1.0.7 is available as a pre-release](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.7). These checks cover startup and menus. They do not establish new gameplay, saving or long-session results.
+[MacRunner 1.0.7 is available as a pre-release](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.0.7). These checks cover startup and menus. They do not establish new gameplay, saving or long-session results.
 
 | Game | Checked in 1.0.7 | Still to check | FPS from one screenshot |
 | --- | --- | --- | --- |
@@ -213,7 +213,7 @@ These checks retain the scope recorded in the release notes; they do not promote
 
 **Known issues:** firing a weapon hung the GPU and restarted the macOS session on M1 Pro; save all your work before playing. Split frames, stutter and sky artifacts remain. The preview replaces four shared engine files and can affect other titles. **Ray tracing is experimental, not released.**
 
-Add `TheGreatCircle.exe` to MacRunner and press Play. If the game asks “Run In Safe Mode?” after an interrupted session, the preview notes say to choose No. This preview is separate from the ordinary 1.0.6 bundle and does not certify other Macs or games. [Preview notes](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.6-indiana)
+Add `TheGreatCircle.exe` to MacRunner and press Play. If the game asks “Run In Safe Mode?” after an interrupted session, the preview notes say to choose No. This preview is separate from the ordinary 1.0.6 bundle and does not certify other Macs or games. [Preview notes](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.0.6-indiana)
 
 ## Reading the graphics paths
 
@@ -223,4 +223,4 @@ Add `TheGreatCircle.exe` to MacRunner and press Play. If the game asks “Run In
 - **Software rendering:** rendering work is performed in software, as in the recorded Ion Fury check.
 - **Experimental DXMT-based DirectX 12 → Metal:** MacRunner's separate development path, not a released feature of the current app bundle or a claim of upstream DXMT DirectX 12 support.
 
-[Back to MacRunner](README.md#tested-games--engines) · [Release status](RELEASE_STATUS.md) · [Vote for the next title](https://github.com/t0b1kent/macrunner-app/issues/1)
+[Back to MacRunner](README.md#tested-games--engines) · [Release status](RELEASE_STATUS.md) · [Vote for the next title](https://github.com/MacRunnerApp/macrunner-app/issues/1)

@@ -2,7 +2,7 @@
 
 ## Current · MacRunner 1.1.5 · build 125
 
-[MacRunner](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.5) · [Release notes](docs/RELEASE-1.1.5-EN.md) · [HyperBridge source v1.1.5](https://github.com/t0b1kent/hyperbridge/tree/v1.1.5) · [DX9 source v1.1.5](https://github.com/t0b1kent/dxmt/tree/v1.1.5).
+[MacRunner](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.1.5) · [Release notes](docs/RELEASE-1.1.5-EN.md) · [HyperBridge source v1.1.5](https://github.com/t0b1kent/hyperbridge/tree/v1.1.5) · [DX9 source v1.1.5](https://github.com/t0b1kent/dxmt/tree/v1.1.5).
 
 Automatic cnc-ddraw for older DirectDraw games (Might and Magic VII verified by the owner; profiles for VI and VIII), updated HyperBridge 32-bit and 64-bit engines, Ubisoft Connect hang fixes and earlier GPU-query submission in Direct3D 9. Early GPU-query submission (new in 1.1.5) raised the average frame rate in a busy Gothic 3 town scene with combat from **51.2 to 66.5 FPS** on a MacBook Pro with an M1 Pro (same build and save, option off vs on, about 5 minutes each; the scene changes during combat, so expect some variation).
 
@@ -10,19 +10,19 @@ Automatic cnc-ddraw for older DirectDraw games (Might and Magic VII verified by 
 
 ## Historical · MacRunner 1.1.4 · build 123
 
-[MacRunner](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.4) · [Release notes](docs/RELEASE-1.1.4-EN.md).
+[MacRunner](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.1.4) · [Release notes](docs/RELEASE-1.1.4-EN.md).
 
 MacRunner 1.1.4 speeds up 32-bit games: Gothic 3 (unpatched GOG version) went from about 32 to about 100 fps in one test scene on a MacBook Pro with an M1 Pro. It removes the false error message after a normal Gothic 3 quit, stops the Wine window flash when switching between games with different graphics layers, limits automatic Retina scaling to games, and fixes Steam bottle preparation and networking. Elden Ring and Crysis were not run live on this build.
 
 ## Historical · MacRunner 1.1.3 · build 122
 
-[MacRunner](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.3) · [DX9 1.1.3](https://github.com/t0b1kent/dxmt/releases/tag/v1.1.3) · [Release notes](docs/RELEASE-1.1.3-EN.md).
+[MacRunner](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.1.3) · [DX9 1.1.3](https://github.com/t0b1kent/dxmt/releases/tag/v1.1.3) · [Release notes](docs/RELEASE-1.1.3-EN.md).
 
 MacRunner 1.1.3 fixes Retina fullscreen for 32-bit Direct3D 9 and the light edges seen in Direct3D 12 fullscreen. It also recovers Direct3D 9 pipeline archives and installs supported DirectX 9 files from the game's installer. The maintainer verified Gothic 3 fullscreen and first launch, and Elden Ring fullscreen without light edges, on the build 122 candidate.
 
 ## Historical · MacRunner 1.1.2 · build 121
 
-[MacRunner](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.2) · [DX9 1.1.2](https://github.com/t0b1kent/dxmt/releases/tag/v1.1.2) · [HyperBridge 1.1.1](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.1) · [Notes](docs/RELEASE-1.1.2-EN.md).
+[MacRunner](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.1.2) · [DX9 1.1.2](https://github.com/t0b1kent/dxmt/releases/tag/v1.1.2) · [HyperBridge 1.1.1](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.1) · [Notes](docs/RELEASE-1.1.2-EN.md).
 
 MacRunner 1.1.2 fixes an ARM64EC graphics startup regression, adds the complete DX9 display-mode catalogue, persists an explicit Retina-off choice and stops automatically enabling the experimental hidden-cursor relative mouse path. Adapter enumeration, DirectX 12 device creation and DX9 mode-query checks passed on the signed full package without launching games. The owner will download and test games after publication. Gothic 3 first-start behavior, Retina-on menu input and full Elden Ring startup still require that gameplay confirmation. The previously documented rare shutdown failure remains under investigation.
 
@@ -30,7 +30,7 @@ MacRunner 1.1.2 fixes an ARM64EC graphics startup regression, adds the complete 
 
 **Historical: MacRunner 1.1.1, build 120 · November 16, 2026**
 
-[Download](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.1) · [HyperBridge 1.1.1](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.1) · [DX9 1.1.1](https://github.com/t0b1kent/dxmt/releases/tag/v1.1.1) · [Full release notes](docs/RELEASE-1.1.1-EN.md).
+[Download](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.1.1) · [HyperBridge 1.1.1](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.1) · [DX9 1.1.1](https://github.com/t0b1kent/dxmt/releases/tag/v1.1.1) · [Full release notes](docs/RELEASE-1.1.1-EN.md).
 
 All three releases are published as ordinary releases. MacRunner is signed and notarized by Apple. The release was composed from recorded GitHub source-build outputs. Sources and build information identify the selected producer revisions; component package licenses remain separate.
 
@@ -44,7 +44,7 @@ A rare abnormal shutdown seen in synthetic testing remains unresolved. It is dis
 
 ## MacRunner 1.1.0 · build 119
 
-[Application release](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.1.0) · [Translator release](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.0) · [English release notes](docs/RELEASE-1.1.0-EN.md).
+[Application release](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.1.0) · [Translator release](https://github.com/t0b1kent/hyperbridge/releases/tag/v1.1.0) · [English release notes](docs/RELEASE-1.1.0-EN.md).
 
 This release updates Wine memory allocation and asynchronous exceptions, including IsBad*, improves QueryPerformanceCounter and D3D11 → Metal, and includes a Retina toggle on the game's page. HEADER_BY_PC, RET_NOPOLL, CMP_ZC, RIP_LITERAL and QPC_INLINE are disabled by default. Automatic Retina, EmulateModeset, shader-cache migration and faster bottle updates are planned for 1.1.1.
 
@@ -54,7 +54,7 @@ On a game's first launch, bottle preparation can take several minutes and shader
 
 ## MacRunner 1.0.9 development preview
 
-**[Download from the release page](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.9).** Released October 7, 2026; Apple Silicon; declares macOS 26.5 as its minimum, checked on macOS 27.0.
+**[Download from the release page](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.0.9).** Released October 7, 2026; Apple Silicon; declares macOS 26.5 as its minimum, checked on macOS 27.0.
 
 | Release | What changed since the previous preview |
 | --- | --- |
@@ -74,7 +74,7 @@ On a game's first launch, bottle preparation can take several minutes and shader
 
 ### Separate Indiana preview
 
-**[1.0.6-indiana](https://github.com/t0b1kent/macrunner-app/releases/tag/v1.0.6-indiana), October 1:** experimental support for Indiana Jones and the Great Circle (Windows GOG version) through HyperBridge/Wine 11 and MoltenVK. The notes report about 10–12 FPS at minimum settings on M1 Pro. Firing a weapon hung the GPU and restarted the macOS session; split frames, stutter and sky artifacts remain. Save your work before trying it. Its four shared engine-file replacements can affect other titles. **Ray tracing is experimental, not released.** [Exact preview scope →](TESTED_GAMES.md#indiana-jones--106-indiana-experimental-preview)
+**[1.0.6-indiana](https://github.com/MacRunnerApp/macrunner-app/releases/tag/v1.0.6-indiana), October 1:** experimental support for Indiana Jones and the Great Circle (Windows GOG version) through HyperBridge/Wine 11 and MoltenVK. The notes report about 10–12 FPS at minimum settings on M1 Pro. Firing a weapon hung the GPU and restarted the macOS session; split frames, stutter and sky artifacts remain. Save your work before trying it. Its four shared engine-file replacements can affect other titles. **Ray tracing is experimental, not released.** [Exact preview scope →](TESTED_GAMES.md#indiana-jones--106-indiana-experimental-preview)
 
 ## Engine
 
